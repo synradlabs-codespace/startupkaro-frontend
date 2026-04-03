@@ -1,65 +1,74 @@
-import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen bg-white flex flex-col items-center justify-center px-6 font-serif">
+      <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none opacity-60" />
+
+      <div className="absolute top-0 left-0 right-0 flex h-1">
+        <div className="flex-1 bg-[var(--color-saffron)]" />
+        <div className="flex-1 bg-white border-t border-gray-200" />
+        <div className="flex-1 bg-[var(--color-green)]" />
+      </div>
+
+      <div className="relative mb-16 text-center">
+        <p className="text-xs tracking-[0.35em] text-gray-400 uppercase mb-4 font-mono">
+          Welcome to
+        </p>
+        <h1 className="text-6xl md:text-8xl text-black font-normal tracking-tight leading-none">
+          Startup<span className="text-[var(--color-saffron)]">Karo</span>
+        </h1>
+        <div className="mt-5 flex items-center justify-center gap-2">
+          <div className="h-px w-12 bg-[var(--color-saffron)]" />
+          <div className="w-2 h-2 rounded-full bg-[var(--color-indigo)]" />
+          <div className="h-px w-12 bg-[var(--color-green)]" />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </div>
+
+      <div className="relative flex flex-col md:flex-row gap-5 w-full max-w-3xl">
+        <PortalCard href="/admin/login" label="Admin" description="Manage operations, teams & analytics" tag="01" accent="var(--color-saffron)" />
+        <PortalCard href="/employee/login" label="Employee" description="Handle orders, customers & inquiries" tag="02" accent="var(--color-indigo)" />
+        <PortalCard href="/customer/login" label="Customer" description="View purchases, services & invoices" tag="03" accent="var(--color-green)" />
+      </div>
+
+      <p className="relative mt-14 text-xs text-gray-400 tracking-widest uppercase font-mono">
+        Select your portal to continue
+      </p>
+    </main>
+  );
+}
+
+function PortalCard({ href, label, description, tag, accent }: {
+  href: string;
+  label: string;
+  description: string;
+  tag: string;
+  accent: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="group relative flex-1 border border-gray-200 rounded-2xl p-8 bg-white hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+    >
+      <div
+        className="absolute bottom-0 left-0 right-0 h-0.5 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
+        style={{ backgroundColor: accent }}
+      />
+      <div className="relative">
+        <span className="text-[10px] font-mono tracking-[0.25em] mb-6 block font-medium" style={{ color: accent }}>
+          {tag}
+        </span>
+        <h2 className="text-3xl font-normal mb-3 text-black">{label}</h2>
+        <p className="text-sm text-gray-500 leading-relaxed font-sans group-hover:text-gray-600 transition-colors">
+          {description}
+        </p>
+        <div
+          className="mt-8 text-xs font-mono tracking-widest flex items-center gap-2 transition-all duration-300 group-hover:gap-3 font-medium"
+          style={{ color: accent }}
+        >
+          Enter <span className="text-base leading-none">→</span>
         </div>
-      </main>
-    </div>
+      </div>
+    </Link>
   );
 }

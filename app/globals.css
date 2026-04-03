@@ -4,6 +4,25 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  /* Brand colors — Indian flag palette */
+  --color-saffron: #FF9933;
+  --color-indigo: #000080;
+  --color-green: #138808;
+  --color-black: #0A0A0A;
+  --color-white: #ffffff;
+
+  /* Semantic panel accents */
+  --color-accent-admin: #FF9933;
+  --color-accent-employee: #000080;
+  --color-accent-customer: #138808;
+
+  /* Fonts */
+  --font-serif: "Instrument Serif", serif;
+  --font-mono: "DM Mono", monospace;
+  --font-sans: "DM Sans", sans-serif;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -121,9 +140,11 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
   }
