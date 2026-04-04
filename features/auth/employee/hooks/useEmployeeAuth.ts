@@ -17,8 +17,8 @@ export function useEmployeeLogin() {
         setLoading(true);
         setError(null);
         try {
-            const response = await authService.employeeLogin({ email, password });
-            saveSession(response.user, response.accessToken);
+            // const response = await authService.employeeLogin({ email, password });
+            // saveSession(response.user, response.accessToken);
             router.push("/employee");
         } catch (err: any) {
             setError(err?.response?.data?.message ?? "Invalid credentials");

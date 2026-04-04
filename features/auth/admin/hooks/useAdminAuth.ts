@@ -17,8 +17,8 @@ export function useAdminLogin() {
         setLoading(true);
         setError(null);
         try {
-            const response = await authService.adminLogin({ email, password });
-            saveSession(response.user, response.accessToken);
+            // const response = await authService.adminLogin({ email, password });
+            // saveSession(response.user, response.accessToken);
             router.push("/admin");
         } catch (err: any) {
             setError(err?.response?.data?.message ?? "Invalid credentials");

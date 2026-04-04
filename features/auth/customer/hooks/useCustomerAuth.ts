@@ -17,8 +17,8 @@ export function useCustomerLogin() {
         setLoading(true);
         setError(null);
         try {
-            const response = await authService.customerLogin({ email, password });
-            saveSession(response.user, response.accessToken);
+            // const response = await authService.customerLogin({ email, password });
+            // saveSession(response.user, response.accessToken);
             router.push("/customer");
         } catch (err: any) {
             setError(err?.response?.data?.message ?? "Invalid credentials");
@@ -45,8 +45,8 @@ export function useCustomerRegister() {
         setLoading(true);
         setError(null);
         try {
-            const response = await authService.customerRegister(payload);
-            saveSession(response.user, response.accessToken);
+            // const response = await authService.customerRegister(payload);
+            // saveSession(response.user, response.accessToken);
             router.push("/customer");
         } catch (err: any) {
             setError(err?.response?.data?.message ?? "Registration failed");
