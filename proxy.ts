@@ -29,7 +29,7 @@
 //     CUSTOMER: "/customer",
 // };
 
-// export function middleware(request: NextRequest) {
+// export function proxy(request: NextRequest) {
 //     const { pathname } = request.nextUrl;
 
 //     // Read auth state from cookies (set client-side after login)
@@ -77,7 +77,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-export function middleware(_request: NextRequest) {
+export function proxy(_request: NextRequest) {
     // Auth middleware disabled until backend APIs are ready.
     // TODO: Re-enable role-based route protection once JWT auth is implemented.
     return NextResponse.next();

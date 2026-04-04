@@ -18,10 +18,10 @@ export function CustomerCheckoutSuccess() {
                         Your order has been placed successfully. Our team will get in touch with you shortly to begin processing your service.
                     </p>
                     <div className="flex gap-3 justify-center pt-2">
-                        <Button asChild className="bg-[var(--color-green)] hover:bg-[var(--color-green)]/90 text-white">
+                        <Button className="bg-[var(--color-green)] hover:bg-[var(--color-green)]/90 text-white">
                             <Link href="/customer/purchases">View My Purchases</Link>
                         </Button>
-                        <Button asChild variant="outline">
+                        <Button variant="outline">
                             <Link href="/customer">Back to Dashboard</Link>
                         </Button>
                     </div>
