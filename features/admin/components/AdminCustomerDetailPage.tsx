@@ -19,7 +19,7 @@ export function AdminCustomerDetailPage({ id }: { id: string }) {
                     <CardContent className="pt-6">
                         <div className="flex flex-col items-center text-center gap-3">
                             <Avatar className="h-16 w-16">
-                                <AvatarFallback className="text-lg bg-[var(--color-saffron)]/10 text-[var(--color-saffron)]">
+                                <AvatarFallback className="text-lg bg-[var(--color-green)]/10 text-[var(--color-green)]">
                                     {customer.name.split(" ").map(n => n[0]).join("")}
                                 </AvatarFallback>
                             </Avatar>

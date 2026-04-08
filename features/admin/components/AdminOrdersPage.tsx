@@ -32,7 +32,7 @@ export function AdminOrdersPage() {
                 title="Orders"
                 description={`${mockOrders.length} total orders`}
                 action={
-                    <Button  size="sm" className="bg-[var(--color-saffron)] hover:bg-[var(--color-saffron)]/90 text-white">
+                    <Button  size="sm" className="bg-[var(--color-green)] hover:bg-[var(--color-green)]/90 text-white">
                         <Link href="/admin/orders/new">
                             <Plus className="h-4 w-4 mr-1" /> New Order
                         </Link>

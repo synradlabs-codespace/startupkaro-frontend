@@ -72,7 +72,7 @@ export function AdminOrderEditPage({ id }: { id: string }) {
                                 </Select>
                             </div>
                             <div className="flex gap-3 pt-2">
-                                <Button type="submit" className="bg-[var(--color-saffron)] hover:bg-[var(--color-saffron)]/90 text-white">
+                                <Button type="submit" className="bg-[var(--color-green)] hover:bg-[var(--color-green)]/90 text-white">
                                     Save Changes
                                 </Button>
                                 <Button type="button" variant="outline" onClick={() => router.back()}>

@@ -44,9 +44,9 @@ const navItems = [
     { title: "Analytics", href: "/admin/analytics", icon: BarChart3 },
 ];
 
-const ACCENT = "#FF9933";
-const ACCENT_BG = "rgba(255, 153, 51, 0.10)";
-const ACCENT_TEXT = "#d4720a";
+const ACCENT = "#138808";
+const ACCENT_BG = "rgba(19, 136, 8, 0.10)";
+const ACCENT_TEXT = "#0d6106";
 
 export function AdminSidebar() {
     const pathname = usePathname();

@@ -21,7 +21,7 @@ export function AdminOrderDetailPage({ id }: { id: string }) {
                         <Button variant="outline" size="sm">
                             <Download className="h-4 w-4 mr-1" /> Invoice
                         </Button>
-                        <Button size="sm" className="bg-[var(--color-saffron)] hover:bg-[var(--color-saffron)]/90 text-white">
+                        <Button size="sm" className="bg-[var(--color-green)] hover:bg-[var(--color-green)]/90 text-white">
                             <Link href={`/admin/orders/${id}/edit`}>
                                 <Pencil className="h-4 w-4 mr-1" /> Edit
                             </Link>

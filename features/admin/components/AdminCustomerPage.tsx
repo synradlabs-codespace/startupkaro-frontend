@@ -49,7 +49,7 @@ export function AdminCustomersPage() {
                                         <TableCell>
                                             <div className="flex items-center gap-3">
                                                 <Avatar className="h-8 w-8">
-                                                    <AvatarFallback className="text-xs bg-[var(--color-saffron)]/10 text-[var(--color-saffron)]">
+                                                    <AvatarFallback className="text-xs bg-[var(--color-green)]/10 text-[var(--color-green)]">
                                                         {customer.name.split(" ").map(n => n[0]).join("")}
                                                     </AvatarFallback>
                                                 </Avatar>

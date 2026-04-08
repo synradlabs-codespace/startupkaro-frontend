@@ -29,7 +29,7 @@ export function AdminEmployeesPage() {
                 title="Employees"
                 description={`${mockEmployees.length} team members`}
                 action={
-                    <Button size="sm" className="bg-[var(--color-saffron)] hover:bg-[var(--color-saffron)]/90 text-white">
+                    <Button size="sm" className="bg-[var(--color-green)] hover:bg-[var(--color-green)]/90 text-white">
                         <Link href="/admin/employees/new"><Plus className="h-4 w-4 mr-1" /> Add Employee</Link>
                     </Button>
                 }
