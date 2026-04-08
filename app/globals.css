@@ -2,6 +2,13 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* Limit Tailwind v4 class scanning to source files only.
+   Without this, Tailwind scans the entire project directory on every
+   CSS recompile, accumulating state in the PostCSS worker pool. */
+@source "../app/**/*.{tsx,ts,jsx,js}";
+@source "../features/**/*.{tsx,ts,jsx,js}";
+@source "../components/**/*.{tsx,ts,jsx,js}";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {
@@ -13,9 +20,9 @@
   --color-white: #ffffff;
 
   /* Semantic panel accents */
-  --color-accent-admin: #FF9933;
+  --color-accent-admin: #138808;
   --color-accent-employee: #000080;
-  --color-accent-customer: #138808;
+  --color-accent-customer: #FF9933;
 
   /* Fonts */
   --font-serif: "Instrument Serif", serif;
