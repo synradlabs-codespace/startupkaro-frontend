@@ -3,10 +3,10 @@
 import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { PageHeader } from "@/components/custom/PageHeader";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { mockServices } from "@/lib/mock-data";
-import { ShieldCheck, CreditCard } from "lucide-react";
+import { ShieldCheck, CreditCard, ArrowLeft, Clock, Tag, Receipt } from "lucide-react";
+import Link from "next/link";
 
 function CheckoutContent() {
     const searchParams = useSearchParams();
@@ -20,59 +20,99 @@ function CheckoutContent() {
     };
 
     return (
-        <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl">
-            <Card className="md:col-span-2">
-                <CardHeader><CardTitle className="text-base">Order Summary</CardTitle></CardHeader>
-                <CardContent className="space-y-4 text-sm">
-                    <div className="flex justify-between py-2 border-b">
-                        <span className="text-muted-foreground">Service</span>
-                        <span className="font-medium">{service.name}</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b">
-                        <span className="text-muted-foreground">Processing Time</span>
-                        <span className="font-medium">{service.duration}</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b">
-                        <span className="text-muted-foreground">Subtotal</span>
-                        <span className="font-medium">₹{service.price.toLocaleString("en-IN")}</span>
-                    </div>
-                    <div className="flex justify-between py-2 font-semibold text-base">
-                        <span>Total</span>
-                        <span>₹{service.price.toLocaleString("en-IN")}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2">
-                        <ShieldCheck className="h-4 w-4 text-[var(--color-green)]" />
-                        Payments are secured by Razorpay
-                    </div>
-                </CardContent>
-            </Card>
+        <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
 
-            <Card className="h-fit">
-                <CardHeader><CardTitle className="text-base">Pay Now</CardTitle></CardHeader>
-                <CardContent className="space-y-4">
-                    <p className="text-2xl font-bold">₹{service.price.toLocaleString("en-IN")}</p>
-                    <Button
-                        onClick={handlePayment}
-                        className="w-full bg-[var(--color-green)] hover:bg-[var(--color-green)]/90 text-white"
-                    >
-                        <CreditCard className="h-4 w-4 mr-2" />
-                        Pay with Razorpay
-                    </Button>
-                    <p className="text-xs text-center text-muted-foreground">
-                        You will be redirected to Razorpay to complete your payment securely.
-                    </p>
-                </CardContent>
-            </Card>
+                {/* ── Order Summary ───────────────────────── */}
+                <div className="md:col-span-2 rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm overflow-hidden flex flex-col">
+                    <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                        <div className="h-7 w-7 rounded-lg bg-[#FF9933]/10 flex items-center justify-center">
+                            <Receipt className="h-3.5 w-3.5 text-[#FF9933]" />
+                        </div>
+                        <h3 className="text-sm font-semibold text-gray-800">Order Summary</h3>
+                    </div>
+                    <div className="p-6 flex-1 space-y-4">
+                        {[
+                            { label: "Service", value: service.name, icon: Tag },
+                            { label: "Processing Time", value: service.duration, icon: Clock },
+                        ].map(({ label, value, icon: Icon }) => (
+                            <div key={label} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
+                                <span className="text-sm text-gray-500 flex items-center gap-2">
+                                    <Icon className="h-3.5 w-3.5 text-gray-400" />
+                                    {label}
+                                </span>
+                                <span className="text-sm font-medium text-gray-800">{value}</span>
+                            </div>
+                        ))}
+                        <div className="flex items-center justify-between py-3 border-b border-gray-50">
+                            <span className="text-sm text-gray-500">Subtotal</span>
+                            <span className="text-sm font-medium">₹{service.price.toLocaleString("en-IN")}</span>
+                        </div>
+                        <div className="flex items-center justify-between pt-2">
+                            <span className="text-base font-semibold text-gray-900">Total</span>
+                            <span className="text-xl font-bold text-[#FF9933]">₹{service.price.toLocaleString("en-IN")}</span>
+                        </div>
+                    </div>
+                    <div className="px-6 pb-5">
+                        <div className="flex items-center gap-2 text-xs text-gray-400 bg-gray-50 rounded-xl px-3 py-2">
+                            <ShieldCheck className="h-3.5 w-3.5 text-[#FF9933] shrink-0" />
+                            Payments are secured and processed by Razorpay
+                        </div>
+                    </div>
+                </div>
+
+                {/* ── Pay Now ─────────────────────────────── */}
+                <div className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm overflow-hidden flex flex-col">
+                    <div className="h-1.5 bg-gradient-to-r from-[#FF9933] to-orange-300" />
+                    <div className="p-6 flex flex-col flex-1 space-y-5">
+                        <div>
+                            <p className="text-xs text-gray-400 uppercase tracking-wide font-medium mb-1">Amount Due</p>
+                            <p className="text-3xl font-bold text-gray-900">₹{service.price.toLocaleString("en-IN")}</p>
+                        </div>
+
+                        <div className="h-px bg-gray-100" />
+
+                        <div className="flex-1 space-y-3">
+                            <p className="text-xs text-gray-500 font-medium">You'll be redirected to Razorpay to complete payment securely.</p>
+                            <ul className="space-y-1.5 text-xs text-gray-400">
+                                {["UPI, Cards, Net Banking accepted", "256-bit SSL encryption", "Instant payment confirmation"].map((t) => (
+                                    <li key={t} className="flex items-center gap-2">
+                                        <span className="h-1.5 w-1.5 rounded-full bg-[#FF9933]/50 shrink-0" />
+                                        {t}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <Button
+                            onClick={handlePayment}
+                            className="w-full gap-2 bg-[#FF9933] hover:bg-[#FF9933]/90 text-white rounded-xl"
+                        >
+                            <CreditCard className="h-4 w-4" />
+                            Pay with Razorpay
+                        </Button>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
 
 export function CustomerCheckoutPage() {
     return (
-        <div>
-            <PageHeader title="Checkout" description="Review your order before payment" />
+        <div className="flex flex-col min-h-screen">
+            <PageHeader
+                title="Checkout"
+                description="Review your order before payment"
+                action={
+                    <Link href="/customer/services" className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-xl transition-colors">
+                        <ArrowLeft className="h-3.5 w-3.5" />
+                        Back
+                    </Link>
+                }
+            />
             <Suspense fallback={
-                <div className="p-6 text-sm text-muted-foreground">Loading checkout...</div>
+                <div className="p-6 text-sm text-gray-400">Loading checkout…</div>
             }>
                 <CheckoutContent />
             </Suspense>

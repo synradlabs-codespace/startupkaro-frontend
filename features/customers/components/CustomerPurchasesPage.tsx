@@ -34,7 +34,7 @@ export function CustomerPurchasesPage() {
                                     <TableRow>
                                         <TableCell colSpan={7} className="text-center text-muted-foreground py-10">
                                             No purchases yet.{" "}
-                                            <Link href="/customer/services" className="text-[var(--color-green)] hover:underline">
+                                            <Link href="/customer/services" className="text-[var(--color-saffron)] hover:underline">
                                                 Browse services
                                             </Link>
                                         </TableCell>

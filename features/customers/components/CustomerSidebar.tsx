@@ -8,7 +8,7 @@ import {
     ShoppingBag,
     Store,
     User,
-    LogOut,
+    LogOut, 
     ChevronRight,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -21,9 +21,9 @@ const navItems = [
     { title: "Profile", href: "/customer/profile", icon: User },
 ];
 
-const ACCENT = "#138808"; // Indian Green
-const ACCENT_BG = "rgba(19, 136, 8, 0.08)";
-const ACCENT_TEXT = "#138808";
+const ACCENT = "#FF9933";
+const ACCENT_BG = "rgba(255, 153, 51, 0.10)";
+const ACCENT_TEXT = "#d4720a";
 
 export function CustomerSidebar() {
     const pathname = usePathname();
