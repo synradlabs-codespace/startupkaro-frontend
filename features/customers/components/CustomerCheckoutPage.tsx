@@ -15,8 +15,42 @@ function CheckoutContent() {
     const service = mockServices.find((s) => s.id === serviceId) ?? mockServices[0];
 
     const handlePayment = () => {
-        // TODO: init Razorpay when backend is ready
-        router.push("/customer/checkout/success");
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.async = true;
+        document.body.appendChild(script);
+
+        script.onload = () => {
+            const options = {
+                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+                amount: service.price * 100, // paise
+                currency: "INR",
+                name: "StartupKaro",
+                description: service.name,
+                image: "/startupkaro-logo.svg",
+                handler: function (response: { razorpay_payment_id: string }) {
+                    router.push(
+                        `/customer/checkout/success?payment_id=${response.razorpay_payment_id}&service=${serviceId}`
+                    );
+                },
+                modal: {
+                    ondismiss: function () {
+                        router.push(`/customer/checkout/failure?service=${serviceId}`);
+                    },
+                },
+                theme: { color: "#FF9933" },
+            };
+
+            const rzp = new (window as any).Razorpay(options);
+            rzp.on("payment.failed", function () {
+                router.push(`/customer/checkout/failure?service=${serviceId}`);
+            });
+            rzp.open();
+        };
+
+        script.onerror = () => {
+            router.push(`/customer/checkout/failure?service=${serviceId}`);
+        };
     };
 
     return (

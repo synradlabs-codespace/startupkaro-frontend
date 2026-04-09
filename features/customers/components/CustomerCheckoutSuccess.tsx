@@ -1,9 +1,16 @@
+"use client";
+
 // features/customers/components/CustomerCheckoutSuccess.tsx
 
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { CheckCircle2, ShoppingBag, LayoutDashboard, Sparkles } from "lucide-react";
 
-export function CustomerCheckoutSuccess() {
+function SuccessContent() {
+    const searchParams = useSearchParams();
+    const paymentId = searchParams.get("payment_id");
+
     return (
         <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-orange-50/60 via-white to-amber-50/40">
             {/* Decorative blobs */}
@@ -41,6 +48,12 @@ export function CustomerCheckoutSuccess() {
                             You'll receive a confirmation email shortly
                         </div>
 
+                        {paymentId && (
+                            <p className="text-xs text-gray-400 font-mono">
+                                Payment ID: {paymentId}
+                            </p>
+                        )}
+
                         <div className="h-px bg-gray-100" />
 
                         {/* Actions */}
@@ -64,5 +77,13 @@ export function CustomerCheckoutSuccess() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export function CustomerCheckoutSuccess() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-sm text-gray-400">Loading…</div>}>
+            <SuccessContent />
+        </Suspense>
     );
 }

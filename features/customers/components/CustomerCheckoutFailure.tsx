@@ -1,9 +1,19 @@
+"use client";
+
 // features/customers/components/CustomerCheckoutFailure.tsx
 
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { XCircle, RefreshCw, LayoutDashboard, Phone } from "lucide-react";
 
-export function CustomerCheckoutFailure() {
+function FailureContent() {
+    const searchParams = useSearchParams();
+    const serviceId = searchParams.get("service");
+    const retryHref = serviceId
+        ? `/customer/checkout?service=${serviceId}`
+        : "/customer/services";
+
     return (
         <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-red-50/40 via-white to-rose-50/30">
             {/* Decorative blobs */}
@@ -42,7 +52,7 @@ export function CustomerCheckoutFailure() {
                         {/* Actions */}
                         <div className="flex flex-col sm:flex-row gap-3">
                             <Link
-                                href="/customer/services"
+                                href={retryHref}
                                 className="flex-1 inline-flex items-center justify-center gap-2 h-9 px-4 text-sm font-medium bg-[#FF9933] text-white hover:bg-[#FF9933]/90 rounded-xl transition-colors"
                             >
                                 <RefreshCw className="h-4 w-4" />
@@ -69,5 +79,13 @@ export function CustomerCheckoutFailure() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export function CustomerCheckoutFailure() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-sm text-gray-400">Loading…</div>}>
+            <FailureContent />
+        </Suspense>
     );
 }
