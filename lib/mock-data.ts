@@ -32,9 +32,36 @@ export const mockEmployees = [
 ];
 
 export const mockInquiries = [
-  { id: "INQ-001", name: "Suresh Kumar", email: "suresh@example.com", mobile: "+91 99887 76655", message: "I want to know more about GST registration process and the cost involved.", date: "2025-03-18" },
-  { id: "INQ-002", name: "Meena Iyer", email: "meena@example.com", mobile: "+91 88776 65544", message: "Need help with company incorporation for a tech startup.", date: "2025-03-19" },
-  { id: "INQ-003", name: "Deepak Joshi", email: "deepak@example.com", mobile: "+91 77665 54433", message: "Looking for trademark registration services. What documents are needed?", date: "2025-03-20" },
+  {
+    id: "INQ-001",
+    name: "Suresh Kumar",
+    email: "suresh@example.com",
+    mobile: "+91 99887 76655",
+    message: "I want to know more about GST registration process and the cost involved.",
+    date: "2025-03-18",
+    status: "resolved" as const,
+    notes: ["Called customer on 2025-03-19. Explained GST registration process.", "Sent detailed email with pricing breakdown."],
+  },
+  {
+    id: "INQ-002",
+    name: "Meena Iyer",
+    email: "meena@example.com",
+    mobile: "+91 88776 65544",
+    message: "Need help with company incorporation for a tech startup.",
+    date: "2025-03-19",
+    status: "unresolved" as const,
+    notes: ["Follow up scheduled for 2025-03-22."],
+  },
+  {
+    id: "INQ-003",
+    name: "Deepak Joshi",
+    email: "deepak@example.com",
+    mobile: "+91 77665 54433",
+    message: "Looking for trademark registration services. What documents are needed?",
+    date: "2025-03-20",
+    status: "unresolved" as const,
+    notes: [],
+  },
 ];
 
 export const mockAnalytics = {

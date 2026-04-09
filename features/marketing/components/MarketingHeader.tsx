@@ -3,6 +3,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
@@ -21,8 +22,15 @@ export function MarketingHeader() {
                 <div className="flex h-16 items-center justify-between gap-8">
 
                     {/* Logo */}
-                    <Link href="/" className="shrink-0 font-serif text-2xl tracking-tight text-gray-900">
-                        Startup<span className="text-[#FF9933]">Karo</span>
+                    <Link href="/" className="shrink-0">
+                        <Image
+                            src="/startupkaro-logo.svg"
+                            alt="StartupKaro"
+                            width={140}
+                            height={26}
+                            className="h-7 w-auto"
+                            priority
+                        />
                     </Link>
 
                     {/* Desktop nav */}
@@ -42,7 +50,7 @@ export function MarketingHeader() {
                     <div className="hidden md:flex items-center gap-3">
                         <Link
                             href="/login"
-                            className="inline-flex items-center h-9 px-4 text-sm font-medium text-gray-700 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+                            className="inline-flex items-center h-9 px-4 text-sm font-medium text-[#000080] border border-[#000080]/30 rounded-xl hover:bg-[#000080]/5 transition-colors"
                         >
                             Login
                         </Link>
@@ -83,7 +91,7 @@ export function MarketingHeader() {
                         <Link
                             href="/login"
                             onClick={() => setOpen(false)}
-                            className="flex items-center justify-center h-9 px-4 text-sm font-medium text-gray-700 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+                            className="flex items-center justify-center h-9 px-4 text-sm font-medium text-[#000080] border border-[#000080]/30 rounded-xl hover:bg-[#000080]/5 transition-colors"
                         >
                             Login
                         </Link>

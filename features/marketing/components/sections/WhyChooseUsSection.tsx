@@ -7,13 +7,13 @@ const reasons = [
         icon: Users,
         title: "Expert CA & CS team",
         description: "Every filing is handled by a qualified Chartered Accountant or Company Secretary — not a software bot.",
-        accent: "bg-violet-50 text-violet-600",
+        accent: "bg-[#000080]/8 text-[#000080]",
     },
     {
         icon: Globe,
         title: "100% online",
         description: "No office visits, no courier delays. Upload documents, sign digitally, and track progress — all online.",
-        accent: "bg-blue-50 text-blue-600",
+        accent: "bg-[#6BAE3A]/10 text-[#6BAE3A]",
     },
     {
         icon: Tag,
@@ -25,7 +25,7 @@ const reasons = [
         icon: BarChart3,
         title: "Real-time status updates",
         description: "Track every step of your application in your dashboard. Know exactly where your filing stands.",
-        accent: "bg-teal-50 text-teal-600",
+        accent: "bg-[#000080]/8 text-[#000080]",
     },
 ];
 

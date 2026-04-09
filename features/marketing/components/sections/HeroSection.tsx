@@ -42,7 +42,7 @@ export function HeroSection() {
                         </Link>
                         <Link
                             href="/about"
-                            className="inline-flex items-center h-11 px-6 text-sm font-medium text-gray-700 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+                            className="inline-flex items-center h-11 px-6 text-sm font-medium text-[#000080] border border-[#000080]/25 rounded-xl hover:bg-[#000080]/5 transition-colors"
                         >
                             Learn About Us
                         </Link>
@@ -51,7 +51,7 @@ export function HeroSection() {
                     {/* Trust row */}
                     <div className="flex flex-wrap gap-5 text-xs text-gray-500">
                         <span className="flex items-center gap-1.5">
-                            <ShieldCheck className="h-4 w-4 text-[#138808]" />
+                            <ShieldCheck className="h-4 w-4 text-[#6BAE3A]" />
                             100% legal compliance
                         </span>
                         <span className="flex items-center gap-1.5">

@@ -8,24 +8,36 @@ const steps = [
         step: "01",
         title: "Choose a service",
         description: "Browse our catalogue and pick the service your startup needs — pricing is fixed and transparent.",
+        iconBg: "bg-[#FF9933]/10",
+        iconColor: "text-[#FF9933]",
+        stepColor: "text-[#FF9933]",
     },
     {
         icon: Upload,
         step: "02",
         title: "Share your documents",
         description: "Upload the required documents securely through our portal. We tell you exactly what's needed.",
+        iconBg: "bg-[#000080]/8",
+        iconColor: "text-[#000080]",
+        stepColor: "text-[#000080]",
     },
     {
         icon: FileCheck2,
         step: "03",
         title: "We file for you",
         description: "Our CA / CS reviews and files everything with the relevant government authority on your behalf.",
+        iconBg: "bg-[#6BAE3A]/10",
+        iconColor: "text-[#6BAE3A]",
+        stepColor: "text-[#6BAE3A]",
     },
     {
         icon: CheckCircle2,
         step: "04",
         title: "You're compliant",
         description: "Receive your registration certificate, licence, or filed return — and stay compliant from day one.",
+        iconBg: "bg-[#FF9933]/10",
+        iconColor: "text-[#FF9933]",
+        stepColor: "text-[#FF9933]",
     },
 ];
 
@@ -47,10 +59,10 @@ export function HowItWorksSection() {
                                 {idx < steps.length - 1 && (
                                     <div className="hidden lg:block absolute top-5 left-[calc(100%+0px)] w-full h-px border-t border-dashed border-gray-300 -translate-x-1/2" />
                                 )}
-                                <div className="h-10 w-10 rounded-2xl bg-[#FF9933]/10 flex items-center justify-center mb-4 shrink-0">
-                                    <Icon className="h-5 w-5 text-[#FF9933]" />
+                                <div className={`h-10 w-10 rounded-2xl ${item.iconBg} flex items-center justify-center mb-4 shrink-0`}>
+                                    <Icon className={`h-5 w-5 ${item.iconColor}`} />
                                 </div>
-                                <span className="text-[10px] font-mono font-bold text-[#FF9933] tracking-widest mb-2">{item.step}</span>
+                                <span className={`text-[10px] font-mono font-bold ${item.stepColor} tracking-widest mb-2`}>{item.step}</span>
                                 <h3 className="text-sm font-semibold text-gray-900 mb-1.5">{item.title}</h3>
                                 <p className="text-xs text-gray-500 leading-relaxed">{item.description}</p>
                             </div>

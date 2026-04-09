@@ -7,7 +7,7 @@ export function LandingCTASection() {
     return (
         <section className="bg-gray-50/60 py-16 md:py-20">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FF9933] to-orange-400 px-8 py-14 text-center shadow-xl shadow-[#FF9933]/20">
+                <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#000080] via-[#000080] to-[#000060] px-8 py-14 text-center shadow-xl shadow-[#000080]/30">
                     {/* Decorative blobs */}
                     <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-white/10 blur-3xl" />
                     <div className="pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-white/10 blur-3xl" />
@@ -22,7 +22,7 @@ export function LandingCTASection() {
                         <div className="flex flex-wrap justify-center gap-3">
                             <Link
                                 href="/services"
-                                className="inline-flex items-center gap-2 h-11 px-6 text-sm font-medium text-[#FF9933] bg-white rounded-xl hover:bg-orange-50 transition-colors shadow-sm"
+                                className="inline-flex items-center gap-2 h-11 px-6 text-sm font-medium text-[#000080] bg-white rounded-xl hover:bg-orange-50 transition-colors shadow-sm"
                             >
                                 Browse Services
                                 <ArrowRight className="h-4 w-4" />
