@@ -15,19 +15,19 @@
   /* Brand colors — Indian flag palette */
   --color-saffron: #FF9933;
   --color-indigo: #000080;
-  --color-green: #138808;
+  --color-green: #6BAE3A;
   --color-black: #0A0A0A;
   --color-white: #ffffff;
 
   /* Semantic panel accents */
-  --color-accent-admin: #138808;
+  --color-accent-admin: #6BAE3A;
   --color-accent-employee: #000080;
   --color-accent-customer: #FF9933;
 
   /* Fonts */
   --font-serif: "Instrument Serif", serif;
   --font-mono: "DM Mono", monospace;
-  --font-sans: "DM Sans", sans-serif;
+  --font-sans: "Poppins", sans-serif;
 }
 
 @theme inline {
