@@ -1,7 +1,7 @@
 // app/(marketing)/about/page.tsx
 
-import { ComingSoonPage } from "@/features/marketing/components/ComingSoonPage";
+import { AboutPage } from "@/features/marketing/components/AboutPage";
 
-export default function AboutPage() {
-    return <ComingSoonPage title="About Us" />;
+export default function About() {
+    return <AboutPage />;
 }
