@@ -44,9 +44,9 @@ const navItems = [
     { title: "Analytics", href: "/admin/analytics", icon: BarChart3 },
 ];
 
-const ACCENT = "#138808";
-const ACCENT_BG = "rgba(19, 136, 8, 0.10)";
-const ACCENT_TEXT = "#0d6106";
+const ACCENT = "#6BAE3A";
+const ACCENT_BG = "rgba(107, 174, 58, 0.10)";
+const ACCENT_TEXT = "#4a7d28";
 
 export function AdminSidebar() {
     const pathname = usePathname();
@@ -82,18 +82,21 @@ export function AdminSidebar() {
             {/* Header */}
             <div className={`h-16 flex items-center px-4 py-5 transition-all duration-200 border-b border-gray-50 ${collapsed ? "justify-center" : "justify-between"}`}>
                 <div className={`flex items-center gap-3 overflow-hidden ${collapsed ? "w-auto" : "w-full"}`}>
-                    <div
-                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl font-bold text-xs text-white shadow-sm"
-                        style={{ backgroundColor: ACCENT }}
-                    >
-                        SK
-                    </div>
-                    {!collapsed && (
-                        <div className="flex flex-col whitespace-nowrap fade-in">
-                            <p className="text-[13px] font-semibold text-gray-900 leading-none tracking-tight">
-                                StartupKaro
-                            </p>
-                            <p className="text-[11px] text-gray-400 mt-1 leading-none">Admin Panel</p>
+                    {collapsed ? (
+                        <div
+                            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl font-bold text-xs text-white shadow-sm"
+                            style={{ backgroundColor: ACCENT }}
+                        >
+                            SK
+                        </div>
+                    ) : (
+                        <div className="flex flex-col whitespace-nowrap fade-in gap-0.5">
+                            <img
+                                src="/startupkaro-logo.svg"
+                                alt="StartupKaro"
+                                className="h-7 w-auto object-contain"
+                            />
+                            <p className="text-[11px] text-gray-400 leading-none pl-0.5">Admin Panel</p>
                         </div>
                     )}
                 </div>

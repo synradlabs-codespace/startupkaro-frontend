@@ -61,9 +61,11 @@ export function AdminCustomersPage() {
                                         <TableCell>{customer.orders}</TableCell>
                                         <TableCell className="text-muted-foreground text-sm">{customer.joined}</TableCell>
                                         <TableCell className="text-right">
-                                            <Button variant="ghost" size="icon">
-                                                <Link href={`/admin/customers/${customer.id}`}><Eye className="h-4 w-4" /></Link>
-                                            </Button>
+                                            <Link href={`/admin/customers/${customer.id}`}>
+                                                <Button variant="ghost" size="icon">
+                                                    <Eye className="h-4 w-4" />
+                                                </Button>
+                                            </Link>
                                         </TableCell>
                                     </TableRow>
                                 ))}

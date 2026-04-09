@@ -79,7 +79,7 @@ export function AdminAnalyticsPage() {
                             value: `₹${mockAnalytics.totalRevenue.toLocaleString("en-IN")}`,
                             sub: `+${momGrowth}% vs last month`,
                             icon: IndianRupee,
-                            accent: "bg-[#138808]/10 text-[#138808]",
+                            accent: "bg-[#6BAE3A]/10 text-[#6BAE3A]",
                         },
                         {
                             label: "Avg Order Value",
@@ -122,8 +122,8 @@ export function AdminAnalyticsPage() {
                     {/* Revenue Trend (bar chart) */}
                     <div className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm p-6">
                         <div className="flex items-center gap-2 mb-5">
-                            <div className="h-7 w-7 rounded-lg bg-[#138808]/10 flex items-center justify-center">
-                                <BarChart3 className="h-3.5 w-3.5 text-[#138808]" />
+                            <div className="h-7 w-7 rounded-lg bg-[#6BAE3A]/10 flex items-center justify-center">
+                                <BarChart3 className="h-3.5 w-3.5 text-[#6BAE3A]" />
                             </div>
                             <div>
                                 <p className="text-sm font-semibold text-gray-800">Monthly Revenue</p>
@@ -142,7 +142,7 @@ export function AdminAnalyticsPage() {
                                         </span>
                                         <div className="w-full flex-1 flex items-end">
                                             <div
-                                                className="w-full rounded-t-lg bg-gradient-to-t from-[#138808] to-[#138808]/60 transition-all"
+                                                className="w-full rounded-t-lg bg-gradient-to-t from-[#6BAE3A] to-[#6BAE3A]/60 transition-all"
                                                 style={{ height: `${heightPct}%` }}
                                             />
                                         </div>
@@ -153,7 +153,7 @@ export function AdminAnalyticsPage() {
                         </div>
 
                         {/* Growth badge */}
-                        <div className="flex items-center justify-end gap-1.5 text-xs text-[#138808] font-medium">
+                        <div className="flex items-center justify-end gap-1.5 text-xs text-[#6BAE3A] font-medium">
                             <TrendingUp className="h-3.5 w-3.5" />
                             +{momGrowth}% MoM growth
                         </div>
@@ -234,7 +234,7 @@ export function AdminAnalyticsPage() {
                                         </div>
                                         <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                                             <div
-                                                className="h-full rounded-full bg-gradient-to-r from-[#138808] to-[#138808]/60 transition-all"
+                                                className="h-full rounded-full bg-gradient-to-r from-[#6BAE3A] to-[#6BAE3A]/60 transition-all"
                                                 style={{ width: `${pct}%` }}
                                             />
                                         </div>
@@ -296,7 +296,7 @@ export function AdminAnalyticsPage() {
                     {[
                         { label: "Active Orders", value: mockAnalytics.activeOrders, icon: ShoppingCart, color: "text-blue-500" },
                         { label: "Total Customers", value: mockAnalytics.totalCustomers, icon: Users, color: "text-violet-500" },
-                        { label: "Avg Order Value", value: `₹${avgOrderValue.toLocaleString("en-IN")}`, icon: IndianRupee, color: "text-[#138808]" },
+                        { label: "Avg Order Value", value: `₹${avgOrderValue.toLocaleString("en-IN")}`, icon: IndianRupee, color: "text-[#6BAE3A]" },
                         { label: "MoM Growth", value: `+${momGrowth}%`, icon: TrendingUp, color: "text-emerald-500" },
                     ].map((s) => (
                         <div key={s.label} className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm px-5 py-4 flex items-center gap-4">

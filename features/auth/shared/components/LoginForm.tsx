@@ -41,7 +41,7 @@ export function LoginForm({
             <div className="absolute top-0 left-0 right-0 flex h-1">
                 <div className="flex-1 bg-[#FF9933]" />
                 <div className="flex-1 bg-white border-t border-gray-200" />
-                <div className="flex-1 bg-[#138808]" />
+                <div className="flex-1 bg-[#6BAE3A]" />
             </div>
 
             <div className="relative w-full max-w-md">

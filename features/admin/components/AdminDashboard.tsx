@@ -24,7 +24,7 @@ export function AdminDashboard() {
             label: "Total Revenue",
             value: `₹${mockAnalytics.totalRevenue.toLocaleString("en-IN")}`,
             icon: IndianRupee,
-            accent: "bg-[#138808]/10 text-[#138808]",
+            accent: "bg-[#6BAE3A]/10 text-[#6BAE3A]",
             sub: `Avg ₹${avgOrderValue.toLocaleString("en-IN")} / order`,
         },
         {
@@ -57,8 +57,8 @@ export function AdminDashboard() {
             <div className="flex-1 p-6 space-y-6">
 
                 {/* ── Hero Banner ───────────────────────────── */}
-                <div className="relative overflow-hidden rounded-2xl border border-[#138808]/15 bg-gradient-to-br from-[#138808]/8 via-white/80 to-emerald-50/60 backdrop-blur-sm p-6">
-                    <div className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full bg-[#138808]/8 blur-3xl" />
+                <div className="relative overflow-hidden rounded-2xl border border-[#6BAE3A]/15 bg-gradient-to-br from-[#6BAE3A]/8 via-white/80 to-emerald-50/60 backdrop-blur-sm p-6">
+                    <div className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full bg-[#6BAE3A]/8 blur-3xl" />
                     <div className="pointer-events-none absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-emerald-200/15 blur-2xl" />
                     <div className="relative flex items-center justify-between gap-4">
                         <div>
@@ -69,7 +69,7 @@ export function AdminDashboard() {
                         </div>
                         <Link
                             href="/admin/analytics"
-                            className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-[#138808] text-white hover:bg-[#138808]/90 rounded-xl transition-colors shrink-0"
+                            className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-[#6BAE3A] text-white hover:bg-[#6BAE3A]/90 rounded-xl transition-colors shrink-0"
                         >
                             <BarChart3 className="h-3.5 w-3.5" />
                             Analytics
@@ -105,7 +105,7 @@ export function AdminDashboard() {
                             sub: `₹${totalCollected.toLocaleString("en-IN")} of ₹${mockAnalytics.totalRevenue.toLocaleString("en-IN")}`,
                             icon: CreditCard,
                             bar: collectionRate,
-                            barColor: "bg-[#138808]",
+                            barColor: "bg-[#6BAE3A]",
                         },
                         {
                             label: "Order Completion",
@@ -149,7 +149,7 @@ export function AdminDashboard() {
                         </div>
                         <Link
                             href="/admin/orders"
-                            className="inline-flex items-center gap-1 text-xs font-medium text-[#138808] hover:underline"
+                            className="inline-flex items-center gap-1 text-xs font-medium text-[#6BAE3A] hover:underline"
                         >
                             View all <ArrowRight className="h-3 w-3" />
                         </Link>

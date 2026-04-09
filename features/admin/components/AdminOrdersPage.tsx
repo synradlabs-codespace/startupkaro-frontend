@@ -4,6 +4,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { PageHeader } from "@/components/custom/PageHeader";
+import { TablePagination } from "@/components/custom/TablePagination";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,9 +14,13 @@ import { OrderStatusBadge, PaymentStatusBadge } from "@/components/custom/Status
 import { mockOrders } from "@/lib/mock-data";
 import { Plus, Search, Eye, Pencil } from "lucide-react";
 
+const PAGE_SIZE = 10;
+
 export function AdminOrdersPage() {
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(PAGE_SIZE);
 
     const filtered = mockOrders.filter((o) => {
         const matchSearch =
@@ -26,17 +31,29 @@ export function AdminOrdersPage() {
         return matchSearch && matchStatus;
     });
 
+    const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
+
+    const handleFilterChange = (value: string) => {
+        setStatusFilter(value ?? "all");
+        setPage(1);
+    };
+
+    const handleSearch = (value: string) => {
+        setSearch(value);
+        setPage(1);
+    };
+
     return (
         <div>
             <PageHeader
                 title="Orders"
                 description={`${mockOrders.length} total orders`}
                 action={
-                    <Button  size="sm" className="bg-[var(--color-green)] hover:bg-[var(--color-green)]/90 text-white">
-                        <Link href="/admin/orders/new">
+                    <Link href="/admin/orders/new">
+                        <Button size="sm" className="bg-[var(--color-green)] hover:bg-[var(--color-green)]/90 text-white">
                             <Plus className="h-4 w-4 mr-1" /> New Order
-                        </Link>
-                    </Button>
+                        </Button>
+                    </Link>
                 }
             />
             <div className="p-6 space-y-4">
@@ -44,13 +61,13 @@ export function AdminOrdersPage() {
                     <div className="relative flex-1 min-w-[200px]">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
-                            placeholder="Search orders..."
+                            placeholder="Search by order ID, customer, or service..."
                             value={search}
-                            onChange={(e) => setSearch(e.target.value)}
+                            onChange={(e) => handleSearch(e.target.value)}
                             className="pl-9"
                         />
                     </div>
-                    <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v ?? "all")}>
+                    <Select value={statusFilter} onValueChange={handleFilterChange}>
                         <SelectTrigger className="w-[160px]">
                             <SelectValue placeholder="All Statuses" />
                         </SelectTrigger>
@@ -64,46 +81,50 @@ export function AdminOrdersPage() {
                     </Select>
                 </div>
 
-                <Card>
+                <Card className="overflow-hidden">
                     <CardContent className="p-0">
                         <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Order ID</TableHead>
-                                    <TableHead>Customer</TableHead>
-                                    <TableHead>Service</TableHead>
-                                    <TableHead>Amount</TableHead>
-                                    <TableHead>Status</TableHead>
-                                    <TableHead>Payment</TableHead>
-                                    <TableHead>Date</TableHead>
-                                    <TableHead className="text-right">Actions</TableHead>
+                            <TableHeader className="bg-muted/50">
+                                <TableRow className="hover:bg-muted/50">
+                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Order ID</TableHead>
+                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Customer</TableHead>
+                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Service</TableHead>
+                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Amount</TableHead>
+                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Status</TableHead>
+                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Payment</TableHead>
+                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Date</TableHead>
+                                    <TableHead className="text-right font-semibold text-foreground/70 uppercase text-xs tracking-wide">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {filtered.length === 0 ? (
+                                {paginated.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={8} className="text-center text-muted-foreground py-10">
+                                        <TableCell colSpan={8} className="text-center text-muted-foreground py-12">
                                             No orders found
                                         </TableCell>
                                     </TableRow>
                                 ) : (
-                                    filtered.map((order) => (
-                                        <TableRow key={order.id}>
-                                            <TableCell className="font-mono text-xs">{order.id}</TableCell>
+                                    paginated.map((order) => (
+                                        <TableRow key={order.id} className="hover:bg-muted/30">
+                                            <TableCell className="font-mono text-xs text-muted-foreground">{order.id}</TableCell>
                                             <TableCell className="font-medium">{order.customer}</TableCell>
-                                            <TableCell className="text-muted-foreground">{order.service}</TableCell>
-                                            <TableCell>₹{order.amount.toLocaleString("en-IN")}</TableCell>
+                                            <TableCell className="text-muted-foreground text-sm">{order.service}</TableCell>
+                                            <TableCell className="font-medium">₹{order.amount.toLocaleString("en-IN")}</TableCell>
                                             <TableCell><OrderStatusBadge status={order.status as any} /></TableCell>
                                             <TableCell><PaymentStatusBadge status={order.paymentStatus as any} /></TableCell>
                                             <TableCell className="text-muted-foreground text-sm">{order.date}</TableCell>
                                             <TableCell className="text-right">
-                                                <div className="flex gap-2 justify-end">
-                                                    <Button variant="ghost" size="icon" >
-                                                        <Link href={`/admin/orders/${order.id}`}><Eye className="h-4 w-4" /></Link>
-                                                    </Button>
-                                                    <Button variant="ghost" size="icon" >
-                                                        <Link href={`/admin/orders/${order.id}/edit`}><Pencil className="h-4 w-4" /></Link>
-                                                    </Button>
+                                                <div className="flex gap-1 justify-end">
+                                                    <Link href={`/admin/orders/${order.id}`}>
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[var(--color-green)]/10 hover:text-[var(--color-green)]">
+                                                            <Eye className="h-4 w-4" />
+                                                        </Button>
+                                                    </Link>
+                                                    <Link href={`/admin/orders/${order.id}/edit`}>
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[var(--color-indigo)]/10 hover:text-[var(--color-indigo)]">
+                                                            <Pencil className="h-4 w-4" />
+                                                        </Button>
+                                                    </Link>
                                                 </div>
                                             </TableCell>
                                         </TableRow>
@@ -111,6 +132,13 @@ export function AdminOrdersPage() {
                                 )}
                             </TableBody>
                         </Table>
+                        <TablePagination
+                            total={filtered.length}
+                            page={page}
+                            pageSize={pageSize}
+                            onPageChange={setPage}
+                            onPageSizeChange={setPageSize}
+                        />
                     </CardContent>
                 </Card>
             </div>
