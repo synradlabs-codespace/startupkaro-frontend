@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { OrderStatusBadge, PaymentStatusBadge } from "@/components/custom/StatusBadge";
 import { mockCustomers, mockOrders } from "@/lib/mock-data";
-import { Mail, Phone } from "lucide-react";
+import { Mail, Phone, Eye } from "lucide-react";
 
 export function EmployeeCustomerDetailPage({ id }: { id: string }) {
   const customer = mockCustomers.find((c) => c.id === id) ?? mockCustomers[0];
@@ -48,12 +48,13 @@ export function EmployeeCustomerDetailPage({ id }: { id: string }) {
                   <TableHead>Order Status</TableHead>
                   <TableHead>Payment</TableHead>
                   <TableHead>Date</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {orders.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
+                    <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
                       No orders yet
                     </TableCell>
                   </TableRow>
@@ -66,6 +67,13 @@ export function EmployeeCustomerDetailPage({ id }: { id: string }) {
                       <TableCell><OrderStatusBadge status={order.status as any} /></TableCell>
                       <TableCell><PaymentStatusBadge status={order.paymentStatus as any} /></TableCell>
                       <TableCell className="text-muted-foreground text-sm">{order.date}</TableCell>
+                      <TableCell className="text-right">
+                        <Link href={`/employee/orders/${order.id}`}>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[var(--color-indigo)]/10 hover:text-[var(--color-indigo)]">
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                        </Link>
+                      </TableCell>
                     </TableRow>
                   ))
                 )}

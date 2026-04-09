@@ -1,27 +1,32 @@
+// features/employee/components/EmployeeOrderEditPage.tsx
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { InquiryStatusBadge } from "@/components/custom/StatusBadge";
-import { mockInquiries } from "@/lib/mock-data";
-import { CheckCircle2, StickyNote, Send } from "lucide-react";
+import { mockOrders } from "@/lib/mock-data";
+import { StickyNote, Send, CheckCircle2 } from "lucide-react";
 
-export function EmployeeInquiryDetailPage({ id }: { id: string }) {
-    const inquiry = mockInquiries.find((i) => i.id === id) ?? mockInquiries[0];
+export function EmployeeOrderEditPage({ id }: { id: string }) {
+    const router = useRouter();
+    const order = mockOrders.find((o) => o.id === id) ?? mockOrders[0];
 
-    const [status, setStatus] = useState<"unresolved" | "resolved">(inquiry.status);
-    const [statusSaved, setStatusSaved] = useState(false);
-    const [notes, setNotes] = useState<string[]>(inquiry.notes);
+    const [status, setStatus] = useState(order.status);
+    const [saved, setSaved] = useState(false);
+    const [notes, setNotes] = useState<string[]>([]);
     const [newNote, setNewNote] = useState("");
 
-    const handleSaveStatus = () => {
-        setStatusSaved(true);
-        setTimeout(() => setStatusSaved(false), 2000);
+    const handleSave = () => {
+        setSaved(true);
+        setTimeout(() => {
+            setSaved(false);
+            router.push(`/employee/orders/${id}`);
+        }, 1200);
     };
 
     const handleAddNote = () => {
@@ -31,63 +36,61 @@ export function EmployeeInquiryDetailPage({ id }: { id: string }) {
         setNewNote("");
     };
 
-    const statusChanged = status !== inquiry.status;
+    const statusChanged = status !== order.status;
 
     return (
         <div>
-            <PageHeader title="Inquiry Detail" />
+            <PageHeader title={`Edit Order ${id}`} description="Update order status and add notes" />
             <div className="p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-5xl">
 
-                    {/* Left — Inquiry Info */}
+                    {/* Left — Status */}
                     <Card>
-                        <CardHeader>
-                            <div className="flex items-center justify-between">
-                                <CardTitle className="text-base">Inquiry from {inquiry.name}</CardTitle>
-                                <InquiryStatusBadge status={status} />
-                            </div>
-                        </CardHeader>
-                        <CardContent className="space-y-4 text-sm">
+                        <CardHeader><CardTitle className="text-base">Order Status</CardTitle></CardHeader>
+                        <CardContent className="space-y-5 text-sm">
+                            {/* Read-only summary */}
                             {[
-                                { label: "Name", value: inquiry.name },
-                                { label: "Email", value: inquiry.email },
-                                { label: "Mobile", value: inquiry.mobile },
-                                { label: "Date", value: inquiry.date },
-                            ].map(({ label, value }) => (
+                                { label: "Order ID", value: order.id, mono: true },
+                                { label: "Service", value: order.service },
+                                { label: "Amount", value: `₹${order.amount.toLocaleString("en-IN")}` },
+                                { label: "Customer", value: order.customer },
+                            ].map(({ label, value, mono }) => (
                                 <div key={label} className="flex justify-between">
                                     <span className="text-muted-foreground">{label}</span>
-                                    <span className="font-medium">{value}</span>
+                                    <span className={mono ? "font-mono text-xs" : "font-medium"}>{value}</span>
                                 </div>
                             ))}
-                            <div className="pt-2 border-t">
-                                <p className="text-muted-foreground text-xs mb-2">Message</p>
-                                <p className="text-sm leading-relaxed">{inquiry.message}</p>
-                            </div>
+
                             <div className="pt-2 border-t space-y-1.5">
-                                <Label className="text-xs text-muted-foreground">Status</Label>
-                                <Select value={status} onValueChange={(v) => setStatus(v as "unresolved" | "resolved")}>
+                                <Label className="text-xs text-muted-foreground">Update Status</Label>
+                                <Select value={status} onValueChange={setStatus}>
                                     <SelectTrigger className="h-8 text-sm">
                                         <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="unresolved">Unresolved</SelectItem>
-                                        <SelectItem value="resolved">Resolved</SelectItem>
+                                        <SelectItem value="pending">Pending</SelectItem>
+                                        <SelectItem value="processing">Processing</SelectItem>
+                                        <SelectItem value="completed">Completed</SelectItem>
+                                        <SelectItem value="cancelled">Cancelled</SelectItem>
                                     </SelectContent>
                                 </Select>
-                                {(statusChanged || statusSaved) && (
-                                    <Button
-                                        size="sm"
-                                        className="w-full mt-1 bg-[var(--color-indigo)] hover:bg-[var(--color-indigo)]/90 text-white"
-                                        onClick={handleSaveStatus}
-                                        disabled={statusSaved}
-                                    >
-                                        {statusSaved ? (
-                                            <><CheckCircle2 className="h-4 w-4 mr-1" /> Saved</>
-                                        ) : (
-                                            "Save Status"
-                                        )}
-                                    </Button>
-                                )}
+                            </div>
+
+                            <div className="flex gap-3 pt-2">
+                                <Button
+                                    className="bg-[var(--color-indigo)] hover:bg-[var(--color-indigo)]/90 text-white"
+                                    onClick={handleSave}
+                                    disabled={saved || !statusChanged}
+                                >
+                                    {saved ? (
+                                        <><CheckCircle2 className="h-4 w-4 mr-1" /> Saved</>
+                                    ) : (
+                                        "Save Status"
+                                    )}
+                                </Button>
+                                <Button variant="outline" onClick={() => router.back()}>
+                                    Cancel
+                                </Button>
                             </div>
                         </CardContent>
                     </Card>

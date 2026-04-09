@@ -10,6 +10,7 @@ import {
   MessageSquare,
   LogOut,
   ChevronRight,
+  User,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useSidebar } from "@/components/ui/sidebar";
@@ -19,6 +20,7 @@ const navItems = [
   { title: "Orders", href: "/employee/orders", icon: ShoppingCart },
   { title: "Customers", href: "/employee/customers", icon: Users },
   { title: "Inquiries", href: "/employee/inquiries", icon: MessageSquare },
+  { title: "Profile", href: "/employee/profile", icon: User },
 ];
 
 const ACCENT = "#000080"; // Navy Blue
@@ -42,23 +44,27 @@ export function EmployeeSidebar() {
 
   return (
     <aside
-      className={`flex flex-col border-r border-gray-100 bg-white transition-all duration-300 ease-in-out relative z-20 h-screen ${
-        collapsed ? "w-[80px]" : "w-64"
-      }`}
+      className={`flex flex-col border-r border-gray-100 bg-white transition-all duration-300 ease-in-out relative z-20 h-screen ${collapsed ? "w-[80px]" : "w-64"
+        }`}
     >
       {/* Header */}
       <div className={`h-16 flex items-center px-4 py-5 border-b border-gray-50 ${collapsed ? "justify-center" : "justify-between"}`}>
         <div className={`flex items-center gap-3 overflow-hidden ${collapsed ? "w-auto" : "w-full"}`}>
-          <div
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl font-bold text-xs text-white shadow-sm"
-            style={{ backgroundColor: ACCENT }}
-          >
-            SK
-          </div>
-          {!collapsed && (
-            <div className="flex flex-col whitespace-nowrap">
-              <p className="text-[13px] font-semibold text-gray-900 leading-none tracking-tight">StartupKaro</p>
-              <p className="text-[11px] text-gray-400 mt-1 leading-none">Employee Panel</p>
+          {collapsed ? (
+            <div
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl font-bold text-xs text-white shadow-sm"
+              style={{ backgroundColor: ACCENT }}
+            >
+              SK
+            </div>
+          ) : (
+            <div className="flex flex-col whitespace-nowrap gap-0.5">
+              <img
+                src="/startupkaro-logo.svg"
+                alt="StartupKaro"
+                className="h-7 w-auto object-contain"
+              />
+              <p className="text-[11px] text-gray-400 leading-none pl-0.5">Employee Panel</p>
             </div>
           )}
         </div>
@@ -77,9 +83,8 @@ export function EmployeeSidebar() {
                 <button
                   onClick={() => toggleMenu(item.title)}
                   title={collapsed ? item.title : undefined}
-                  className={`h-9 w-full rounded-lg flex items-center gap-2.5 px-3 transition-all duration-150 cursor-pointer outline-none ${
-                    collapsed ? "justify-center" : "justify-between"
-                  }`}
+                  className={`h-9 w-full rounded-lg flex items-center gap-2.5 px-3 transition-all duration-150 cursor-pointer outline-none ${collapsed ? "justify-center" : "justify-between"
+                    }`}
                   style={active && !collapsed ? { backgroundColor: ACCENT_BG, color: ACCENT_TEXT } : { color: "#374151" }}
                 >
                   <div className="flex items-center gap-2.5">
