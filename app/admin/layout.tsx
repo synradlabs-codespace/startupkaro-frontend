@@ -5,10 +5,10 @@ import { AdminSidebar } from "@/features/admin/components/AdminSidebar";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     return (
-        <SidebarProvider>
+        <SidebarProvider className="h-screen overflow-hidden">
             <AdminSidebar />
-            <SidebarInset>
-                <div className="flex flex-col min-h-screen">
+            <SidebarInset className="overflow-y-auto">
+                <div className="flex flex-col min-h-full">
                     {children}
                 </div>
             </SidebarInset>
