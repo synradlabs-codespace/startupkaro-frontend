@@ -63,7 +63,7 @@ export function EmployeeOrderEditPage({ id }: { id: string }) {
 
                             <div className="pt-2 border-t space-y-1.5">
                                 <Label className="text-xs text-muted-foreground">Update Status</Label>
-                                <Select value={status} onValueChange={setStatus}>
+                                <Select value={status} onValueChange={(v) => setStatus(v ?? status)}>
                                     <SelectTrigger className="h-8 text-sm">
                                         <SelectValue />
                                     </SelectTrigger>

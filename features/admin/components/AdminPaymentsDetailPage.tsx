@@ -25,10 +25,10 @@ export function AdminPaymentDetailPage({ id }: { id: string }) {
     const details = [
         { label: "Payment ID", value: payment.id, icon: Hash, mono: true },
         { label: "Order ID", value: payment.orderId, icon: CreditCard, mono: true },
-        { label: "Customer", value: payment.customer, icon: User },
-        { label: "Amount", value: `₹${payment.amount.toLocaleString("en-IN")}`, icon: IndianRupee },
-        { label: "Method", value: payment.method, icon: Smartphone },
-        { label: "Date", value: payment.date, icon: Calendar },
+        { label: "Customer", value: payment.customer, icon: User, mono: false },
+        { label: "Amount", value: `₹${payment.amount.toLocaleString("en-IN")}`, icon: IndianRupee, mono: false },
+        { label: "Method", value: payment.method, icon: Smartphone, mono: false },
+        { label: "Date", value: payment.date, icon: Calendar, mono: false },
     ] as const;
 
     return (
@@ -79,7 +79,7 @@ export function AdminPaymentDetailPage({ id }: { id: string }) {
 
                             <div className="space-y-3">
                                 <Label className="text-xs text-muted-foreground">Update Status</Label>
-                                <Select value={status} onValueChange={setStatus}>
+                                <Select value={status} onValueChange={(v) => setStatus(v ?? status)}>
                                     <SelectTrigger className="rounded-xl border-gray-200">
                                         <SelectValue />
                                     </SelectTrigger>

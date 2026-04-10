@@ -33,7 +33,7 @@ export function AdminPaymentsPage() {
     const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
     const total = mockPayments.filter(p => p.status === "paid").reduce((sum, p) => sum + p.amount, 0);
 
-    const handleFilterChange = (value: string) => {
+    const handleFilterChange = (value: string | null) => {
         setStatusFilter(value ?? "all");
         setPage(1);
     };

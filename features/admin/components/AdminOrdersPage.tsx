@@ -33,7 +33,7 @@ export function AdminOrdersPage() {
 
     const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
 
-    const handleFilterChange = (value: string) => {
+    const handleFilterChange = (value: string | null) => {
         setStatusFilter(value ?? "all");
         setPage(1);
     };

@@ -38,7 +38,7 @@ export function AdminInquiriesPage() {
         setInquiries((prev) => prev.filter((i) => i.id !== id));
     };
 
-    const handleFilterChange = (value: string) => {
+    const handleFilterChange = (value: string | null) => {
         setStatusFilter(value ?? "all");
         setPage(1);
     };

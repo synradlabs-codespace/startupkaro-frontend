@@ -18,8 +18,8 @@ export function AdminEmployeeDetailPage({ id }: { id: string }) {
 
     const [editing, setEditing] = useState(false);
     const [name, setName] = useState(emp.name);
-    const [status, setStatus] = useState(emp.status);
-    const [form, setForm] = useState({ name: emp.name, status: emp.status });
+    const [status, setStatus] = useState(emp.status ?? "");
+    const [form, setForm] = useState({ name: emp.name, status: emp.status ?? "" });
 
     const handleEdit = () => {
         setForm({ name, status });
@@ -86,7 +86,7 @@ export function AdminEmployeeDetailPage({ id }: { id: string }) {
                         <div className="flex gap-2 items-center">
                             <Badge variant="outline">{emp.role}</Badge>
                             {editing ? (
-                                <Select value={form.status} onValueChange={(v) => setForm(f => ({ ...f, status: v }))}>
+                                <Select value={form.status} onValueChange={(v) => setForm(f => ({ ...f, status: v ?? "" }))}>
                                     <SelectTrigger className="h-7 text-xs rounded-full px-3 w-auto border-gray-200">
                                         <SelectValue />
                                     </SelectTrigger>
