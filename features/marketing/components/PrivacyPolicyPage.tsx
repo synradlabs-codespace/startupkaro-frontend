@@ -58,7 +58,7 @@ export function PrivacyPolicyPage() {
                         <li>Interaction events such as button clicks and form interactions</li>
                     </ul>
                     <p className="mt-2">
-                        We use <strong className="text-gray-900">PostHog</strong> — an open-source product analytics platform — to collect
+                        We use <strong className="text-gray-900">PostHog</strong>, an open-source product analytics platform, to collect
                         behavioral and usage data to understand how visitors interact with our website. PostHog may set cookies on
                         your device. See our <Link href="/cookies-policy" className="text-[#FF9933] hover:underline">Cookies Policy</Link> for details.
                     </p>

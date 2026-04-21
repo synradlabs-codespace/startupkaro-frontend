@@ -28,7 +28,7 @@ export function HeroSection() {
 
                     {/* Sub-headline */}
                     <p className="text-lg text-gray-500 leading-relaxed mb-8 max-w-2xl">
-                        Expert CAs and CSs handle your GST, company registration, trademarks, and compliance — end to end. Fixed pricing, real-time updates, zero back-and-forth.
+                        Expert CAs and CSs handle your GST, company registration, trademarks, and compliance, end to end. Fixed pricing, real-time updates, zero back-and-forth.
                     </p>
 
                     {/* CTAs */}

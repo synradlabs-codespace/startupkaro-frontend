@@ -28,7 +28,7 @@ export function ServicesListingPage({ services }: { services: Service[] }) {
             {/* Page title */}
             <div>
                 <h1 className="font-serif text-3xl md:text-4xl font-normal text-gray-900 mb-2">Our Services</h1>
-                <p className="text-sm text-gray-500">Startup compliance and legal services — handled end-to-end by expert CAs.</p>
+                <p className="text-sm text-gray-500">Startup compliance and legal services, handled end-to-end by expert CAs.</p>
             </div>
 
             {/* Search + filter */}

@@ -6,13 +6,13 @@ const reasons = [
     {
         icon: Users,
         title: "Expert CA & CS team",
-        description: "Every filing is handled by a qualified Chartered Accountant or Company Secretary — not a software bot.",
+        description: "Every filing is handled by a qualified Chartered Accountant or Company Secretary, not a software bot.",
         accent: "bg-[#000080]/8 text-[#000080]",
     },
     {
         icon: Globe,
         title: "100% online",
-        description: "No office visits, no courier delays. Upload documents, sign digitally, and track progress — all online.",
+        description: "No office visits, no courier delays. Upload documents, sign digitally, and track progress, all online.",
         accent: "bg-[#6BAE3A]/10 text-[#6BAE3A]",
     },
     {

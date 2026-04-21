@@ -49,8 +49,8 @@ export function TermsOfServicePage() {
                         company incorporation, trademark filing, income tax return filing, FSSAI licensing, and import-export code registration.
                     </p>
                     <p>
-                        All services are delivered through qualified professionals — Chartered Accountants (CAs), Company Secretaries (CSs),
-                        and legal professionals — assigned on a case-by-case basis.
+                        All services are delivered through qualified professionals, Chartered Accountants (CAs), Company Secretaries (CSs),
+                        and legal professionals, assigned on a case-by-case basis.
                     </p>
                     <p>
                         We act as a facilitator and professional service provider. We do not guarantee outcomes that are subject to
@@ -62,7 +62,7 @@ export function TermsOfServicePage() {
                     <p>You agree to:</p>
                     <ul className="list-disc pl-5 space-y-1.5">
                         <li>Provide accurate, complete, and up-to-date information when placing an order or filling any form</li>
-                        <li>Upload genuine documents — submitting forged or fraudulent documents is illegal and will result in immediate service termination</li>
+                        <li>Upload genuine documents, submitting forged or fraudulent documents is illegal and will result in immediate service termination</li>
                         <li>Respond promptly to requests for additional information or document verification</li>
                         <li>Keep your account credentials confidential and notify us of any unauthorised access</li>
                         <li>Use our services only for lawful business purposes</li>
@@ -91,8 +91,8 @@ export function TermsOfServicePage() {
 
                 <Section title="Intellectual Property">
                     <p>
-                        All content on the StartupKaro website — including text, graphics, logos, service descriptions, and
-                        software — is the property of StartupKaro and is protected under applicable intellectual property laws.
+                        All content on the StartupKaro website, including text, graphics, logos, service descriptions, and
+                        software, is the property of StartupKaro and is protected under applicable intellectual property laws.
                         You may not reproduce, distribute, or use our content without prior written consent.
                     </p>
                 </Section>

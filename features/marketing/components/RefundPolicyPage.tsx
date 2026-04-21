@@ -42,7 +42,7 @@ export function RefundPolicyPage() {
                 <Section title="Overview">
                     <p>
                         StartupKaro provides professional compliance and registration services that involve significant human effort,
-                        government interaction, and third-party costs — often from the moment your order is placed. Because of the
+                        government interaction, and third-party costs, often from the moment your order is placed. Because of the
                         nature of these services, all refund decisions are made solely at the discretion of StartupKaro on a
                         case-by-case basis.
                     </p>
@@ -91,7 +91,7 @@ export function RefundPolicyPage() {
 
                 <Section title="Government-Mandated Rejections">
                     <p>
-                        Some services — such as trademark registration or company name approval — involve outcomes that are
+                        Some services, such as trademark registration or company name approval, involve outcomes that are
                         subject to government discretion. A rejection by a government authority does not automatically entitle
                         you to a refund of professional fees, as our team has already invested effort in preparing and filing
                         your application. Refund eligibility in such cases will be assessed individually.
@@ -142,7 +142,7 @@ export function RefundPolicyPage() {
 
                 <Section title="Contact">
                     <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 text-sm">
-                        <p className="font-medium text-gray-900">StartupKaro — Refund Requests</p>
+                        <p className="font-medium text-gray-900">StartupKaro, Refund Requests</p>
                         <p className="text-gray-500 mt-1">
                             Email:{" "}
                             <a href="mailto:hello@startupkaro.in" className="text-[#FF9933] hover:underline">

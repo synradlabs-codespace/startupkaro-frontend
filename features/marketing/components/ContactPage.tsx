@@ -123,7 +123,7 @@ export function ContactPage() {
                                 Get in touch
                             </p>
                             <h1 className="text-4xl text-black font-serif font-normal leading-tight">
-                                We&apos;d love to<br />hear from you
+                                We'd love to<br />hear from you
                             </h1>
                             <p className="mt-3 text-sm text-gray-500">
                                 Have a question about our services? Need help choosing the right compliance package? Our experts are here to help.

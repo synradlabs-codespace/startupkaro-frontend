@@ -40,7 +40,7 @@ export function MarketingFooter() {
                             />
                         </Link>
                         <p className="text-sm text-gray-500 leading-relaxed">
-                            End-to-end compliance and legal services for Indian startups — handled by expert CAs and CSs.
+                            End-to-end compliance and legal services for Indian startups, handled by expert CAs and CSs.
                         </p>
                         <div className="flex gap-3 pt-1">
                             <a

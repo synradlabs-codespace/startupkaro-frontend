@@ -16,21 +16,21 @@ const values = [
         color: "#FF9933",
         title: "Compliance-first",
         description:
-            "Every service we offer is designed around keeping your business fully compliant with Indian law — no shortcuts, no guesswork.",
+            "Every service we offer is designed around keeping your business fully compliant with Indian law, no shortcuts, no guesswork.",
     },
     {
         icon: Clock,
         color: "#000080",
         title: "Transparent timelines",
         description:
-            "We quote real timelines and stick to them. Government delays happen — we keep you informed every step of the way.",
+            "We quote real timelines and stick to them. Government delays happen, we keep you informed every step of the way.",
     },
     {
         icon: Users,
         color: "#6BAE3A",
         title: "Human experts, always",
         description:
-            "A dedicated CA or CS is assigned to your case. You get a real professional — not a chatbot or a generic form submission.",
+            "A dedicated CA or CS is assigned to your case. You get a real professional, not a chatbot or a generic form submission.",
     },
     {
         icon: Award,
@@ -68,11 +68,11 @@ export function AboutPage() {
                         About StartupKaro
                     </p>
                     <h1 className="text-4xl sm:text-5xl font-serif font-normal text-gray-900 leading-tight mb-6">
-                        India&apos;s compliance partner<br className="hidden sm:block" /> for growing businesses
+                        India's compliance partner<br className="hidden sm:block" /> for growing businesses
                     </h1>
                     <p className="text-base sm:text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
                         StartupKaro was built for founders, freelancers, and small business owners who want to spend less time
-                        navigating paperwork and more time building. We handle the legal and compliance work — end to end.
+                        navigating paperwork and more time building. We handle the legal and compliance work, end to end.
                     </p>
                 </div>
             </section>
@@ -100,15 +100,15 @@ export function AboutPage() {
                 <div className="space-y-4 text-gray-600 text-[15px] leading-relaxed">
                     <p>
                         Starting a business in India has historically meant months of back-and-forth with consultants,
-                        government portals, and mountains of documentation. For most first-time founders, it&apos;s overwhelming.
+                        government portals, and mountains of documentation. For most first-time founders, it's overwhelming.
                     </p>
                     <p>
-                        We built StartupKaro to change that. Our platform combines qualified professionals — Chartered Accountants,
-                        Company Secretaries, and legal experts — with a simple, transparent process so that any business owner
+                        We built StartupKaro to change that. Our platform combines qualified professionals, Chartered Accountants,
+                        Company Secretaries, and legal experts, with a simple, transparent process so that any business owner
                         can get legally set up and stay compliant, without needing to become a compliance expert themselves.
                     </p>
                     <p>
-                        We serve startups from day one through their growth journey — beginning with company registration and
+                        We serve startups from day one through their growth journey, beginning with company registration and
                         GST, and continuing with ongoing tax filing, payroll, accounting, and regulatory compliance as they scale.
                     </p>
                 </div>
@@ -150,7 +150,7 @@ export function AboutPage() {
                     </p>
                     <h2 className="text-3xl font-serif font-normal text-gray-900">Our services</h2>
                     <p className="mt-3 text-sm text-gray-500 max-w-xl mx-auto">
-                        Fixed services at fixed prices — delivered by qualified professionals.
+                        Fixed services at fixed prices, delivered by qualified professionals.
                     </p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -186,7 +186,7 @@ export function AboutPage() {
                         Ready to get started?
                     </h2>
                     <p className="text-sm text-gray-500 mb-8 leading-relaxed">
-                        Tell us what you need and we&apos;ll match you with the right service and a dedicated expert.
+                        Tell us what you need and we'll match you with the right service and a dedicated expert.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                         <Link

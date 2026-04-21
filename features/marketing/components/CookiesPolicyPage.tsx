@@ -15,7 +15,7 @@ const cookieTable = [
     {
         name: "ph_*",
         provider: "PostHog",
-        purpose: "Product analytics — tracks page views, events, and user sessions to help us understand usage",
+        purpose: "Product analytics, tracks page views, events, and user sessions to help us understand usage",
         type: "Analytics",
         duration: "1 year",
     },
@@ -82,7 +82,7 @@ export function CookiesPolicyPage() {
 
                 <Section title="PostHog Analytics">
                     <p>
-                        We use <strong className="text-gray-900">PostHog</strong> — an open-source, privacy-focused product analytics platform — to
+                        We use <strong className="text-gray-900">PostHog</strong>, an open-source, privacy-focused product analytics platform, to
                         understand how our website and app are used. PostHog collects:
                     </p>
                     <ul className="list-disc pl-5 space-y-1.5">
@@ -90,7 +90,7 @@ export function CookiesPolicyPage() {
                         <li>Button clicks and form interaction events</li>
                         <li>Browser and device type</li>
                         <li>Approximate geographic location (country/city level, derived from IP)</li>
-                        <li>Session recordings (if enabled) — these capture UI interactions, not keystrokes or passwords</li>
+                        <li>Session recordings (if enabled), these capture UI interactions, not keystrokes or passwords</li>
                     </ul>
                     <p>
                         PostHog does not use your data for advertising and does not share it with third-party ad networks.
@@ -99,7 +99,7 @@ export function CookiesPolicyPage() {
                     </p>
                     <p>
                         IP addresses collected by PostHog may be used to derive location data and are subsequently anonymized
-                        or truncated in accordance with PostHog&apos;s data processing practices.
+                        or truncated in accordance with PostHog's data processing practices.
                     </p>
                 </Section>
 
@@ -139,7 +139,7 @@ export function CookiesPolicyPage() {
                     <p>
                         <strong className="text-gray-900">Opt-out of analytics:</strong> If you do not wish to be tracked by PostHog, you can
                         use a browser extension that blocks analytics scripts (such as uBlock Origin), or enable
-                        &quot;Do Not Track&quot; in your browser settings — PostHog respects this signal where configured.
+                        &quot;Do Not Track&quot; in your browser settings, PostHog respects this signal where configured.
                     </p>
                 </Section>
 
