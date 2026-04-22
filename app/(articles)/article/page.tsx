@@ -1,8 +1,8 @@
-// app/(marketing)/article/page.tsx
+// app/(articles)/article/page.tsx
 
 import type { Metadata } from "next";
-import { ArticleListPage } from "@/features/marketing/components/ArticleListPage";
-import { getArticles } from "@/features/marketing/data/articles.service";
+import { ArticleListPage } from "@/features/articles/components/ArticleListPage";
+import { getArticles } from "@/features/articles/data/articles.service";
 
 export const metadata: Metadata = {
     title: "Articles | StartupKaro",

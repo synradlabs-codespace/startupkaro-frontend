@@ -1,13 +1,13 @@
-// app/(marketing)/article/[slug]/page.tsx
+// app/(articles)/article/[slug]/page.tsx
 
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ArticleDetailPage } from "@/features/marketing/components/ArticleDetailPage";
+import { ArticleDetailPage } from "@/features/articles/components/ArticleDetailPage";
 import {
     getArticleBySlug,
     getAllArticleSlugs,
     getRelatedArticles,
-} from "@/features/marketing/data/articles.service";
+} from "@/features/articles/data/articles.service";
 
 export async function generateStaticParams() {
     return getAllArticleSlugs();
