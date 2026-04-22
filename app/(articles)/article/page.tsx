@@ -2,7 +2,9 @@
 
 import type { Metadata } from "next";
 import { ArticleListPage } from "@/features/articles/components/ArticleListPage";
-import { getArticles } from "@/features/articles/data/articles.service";
+import { getArticles } from "@/features/articles/api/articles.service";
+import { getAllCategories } from "@/features/articles/api/categories.service";
+import { SanityLive } from "@/sanity/live";
 
 export const metadata: Metadata = {
     title: "Articles | StartupKaro",
@@ -17,7 +19,20 @@ export default async function ArticlesPage({
 }) {
     const { page: p, category } = await searchParams;
     const page = Math.max(1, Number(p) || 1);
-    const data = await getArticles({ page, pageSize: 12, category });
 
-    return <ArticleListPage {...data} activeCategory={category ?? "All"} />;
+    const [data, categories] = await Promise.all([
+        getArticles({ page, pageSize: 12, category }),
+        getAllCategories(),
+    ]);
+
+    return (
+        <>
+            <ArticleListPage
+                {...data}
+                activeCategory={category ?? "All"}
+                categories={categories}
+            />
+            <SanityLive />
+        </>
+    );
 }

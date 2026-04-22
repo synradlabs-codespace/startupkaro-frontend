@@ -3,20 +3,18 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar, Clock, ArrowLeft, User } from "lucide-react";
-import { categoryMeta, fallbackMeta } from "@/features/articles/data/category-meta";
+import { getIcon } from "@/features/articles/lib/icon-map";
 import { ArticleBody } from "./ui/ArticleBody";
 import { ArticleCard } from "./ui/ArticleCard";
 import { ReadingProgressBar } from "./ui/ReadingProgressBar";
-import type { Article } from "@/features/articles/data/types";
+import type { Article, ArticleCard as ArticleCardType } from "@/features/articles/types";
 
 interface ArticleDetailPageProps {
     article: Article;
-    related: Article[];
+    related: ArticleCardType[];
 }
 
 export function ArticleDetailPage({ article, related }: ArticleDetailPageProps) {
-    const meta = categoryMeta[article.category] ?? fallbackMeta;
-
     const formattedDate = new Date(article.publishedAt).toLocaleDateString("en-IN", {
         day: "numeric",
         month: "long",
@@ -26,6 +24,7 @@ export function ArticleDetailPage({ article, related }: ArticleDetailPageProps) 
     return (
         <div>
             <ReadingProgressBar endElementId="related-articles" />
+
             {/* Hero */}
             <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 pt-10 pb-8">
                 {/* Back link */}
@@ -37,11 +36,22 @@ export function ArticleDetailPage({ article, related }: ArticleDetailPageProps) 
                     All Articles
                 </Link>
 
-                {/* Category badge */}
-                <div className="mb-4">
-                    <span className={`inline-block text-[11px] font-semibold px-2.5 py-1 rounded-full ${meta.badge}`}>
-                        {article.category}
-                    </span>
+                {/* Category badges */}
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                    {article.categories.map((cat) => {
+                        const Icon = getIcon(cat.iconName);
+                        const color = cat.accentColor ?? "#6B7280";
+                        return (
+                            <span
+                                key={cat.slug}
+                                className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full"
+                                style={{ backgroundColor: `${color}1A`, color }}
+                            >
+                                <Icon className="h-3 w-3" />
+                                {cat.title}
+                            </span>
+                        );
+                    })}
                 </div>
 
                 {/* Title */}
@@ -49,27 +59,39 @@ export function ArticleDetailPage({ article, related }: ArticleDetailPageProps) 
                     {article.title}
                 </h1>
 
-                {/* Excerpt / standfirst */}
-                <p className="text-lg text-gray-500 leading-relaxed mb-8">{article.excerpt}</p>
+                {/* Summary / standfirst */}
+                <p className="text-lg text-gray-500 leading-relaxed mb-8">{article.summary}</p>
 
                 {/* Author + meta */}
                 <div className="flex flex-wrap items-center gap-4">
-                    <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
-                        <User className="h-5 w-5 text-gray-400" />
+                    <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
+                        {article.author.avatar ? (
+                            <Image
+                                src={article.author.avatar}
+                                alt={article.author.name}
+                                width={40}
+                                height={40}
+                                className="object-cover"
+                            />
+                        ) : (
+                            <User className="h-5 w-5 text-gray-400" />
+                        )}
                     </div>
                     <div className="min-w-0">
                         <p className="text-sm font-medium text-gray-900">{article.author.name}</p>
-                        <p className="text-xs text-gray-400">{article.author.role}</p>
+                        <p className="text-xs text-gray-400">{article.author.designation}</p>
                     </div>
                     <div className="ml-auto flex flex-wrap items-center gap-4 text-xs text-gray-400">
                         <span className="flex items-center gap-1.5">
                             <Calendar className="h-3.5 w-3.5" />
                             {formattedDate}
                         </span>
-                        <span className="flex items-center gap-1.5">
-                            <Clock className="h-3.5 w-3.5" />
-                            {article.readTimeMinutes} min read
-                        </span>
+                        {article.readTime != null && (
+                            <span className="flex items-center gap-1.5">
+                                <Clock className="h-3.5 w-3.5" />
+                                {article.readTime} min read
+                            </span>
+                        )}
                     </div>
                 </div>
             </div>
@@ -78,11 +100,13 @@ export function ArticleDetailPage({ article, related }: ArticleDetailPageProps) 
             <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 mb-8">
                 <div className="relative h-64 md:h-96 w-full rounded-2xl overflow-hidden">
                     <Image
-                        src={article.coverImageUrl ?? "/assets/blog-placeholder.jpg"}
-                        alt={article.title}
+                        src={article.coverImage?.url ?? "/assets/blog-placeholder.jpg"}
+                        alt={article.coverImage?.alt ?? article.title}
                         fill
                         className="object-cover"
                         priority
+                        placeholder={article.coverImage?.lqip ? "blur" : "empty"}
+                        blurDataURL={article.coverImage?.lqip}
                         sizes="(max-width: 768px) 100vw, 896px"
                     />
                 </div>
@@ -103,12 +127,22 @@ export function ArticleDetailPage({ article, related }: ArticleDetailPageProps) 
                 <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pb-12">
                     <div className="rounded-2xl border border-gray-200/70 bg-gray-50/80 p-5">
                         <div className="flex items-start gap-4">
-                            <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center shrink-0">
-                                <User className="h-5 w-5 text-gray-500" />
+                            <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center shrink-0 overflow-hidden">
+                                {article.author.avatar ? (
+                                    <Image
+                                        src={article.author.avatar}
+                                        alt={article.author.name}
+                                        width={40}
+                                        height={40}
+                                        className="object-cover"
+                                    />
+                                ) : (
+                                    <User className="h-5 w-5 text-gray-500" />
+                                )}
                             </div>
                             <div>
                                 <p className="text-sm font-semibold text-gray-900">{article.author.name}</p>
-                                <p className="text-xs text-gray-400 mb-2">{article.author.role}</p>
+                                <p className="text-xs text-gray-400 mb-2">{article.author.designation}</p>
                                 <p className="text-xs text-gray-500 leading-relaxed">{article.author.bio}</p>
                             </div>
                         </div>

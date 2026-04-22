@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
     // Trade-off: slightly slower cold starts, but no OOM crash after ~1 hour.
     turbopackFileSystemCacheForDev: false,
   },
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "cdn.sanity.io" },
+    ],
+  },
 };
 
 export default nextConfig;

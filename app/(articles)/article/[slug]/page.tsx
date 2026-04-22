@@ -7,7 +7,8 @@ import {
     getArticleBySlug,
     getAllArticleSlugs,
     getRelatedArticles,
-} from "@/features/articles/data/articles.service";
+} from "@/features/articles/api/articles.service";
+import { SanityLive } from "@/sanity/live";
 
 export async function generateStaticParams() {
     return getAllArticleSlugs();
@@ -21,13 +22,21 @@ export async function generateMetadata({
     const { slug } = await params;
     const article = await getArticleBySlug(slug);
     if (!article) return {};
+
+    const ogImages = [];
+    if (article.seo?.ogImage) ogImages.push({ url: article.seo.ogImage });
+    else if (article.coverImage?.url) ogImages.push({ url: article.coverImage.url });
+
     return {
         title: article.seo?.title ?? `${article.title} | StartupKaro`,
-        description: article.seo?.description ?? article.excerpt,
+        description: article.seo?.description ?? article.summary,
+        keywords: article.seo?.keywords,
         openGraph: {
             type: "article",
             publishedTime: article.publishedAt,
+            modifiedTime: article.updatedAt,
             authors: [article.author.name],
+            images: ogImages,
         },
     };
 }
@@ -41,6 +50,13 @@ export default async function ArticlePage({
     const article = await getArticleBySlug(slug);
     if (!article) notFound();
 
-    const related = await getRelatedArticles(slug, article.category, 3);
-    return <ArticleDetailPage article={article} related={related} />;
+    const categorySlugs = article.categories.map((c) => c.slug);
+    const related = await getRelatedArticles(slug, categorySlugs, 3);
+
+    return (
+        <>
+            <ArticleDetailPage article={article} related={related} />
+            <SanityLive />
+        </>
+    );
 }

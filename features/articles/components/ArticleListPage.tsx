@@ -4,18 +4,30 @@ import { BookOpen } from "lucide-react";
 import { ArticleCard } from "./ui/ArticleCard";
 import { ArticleFilters } from "./ui/ArticleFilters";
 import { ArticlePagination } from "./ui/ArticlePagination";
-import type { Article } from "@/features/articles/data/types";
+import type { ArticleCard as ArticleCardType, Category } from "@/features/articles/types";
 
 interface ArticleListPageProps {
-    items: Article[];
+    items: ArticleCardType[];
     total: number;
     page: number;
     pageSize: number;
     activeCategory: string;
+    categories: Category[];
 }
 
-export function ArticleListPage({ items, total, page, pageSize, activeCategory }: ArticleListPageProps) {
+export function ArticleListPage({
+    items,
+    total,
+    page,
+    pageSize,
+    activeCategory,
+    categories,
+}: ArticleListPageProps) {
     const totalPages = Math.max(1, Math.ceil(total / pageSize));
+    const isFiltered = activeCategory && activeCategory !== "All" && activeCategory !== "all";
+    const activeCategoryTitle = isFiltered
+        ? (categories.find((c) => c.slug === activeCategory)?.title ?? activeCategory)
+        : null;
 
     return (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 space-y-8">
@@ -31,13 +43,13 @@ export function ArticleListPage({ items, total, page, pageSize, activeCategory }
             </div>
 
             {/* Category filters */}
-            <ArticleFilters activeCategory={activeCategory} />
+            <ArticleFilters categories={categories} activeCategory={activeCategory} />
 
             {/* Result count */}
             {total > 0 && (
                 <p className="text-xs text-gray-400">
                     {total} article{total !== 1 ? "s" : ""}
-                    {activeCategory !== "All" ? ` in ${activeCategory}` : ""}
+                    {activeCategoryTitle ? ` in ${activeCategoryTitle}` : ""}
                 </p>
             )}
 
