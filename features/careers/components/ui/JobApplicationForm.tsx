@@ -274,9 +274,10 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                             <input
                                 type="tel"
                                 value={form.mobile}
-                                onChange={(e) => set("mobile", e.target.value)}
-                                placeholder="+91 98765 43210"
+                                onChange={(e) => set("mobile", e.target.value.replace(/[^\d+]/g, ""))}
+                                placeholder="+91 9876543210"
                                 autoComplete="tel"
+                                inputMode="numeric"
                                 className={`${INPUT_BASE} ${errors.mobile ? INPUT_ERROR : INPUT_DEFAULT}`}
                             />
                             {errors.mobile && (
@@ -506,7 +507,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-3.5 rounded-xl text-sm font-mono tracking-widest uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-white bg-[#FF9933] hover:bg-[#FF9933]/90 shadow-sm shadow-[#FF9933]/20"
+                        className="w-full py-3.5 rounded-xl text-sm font-mono tracking-widest uppercase transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-white bg-[#FF9933] hover:bg-[#FF9933]/90 shadow-sm shadow-[#FF9933]/20"
                     >
                         {loading ? "Submitting…" : "Submit Application"}
                     </button>

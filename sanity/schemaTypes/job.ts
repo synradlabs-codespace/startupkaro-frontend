@@ -1,6 +1,7 @@
 import { defineField, defineType } from "sanity";
 import { Briefcase } from "lucide-react";
 import { JobIdInput } from "../components/JobIdInput";
+import { SlugReadOnlyInput } from "../components/SlugReadOnlyInput";
 
 const DEPARTMENT_OPTIONS = [
     { title: "Advisory", value: "Advisory" },
@@ -37,7 +38,9 @@ export const jobType = defineType({
             title: "Slug",
             type: "slug",
             group: "overview",
-            options: { source: "title", maxLength: 96 },
+            description: "Auto-generated from Job ID. Do not edit manually.",
+            options: { source: "jobId", maxLength: 96 },
+            components: { input: SlugReadOnlyInput },
             validation: (Rule) => Rule.required(),
         }),
         defineField({
