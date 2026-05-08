@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Link from "next/link";
 import {
     motion,
     useScroll,
@@ -13,8 +12,9 @@ import {
     LineChart,
     ShieldCheck,
     Check,
-    ArrowRight,
 } from "lucide-react";
+
+import { FlowButton } from "@/components/custom/FlowButton";
 
 const steps = [
     {
@@ -38,6 +38,8 @@ const steps = [
             "PAN & TAN application",
         ],
         visualLabel: "Let\u2019s get you started",
+        colorVariant: "saffron" as const,
+        ctaText: "Start Now",
     },
     {
         number: "02",
@@ -60,6 +62,8 @@ const steps = [
             "ROC annual compliance",
         ],
         visualLabel: "Keeping things on track",
+        colorVariant: "navy" as const,
+        ctaText: "Manage Now",
     },
     {
         number: "03",
@@ -82,6 +86,8 @@ const steps = [
             "Dispute & notice handling",
         ],
         visualLabel: "You\u2019re covered",
+        colorVariant: "green" as const,
+        ctaText: "Protect Now",
     },
 ];
 
@@ -291,13 +297,12 @@ function StepCard({ step, isActive }: StepCardProps) {
 
             {/* CTA */}
             <div className="pt-1">
-                <Link
+                <FlowButton
                     href="/services"
-                    className="inline-flex items-center gap-2 h-10 px-5 text-sm font-medium text-white bg-[#FF9933] rounded-xl hover:bg-[#FF9933]/90 transition-colors shadow-sm shadow-[#FF9933]/20"
-                >
-                    Explore services
-                    <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
+                    text={step.ctaText}
+                    icon={step.Icon}
+                    colorVariant={step.colorVariant}
+                />
             </div>
         </motion.div>
     );

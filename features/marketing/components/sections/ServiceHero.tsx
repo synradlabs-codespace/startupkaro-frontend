@@ -1,9 +1,9 @@
 // features/marketing/components/sections/ServiceHero.tsx
 
-import Link from "next/link";
 import { Clock, ArrowRight } from "lucide-react";
 import { categoryMeta, fallbackMeta } from "@/features/marketing/data/category-meta";
 import type { Service } from "@/features/marketing/data/types";
+import { FlowButton } from "@/components/custom/FlowButton";
 
 export function ServiceHero({ service }: { service: Service }) {
     const meta = categoryMeta[service.category] ?? fallbackMeta;
@@ -48,13 +48,12 @@ export function ServiceHero({ service }: { service: Service }) {
                                     <p className="text-xs text-gray-400 mt-1">{service.pricing.note}</p>
                                 )}
                             </div>
-                            <Link
+                            <FlowButton
                                 href={`/customer/checkout?service=${service.slug}`}
-                                className="flex items-center justify-center gap-2 w-full h-10 px-4 text-sm font-medium bg-[#FF9933] text-white hover:bg-[#FF9933]/90 rounded-xl transition-colors"
-                            >
-                                Get Started
-                                <ArrowRight className="h-4 w-4" />
-                            </Link>
+                                text="Get Started"
+                                colorVariant="saffron"
+                                className="w-full justify-center"
+                            />
                             <p className="text-[11px] text-center text-gray-400">No hidden fees. Expert assistance included.</p>
                         </div>
                     </div>

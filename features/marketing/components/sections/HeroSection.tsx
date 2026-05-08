@@ -1,7 +1,9 @@
 // features/marketing/components/sections/HeroSection.tsx
 
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, Clock, Star } from "lucide-react";
+import { ShieldCheck, Clock, Star } from "lucide-react";
+
+import { FlowButton } from "@/components/custom/FlowButton";
 
 export function HeroSection() {
     return (
@@ -33,19 +35,7 @@ export function HeroSection() {
 
                     {/* CTAs */}
                     <div className="flex flex-wrap items-center gap-3 mb-10">
-                        <Link
-                            href="/services"
-                            className="inline-flex items-center gap-2 h-11 px-6 text-sm font-medium text-white bg-[#FF9933] rounded-xl hover:bg-[#FF9933]/90 transition-colors shadow-sm shadow-[#FF9933]/20"
-                        >
-                            Explore Services
-                            <ArrowRight className="h-4 w-4" />
-                        </Link>
-                        <Link
-                            href="/about"
-                            className="inline-flex items-center h-11 px-6 text-sm font-medium text-[#000080] border border-[#000080]/25 rounded-xl hover:bg-[#000080]/5 transition-colors"
-                        >
-                            Learn About Us
-                        </Link>
+                        <FlowButton href="/services" text="Explore Services" colorVariant="saffron" />
                     </div>
 
                     {/* Trust row */}

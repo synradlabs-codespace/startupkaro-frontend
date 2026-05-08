@@ -1,8 +1,8 @@
 // features/marketing/components/sections/ServicePricingCTA.tsx
 
-import Link from "next/link";
 import { ArrowRight, Clock, ShieldCheck } from "lucide-react";
 import type { Service } from "@/features/marketing/data/types";
+import { FlowButton } from "@/components/custom/FlowButton";
 
 export function ServicePricingCTA({ service }: { service: Service }) {
     return (
@@ -24,13 +24,11 @@ export function ServicePricingCTA({ service }: { service: Service }) {
                     </div>
 
                     <div className="flex flex-col sm:items-end gap-3">
-                        <Link
+                        <FlowButton
                             href={`/customer/checkout?service=${service.slug}`}
-                            className="inline-flex items-center justify-center gap-2 h-11 px-8 text-sm font-medium bg-[#FF9933] text-white hover:bg-[#FF9933]/90 rounded-xl transition-colors shadow-sm"
-                        >
-                            Get Started Now
-                            <ArrowRight className="h-4 w-4" />
-                        </Link>
+                            text="Get Started Now"
+                            colorVariant="saffron"
+                        />
                         <p className="text-[11px] text-gray-400 flex items-center gap-1.5">
                             <ShieldCheck className="h-3 w-3 text-[#FF9933]" />
                             Expert CA assigned · Secured payment

@@ -7,10 +7,13 @@ import Image from "next/image";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
+import { FlowButton } from "@/components/custom/FlowButton";
+
 const navLinks = [
     { href: "/services", label: "Services" },
     { href: "/article", label: "Articles" },
     { href: "/about", label: "About" },
+    { href: "/careers", label: "Careers" },
     { href: "/contact", label: "Contact" },
 ];
 
@@ -55,12 +58,7 @@ export function MarketingHeader() {
                         >
                             Login
                         </Link>
-                        <Link
-                            href="/services"
-                            className="inline-flex items-center h-9 px-4 text-sm font-medium text-white bg-[#FF9933] rounded-xl hover:bg-[#FF9933]/90 transition-colors"
-                        >
-                            Get Started
-                        </Link>
+                        <FlowButton href="/services" text="Get Started" colorVariant="saffron" wrapperClassName="h-9" />
                     </div>
 
                     {/* Mobile menu toggle */}
@@ -96,13 +94,13 @@ export function MarketingHeader() {
                         >
                             Login
                         </Link>
-                        <Link
+                        <FlowButton
                             href="/services"
                             onClick={() => setOpen(false)}
-                            className="flex items-center justify-center h-9 px-4 text-sm font-medium text-white bg-[#FF9933] rounded-xl hover:bg-[#FF9933]/90 transition-colors"
-                        >
-                            Get Started
-                        </Link>
+                            text="Get Started"
+                            colorVariant="saffron"
+                            wrapperClassName="justify-center h-9"
+                        />
                     </div>
                 </div>
             )}
