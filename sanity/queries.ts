@@ -96,3 +96,53 @@ export const CATEGORIES_QUERY = defineQuery(`
     iconName
   }
 `);
+
+// ─── Careers / Jobs ──────────────────────────────────────────────────────────
+
+const JOB_CARD_PROJECTION = `{
+  _id,
+  title,
+  "slug": slug.current,
+  jobId,
+  department,
+  workType,
+  location,
+  isRemote,
+  shortDescription
+}`;
+
+export const JOBS_QUERY = defineQuery(`
+  *[_type == "job" && isActive == true] | order(publishedAt desc) ${JOB_CARD_PROJECTION}
+`);
+
+export const JOB_BY_SLUG_QUERY = defineQuery(`
+  *[_type == "job" && slug.current == $slug][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    jobId,
+    department,
+    workType,
+    location,
+    isRemote,
+    shortDescription,
+    bannerCtaLabel,
+    publishedAt,
+    whatYoullDo[] {
+      ...,
+      _type == "image" => {
+        "url": asset->url,
+        alt,
+        caption,
+        "lqip": asset->metadata.lqip,
+        "dimensions": asset->metadata.dimensions
+      }
+    },
+    requirements,
+    bonusRequirements
+  }
+`);
+
+export const ALL_JOB_SLUGS_QUERY = defineQuery(`
+  *[_type == "job" && defined(slug.current) && isActive == true]{ "slug": slug.current }
+`);

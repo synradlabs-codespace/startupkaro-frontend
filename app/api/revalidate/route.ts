@@ -30,6 +30,9 @@ export async function POST(req: NextRequest) {
             revalidateTag("article", "default");
         } else if (_type === "author") {
             revalidateTag("article", "default");
+        } else if (_type === "job") {
+            revalidateTag("job", "default");
+            if (slug?.current) revalidateTag(`job:${slug.current}`, "default");
         }
 
         return NextResponse.json({

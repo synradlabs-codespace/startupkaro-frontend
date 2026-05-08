@@ -1,6 +1,7 @@
 import { categoryType } from "./category";
 import { authorType } from "./author";
 import { articleType } from "./article";
+import { jobType } from "./job";
 import { seoType } from "./objects/seo";
 import { portableTextBodyType } from "./objects/portableTextBody";
 import { embedInstagramType } from "./objects/embedInstagram";
@@ -11,6 +12,7 @@ export const schemaTypes = [
     categoryType,
     authorType,
     articleType,
+    jobType,
     // Objects
     seoType,
     portableTextBodyType,
