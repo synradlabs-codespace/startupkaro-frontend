@@ -88,6 +88,12 @@ export const ALL_SLUGS_QUERY = defineQuery(`
   *[_type == "article" && defined(slug.current)]{ "slug": slug.current }
 `);
 
+export const LATEST_ARTICLES_QUERY = defineQuery(`
+  *[_type == "article" && defined(slug.current) && defined(publishedAt)]
+  | order(publishedAt desc)
+  [0...3] ${ARTICLE_CARD_PROJECTION}
+`);
+
 export const CATEGORIES_QUERY = defineQuery(`
   *[_type == "category"] | order(title asc) {
     title,

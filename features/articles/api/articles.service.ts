@@ -6,6 +6,7 @@ import {
     ARTICLE_BY_SLUG_QUERY,
     RELATED_FALLBACK_QUERY,
     ALL_SLUGS_QUERY,
+    LATEST_ARTICLES_QUERY,
 } from "@/sanity/queries";
 import type { Article, ArticleCard } from "@/features/articles/types";
 import { calculateReadTime } from "@/features/articles/lib/read-time";
@@ -65,6 +66,15 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
 export async function getAllArticleSlugs(): Promise<{ slug: string }[]> {
     const data = await client.fetch(ALL_SLUGS_QUERY);
     return (data ?? []) as { slug: string }[];
+}
+
+export async function getLatestArticles(limit = 3): Promise<ArticleCard[]> {
+    const result = await sanityFetch({
+        query: LATEST_ARTICLES_QUERY,
+        params: { limit },
+        tags: ["article"],
+    });
+    return (result.data ?? []) as ArticleCard[];
 }
 
 export async function getRelatedArticles(
