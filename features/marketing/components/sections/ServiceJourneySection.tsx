@@ -21,14 +21,14 @@ const steps = [
         number: "01",
         heading: "Start your business",
         Icon: Rocket,
-        accent: "#ff7759",
-        accentBg: "bg-coral/10",
-        accentText: "text-coral",
-        accentBorder: "border-coral/25",
-        gradientFrom: "from-orange-50",
-        gradientTo: "to-amber-50",
-        iconBg: "bg-coral/15",
-        iconText: "text-coral",
+        accent: "#37352f",
+        accentBg: "bg-tint-peach",
+        accentText: "text-charcoal",
+        accentBorder: "border-hairline-strong",
+        gradientFrom: "from-tint-cream",
+        gradientTo: "to-tint-peach",
+        iconBg: "bg-tint-peach",
+        iconText: "text-charcoal",
         description:
             "Get legally incorporated and ready to operate. Our experts handle every filing end to end, so you can stay focused on building.",
         services: [
@@ -37,22 +37,22 @@ const steps = [
             "Startup India recognition",
             "PAN & TAN application",
         ],
-        visualLabel: "Let’s get you started",
-        colorVariant: "saffron" as const,
+        visualLabel: "Let's get you started",
+        colorVariant: "navy" as const,
         ctaText: "Start Now",
     },
     {
         number: "02",
         heading: "Manage your business",
         Icon: LineChart,
-        accent: "#17171c",
-        accentBg: "bg-primary-brand/8",
-        accentText: "text-primary-brand",
-        accentBorder: "border-primary-brand/20",
-        gradientFrom: "from-indigo-50",
+        accent: "#37352f",
+        accentBg: "bg-tint-sky",
+        accentText: "text-charcoal",
+        accentBorder: "border-hairline-strong",
+        gradientFrom: "from-tint-sky",
         gradientTo: "to-blue-50",
-        iconBg: "bg-primary-brand/10",
-        iconText: "text-primary-brand",
+        iconBg: "bg-tint-sky",
+        iconText: "text-charcoal",
         description:
             "Stay compliant and financially healthy month to month. We handle the recurring filings so nothing slips through the cracks.",
         services: [
@@ -69,14 +69,14 @@ const steps = [
         number: "03",
         heading: "Protect your business",
         Icon: ShieldCheck,
-        accent: "#003c33",
-        accentBg: "bg-deep-green/10",
-        accentText: "text-deep-green",
-        accentBorder: "border-deep-green/20",
-        gradientFrom: "from-green-50",
+        accent: "#37352f",
+        accentBg: "bg-tint-mint",
+        accentText: "text-charcoal",
+        accentBorder: "border-hairline-strong",
+        gradientFrom: "from-tint-mint",
         gradientTo: "to-emerald-50",
-        iconBg: "bg-deep-green/15",
-        iconText: "text-deep-green",
+        iconBg: "bg-tint-mint",
+        iconText: "text-charcoal",
         description:
             "Safeguard the brand, IP, and legal footing you've built. Lock in your trademarks and have expert legal cover on standby.",
         services: [
@@ -85,8 +85,8 @@ const steps = [
             "Legal contracts & agreements",
             "Dispute & notice handling",
         ],
-        visualLabel: "You’re covered",
-        colorVariant: "green" as const,
+        visualLabel: "You're covered",
+        colorVariant: "navy" as const,
         ctaText: "Protect Now",
     },
 ];
@@ -109,111 +109,108 @@ export function ServiceJourneySection() {
     const activeAccent = steps[activeStep].accent;
 
     return (
-        <section className="bg-white py-20 md:py-24">
+        <section className="bg-canvas py-20 md:py-24">
             {/* Section header */}
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center mb-14">
-                <p className="font-mono text-xs uppercase tracking-[0.28px] text-coral mb-2">
+                <p className="text-xs uppercase tracking-[0.28px] text-steel font-medium mb-2">
                     Your journey
                 </p>
-                <h2 className="font-display text-4xl md:text-5xl text-ink font-normal tracking-tight">
+                <h2 className="font-display text-4xl md:text-5xl text-ink font-semibold tracking-tight">
                     Everything you need,{" "}
-                    <span className="text-coral">at every stage</span>
+                    <span className="italic font-normal">at every stage</span>
                 </h2>
-                <p className="mt-3 text-base text-body-muted max-w-lg mx-auto">
-                    From the day you register to years of growth, we're with you at every step.
+                <p className="mt-3 text-base text-slate max-w-lg mx-auto">
+                    From the day you register to years of growth, we&apos;re with you at every step.
                 </p>
             </div>
 
-            {/* ── DESKTOP: sticky-left + scrollable-right ── */}
+            {/* DESKTOP: sticky-left + scrollable-right */}
             <div
                 ref={containerRef}
                 className="relative hidden lg:block mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
             >
                 <div className="lg:grid lg:grid-cols-2 lg:gap-16">
-                    {/* Left — grid item stretches to full row height, inner div sticks */}
                     <div>
-                    <div className="lg:sticky lg:top-24 lg:h-[calc(100vh-6rem)] flex flex-col justify-center items-center gap-6">
-                        {/* Illustration area */}
-                        <div className="relative w-full max-w-sm aspect-square">
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={activeStep}
-                                    initial={{ opacity: 0, scale: 0.97, y: 10 }}
-                                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                                    exit={{ opacity: 0, scale: 0.97, y: -10 }}
-                                    transition={{ duration: 0.45, ease: "easeOut" }}
-                                    className={`absolute inset-0 rounded-[22px] bg-linear-to-br ${steps[activeStep].gradientFrom} ${steps[activeStep].gradientTo} flex flex-col items-center justify-center gap-5 border border-hairline`}
-                                >
-                                    {/* Decorative rings */}
-                                    <div
-                                        className="absolute inset-0 rounded-[22px] opacity-30"
-                                        style={{
-                                            background: `radial-gradient(circle at 70% 30%, ${activeAccent}22 0%, transparent 60%)`,
-                                        }}
-                                    />
-                                    <div
-                                        className="w-24 h-24 rounded-lg flex items-center justify-center"
-                                        style={{ backgroundColor: `${activeAccent}22` }}
-                                    >
-                                        {(() => {
-                                            const S = steps[activeStep];
-                                            return (
-                                                <S.Icon
-                                                    className="h-10 w-10"
-                                                    style={{ color: activeAccent }}
-                                                />
-                                            );
-                                        })()}
-                                    </div>
-                                    <div className="text-center px-6 relative">
-                                        <p
-                                            className="font-mono text-xs uppercase tracking-[0.28px] mb-1"
-                                            style={{ color: activeAccent }}
-                                        >
-                                            Step {steps[activeStep].number}
-                                        </p>
-                                        <p className="font-display text-xl text-ink font-normal">
-                                            {steps[activeStep].heading}
-                                        </p>
-                                        <p className="text-xs text-body-muted mt-1.5">
-                                            {steps[activeStep].visualLabel}
-                                        </p>
-                                    </div>
-                                    {/* Decorative dot grid */}
-                                    <div className="absolute bottom-6 right-6 grid grid-cols-3 gap-1.5 opacity-20">
-                                        {Array.from({ length: 9 }).map((_, i) => (
-                                            <div
-                                                key={i}
-                                                className="w-1.5 h-1.5 rounded-full"
-                                                style={{ backgroundColor: activeAccent }}
-                                            />
-                                        ))}
-                                    </div>
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
-
-                        {/* Progress rail */}
-                        <div className="flex items-center gap-3">
-                            {steps.map((s, i) => (
-                                <div key={i} className="flex items-center gap-3">
+                        <div className="lg:sticky lg:top-24 lg:h-[calc(100vh-6rem)] flex flex-col justify-center items-center gap-6">
+                            {/* Illustration area */}
+                            <div className="relative w-full max-w-sm aspect-square">
+                                <AnimatePresence mode="wait">
                                     <motion.div
-                                        className="rounded-full transition-all duration-300"
-                                        animate={{
-                                            width: i === activeStep ? 24 : 8,
-                                            height: 8,
-                                            backgroundColor:
-                                                i === activeStep ? s.accent : "#e5e7eb",
-                                        }}
-                                        transition={{ duration: 0.3 }}
-                                    />
-                                    {i < steps.length - 1 && (
-                                        <div className="w-6 h-0.5 bg-gray-200" />
-                                    )}
-                                </div>
-                            ))}
+                                        key={activeStep}
+                                        initial={{ opacity: 0, scale: 0.97, y: 10 }}
+                                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                                        exit={{ opacity: 0, scale: 0.97, y: -10 }}
+                                        transition={{ duration: 0.45, ease: "easeOut" }}
+                                        className={`absolute inset-0 rounded-2xl bg-linear-to-br ${steps[activeStep].gradientFrom} ${steps[activeStep].gradientTo} flex flex-col items-center justify-center gap-5 border border-hairline`}
+                                    >
+                                        <div
+                                            className="absolute inset-0 rounded-2xl opacity-20"
+                                            style={{
+                                                background: `radial-gradient(circle at 70% 30%, ${activeAccent}22 0%, transparent 60%)`,
+                                            }}
+                                        />
+                                        <div
+                                            className="w-24 h-24 rounded-lg flex items-center justify-center"
+                                            style={{ backgroundColor: `${activeAccent}18` }}
+                                        >
+                                            {(() => {
+                                                const S = steps[activeStep];
+                                                return (
+                                                    <S.Icon
+                                                        className="h-10 w-10"
+                                                        style={{ color: activeAccent }}
+                                                    />
+                                                );
+                                            })()}
+                                        </div>
+                                        <div className="text-center px-6 relative">
+                                            <p
+                                                className="text-xs uppercase tracking-[0.28px] font-medium mb-1"
+                                                style={{ color: activeAccent }}
+                                            >
+                                                Step {steps[activeStep].number}
+                                            </p>
+                                            <p className="font-display text-xl text-ink font-semibold">
+                                                {steps[activeStep].heading}
+                                            </p>
+                                            <p className="text-xs text-slate mt-1.5">
+                                                {steps[activeStep].visualLabel}
+                                            </p>
+                                        </div>
+                                        <div className="absolute bottom-6 right-6 grid grid-cols-3 gap-1.5 opacity-20">
+                                            {Array.from({ length: 9 }).map((_, i) => (
+                                                <div
+                                                    key={i}
+                                                    className="w-1.5 h-1.5 rounded-full"
+                                                    style={{ backgroundColor: activeAccent }}
+                                                />
+                                            ))}
+                                        </div>
+                                    </motion.div>
+                                </AnimatePresence>
+                            </div>
+
+                            {/* Progress rail */}
+                            <div className="flex items-center gap-3">
+                                {steps.map((s, i) => (
+                                    <div key={i} className="flex items-center gap-3">
+                                        <motion.div
+                                            className="rounded-full transition-all duration-300"
+                                            animate={{
+                                                width: i === activeStep ? 24 : 8,
+                                                height: 8,
+                                                backgroundColor:
+                                                    i === activeStep ? s.accent : "#e5e3df",
+                                            }}
+                                            transition={{ duration: 0.3 }}
+                                        />
+                                        {i < steps.length - 1 && (
+                                            <div className="w-6 h-0.5 bg-hairline" />
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </div>
                     </div>
 
                     {/* Right — scrollable cards */}
@@ -230,7 +227,7 @@ export function ServiceJourneySection() {
                 </div>
             </div>
 
-            {/* ── MOBILE: stacked cards ── */}
+            {/* MOBILE: stacked cards */}
             <div className="lg:hidden mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6">
                 {steps.map((step) => (
                     <StepCard key={step.number} step={step} isActive />
@@ -250,24 +247,18 @@ function StepCard({ step, isActive }: StepCardProps) {
         <motion.div
             animate={{ opacity: isActive ? 1 : 0.45 }}
             transition={{ duration: 0.35 }}
-            className={`w-full rounded-lg border bg-white p-7 md:p-8 space-y-5 ${
-                isActive
-                    ? `border-hairline ${step.accentBorder}`
-                    : "border-hairline"
+            className={`w-full rounded-lg border bg-canvas p-7 md:p-8 space-y-5 ${
+                isActive ? `border-hairline-strong` : "border-hairline"
             }`}
         >
             {/* Step badge + icon */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <span
-                        className={`font-mono text-xs uppercase tracking-[0.28px] ${step.accentText}`}
-                    >
+                    <span className={`text-xs uppercase tracking-[0.28px] font-medium ${step.accentText}`}>
                         {step.number}
                     </span>
-                    <div className="w-px h-4 bg-gray-200" />
-                    <div
-                        className={`h-9 w-9 rounded-lg flex items-center justify-center ${step.accentBg}`}
-                    >
+                    <div className="w-px h-4 bg-hairline" />
+                    <div className={`h-9 w-9 rounded-lg flex items-center justify-center ${step.accentBg}`}>
                         <step.Icon className={`h-4.5 w-4.5 ${step.accentText}`} />
                     </div>
                 </div>
@@ -275,22 +266,20 @@ function StepCard({ step, isActive }: StepCardProps) {
 
             {/* Heading + description */}
             <div>
-                <h3 className="font-display text-2xl md:text-3xl text-ink font-normal tracking-tight mb-2">
+                <h3 className="font-display text-2xl md:text-3xl text-ink font-semibold tracking-tight mb-2">
                     {step.heading}
                 </h3>
-                <p className="text-sm text-body-muted leading-relaxed">{step.description}</p>
+                <p className="text-sm text-slate leading-relaxed">{step.description}</p>
             </div>
 
             {/* Key services */}
             <div className="space-y-2.5">
                 {step.services.map((service) => (
                     <div key={service} className="flex items-center gap-2.5">
-                        <div
-                            className={`h-5 w-5 rounded-full flex items-center justify-center shrink-0 ${step.accentBg}`}
-                        >
+                        <div className={`h-5 w-5 rounded-full flex items-center justify-center shrink-0 ${step.accentBg}`}>
                             <Check className={`h-3 w-3 ${step.accentText}`} />
                         </div>
-                        <span className="text-sm text-ink">{service}</span>
+                        <span className="text-sm text-charcoal">{service}</span>
                     </div>
                 ))}
             </div>

@@ -5,31 +5,27 @@ import Link from "next/link";
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
     return (
         <section className="mb-10">
-            <h2 className="text-xl font-serif font-semibold text-gray-900 mb-4">{title}</h2>
-            <div className="space-y-3 text-[15px] text-gray-600 leading-relaxed">{children}</div>
+            <h2 className="text-xl font-display font-semibold text-ink mb-4">{title}</h2>
+            <div className="space-y-3 text-[15px] text-slate leading-relaxed">{children}</div>
         </section>
     );
 }
 
 export function RefundPolicyPage() {
     return (
-        <div className="bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-4">
             {/* Header */}
-            <div className="relative border-b border-gray-100 px-4 sm:px-6 lg:px-8 py-16">
-                <div className="absolute top-0 left-0 right-0 flex h-1">
-                    <div className="flex-1 bg-[#ff7759]" />
-                    <div className="flex-1 bg-white border-t border-gray-200" />
-                    <div className="flex-1 bg-[#003c33]" />
-                </div>
-                <div className="mx-auto max-w-3xl">
-                    <p className="text-xs tracking-[0.3em] uppercase font-mono font-medium text-[#ff7759] mb-3">Legal</p>
-                    <h1 className="text-4xl font-serif font-normal text-gray-900 mb-3">Refund Policy</h1>
-                    <p className="text-sm text-gray-400">Last updated: April 9, 2026</p>
+            <div className="bg-tint-cream rounded-2xl px-8 py-12">
+                <div className="max-w-3xl">
+                    <p className="text-xs font-medium uppercase tracking-[0.28px] text-steel mb-3">Legal</p>
+                    <h1 className="font-display text-4xl font-semibold tracking-tight text-ink mb-3">Refund Policy</h1>
+                    <p className="text-sm text-stone">Last updated: April 9, 2026</p>
                 </div>
             </div>
 
             {/* Body */}
-            <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16">
+            <div className="bg-canvas rounded-2xl px-8 py-12">
+            <div className="max-w-3xl">
 
                 <div className="mb-10 p-5 bg-amber-50 border border-amber-100 rounded-2xl">
                     <p className="text-sm text-amber-800 leading-relaxed">
@@ -56,18 +52,18 @@ export function RefundPolicyPage() {
                     <p>The following amounts are non-refundable under any circumstances:</p>
                     <ul className="list-disc pl-5 space-y-1.5">
                         <li>
-                            <strong className="text-gray-900">Government fees:</strong> Any fees paid to government portals (e.g., MCA, GST Portal, DGFT, IP India)
+                            <strong className="text-ink">Government fees:</strong> Any fees paid to government portals (e.g., MCA, GST Portal, DGFT, IP India)
                             on your behalf are non-recoverable and cannot be refunded.
                         </li>
                         <li>
-                            <strong className="text-gray-900">Digital Signature Certificate (DSC) costs:</strong> Once a DSC is issued, the associated cost cannot be refunded.
+                            <strong className="text-ink">Digital Signature Certificate (DSC) costs:</strong> Once a DSC is issued, the associated cost cannot be refunded.
                         </li>
                         <li>
-                            <strong className="text-gray-900">Services already delivered:</strong> Where a service or a defined milestone has been fully completed and
+                            <strong className="text-ink">Services already delivered:</strong> Where a service or a defined milestone has been fully completed and
                             delivered, no refund will be issued for that component.
                         </li>
                         <li>
-                            <strong className="text-gray-900">Delays caused by you:</strong> If your order is delayed or rejected due to incorrect information or
+                            <strong className="text-ink">Delays caused by you:</strong> If your order is delayed or rejected due to incorrect information or
                             documents submitted by you, no refund is applicable.
                         </li>
                     </ul>
@@ -100,7 +96,7 @@ export function RefundPolicyPage() {
 
                 <Section title="How to Request a Refund">
                     <p>To submit a refund request, email us at{" "}
-                        <a href="mailto:hello@startupkaro.in" className="text-[#ff7759] hover:underline">
+                        <a href="mailto:hello@startupkaro.in" className="text-link-blue hover:underline">
                             hello@startupkaro.in
                         </a>{" "}
                         with:
@@ -135,24 +131,25 @@ export function RefundPolicyPage() {
                 <Section title="Related Policies">
                     <p>
                         This Refund Policy should be read alongside our{" "}
-                        <Link href="/terms-of-service" className="text-[#ff7759] hover:underline">Terms of Service</Link> and{" "}
-                        <Link href="/privacy-policy" className="text-[#ff7759] hover:underline">Privacy Policy</Link>.
+                        <Link href="/terms-of-service" className="text-link-blue hover:underline">Terms of Service</Link> and{" "}
+                        <Link href="/privacy-policy" className="text-link-blue hover:underline">Privacy Policy</Link>.
                     </p>
                 </Section>
 
                 <Section title="Contact">
-                    <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 text-sm">
-                        <p className="font-medium text-gray-900">StartupKaro, Refund Requests</p>
-                        <p className="text-gray-500 mt-1">
+                    <div className="p-4 bg-surface rounded-xl border border-hairline text-sm">
+                        <p className="font-medium text-ink">StartupKaro, Refund Requests</p>
+                        <p className="text-slate mt-1">
                             Email:{" "}
-                            <a href="mailto:hello@startupkaro.in" className="text-[#ff7759] hover:underline">
+                            <a href="mailto:hello@startupkaro.in" className="text-link-blue hover:underline">
                                 hello@startupkaro.in
                             </a>
                         </p>
-                        <p className="text-gray-500">Phone: +91 789 00000 88</p>
-                        <p className="text-gray-500">Business hours: Mon–Sat, 10am–6pm IST</p>
+                        <p className="text-slate">Phone: +91 789 00000 88</p>
+                        <p className="text-slate">Business hours: Mon–Sat, 10am–6pm IST</p>
                     </div>
                 </Section>
+            </div>
             </div>
         </div>
     );

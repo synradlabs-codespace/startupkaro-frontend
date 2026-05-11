@@ -10,7 +10,7 @@ interface JobDetailPageProps {
 
 export function JobDetailPage({ job }: JobDetailPageProps) {
     return (
-        <main>
+        <main className="pb-16">
             <JobBanner job={job} />
 
             <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-14 space-y-14">
@@ -18,10 +18,10 @@ export function JobDetailPage({ job }: JobDetailPageProps) {
                 {/* What you'll do */}
                 {job.whatYoullDo && job.whatYoullDo.length > 0 && (
                     <section>
-                        <h2 className="font-display text-2xl font-normal tracking-tight leading-snug text-ink mb-6">
+                        <h2 className="font-display text-2xl font-semibold tracking-tight leading-snug text-ink mb-6">
                             What you&apos;ll do at StartupKaro
                         </h2>
-                        <div className="space-y-5 text-sm text-body-muted leading-relaxed">
+                        <div className="space-y-5 text-sm text-slate leading-relaxed">
                             <PortableText
                                 value={job.whatYoullDo}
                                 components={portableTextComponents}
@@ -33,16 +33,13 @@ export function JobDetailPage({ job }: JobDetailPageProps) {
                 {/* Requirements */}
                 {job.requirements && job.requirements.length > 0 && (
                     <section>
-                        <h2 className="font-display text-2xl font-normal tracking-tight leading-snug text-ink mb-5">
+                        <h2 className="font-display text-2xl font-semibold tracking-tight leading-snug text-ink mb-5">
                             Requirements
                         </h2>
                         <ul className="space-y-3">
                             {job.requirements.map((req, i) => (
-                                <li key={i} className="flex items-start gap-3 text-sm text-body-muted">
-                                    <span
-                                        className="mt-1.5 h-1.5 w-1.5 rounded-full shrink-0"
-                                        style={{ backgroundColor: "#ff7759" }}
-                                    />
+                                <li key={i} className="flex items-start gap-3 text-sm text-slate">
+                                    <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-charcoal shrink-0" />
                                     {req}
                                 </li>
                             ))}
@@ -53,16 +50,13 @@ export function JobDetailPage({ job }: JobDetailPageProps) {
                 {/* Bonus requirements */}
                 {job.bonusRequirements && job.bonusRequirements.length > 0 && (
                     <section>
-                        <h2 className="font-display text-2xl font-normal tracking-tight leading-snug text-ink mb-5">
+                        <h2 className="font-display text-2xl font-semibold tracking-tight leading-snug text-ink mb-5">
                             Bonus Requirements
                         </h2>
                         <ul className="space-y-3">
                             {job.bonusRequirements.map((req, i) => (
-                                <li key={i} className="flex items-start gap-3 text-sm text-body-muted">
-                                    <span
-                                        className="mt-1.5 h-1.5 w-1.5 rounded-full shrink-0"
-                                        style={{ backgroundColor: "#003c33" }}
-                                    />
+                                <li key={i} className="flex items-start gap-3 text-sm text-slate">
+                                    <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-stone shrink-0" />
                                     {req}
                                 </li>
                             ))}

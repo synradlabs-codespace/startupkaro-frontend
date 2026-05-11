@@ -10,9 +10,9 @@ export function ServiceCard({ service }: { service: Service }) {
     const Icon = meta.icon;
 
     return (
-        <div className="group relative flex flex-col rounded-lg border border-hairline bg-white hover:-translate-y-0.5 transition-all duration-200 overflow-hidden">
+        <div className="group relative flex flex-col rounded-xl border border-hairline bg-canvas hover:-translate-y-0.5 transition-all duration-200 overflow-hidden">
             {/* Top accent strip */}
-            <div className="h-1 w-full bg-coral opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+            <div className="h-1 w-full bg-tint-sky opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
 
             <div className="flex flex-col flex-1 p-5">
                 {/* Icon + category */}
@@ -20,31 +20,31 @@ export function ServiceCard({ service }: { service: Service }) {
                     <div className={`h-10 w-10 rounded-lg ${meta.bg} flex items-center justify-center`}>
                         <Icon className={`h-5 w-5 ${meta.color}`} />
                     </div>
-                    <span className={`font-mono text-xs uppercase tracking-[0.28px] px-2.5 py-1 rounded-full ${meta.badge}`}>
+                    <span className={`text-xs font-medium uppercase tracking-[0.28px] px-2.5 py-1 rounded-md ${meta.badge}`}>
                         {service.category}
                     </span>
                 </div>
 
                 {/* Name + description */}
-                <h3 className="font-display text-2xl font-normal tracking-tight text-ink mb-1.5 leading-snug">{service.name}</h3>
-                <p className="font-sans text-base text-body-muted leading-relaxed flex-1">{service.description}</p>
+                <h3 className="font-display text-xl font-semibold tracking-tight text-ink mb-1.5 leading-snug">{service.name}</h3>
+                <p className="text-sm text-slate leading-relaxed flex-1">{service.description}</p>
 
                 <div className="h-px bg-hairline my-4" />
 
                 {/* Price + duration + CTA */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <p className="text-2xl font-display font-normal tracking-tight text-ink">
+                        <p className="text-2xl font-display font-semibold tracking-tight text-ink">
                             ₹{service.pricing.amount.toLocaleString("en-IN")}
                         </p>
-                        <p className="font-mono text-xs uppercase tracking-[0.28px] text-body-muted flex items-center gap-1 mt-0.5">
+                        <p className="text-xs text-stone flex items-center gap-1 mt-0.5">
                             <Clock className="h-3 w-3" />
                             {service.duration}
                         </p>
                     </div>
                     <Link
                         href={`/services/${service.slug}`}
-                        className="inline-flex items-center gap-1.5 h-7 px-2.5 font-mono text-xs uppercase tracking-[0.28px] bg-coral text-white hover:bg-coral/90 rounded-lg transition-colors shrink-0"
+                        className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium bg-primary-brand text-white hover:bg-primary-brand/90 rounded-md transition-colors shrink-0"
                     >
                         Learn More
                         <ArrowRight className="h-3.5 w-3.5" />

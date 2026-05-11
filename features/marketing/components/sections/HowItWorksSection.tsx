@@ -1,75 +1,96 @@
-// features/marketing/components/sections/HowItWorksSection.tsx
+"use client";
 
 import { MousePointerClick, Upload, FileCheck2, CheckCircle2 } from "lucide-react";
+import ScrollStack, { ScrollStackItem } from "@/components/ScrollStack";
 
 const steps = [
     {
         icon: MousePointerClick,
         step: "01",
         title: "Choose a service",
-        description: "Browse our catalogue and pick the service your startup needs, pricing is fixed and transparent.",
-        iconBg: "bg-coral/10",
-        iconColor: "text-coral",
-        stepColor: "text-coral",
+        description:
+            "Browse our catalogue and pick what your startup needs. Every service has a fixed, upfront price — no hidden fees, no surprise invoices.",
+        itemClassName: "bg-tint-peach",
     },
     {
         icon: Upload,
         step: "02",
         title: "Share your documents",
-        description: "Upload the required documents securely through our portal. We tell you exactly what's needed.",
-        iconBg: "bg-primary-brand/8",
-        iconColor: "text-primary-brand",
-        stepColor: "text-primary-brand",
+        description:
+            "We send you a precise checklist — nothing more, nothing less. Upload securely through our portal and our team reviews everything within one business day.",
+        itemClassName: "bg-tint-sky",
     },
     {
         icon: FileCheck2,
         step: "03",
         title: "We file for you",
-        description: "Our CA / CS reviews and files everything with the relevant government authority on your behalf.",
-        iconBg: "bg-deep-green/10",
-        iconColor: "text-deep-green",
-        stepColor: "text-deep-green",
+        description:
+            "A dedicated CA, CS, or legal professional prepares and submits all filings with the relevant authority. You get real-time updates at every milestone.",
+        itemClassName: "bg-tint-mint",
     },
     {
         icon: CheckCircle2,
         step: "04",
-        title: "You're compliant",
-        description: "Receive your registration certificate, licence, or filed return, and stay compliant from day one.",
-        iconBg: "bg-coral/10",
-        iconColor: "text-coral",
-        stepColor: "text-coral",
+        title: "You are compliant",
+        description:
+            "Your certificate, GSTIN, or licence lands directly in your portal. We also track renewal dates and compliance deadlines so you never miss a thing.",
+        itemClassName: "bg-tint-lavender",
     },
 ];
 
 export function HowItWorksSection() {
     return (
-        <section className="bg-white py-20 md:py-24">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <section className="bg-canvas py-20 md:py-24">
+            <div className="mx-auto max-w-7xl px-8">
                 <div className="text-center mb-12">
-                    <p className="font-mono text-xs uppercase tracking-[0.28px] text-coral mb-2">Simple process</p>
-                    <h2 className="font-display text-4xl md:text-5xl text-ink font-normal tracking-tight">How it works</h2>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {steps.map((item, idx) => {
-                        const Icon = item.icon;
-                        return (
-                            <div key={item.step} className="relative flex flex-col items-start">
-                                {/* Connector line (between cards on desktop) */}
-                                {idx < steps.length - 1 && (
-                                    <div className="hidden lg:block absolute top-5 left-[calc(100%+0px)] w-full h-px border-t border-dashed border-gray-300 -translate-x-1/2" />
-                                )}
-                                <div className={`h-10 w-10 rounded-lg ${item.iconBg} flex items-center justify-center mb-4 shrink-0`}>
-                                    <Icon className={`h-5 w-5 ${item.iconColor}`} />
-                                </div>
-                                <span className={`font-mono text-xs uppercase tracking-[0.28px] ${item.stepColor} mb-2`}>{item.step}</span>
-                                <h3 className="font-display text-base font-normal text-ink mb-1.5">{item.title}</h3>
-                                <p className="text-sm text-body-muted leading-relaxed">{item.description}</p>
-                            </div>
-                        );
-                    })}
+                    <p className="text-xs uppercase tracking-[0.28px] text-steel font-medium mb-2">
+                        Simple process
+                    </p>
+                    <h2 className="font-display text-4xl md:text-5xl text-ink font-semibold tracking-tight">
+                        How it works
+                    </h2>
                 </div>
             </div>
+
+            <ScrollStack
+                useWindowScroll
+                itemDistance={80}
+                itemScale={0.04}
+                itemStackDistance={20}
+                stackPosition="15%"
+                scaleEndPosition="5%"
+                baseScale={0.88}
+                scrollBuffer={240}
+                className="max-w-3xl mx-auto px-4"
+            >
+                {steps.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                        <ScrollStackItem
+                            key={item.step}
+                            itemClassName={`${item.itemClassName} !rounded-2xl !h-72 !p-10`}
+                        >
+                            <div className="flex items-center gap-10 h-full">
+                                {/* Left — icon centered vertically */}
+                                <div className="shrink-0 flex flex-col items-center gap-4">
+                                    <div className="h-20 w-20 rounded-2xl bg-white/60 flex items-center justify-center">
+                                        <Icon className="h-10 w-10 text-charcoal" />
+                                    </div>
+                                    <span className="text-xs font-semibold text-stone tracking-widest">{item.step}</span>
+                                </div>
+
+                                {/* Right — text */}
+                                <div className="flex flex-col gap-3 min-w-0">
+                                    <h3 className="font-display text-2xl md:text-3xl font-semibold text-ink tracking-tight leading-snug">
+                                        {item.title}
+                                    </h3>
+                                    <p className="text-base md:text-lg text-slate leading-relaxed">{item.description}</p>
+                                </div>
+                            </div>
+                        </ScrollStackItem>
+                    );
+                })}
+            </ScrollStack>
         </section>
     );
 }

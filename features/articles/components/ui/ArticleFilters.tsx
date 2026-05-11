@@ -25,14 +25,13 @@ export function ArticleFilters({ categories, activeCategory }: ArticleFiltersPro
 
     return (
         <div className="flex gap-2 flex-wrap">
-            {/* "All" chip */}
             <button
                 type="button"
                 onClick={() => handleCategory("all")}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-150 border border-hairline ${
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-150 border ${
                     isAllActive
                         ? "bg-primary-brand text-white border-primary-brand"
-                        : "bg-white text-body-muted hover:text-coral hover:border-coral"
+                        : "bg-canvas text-slate border-hairline hover:border-hairline-strong hover:text-ink"
                 }`}
             >
                 All
@@ -46,10 +45,10 @@ export function ArticleFilters({ categories, activeCategory }: ArticleFiltersPro
                         key={cat.slug}
                         type="button"
                         onClick={() => handleCategory(cat.slug)}
-                        className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-150 border border-hairline ${
+                        className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-150 border ${
                             isActive
                                 ? "bg-primary-brand text-white border-primary-brand"
-                                : "bg-white text-body-muted hover:text-coral hover:border-coral"
+                                : "bg-canvas text-slate border-hairline hover:border-hairline-strong hover:text-ink"
                         }`}
                     >
                         <Icon className="h-3 w-3" />

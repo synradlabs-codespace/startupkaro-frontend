@@ -5,8 +5,8 @@ import Link from "next/link";
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
     return (
         <section className="mb-10">
-            <h2 className="text-xl font-serif font-semibold text-gray-900 mb-4">{title}</h2>
-            <div className="space-y-3 text-[15px] text-gray-600 leading-relaxed">{children}</div>
+            <h2 className="text-xl font-display font-semibold text-ink mb-4">{title}</h2>
+            <div className="space-y-3 text-[15px] text-slate leading-relaxed">{children}</div>
         </section>
     );
 }
@@ -37,23 +37,19 @@ const cookieTable = [
 
 export function CookiesPolicyPage() {
     return (
-        <div className="bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-4">
             {/* Header */}
-            <div className="relative border-b border-gray-100 px-4 sm:px-6 lg:px-8 py-16">
-                <div className="absolute top-0 left-0 right-0 flex h-1">
-                    <div className="flex-1 bg-[#ff7759]" />
-                    <div className="flex-1 bg-white border-t border-gray-200" />
-                    <div className="flex-1 bg-[#003c33]" />
-                </div>
-                <div className="mx-auto max-w-3xl">
-                    <p className="text-xs tracking-[0.3em] uppercase font-mono font-medium text-[#003c33] mb-3">Legal</p>
-                    <h1 className="text-4xl font-serif font-normal text-gray-900 mb-3">Cookies &amp; Data Collection</h1>
-                    <p className="text-sm text-gray-400">Last updated: April 9, 2026</p>
+            <div className="bg-tint-cream rounded-2xl px-8 py-12">
+                <div className="max-w-3xl">
+                    <p className="text-xs font-medium uppercase tracking-[0.28px] text-steel mb-3">Legal</p>
+                    <h1 className="font-display text-4xl font-semibold tracking-tight text-ink mb-3">Cookies &amp; Data Collection</h1>
+                    <p className="text-sm text-stone">Last updated: April 9, 2026</p>
                 </div>
             </div>
 
             {/* Body */}
-            <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16">
+            <div className="bg-canvas rounded-2xl px-8 py-12">
+            <div className="max-w-3xl">
 
                 <Section title="What Are Cookies?">
                     <p>
@@ -66,15 +62,15 @@ export function CookiesPolicyPage() {
                     <p>StartupKaro uses cookies for the following purposes:</p>
                     <ul className="list-disc pl-5 space-y-1.5">
                         <li>
-                            <strong className="text-gray-900">Strictly necessary:</strong> Cookies required for core functionality such
+                            <strong className="text-ink">Strictly necessary:</strong> Cookies required for core functionality such
                             as authentication and session management. These cannot be disabled.
                         </li>
                         <li>
-                            <strong className="text-gray-900">Functional:</strong> Cookies that remember your preferences (e.g., sidebar state)
+                            <strong className="text-ink">Functional:</strong> Cookies that remember your preferences (e.g., sidebar state)
                             to improve your experience.
                         </li>
                         <li>
-                            <strong className="text-gray-900">Analytics:</strong> Cookies used to collect anonymized data about how visitors
+                            <strong className="text-ink">Analytics:</strong> Cookies used to collect anonymized data about how visitors
                             use our website, so we can improve it.
                         </li>
                     </ul>
@@ -82,7 +78,7 @@ export function CookiesPolicyPage() {
 
                 <Section title="PostHog Analytics">
                     <p>
-                        We use <strong className="text-gray-900">PostHog</strong>, an open-source, privacy-focused product analytics platform, to
+                        We use <strong className="text-ink">PostHog</strong>, an open-source, privacy-focused product analytics platform, to
                         understand how our website and app are used. PostHog collects:
                     </p>
                     <ul className="list-disc pl-5 space-y-1.5">
@@ -95,34 +91,34 @@ export function CookiesPolicyPage() {
                     <p>
                         PostHog does not use your data for advertising and does not share it with third-party ad networks.
                         You can learn more at{" "}
-                        <span className="text-gray-800 font-medium">posthog.com</span>.
+                        <span className="text-charcoal font-medium">posthog.com</span>.
                     </p>
                     <p>
                         IP addresses collected by PostHog may be used to derive location data and are subsequently anonymized
-                        or truncated in accordance with PostHog's data processing practices.
+                        or truncated in accordance with PostHog&apos;s data processing practices.
                     </p>
                 </Section>
 
                 <Section title="Cookies We Set">
-                    <div className="overflow-x-auto rounded-xl border border-gray-100">
+                    <div className="overflow-x-auto rounded-xl border border-hairline">
                         <table className="w-full text-sm">
                             <thead>
-                                <tr className="bg-gray-50 border-b border-gray-100">
-                                    <th className="text-left px-4 py-3 font-medium text-gray-700 text-xs uppercase tracking-wider">Cookie</th>
-                                    <th className="text-left px-4 py-3 font-medium text-gray-700 text-xs uppercase tracking-wider">Provider</th>
-                                    <th className="text-left px-4 py-3 font-medium text-gray-700 text-xs uppercase tracking-wider">Purpose</th>
-                                    <th className="text-left px-4 py-3 font-medium text-gray-700 text-xs uppercase tracking-wider">Type</th>
-                                    <th className="text-left px-4 py-3 font-medium text-gray-700 text-xs uppercase tracking-wider">Duration</th>
+                                <tr className="bg-surface border-b border-hairline">
+                                    <th className="text-left px-4 py-3 font-medium text-slate text-xs uppercase tracking-wider">Cookie</th>
+                                    <th className="text-left px-4 py-3 font-medium text-slate text-xs uppercase tracking-wider">Provider</th>
+                                    <th className="text-left px-4 py-3 font-medium text-slate text-xs uppercase tracking-wider">Purpose</th>
+                                    <th className="text-left px-4 py-3 font-medium text-slate text-xs uppercase tracking-wider">Type</th>
+                                    <th className="text-left px-4 py-3 font-medium text-slate text-xs uppercase tracking-wider">Duration</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-50">
+                            <tbody className="divide-y divide-hairline">
                                 {cookieTable.map((row) => (
                                     <tr key={row.name} className="bg-white">
-                                        <td className="px-4 py-3 font-mono text-xs text-gray-800 whitespace-nowrap">{row.name}</td>
-                                        <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{row.provider}</td>
-                                        <td className="px-4 py-3 text-gray-500">{row.purpose}</td>
-                                        <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{row.type}</td>
-                                        <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{row.duration}</td>
+                                        <td className="px-4 py-3 font-mono text-xs text-charcoal whitespace-nowrap">{row.name}</td>
+                                        <td className="px-4 py-3 text-slate whitespace-nowrap">{row.provider}</td>
+                                        <td className="px-4 py-3 text-slate">{row.purpose}</td>
+                                        <td className="px-4 py-3 text-slate whitespace-nowrap">{row.type}</td>
+                                        <td className="px-4 py-3 text-slate whitespace-nowrap">{row.duration}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -132,12 +128,12 @@ export function CookiesPolicyPage() {
 
                 <Section title="Your Choices">
                     <p>
-                        <strong className="text-gray-900">Browser settings:</strong> You can configure your browser to refuse all cookies or
+                        <strong className="text-ink">Browser settings:</strong> You can configure your browser to refuse all cookies or
                         to alert you when cookies are being set. Note that disabling strictly necessary cookies will prevent
                         core site functionality from working (e.g., you will not be able to log in).
                     </p>
                     <p>
-                        <strong className="text-gray-900">Opt-out of analytics:</strong> If you do not wish to be tracked by PostHog, you can
+                        <strong className="text-ink">Opt-out of analytics:</strong> If you do not wish to be tracked by PostHog, you can
                         use a browser extension that blocks analytics scripts (such as uBlock Origin), or enable
                         &quot;Do Not Track&quot; in your browser settings, PostHog respects this signal where configured.
                     </p>
@@ -148,7 +144,7 @@ export function CookiesPolicyPage() {
                         In addition to cookies, we may collect technical data server-side, including your IP address, referrer URL,
                         and request metadata for security and fraud prevention purposes. This data is not used for advertising.
                         For full details, see our{" "}
-                        <Link href="/privacy-policy" className="text-[#ff7759] hover:underline">Privacy Policy</Link>.
+                        <Link href="/privacy-policy" className="text-link-blue hover:underline">Privacy Policy</Link>.
                     </p>
                 </Section>
 
@@ -162,11 +158,12 @@ export function CookiesPolicyPage() {
                 <Section title="Contact">
                     <p>
                         Questions about our use of cookies? Email us at{" "}
-                        <a href="mailto:hello@startupkaro.in" className="text-[#ff7759] hover:underline">
+                        <a href="mailto:hello@startupkaro.in" className="text-link-blue hover:underline">
                             hello@startupkaro.in
                         </a>.
                     </p>
                 </Section>
+            </div>
             </div>
         </div>
     );

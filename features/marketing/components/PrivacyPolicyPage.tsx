@@ -5,31 +5,27 @@ import Link from "next/link";
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
     return (
         <section className="mb-10">
-            <h2 className="text-xl font-serif font-semibold text-gray-900 mb-4">{title}</h2>
-            <div className="space-y-3 text-[15px] text-gray-600 leading-relaxed">{children}</div>
+            <h2 className="text-xl font-display font-semibold text-ink mb-4">{title}</h2>
+            <div className="space-y-3 text-[15px] text-slate leading-relaxed">{children}</div>
         </section>
     );
 }
 
 export function PrivacyPolicyPage() {
     return (
-        <div className="bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-4">
             {/* Header */}
-            <div className="relative border-b border-gray-100 px-4 sm:px-6 lg:px-8 py-16">
-                <div className="absolute top-0 left-0 right-0 flex h-1">
-                    <div className="flex-1 bg-[#ff7759]" />
-                    <div className="flex-1 bg-white border-t border-gray-200" />
-                    <div className="flex-1 bg-[#003c33]" />
-                </div>
-                <div className="mx-auto max-w-3xl">
-                    <p className="text-xs tracking-[0.3em] uppercase font-mono font-medium text-[#ff7759] mb-3">Legal</p>
-                    <h1 className="text-4xl font-serif font-normal text-gray-900 mb-3">Privacy Policy</h1>
-                    <p className="text-sm text-gray-400">Last updated: April 9, 2026</p>
+            <div className="bg-tint-cream rounded-2xl px-8 py-12">
+                <div className="max-w-3xl">
+                    <p className="text-xs font-medium uppercase tracking-[0.28px] text-steel mb-3">Legal</p>
+                    <h1 className="font-display text-4xl font-semibold tracking-tight text-ink mb-3">Privacy Policy</h1>
+                    <p className="text-sm text-stone">Last updated: April 9, 2026</p>
                 </div>
             </div>
 
             {/* Body */}
-            <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16">
+            <div className="bg-canvas rounded-2xl px-8 py-12">
+            <div className="max-w-3xl">
 
                 <Section title="Overview">
                     <p>
@@ -43,14 +39,14 @@ export function PrivacyPolicyPage() {
                 </Section>
 
                 <Section title="Information We Collect">
-                    <p><strong className="text-gray-900">Information you provide directly:</strong></p>
+                    <p><strong className="text-ink">Information you provide directly:</strong></p>
                     <ul className="list-disc pl-5 space-y-1.5">
                         <li>Name, email address, and phone number when you contact us or sign up</li>
                         <li>Business details such as PAN, Aadhaar, address proof, and company name when you place an order for a service</li>
                         <li>Payment information (we do not store card details; payments are processed via third-party gateways)</li>
                         <li>Messages and correspondence you send us through our contact form</li>
                     </ul>
-                    <p className="mt-2"><strong className="text-gray-900">Information collected automatically:</strong></p>
+                    <p className="mt-2"><strong className="text-ink">Information collected automatically:</strong></p>
                     <ul className="list-disc pl-5 space-y-1.5">
                         <li>Browser type, device type, and operating system</li>
                         <li>Pages visited, time spent on pages, and referring URLs</li>
@@ -58,9 +54,9 @@ export function PrivacyPolicyPage() {
                         <li>Interaction events such as button clicks and form interactions</li>
                     </ul>
                     <p className="mt-2">
-                        We use <strong className="text-gray-900">PostHog</strong>, an open-source product analytics platform, to collect
+                        We use <strong className="text-ink">PostHog</strong>, an open-source product analytics platform, to collect
                         behavioral and usage data to understand how visitors interact with our website. PostHog may set cookies on
-                        your device. See our <Link href="/cookies-policy" className="text-[#ff7759] hover:underline">Cookies Policy</Link> for details.
+                        your device. See our <Link href="/cookies-policy" className="text-link-blue hover:underline">Cookies Policy</Link> for details.
                     </p>
                 </Section>
 
@@ -79,21 +75,21 @@ export function PrivacyPolicyPage() {
                     <p>We do not sell or rent your personal information. We may share your information with:</p>
                     <ul className="list-disc pl-5 space-y-1.5">
                         <li>
-                            <strong className="text-gray-900">Assigned professionals:</strong> The CA, CS, or legal expert handling your specific service case.
+                            <strong className="text-ink">Assigned professionals:</strong> The CA, CS, or legal expert handling your specific service case.
                         </li>
                         <li>
-                            <strong className="text-gray-900">Government portals:</strong> We submit your information to relevant portals (MCA, GST Portal, DGFT, IP India, etc.)
+                            <strong className="text-ink">Government portals:</strong> We submit your information to relevant portals (MCA, GST Portal, DGFT, IP India, etc.)
                             on your behalf as required to complete the service.
                         </li>
                         <li>
-                            <strong className="text-gray-900">Payment processors:</strong> Your payment is processed by third-party gateways. We do not store card or UPI credentials.
+                            <strong className="text-ink">Payment processors:</strong> Your payment is processed by third-party gateways. We do not store card or UPI credentials.
                         </li>
                         <li>
-                            <strong className="text-gray-900">Analytics providers:</strong> PostHog receives anonymized usage data. See our{" "}
-                            <Link href="/cookies-policy" className="text-[#ff7759] hover:underline">Cookies Policy</Link>.
+                            <strong className="text-ink">Analytics providers:</strong> PostHog receives anonymized usage data. See our{" "}
+                            <Link href="/cookies-policy" className="text-link-blue hover:underline">Cookies Policy</Link>.
                         </li>
                         <li>
-                            <strong className="text-gray-900">Legal requirements:</strong> We may disclose information if required by law, court order, or government authority.
+                            <strong className="text-ink">Legal requirements:</strong> We may disclose information if required by law, court order, or government authority.
                         </li>
                     </ul>
                 </Section>
@@ -103,7 +99,7 @@ export function PrivacyPolicyPage() {
                         We retain your personal and business data for as long as necessary to fulfil the service and meet our legal obligations.
                         For most compliance and registration documents, Indian law requires records to be maintained for a minimum of 8 years.
                         You may request deletion of your account data by contacting us at{" "}
-                        <a href="mailto:hello@startupkaro.in" className="text-[#ff7759] hover:underline">hello@startupkaro.in</a>.
+                        <a href="mailto:hello@startupkaro.in" className="text-link-blue hover:underline">hello@startupkaro.in</a>.
                         Note that data submitted to government portals on your behalf cannot be deleted by us.
                     </p>
                 </Section>
@@ -126,7 +122,7 @@ export function PrivacyPolicyPage() {
                         <li>Withdraw consent for analytics tracking via cookie preferences</li>
                     </ul>
                     <p>To exercise any of these rights, email us at{" "}
-                        <a href="mailto:hello@startupkaro.in" className="text-[#ff7759] hover:underline">hello@startupkaro.in</a>.
+                        <a href="mailto:hello@startupkaro.in" className="text-link-blue hover:underline">hello@startupkaro.in</a>.
                     </p>
                 </Section>
 
@@ -155,18 +151,19 @@ export function PrivacyPolicyPage() {
                     <p>
                         If you have any questions about this Privacy Policy, please contact us at:
                     </p>
-                    <div className="mt-3 p-4 bg-gray-50 rounded-xl border border-gray-100 text-sm">
-                        <p className="font-medium text-gray-900">StartupKaro</p>
-                        <p className="text-gray-500 mt-1">Mohali, Punjab, India</p>
-                        <p className="text-gray-500">
+                    <div className="mt-3 p-4 bg-surface rounded-xl border border-hairline text-sm">
+                        <p className="font-medium text-ink">StartupKaro</p>
+                        <p className="text-slate mt-1">Mohali, Punjab, India</p>
+                        <p className="text-slate">
                             Email:{" "}
-                            <a href="mailto:hello@startupkaro.in" className="text-[#ff7759] hover:underline">
+                            <a href="mailto:hello@startupkaro.in" className="text-link-blue hover:underline">
                                 hello@startupkaro.in
                             </a>
                         </p>
-                        <p className="text-gray-500">Phone: +91 789 00000 88</p>
+                        <p className="text-slate">Phone: +91 789 00000 88</p>
                     </div>
                 </Section>
+            </div>
             </div>
         </div>
     );

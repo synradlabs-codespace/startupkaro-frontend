@@ -6,11 +6,7 @@ import { Calendar, Clock } from "lucide-react";
 import { getIcon } from "@/features/articles/lib/icon-map";
 import type { ArticleCard as ArticleCardType } from "@/features/articles/types";
 
-const ACCENTS = ["#ff7759", "#17171c", "#003c33"] as const;
-
-export function ArticleCard({ article, index }: { article: ArticleCardType; index: number }) {
-    const accent = ACCENTS[index % 3];
-
+export function ArticleCard({ article }: { article: ArticleCardType; index?: number }) {
     const formattedDate = new Date(article.publishedAt).toLocaleDateString("en-IN", {
         day: "numeric",
         month: "short",
@@ -20,11 +16,8 @@ export function ArticleCard({ article, index }: { article: ArticleCardType; inde
     return (
         <Link
             href={`/article/${article.slug}`}
-            className="group relative flex flex-col rounded-lg border border-hairline bg-white overflow-hidden transition-colors duration-200"
+            className="group relative flex flex-col rounded-xl border border-hairline bg-canvas overflow-hidden transition-all duration-200 hover:-translate-y-0.5"
         >
-            {/* Top accent strip */}
-            <div className="h-0.75 w-full shrink-0" style={{ backgroundColor: accent }} />
-
             {/* Cover image */}
             <div className="relative h-44 w-full overflow-hidden">
                 <Image
@@ -41,11 +34,10 @@ export function ArticleCard({ article, index }: { article: ArticleCardType; inde
             <div className="flex flex-col flex-1 p-5">
                 {/* Categories + read time */}
                 <div className="flex items-start justify-between gap-2 mb-3">
-                    {/* Category pills */}
                     <div className="flex flex-wrap gap-1.5">
                         {article.categories.map((cat) => {
                             const Icon = getIcon(cat.iconName);
-                            const color = cat.accentColor ?? "#6B7280";
+                            const color = cat.accentColor ?? "#787671";
                             return (
                                 <span
                                     key={cat.slug}
@@ -62,7 +54,7 @@ export function ArticleCard({ article, index }: { article: ArticleCardType; inde
                         })}
                     </div>
                     {article.readTime != null && (
-                        <span className="flex items-center gap-1 text-[11px] text-body-muted shrink-0">
+                        <span className="flex items-center gap-1 text-[11px] text-stone shrink-0">
                             <Clock className="h-3 w-3" />
                             {article.readTime} min
                         </span>
@@ -70,10 +62,10 @@ export function ArticleCard({ article, index }: { article: ArticleCardType; inde
                 </div>
 
                 {/* Title + summary */}
-                <h3 className="text-sm font-medium text-ink mb-1.5 leading-snug group-hover:underline decoration-hairline underline-offset-2 transition-colors">
+                <h3 className="text-sm font-semibold text-ink mb-1.5 leading-snug group-hover:underline decoration-hairline underline-offset-2">
                     {article.title}
                 </h3>
-                <p className="text-xs text-body-muted leading-relaxed flex-1">{article.summary}</p>
+                <p className="text-xs text-slate leading-relaxed flex-1">{article.summary}</p>
 
                 <div className="h-px bg-hairline my-4" />
 
@@ -81,9 +73,9 @@ export function ArticleCard({ article, index }: { article: ArticleCardType; inde
                 <div className="flex items-end justify-between gap-2">
                     <div className="min-w-0">
                         <p className="text-xs font-medium text-ink truncate">{article.author.name}</p>
-                        <p className="text-[11px] text-body-muted mt-0.5 truncate">{article.author.designation}</p>
+                        <p className="text-[11px] text-stone mt-0.5 truncate">{article.author.designation}</p>
                     </div>
-                    <span className="flex items-center gap-1 text-[11px] text-body-muted shrink-0">
+                    <span className="flex items-center gap-1 text-[11px] text-stone shrink-0">
                         <Calendar className="h-3 w-3" />
                         {formattedDate}
                     </span>

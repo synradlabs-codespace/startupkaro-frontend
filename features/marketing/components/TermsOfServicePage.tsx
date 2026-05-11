@@ -5,31 +5,27 @@ import Link from "next/link";
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
     return (
         <section className="mb-10">
-            <h2 className="text-xl font-serif font-semibold text-gray-900 mb-4">{title}</h2>
-            <div className="space-y-3 text-[15px] text-gray-600 leading-relaxed">{children}</div>
+            <h2 className="text-xl font-display font-semibold text-ink mb-4">{title}</h2>
+            <div className="space-y-3 text-[15px] text-slate leading-relaxed">{children}</div>
         </section>
     );
 }
 
 export function TermsOfServicePage() {
     return (
-        <div className="bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-4">
             {/* Header */}
-            <div className="relative border-b border-gray-100 px-4 sm:px-6 lg:px-8 py-16">
-                <div className="absolute top-0 left-0 right-0 flex h-1">
-                    <div className="flex-1 bg-[#ff7759]" />
-                    <div className="flex-1 bg-white border-t border-gray-200" />
-                    <div className="flex-1 bg-[#003c33]" />
-                </div>
-                <div className="mx-auto max-w-3xl">
-                    <p className="text-xs tracking-[0.3em] uppercase font-mono font-medium text-[#17171c] mb-3">Legal</p>
-                    <h1 className="text-4xl font-serif font-normal text-gray-900 mb-3">Terms of Service</h1>
-                    <p className="text-sm text-gray-400">Last updated: April 9, 2026</p>
+            <div className="bg-tint-cream rounded-2xl px-8 py-12">
+                <div className="max-w-3xl">
+                    <p className="text-xs font-medium uppercase tracking-[0.28px] text-steel mb-3">Legal</p>
+                    <h1 className="font-display text-4xl font-semibold tracking-tight text-ink mb-3">Terms of Service</h1>
+                    <p className="text-sm text-stone">Last updated: April 9, 2026</p>
                 </div>
             </div>
 
             {/* Body */}
-            <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16">
+            <div className="bg-canvas rounded-2xl px-8 py-12">
+            <div className="max-w-3xl">
 
                 <Section title="Acceptance of Terms">
                     <p>
@@ -85,7 +81,7 @@ export function TermsOfServicePage() {
                 <Section title="Refunds">
                     <p>
                         Refund eligibility and amounts are determined solely at the discretion of StartupKaro. Please review our{" "}
-                        <Link href="/refund-policy" className="text-[#ff7759] hover:underline">Refund Policy</Link> for details.
+                        <Link href="/refund-policy" className="text-link-blue hover:underline">Refund Policy</Link> for details.
                     </p>
                 </Section>
 
@@ -139,24 +135,25 @@ export function TermsOfServicePage() {
                 <Section title="Privacy">
                     <p>
                         Your use of our services is also governed by our{" "}
-                        <Link href="/privacy-policy" className="text-[#ff7759] hover:underline">Privacy Policy</Link>, which is
+                        <Link href="/privacy-policy" className="text-link-blue hover:underline">Privacy Policy</Link>, which is
                         incorporated into these Terms by reference.
                     </p>
                 </Section>
 
                 <Section title="Contact">
                     <p>For questions about these Terms, contact us:</p>
-                    <div className="mt-3 p-4 bg-gray-50 rounded-xl border border-gray-100 text-sm">
-                        <p className="font-medium text-gray-900">StartupKaro</p>
-                        <p className="text-gray-500 mt-1">Mohali, Punjab, India</p>
-                        <p className="text-gray-500">
+                    <div className="mt-3 p-4 bg-surface rounded-xl border border-hairline text-sm">
+                        <p className="font-medium text-ink">StartupKaro</p>
+                        <p className="text-slate mt-1">Mohali, Punjab, India</p>
+                        <p className="text-slate">
                             Email:{" "}
-                            <a href="mailto:hello@startupkaro.in" className="text-[#ff7759] hover:underline">
+                            <a href="mailto:hello@startupkaro.in" className="text-link-blue hover:underline">
                                 hello@startupkaro.in
                             </a>
                         </p>
                     </div>
                 </Section>
+            </div>
             </div>
         </div>
     );

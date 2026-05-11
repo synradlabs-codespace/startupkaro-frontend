@@ -66,10 +66,10 @@ export function ChatBubbles() {
                         >
                             {/* Avatar */}
                             <div
-                                className={`w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-semibold shrink-0 ${
+                                className={`w-7 h-7 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 ${
                                     isFounder
-                                        ? "bg-coral/40 text-coral"
-                                        : "bg-white/90 text-dark-navy"
+                                        ? "bg-primary-brand text-white"
+                                        : "bg-tint-sky text-charcoal border border-hairline"
                                 }`}
                             >
                                 {isFounder ? "F" : "CA"}
@@ -79,8 +79,8 @@ export function ChatBubbles() {
                             <div
                                 className={`max-w-[78%] px-3.5 py-2.5 text-[11px] leading-relaxed ${
                                     isFounder
-                                        ? "bg-white/92 border border-white/20 text-ink rounded-2xl rounded-bl-sm"
-                                        : "bg-white/20 text-white rounded-2xl rounded-br-sm"
+                                        ? "bg-tint-sky text-ink rounded-2xl rounded-bl-sm"
+                                        : "bg-canvas text-charcoal rounded-2xl rounded-br-sm border border-hairline"
                                 }`}
                             >
                                 {msg.text}
