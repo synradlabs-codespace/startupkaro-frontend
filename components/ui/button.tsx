@@ -10,28 +10,28 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        /* near-black pill — primary CTA per DESIGN.md */
+        /* charcoal rectangle — primary CTA */
         default:
-          "rounded-full bg-primary text-primary-foreground hover:bg-primary/85 active:bg-primary/90",
+          "rounded-md bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/95",
         /* pill outline — taxonomy/filter controls */
         "pill-outline":
-          "rounded-full border-border bg-transparent text-foreground hover:bg-muted",
+          "rounded-full border border-input bg-transparent text-foreground hover:bg-muted",
         outline:
-          "rounded-lg border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+          "rounded-md border border-input bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground",
         secondary:
-          "rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
+          "rounded-md bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
         ghost:
-          "rounded-lg hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
+          "rounded-md hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground",
         destructive:
-          "rounded-lg bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
-        link: "rounded-none text-foreground underline-offset-4 hover:underline",
+          "rounded-md bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20",
+        link: "rounded-none text-link-blue underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-9 gap-1.5 px-6 has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4",
+        default: "h-10 gap-1.5 px-6 has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4",
         xs: "h-6 gap-1 px-2 text-xs has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
         sm: "h-8 gap-1 px-4 text-[0.8rem] has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 [&_svg:not([class*='size-'])]:size-3.5",
         lg: "h-11 gap-2 px-8 text-base has-data-[icon=inline-end]:pr-6 has-data-[icon=inline-start]:pl-6",
-        icon: "size-9 rounded-full",
+        icon: "size-9 rounded-md",
         "icon-xs": "size-6 [&_svg:not([class*='size-'])]:size-3",
         "icon-sm": "size-8 [&_svg:not([class*='size-'])]:size-3.5",
         "icon-lg": "size-11",

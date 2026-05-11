@@ -59,44 +59,49 @@ Paginated endpoints return `PaginatedResponse<T>` with a `pagination` object.
 
 ## Design system
 
-The site uses a Cohere-inspired design system defined in `DESIGN.md` at the repo root. All palette tokens are declared in `app/globals.css` `@theme` and available as Tailwind utilities.
+The site uses a Notion-inspired design system defined in `DESIGN.md` at the repo root. All palette tokens are declared in `app/globals.css` `@theme` and available as Tailwind utilities. Page background is white (`bg-canvas`). Marketing sections are wrapped in borderless `rounded-2xl` pastel cards that alternate tints.
 
 ### Palette (key tokens)
 | Utility | Hex | Role |
 |---|---|---|
 | `bg-primary-brand` / `text-primary-brand` | `#17171c` | Near-black — primary CTAs, dark text |
-| `bg-deep-green` / `text-deep-green` | `#003c33` | Dark feature bands, admin accent |
-| `bg-dark-navy` / `text-dark-navy` | `#071829` | Employee panel accent, dark surfaces |
-| `bg-coral` / `text-coral` | `#ff7759` | Editorial eyebrows, customer accent, taxonomy chips |
-| `bg-coral-soft` / `text-coral-soft` | `#ffad9b` | Warm accent tint |
-| `bg-soft-stone` | `#eeece7` | Secondary surfaces, form page backgrounds |
-| `bg-pale-green` | `#edfce9` | Light wash, decorative blobs |
-| `bg-pale-blue` | `#f1f5ff` | Light wash, editorial CTA backgrounds |
-| `border-hairline` | `#d9d9dd` | Default card/divider border |
-| `text-ink` | `#212121` | Default body text |
-| `text-body-muted` | `#616161` | Secondary / muted body text |
-| `text-muted-brand` | `#93939f` | Metadata, captions |
-| `text-action-blue` | `#1863dc` | Editorial links |
+| `text-ink` | `#1a1a1a` | Headlines |
+| `text-charcoal` | `#37352f` | Body copy |
+| `text-slate` | `#5d5b54` | Secondary body |
+| `text-steel` | `#787671` | Tertiary / eyebrows |
+| `text-stone` | `#a4a097` | Muted labels / metadata |
+| `border-hairline` | `#e5e3df` | Default card/divider border |
+| `border-hairline-strong` | `#c8c4be` | Input borders |
+| `bg-surface` | `#f6f5f4` | Quiet neutral surface |
+| `bg-canvas` | `#ffffff` | Page bg + white cards |
+| `bg-tint-sky` | `#dcecfa` | Anchor pastel (hero, career pages) |
+| `bg-tint-mint` | `#d9f3e1` | Anchor pastel (features, articles) |
+| `bg-tint-peach` | `#ffe8d4` | Anchor pastel (CTA sections) |
+| `bg-tint-cream` | `#f8f5e8` | Hero default, legal pages |
+| `bg-tint-lavender` | `#e6e0f5` | Supporting pastel (used sparingly) |
+| `text-link-blue` | `#0075de` | Inline links |
 
-### Per-panel accent colors
-- **Admin** — `#003c33` deep-green
-- **Employee** — `#071829` dark-navy
-- **Customer** — `#ff7759` coral
+### Per-panel accent tokens (forward-looking, not yet applied to panels)
+- **Admin** — `bg-accent-admin` (`#d9f3e1` mint)
+- **Employee** — `bg-accent-employee` (`#dcecfa` sky)
+- **Customer** — `bg-accent-customer` (`#ffe8d4` peach)
 
 ### Typography
-- **Display / headings** — `font-display` (Space Grotesk via `next/font`)
-- **Body / UI** — `font-sans` (Inter via `next/font`)
-- **Labels / eyebrows** — `font-mono` (JetBrains Mono via `next/font`)
-- Headline pattern: `font-display font-normal tracking-tight leading-none` — large sections 48-72px, section headings 40-48px
-- Eyebrow pattern: `font-mono text-xs uppercase tracking-[0.28px] text-coral`
+- **All text** — Inter only (`font-sans`, `font-display`, `font-mono` are all aliased to Inter)
+- Space Grotesk and JetBrains Mono have been removed
+- Headline pattern: `font-display font-semibold tracking-tight` — large sections text-4xl–text-6xl, section headings text-3xl–text-4xl
+- Eyebrow pattern: `text-xs font-medium uppercase tracking-[0.28px] text-steel`
 
-### Component conventions
-- **Primary CTA buttons** — `rounded-full bg-primary-brand text-white` (default Button variant)
-- **Pill-outline buttons** — `variant="pill-outline"` on the Button component
-- **Cards** — `rounded-lg border border-hairline bg-white` — flat, NO `shadow-*`
-- **Large media cards** — `rounded-[22px]`
-- **Dark feature bands** — `bg-deep-green rounded-[22px] p-12 text-white`
-- **Sidebar** — `bg-sidebar` (CSS var set to `#17171c`); active item uses per-panel accent
+### Section card conventions (marketing pages)
+- Each major section is a `rounded-2xl` borderless pastel card: `bg-tint-* rounded-2xl px-8 py-16 md:py-20`
+- Page container: `mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-4`
+- Inner cards (features, job cards, article cards): `rounded-xl border border-hairline bg-canvas` — flat, NO `shadow-*`
+- Alternating rhythm: hero pastel → white → pastel → white → CTA pastel
+
+### Button conventions
+- **Primary CTA** — `rounded-md bg-primary-brand text-white h-10` (default Button variant, NOT rounded-full)
+- **Pill-outline** — `variant="pill-outline"` for taxonomy chips / filter buttons
+- **Outline** — `rounded-md border-hairline-strong`
 - Do NOT use `shadow-*` on cards. Do NOT use `asChild` prop (button is not Radix UI).
 
 ### Note

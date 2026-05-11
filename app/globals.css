@@ -12,41 +12,39 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  /* Cohere-inspired brand palette */
+  /* Notion-inspired brand palette */
   --color-primary-brand: #17171c;
-  --color-cohere-black: #000000;
-  --color-ink: #212121;
-  --color-deep-green: #003c33;
-  --color-dark-navy: #071829;
+  --color-ink: #1a1a1a;
+  --color-charcoal: #37352f;
+  --color-slate: #5d5b54;
+  --color-steel: #787671;
+  --color-stone: #a4a097;
   --color-canvas: #ffffff;
-  --color-soft-stone: #eeece7;
-  --color-pale-green: #edfce9;
-  --color-pale-blue: #f1f5ff;
-  --color-hairline: #d9d9dd;
-  --color-border-light: #e5e7eb;
-  --color-card-border: #f2f2f2;
-  --color-muted-brand: #93939f;
-  --color-slate-brand: #75758a;
-  --color-body-muted: #616161;
-  --color-action-blue: #1863dc;
-  --color-focus-blue: #4c6ee6;
-  --color-coral: #ff7759;
-  --color-coral-soft: #ffad9b;
-  --color-form-focus: #9b60aa;
-  --color-error-brand: #b30000;
+  --color-surface: #f6f5f4;
+  --color-surface-soft: #fafaf9;
+  --color-hairline: #e5e3df;
+  --color-hairline-strong: #c8c4be;
 
-  /* Per-panel accents (admin=deep-green, employee=dark-navy, customer=coral) */
-  --color-accent-admin: #003c33;
-  --color-accent-employee: #071829;
-  --color-accent-customer: #ff7759;
+  /* Pastel tints */
+  --color-tint-sky: #dcecfa;
+  --color-tint-mint: #d9f3e1;
+  --color-tint-peach: #ffe8d4;
+  --color-tint-cream: #f8f5e8;
+  --color-tint-lavender: #e6e0f5;
 
-  /* Fonts — next/font CSS vars are applied to <html>, fallbacks ensure render */
-  --font-display: var(--font-space-grotesk), "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  /* Links & semantic */
+  --color-link-blue: #0075de;
+  --color-error-brand: #e03131;
+
+  /* Per-panel accents (deferred — panels not yet migrated) */
+  --color-accent-admin: #d9f3e1;
+  --color-accent-employee: #dcecfa;
+  --color-accent-customer: #ffe8d4;
+
+  /* Fonts — Inter only; display + mono aliased so existing utilities keep working */
   --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace;
-
-  /* Radius tokens from DESIGN.md */
-  --radius-pill: 2rem;
+  --font-display: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
 @theme inline {
@@ -92,54 +90,71 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  @keyframes marquee {
+  from {
+    transform: translateX(0);
+    }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+    }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
 }
 
 :root {
-  /* white canvas */
+  /* canvas white */
   --background: oklch(1 0 0);
-  /* ink #212121 */
-  --foreground: oklch(0.169 0 0);
+  /* ink #1a1a1a */
+  --foreground: oklch(0.13 0 0);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.169 0 0);
+  --card-foreground: oklch(0.13 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.169 0 0);
+  --popover-foreground: oklch(0.13 0 0);
   /* near-black #17171c */
   --primary: oklch(0.143 0.007 264);
   --primary-foreground: oklch(1 0 0);
-  /* soft-stone #eeece7 */
-  --secondary: oklch(0.934 0.006 78);
-  --secondary-foreground: oklch(0.169 0 0);
-  /* card-border #f2f2f2 */
-  --muted: oklch(0.953 0 0);
-  /* body-muted #616161 */
-  --muted-foreground: oklch(0.435 0 0);
-  /* pale-blue #f1f5ff */
-  --accent: oklch(0.972 0.016 266);
-  --accent-foreground: oklch(0.169 0 0);
+  /* tint-cream #f8f5e8 */
+  --secondary: oklch(0.972 0.012 89);
+  --secondary-foreground: oklch(0.13 0 0);
+  /* surface #f6f5f4 */
+  --muted: oklch(0.967 0.003 75);
+  /* slate #5d5b54 */
+  --muted-foreground: oklch(0.42 0.008 75);
+  /* tint-sky #dcecfa */
+  --accent: oklch(0.938 0.034 228);
+  --accent-foreground: oklch(0.13 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  /* hairline #d9d9dd */
-  --border: oklch(0.873 0.003 264);
-  /* border-light #e5e7eb */
-  --input: oklch(0.916 0.005 264);
-  /* focus-blue #4c6ee6 */
-  --ring: oklch(0.535 0.178 262);
-  /* chart colors mapped to palette accent hues */
+  /* hairline #e5e3df */
+  --border: oklch(0.906 0.007 75);
+  /* hairline-strong #c8c4be */
+  --input: oklch(0.803 0.01 75);
+  /* charcoal focus */
+  --ring: oklch(0.143 0.007 264);
   --chart-1: oklch(0.685 0.195 25);
-  --chart-2: oklch(0.24 0.06 175);
-  --chart-3: oklch(0.479 0.19 255);
-  --chart-4: oklch(0.804 0.12 20);
-  --chart-5: oklch(0.529 0.135 302);
-  --radius: 0.5rem;
+  --chart-2: oklch(0.65 0.12 160);
+  --chart-3: oklch(0.6 0.08 228);
+  --chart-4: oklch(0.78 0.1 89);
+  --chart-5: oklch(0.7 0.1 302);
+  --radius: 0.75rem;
   /* sidebar: near-black #17171c */
   --sidebar: oklch(0.143 0.007 264);
   --sidebar-foreground: oklch(1 0 0);
-  /* sidebar active: deep-green #003c33 (admin default; panels override per-component) */
-  --sidebar-primary: oklch(0.24 0.06 175);
+  /* sidebar primary: charcoal */
+  --sidebar-primary: oklch(0.143 0.007 264);
   --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: oklch(1 0 0 / 8%);
   --sidebar-accent-foreground: oklch(1 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.535 0.178 262);
+  --sidebar-ring: oklch(0.143 0.007 264);
 }
 
 .dark {
