@@ -9,7 +9,7 @@ import { SanityLive } from "@/sanity/live";
 export const metadata: Metadata = {
     title: "Articles | StartupKaro",
     description:
-        "Expert insights on GST, income tax, company compliance, startup law, and business finance — written by CAs, lawyers, and experienced founders.",
+        "Expert insights on GST, income tax, company compliance, startup law, and business finance, written by CAs, lawyers, and experienced founders.",
 };
 
 export default async function ArticlesPage({

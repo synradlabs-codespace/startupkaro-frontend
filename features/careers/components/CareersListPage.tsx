@@ -9,7 +9,7 @@ const CULTURE_PILLARS = [
         icon: ShieldCheck,
         color: "#6BAE3A",
         title: "Compliance first",
-        body: "We help founders stay compliant so we hold ourselves to the same standard — every process, every decision.",
+        body: "We help founders stay compliant so we hold ourselves to the same standard, every process, every decision.",
     },
     {
         icon: Heart,
@@ -21,7 +21,7 @@ const CULTURE_PILLARS = [
         icon: Users,
         color: "#000080",
         title: "Expert, not corporate",
-        body: "Real CAs, CSs, and legal experts — approachable, fast, and always in your corner.",
+        body: "Real CAs, CSs, and legal experts, approachable, fast, and always in your corner.",
     },
     {
         icon: Zap,
@@ -57,7 +57,7 @@ export function CareersListPage({ jobs }: CareersListPageProps) {
                             compliance platform
                         </h1>
                         <p className="text-lg text-gray-500 leading-relaxed mb-8 max-w-2xl">
-                            We&apos;re on a mission to become India&apos;s most trusted compliance partner for new-age founders — making GST, registrations, and legal paperwork completely headache-free. If you believe businesses should focus on building, not bureaucracy, you&apos;ll fit right in.
+                            We&apos;re on a mission to become India&apos;s most trusted compliance partner for new-age founders, making GST, registrations, and legal paperwork completely headache-free. If you believe businesses should focus on building, not bureaucracy, you&apos;ll fit right in.
                         </p>
                         <div className="flex flex-wrap gap-5 text-xs text-gray-500">
                             <span className="flex items-center gap-1.5">
@@ -117,7 +117,7 @@ export function CareersListPage({ jobs }: CareersListPageProps) {
                         </h2>
                         <p className="text-sm text-gray-500">
                             {jobs.length === 0
-                                ? "No openings right now — check back soon."
+                                ? "No openings right now, check back soon."
                                 : `${jobs.length} opening${jobs.length === 1 ? "" : "s"} across all departments`}
                         </p>
                     </div>
