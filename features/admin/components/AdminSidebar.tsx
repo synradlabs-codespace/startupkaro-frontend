@@ -44,9 +44,9 @@ const navItems = [
     { title: "Analytics", href: "/admin/analytics", icon: BarChart3 },
 ];
 
-const ACCENT = "#6BAE3A";
-const ACCENT_BG = "rgba(107, 174, 58, 0.10)";
-const ACCENT_TEXT = "#4a7d28";
+const ACCENT = "#003c33";
+const ACCENT_BG = "rgba(0, 60, 51, 0.10)";
+const ACCENT_TEXT = "#003c33";
 
 export function AdminSidebar() {
     const pathname = usePathname();
@@ -76,11 +76,11 @@ export function AdminSidebar() {
 
     return (
         <aside
-            className={`flex flex-col border-r border-gray-100 bg-white transition-all duration-300 ease-in-out relative z-20 h-screen ${collapsed ? "w-[80px]" : "w-64"
+            className={`flex flex-col border-r border-gray-800 bg-sidebar transition-all duration-300 ease-in-out relative z-20 h-screen ${collapsed ? "w-[80px]" : "w-64"
                 }`}
         >
             {/* Header */}
-            <div className={`h-16 flex items-center px-4 py-5 transition-all duration-200 border-b border-gray-50 ${collapsed ? "justify-center" : "justify-between"}`}>
+            <div className={`h-16 flex items-center px-4 py-5 transition-all duration-200 border-b border-gray-800 ${collapsed ? "justify-center" : "justify-between"}`}>
                 <div className={`flex items-center gap-3 overflow-hidden ${collapsed ? "w-auto" : "w-full"}`}>
                     {collapsed ? (
                         <div
@@ -120,7 +120,7 @@ export function AdminSidebar() {
                                     title={collapsed ? item.title : undefined}
                                     className={`h-9 w-full rounded-lg flex items-center gap-2.5 px-3 transition-all duration-150 cursor-pointer outline-none ${collapsed ? "justify-center" : "justify-between"
                                         }`}
-                                    style={active && !collapsed ? { backgroundColor: ACCENT_BG, color: ACCENT_TEXT } : { color: "#374151" }}
+                                    style={active && !collapsed ? { backgroundColor: ACCENT_BG, color: ACCENT_TEXT } : { color: "#a1a1aa" }}
                                 >
                                     <div className="flex items-center gap-2.5">
                                         <item.icon className="h-[18px] w-[18px] shrink-0" style={active ? { color: ACCENT_TEXT } : {}} />
@@ -136,7 +136,7 @@ export function AdminSidebar() {
                                     title={collapsed ? item.title : undefined}
                                     className={`h-9 w-full rounded-lg flex items-center gap-2.5 px-3 transition-all duration-150 outline-none ${collapsed ? "justify-center" : ""
                                         }`}
-                                    style={active ? { backgroundColor: ACCENT_BG, color: ACCENT_TEXT } : { color: "#374151" }}
+                                    style={active ? { backgroundColor: ACCENT_BG, color: ACCENT_TEXT } : { color: "#a1a1aa" }}
                                 >
                                     <item.icon className="h-[18px] w-[18px] shrink-0" />
                                     {!collapsed && <span className="text-[13px] font-medium whitespace-nowrap">{item.title}</span>}
@@ -145,19 +145,19 @@ export function AdminSidebar() {
 
                             {/* Accordion Content */}
                             {hasChildren && isOpen && !collapsed && (
-                                <div className="ml-[22px] mt-1 border-l border-gray-100 pl-3 space-y-1 py-1">
+                                <div className="ml-[22px] mt-1 border-l border-gray-700 pl-3 space-y-1 py-1">
                                     {item.children?.map((child) => {
                                         const childActive = pathname === child.href;
                                         return (
                                             <Link
                                                 key={child.href}
                                                 href={child.href}
-                                                className={`h-8 rounded-md flex items-center text-[12.5px] font-medium w-full px-2 transition-all duration-150 ${childActive ? "bg-opacity-50" : "hover:bg-gray-50 hover:text-gray-900"
+                                                className={`h-8 rounded-md flex items-center text-[12.5px] font-medium w-full px-2 transition-all duration-150 ${childActive ? "bg-opacity-50" : "hover:bg-white/10 hover:text-white"
                                                     }`}
                                                 style={
                                                     childActive
                                                         ? { color: ACCENT_TEXT, backgroundColor: ACCENT_BG }
-                                                        : { color: "#6b7280" }
+                                                        : { color: "#a1a1aa" }
                                                 }
                                             >
                                                 {child.title}
@@ -172,7 +172,7 @@ export function AdminSidebar() {
             </div>
 
             {/* Footer */}
-            <div className="px-3 py-4 border-t border-gray-100 bg-white">
+            <div className="px-3 py-4 border-t border-gray-800">
                 {collapsed ? (
                     <div className="group relative flex justify-center cursor-pointer" title="Admin">
                         <Avatar className="h-8 w-8">
@@ -195,7 +195,7 @@ export function AdminSidebar() {
                             </AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
-                            <p className="text-[13px] font-medium text-gray-900 truncate leading-none">Admin</p>
+                            <p className="text-[13px] font-medium text-white truncate leading-none">Admin</p>
                             <p className="text-[11px] text-gray-400 truncate mt-0.5">admin@startupkaro.com</p>
                         </div>
                         <Link

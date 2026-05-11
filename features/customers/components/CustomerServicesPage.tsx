@@ -82,7 +82,7 @@ export function CustomerServicesPage() {
                             placeholder="Search services..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            className="pl-9 rounded-xl border-gray-200 focus-visible:ring-[#FF9933]/30"
+                            className="pl-9 rounded-xl border-gray-200 focus-visible:ring-[coral]/30"
                         />
                     </div>
                     <div className="flex gap-2 flex-wrap">
@@ -92,8 +92,8 @@ export function CustomerServicesPage() {
                                 onClick={() => setActiveCategory(cat)}
                                 className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all duration-150 border ${
                                     activeCategory === cat
-                                        ? "bg-[#FF9933] text-white border-[#FF9933] shadow-sm"
-                                        : "bg-white text-gray-500 border-gray-200 hover:border-[#FF9933]/40 hover:text-[#FF9933]"
+                                        ? "bg-[coral] text-white border-[coral] shadow-sm"
+                                        : "bg-white text-gray-500 border-gray-200 hover:border-[coral]/40 hover:text-[coral]"
                                 }`}
                             >
                                 {cat}
@@ -123,7 +123,7 @@ export function CustomerServicesPage() {
                                     className="group relative flex flex-col rounded-2xl border border-gray-200/70 bg-white/80 backdrop-blur-sm shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
                                 >
                                     {/* Top accent strip */}
-                                    <div className="h-1 w-full bg-gradient-to-r from-[#FF9933] to-orange-300 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                                    <div className="h-1 w-full bg-gradient-to-r from-[coral] to-orange-300 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
 
                                     <div className="flex flex-col flex-1 p-5">
                                         {/* Icon + category */}
@@ -160,7 +160,7 @@ export function CustomerServicesPage() {
                                             </div>
                                             <Link
                                                 href={`/customer/services/${service.id}`}
-                                                className="inline-flex items-center gap-1.5 h-7 px-2.5 text-[0.8rem] font-medium bg-[#FF9933] text-white hover:bg-[#FF9933]/90 rounded-xl transition-colors shrink-0"
+                                                className="inline-flex items-center gap-1.5 h-7 px-2.5 text-[0.8rem] font-medium bg-[coral] text-white hover:bg-[coral]/90 rounded-xl transition-colors shrink-0"
                                             >
                                                 Details
                                                 <ArrowRight className="h-3.5 w-3.5" />
@@ -175,7 +175,7 @@ export function CustomerServicesPage() {
 
                 {/* ── Footer note ──────────────────────────── */}
                 <div className="flex items-center gap-2 text-xs text-gray-400 pt-2">
-                    <Sparkles className="h-3.5 w-3.5 text-[#FF9933]" />
+                    <Sparkles className="h-3.5 w-3.5 text-[coral]" />
                     All services include expert assistance and end-to-end document handling.
                 </div>
             </div>

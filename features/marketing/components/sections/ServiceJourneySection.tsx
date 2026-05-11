@@ -21,14 +21,14 @@ const steps = [
         number: "01",
         heading: "Start your business",
         Icon: Rocket,
-        accent: "#FF9933",
-        accentBg: "bg-[#FF9933]/10",
-        accentText: "text-[#FF9933]",
-        accentBorder: "border-[#FF9933]/25",
+        accent: "#ff7759",
+        accentBg: "bg-coral/10",
+        accentText: "text-coral",
+        accentBorder: "border-coral/25",
         gradientFrom: "from-orange-50",
         gradientTo: "to-amber-50",
-        iconBg: "bg-[#FF9933]/15",
-        iconText: "text-[#FF9933]",
+        iconBg: "bg-coral/15",
+        iconText: "text-coral",
         description:
             "Get legally incorporated and ready to operate. Our experts handle every filing end to end, so you can stay focused on building.",
         services: [
@@ -37,7 +37,7 @@ const steps = [
             "Startup India recognition",
             "PAN & TAN application",
         ],
-        visualLabel: "Let\u2019s get you started",
+        visualLabel: "Let’s get you started",
         colorVariant: "saffron" as const,
         ctaText: "Start Now",
     },
@@ -45,14 +45,14 @@ const steps = [
         number: "02",
         heading: "Manage your business",
         Icon: LineChart,
-        accent: "#000080",
-        accentBg: "bg-[#000080]/8",
-        accentText: "text-[#000080]",
-        accentBorder: "border-[#000080]/20",
+        accent: "#17171c",
+        accentBg: "bg-primary-brand/8",
+        accentText: "text-primary-brand",
+        accentBorder: "border-primary-brand/20",
         gradientFrom: "from-indigo-50",
         gradientTo: "to-blue-50",
-        iconBg: "bg-[#000080]/10",
-        iconText: "text-[#000080]",
+        iconBg: "bg-primary-brand/10",
+        iconText: "text-primary-brand",
         description:
             "Stay compliant and financially healthy month to month. We handle the recurring filings so nothing slips through the cracks.",
         services: [
@@ -69,14 +69,14 @@ const steps = [
         number: "03",
         heading: "Protect your business",
         Icon: ShieldCheck,
-        accent: "#6BAE3A",
-        accentBg: "bg-[#6BAE3A]/10",
-        accentText: "text-[#6BAE3A]",
-        accentBorder: "border-[#6BAE3A]/20",
+        accent: "#003c33",
+        accentBg: "bg-deep-green/10",
+        accentText: "text-deep-green",
+        accentBorder: "border-deep-green/20",
         gradientFrom: "from-green-50",
         gradientTo: "to-emerald-50",
-        iconBg: "bg-[#6BAE3A]/15",
-        iconText: "text-[#6BAE3A]",
+        iconBg: "bg-deep-green/15",
+        iconText: "text-deep-green",
         description:
             "Safeguard the brand, IP, and legal footing you've built. Lock in your trademarks and have expert legal cover on standby.",
         services: [
@@ -85,7 +85,7 @@ const steps = [
             "Legal contracts & agreements",
             "Dispute & notice handling",
         ],
-        visualLabel: "You\u2019re covered",
+        visualLabel: "You’re covered",
         colorVariant: "green" as const,
         ctaText: "Protect Now",
     },
@@ -109,17 +109,17 @@ export function ServiceJourneySection() {
     const activeAccent = steps[activeStep].accent;
 
     return (
-        <section className="bg-gray-50/40 py-16 md:py-20">
+        <section className="bg-white py-20 md:py-24">
             {/* Section header */}
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center mb-14">
-                <p className="text-xs font-semibold text-[#FF9933] uppercase tracking-wider mb-2">
+                <p className="font-mono text-xs uppercase tracking-[0.28px] text-coral mb-2">
                     Your journey
                 </p>
-                <h2 className="font-serif text-3xl md:text-4xl text-gray-900 font-normal">
+                <h2 className="font-display text-4xl md:text-5xl text-ink font-normal tracking-tight">
                     Everything you need,{" "}
-                    <span className="text-[#FF9933]">at every stage</span>
+                    <span className="text-coral">at every stage</span>
                 </h2>
-                <p className="mt-3 text-sm text-gray-500 max-w-lg mx-auto">
+                <p className="mt-3 text-base text-body-muted max-w-lg mx-auto">
                     From the day you register to years of growth, we're with you at every step.
                 </p>
             </div>
@@ -142,17 +142,17 @@ export function ServiceJourneySection() {
                                     animate={{ opacity: 1, scale: 1, y: 0 }}
                                     exit={{ opacity: 0, scale: 0.97, y: -10 }}
                                     transition={{ duration: 0.45, ease: "easeOut" }}
-                                    className={`absolute inset-0 rounded-3xl bg-linear-to-br ${steps[activeStep].gradientFrom} ${steps[activeStep].gradientTo} flex flex-col items-center justify-center gap-5 border border-gray-200/50`}
+                                    className={`absolute inset-0 rounded-[22px] bg-linear-to-br ${steps[activeStep].gradientFrom} ${steps[activeStep].gradientTo} flex flex-col items-center justify-center gap-5 border border-hairline`}
                                 >
                                     {/* Decorative rings */}
                                     <div
-                                        className="absolute inset-0 rounded-3xl opacity-30"
+                                        className="absolute inset-0 rounded-[22px] opacity-30"
                                         style={{
                                             background: `radial-gradient(circle at 70% 30%, ${activeAccent}22 0%, transparent 60%)`,
                                         }}
                                     />
                                     <div
-                                        className="w-24 h-24 rounded-2xl flex items-center justify-center shadow-lg"
+                                        className="w-24 h-24 rounded-lg flex items-center justify-center"
                                         style={{ backgroundColor: `${activeAccent}22` }}
                                     >
                                         {(() => {
@@ -167,15 +167,15 @@ export function ServiceJourneySection() {
                                     </div>
                                     <div className="text-center px-6 relative">
                                         <p
-                                            className="text-xs font-semibold uppercase tracking-wider mb-1"
+                                            className="font-mono text-xs uppercase tracking-[0.28px] mb-1"
                                             style={{ color: activeAccent }}
                                         >
                                             Step {steps[activeStep].number}
                                         </p>
-                                        <p className="font-serif text-xl text-gray-800 font-normal">
+                                        <p className="font-display text-xl text-ink font-normal">
                                             {steps[activeStep].heading}
                                         </p>
-                                        <p className="text-xs text-gray-500 mt-1.5">
+                                        <p className="text-xs text-body-muted mt-1.5">
                                             {steps[activeStep].visualLabel}
                                         </p>
                                     </div>
@@ -250,23 +250,23 @@ function StepCard({ step, isActive }: StepCardProps) {
         <motion.div
             animate={{ opacity: isActive ? 1 : 0.45 }}
             transition={{ duration: 0.35 }}
-            className={`w-full rounded-2xl border bg-white/70 backdrop-blur-sm shadow-sm p-7 md:p-8 space-y-5 transition-shadow duration-300 ${
+            className={`w-full rounded-lg border bg-white p-7 md:p-8 space-y-5 ${
                 isActive
-                    ? `border-gray-200/60 shadow-md ${step.accentBorder}`
-                    : "border-gray-100"
+                    ? `border-hairline ${step.accentBorder}`
+                    : "border-hairline"
             }`}
         >
             {/* Step badge + icon */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <span
-                        className={`text-xs font-bold uppercase tracking-widest ${step.accentText}`}
+                        className={`font-mono text-xs uppercase tracking-[0.28px] ${step.accentText}`}
                     >
                         {step.number}
                     </span>
                     <div className="w-px h-4 bg-gray-200" />
                     <div
-                        className={`h-9 w-9 rounded-xl flex items-center justify-center ${step.accentBg}`}
+                        className={`h-9 w-9 rounded-lg flex items-center justify-center ${step.accentBg}`}
                     >
                         <step.Icon className={`h-4.5 w-4.5 ${step.accentText}`} />
                     </div>
@@ -275,10 +275,10 @@ function StepCard({ step, isActive }: StepCardProps) {
 
             {/* Heading + description */}
             <div>
-                <h3 className="font-serif text-2xl md:text-3xl text-gray-900 font-normal mb-2">
+                <h3 className="font-display text-2xl md:text-3xl text-ink font-normal tracking-tight mb-2">
                     {step.heading}
                 </h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{step.description}</p>
+                <p className="text-sm text-body-muted leading-relaxed">{step.description}</p>
             </div>
 
             {/* Key services */}
@@ -290,7 +290,7 @@ function StepCard({ step, isActive }: StepCardProps) {
                         >
                             <Check className={`h-3 w-3 ${step.accentText}`} />
                         </div>
-                        <span className="text-sm text-gray-700">{service}</span>
+                        <span className="text-sm text-ink">{service}</span>
                     </div>
                 ))}
             </div>

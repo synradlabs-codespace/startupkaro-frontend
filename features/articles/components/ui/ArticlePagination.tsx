@@ -38,7 +38,7 @@ export function ArticlePagination({ page, totalPages, activeCategory }: ArticleP
                 type="button"
                 onClick={() => go(page - 1)}
                 disabled={page <= 1}
-                className="h-8 w-8 inline-flex items-center justify-center rounded-xl border border-gray-200 text-gray-500 hover:border-[#FF9933]/40 hover:text-[#FF9933] disabled:opacity-40 disabled:pointer-events-none transition-colors"
+                className="h-8 w-8 inline-flex items-center justify-center rounded-xl border border-gray-200 text-gray-500 hover:border-[#ff7759]/40 hover:text-[#ff7759] disabled:opacity-40 disabled:pointer-events-none transition-colors"
             >
                 <ChevronLeft className="h-4 w-4" />
             </button>
@@ -55,8 +55,8 @@ export function ArticlePagination({ page, totalPages, activeCategory }: ArticleP
                         onClick={() => go(p as number)}
                         className={`h-8 min-w-[2rem] px-2.5 inline-flex items-center justify-center rounded-xl text-xs font-medium border transition-colors ${
                             p === page
-                                ? "bg-[#FF9933] text-white border-[#FF9933] shadow-sm"
-                                : "bg-white text-gray-600 border-gray-200 hover:border-[#FF9933]/40 hover:text-[#FF9933]"
+                                ? "bg-[#ff7759] text-white border-[#ff7759] shadow-sm"
+                                : "bg-white text-gray-600 border-gray-200 hover:border-[#ff7759]/40 hover:text-[#ff7759]"
                         }`}
                     >
                         {p}
@@ -68,7 +68,7 @@ export function ArticlePagination({ page, totalPages, activeCategory }: ArticleP
                 type="button"
                 onClick={() => go(page + 1)}
                 disabled={page >= totalPages}
-                className="h-8 w-8 inline-flex items-center justify-center rounded-xl border border-gray-200 text-gray-500 hover:border-[#FF9933]/40 hover:text-[#FF9933] disabled:opacity-40 disabled:pointer-events-none transition-colors"
+                className="h-8 w-8 inline-flex items-center justify-center rounded-xl border border-gray-200 text-gray-500 hover:border-[#ff7759]/40 hover:text-[#ff7759] disabled:opacity-40 disabled:pointer-events-none transition-colors"
             >
                 <ChevronRight className="h-4 w-4" />
             </button>

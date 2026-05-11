@@ -90,7 +90,7 @@ export function CustomerProfilePage() {
                         <Button
                             size="sm"
                             onClick={() => setEditing(true)}
-                            className="gap-2 bg-[#FF9933] hover:bg-[#FF9933]/90 text-white rounded-xl shadow-sm"
+                            className="gap-2 bg-[coral] hover:bg-[coral]/90 text-white rounded-xl shadow-sm"
                         >
                             <Pencil className="h-3.5 w-3.5" />
                             Edit Profile
@@ -102,16 +102,16 @@ export function CustomerProfilePage() {
             <div className="flex-1 p-6 space-y-6">
 
                 {/* ── Hero Card ───────────────────────────── */}
-                <div className="relative overflow-hidden rounded-2xl border border-[#FF9933]/15 bg-gradient-to-br from-[#FF9933]/8 via-white/80 to-orange-50/60 backdrop-blur-sm shadow-sm p-8">
+                <div className="relative overflow-hidden rounded-2xl border border-[coral]/15 bg-gradient-to-br from-[coral]/8 via-white/80 to-orange-50/60 backdrop-blur-sm shadow-sm p-8">
                     {/* decorative blobs */}
-                    <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-[#FF9933]/8 blur-3xl" />
+                    <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-[coral]/8 blur-3xl" />
                     <div className="pointer-events-none absolute -bottom-10 -left-10 h-36 w-36 rounded-full bg-orange-300/10 blur-2xl" />
 
                     <div className="relative flex flex-col sm:flex-row items-center sm:items-start gap-6">
                         {/* Avatar */}
                         <div className="relative shrink-0">
-                            <div className="h-24 w-24 rounded-full bg-gradient-to-br from-[#FF9933]/20 to-orange-200/40 border-2 border-[#FF9933]/20 flex items-center justify-center shadow-inner">
-                                <span className="text-2xl font-semibold text-[#FF9933]">
+                            <div className="h-24 w-24 rounded-full bg-gradient-to-br from-[coral]/20 to-orange-200/40 border-2 border-[coral]/20 flex items-center justify-center shadow-inner">
+                                <span className="text-2xl font-semibold text-[coral]">
                                     {profile.initials}
                                 </span>
                             </div>
@@ -119,7 +119,7 @@ export function CustomerProfilePage() {
                                 <button
                                     type="button"
                                     title="Upload photo"
-                                    className="absolute bottom-0 right-0 h-7 w-7 rounded-full bg-[#FF9933] text-white flex items-center justify-center shadow-md hover:bg-[#FF9933]/90 transition-colors"
+                                    className="absolute bottom-0 right-0 h-7 w-7 rounded-full bg-[coral] text-white flex items-center justify-center shadow-md hover:bg-[coral]/90 transition-colors"
                                 >
                                     <Camera className="h-3.5 w-3.5" />
                                 </button>
@@ -130,7 +130,7 @@ export function CustomerProfilePage() {
                         <div className="flex-1 text-center sm:text-left">
                             <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
                                 <h2 className="text-xl font-semibold text-gray-900">{profile.name}</h2>
-                                <span className="inline-flex items-center gap-1 rounded-full bg-[#FF9933]/10 px-2.5 py-0.5 text-[11px] font-medium text-[#d4720a]">
+                                <span className="inline-flex items-center gap-1 rounded-full bg-[coral]/10 px-2.5 py-0.5 text-[11px] font-medium text-[#d4720a]">
                                     <BadgeCheck className="h-3 w-3" />
                                     Customer
                                 </span>
@@ -151,7 +151,7 @@ export function CustomerProfilePage() {
                                 <Button
                                     size="sm"
                                     onClick={handleSave}
-                                    className="gap-1.5 bg-[#FF9933] hover:bg-[#FF9933]/90 text-white rounded-xl"
+                                    className="gap-1.5 bg-[coral] hover:bg-[coral]/90 text-white rounded-xl"
                                 >
                                     <Check className="h-3.5 w-3.5" />
                                     Save
@@ -176,8 +176,8 @@ export function CustomerProfilePage() {
                     {/* Personal Information */}
                     <div className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm p-6 space-y-5">
                         <div className="flex items-center gap-2 pb-1 border-b border-gray-100">
-                            <div className="h-7 w-7 rounded-lg bg-[#FF9933]/10 flex items-center justify-center">
-                                <User className="h-3.5 w-3.5 text-[#FF9933]" />
+                            <div className="h-7 w-7 rounded-lg bg-[coral]/10 flex items-center justify-center">
+                                <User className="h-3.5 w-3.5 text-[coral]" />
                             </div>
                             <h3 className="text-sm font-semibold text-gray-800">Personal Information</h3>
                         </div>
@@ -192,7 +192,7 @@ export function CustomerProfilePage() {
                                     <Input
                                         {...field("name")}
                                         placeholder="Your full name"
-                                        className={`rounded-xl border-gray-200 focus-visible:ring-[#FF9933]/30 ${errors.name ? "border-red-400" : ""}`}
+                                        className={`rounded-xl border-gray-200 focus-visible:ring-[coral]/30 ${errors.name ? "border-red-400" : ""}`}
                                     />
                                     {errors.name
                                         ? <p className="text-xs text-red-500">{errors.name}</p>
@@ -233,7 +233,7 @@ export function CustomerProfilePage() {
                                         {...field("phone")}
                                         type="tel"
                                         placeholder="+91 98765 43210"
-                                        className={`rounded-xl border-gray-200 focus-visible:ring-[#FF9933]/30 ${errors.phone ? "border-red-400" : ""}`}
+                                        className={`rounded-xl border-gray-200 focus-visible:ring-[coral]/30 ${errors.phone ? "border-red-400" : ""}`}
                                     />
                                     {errors.phone
                                         ? <p className="text-xs text-red-500">{errors.phone}</p>
@@ -251,7 +251,7 @@ export function CustomerProfilePage() {
                                 <Button
                                     size="sm"
                                     onClick={handleSave}
-                                    className="gap-1.5 bg-[#FF9933] hover:bg-[#FF9933]/90 text-white rounded-xl flex-1"
+                                    className="gap-1.5 bg-[coral] hover:bg-[coral]/90 text-white rounded-xl flex-1"
                                 >
                                     <Check className="h-3.5 w-3.5" />
                                     Save Changes
@@ -290,7 +290,7 @@ export function CustomerProfilePage() {
                         {/* Password */}
                         <div className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 bg-gradient-to-r from-gray-50/80 to-white">
                             <div className="h-9 w-9 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
-                                <KeyRound className="h-4 w-4 text-[#FF9933]" />
+                                <KeyRound className="h-4 w-4 text-[coral]" />
                             </div>
                             <div className="flex-1 min-w-0">
                                 <p className="text-sm font-medium text-gray-800">Password</p>
@@ -305,8 +305,8 @@ export function CustomerProfilePage() {
                         </div>
 
                         {/* Security tip */}
-                        <div className="rounded-xl bg-[#FF9933]/5 border border-[#FF9933]/10 p-3 flex gap-2.5">
-                            <ShieldCheck className="h-4 w-4 text-[#FF9933] shrink-0 mt-0.5" />
+                        <div className="rounded-xl bg-[coral]/5 border border-[coral]/10 p-3 flex gap-2.5">
+                            <ShieldCheck className="h-4 w-4 text-[coral] shrink-0 mt-0.5" />
                             <p className="text-xs text-gray-600 leading-relaxed">
                                 Use a strong, unique password and never share it. We will never ask for your password via email or phone.
                             </p>

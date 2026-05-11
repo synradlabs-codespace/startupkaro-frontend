@@ -39,7 +39,7 @@ export function CustomerPurchaseDetailPage({ id }: { id: string }) {
                         router.push("/customer/checkout/failure");
                     },
                 },
-                theme: { color: "#FF9933" },
+                theme: { color: "#ff7759" },
             };
 
             const rzp = new (window as any).Razorpay(options);
@@ -65,7 +65,7 @@ export function CustomerPurchaseDetailPage({ id }: { id: string }) {
                             <Button
                                 size="sm"
                                 onClick={handlePayNow}
-                                className="bg-[#FF9933] hover:bg-[#FF9933]/90 text-white"
+                                className="bg-[coral] hover:bg-[coral]/90 text-white"
                             >
                                 <CreditCard className="h-4 w-4 mr-1" /> Pay Now
                             </Button>

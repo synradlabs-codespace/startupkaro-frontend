@@ -38,7 +38,7 @@ function CheckoutContent() {
                         router.push(`/customer/checkout/failure?service=${serviceId}`);
                     },
                 },
-                theme: { color: "#FF9933" },
+                theme: { color: "#ff7759" },
             };
 
             const rzp = new (window as any).Razorpay(options);
@@ -60,8 +60,8 @@ function CheckoutContent() {
                 {/* ── Order Summary ───────────────────────── */}
                 <div className="md:col-span-2 rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm overflow-hidden flex flex-col">
                     <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
-                        <div className="h-7 w-7 rounded-lg bg-[#FF9933]/10 flex items-center justify-center">
-                            <Receipt className="h-3.5 w-3.5 text-[#FF9933]" />
+                        <div className="h-7 w-7 rounded-lg bg-[coral]/10 flex items-center justify-center">
+                            <Receipt className="h-3.5 w-3.5 text-[coral]" />
                         </div>
                         <h3 className="text-sm font-semibold text-gray-800">Order Summary</h3>
                     </div>
@@ -84,12 +84,12 @@ function CheckoutContent() {
                         </div>
                         <div className="flex items-center justify-between pt-2">
                             <span className="text-base font-semibold text-gray-900">Total</span>
-                            <span className="text-xl font-bold text-[#FF9933]">₹{service.price.toLocaleString("en-IN")}</span>
+                            <span className="text-xl font-bold text-[coral]">₹{service.price.toLocaleString("en-IN")}</span>
                         </div>
                     </div>
                     <div className="px-6 pb-5">
                         <div className="flex items-center gap-2 text-xs text-gray-400 bg-gray-50 rounded-xl px-3 py-2">
-                            <ShieldCheck className="h-3.5 w-3.5 text-[#FF9933] shrink-0" />
+                            <ShieldCheck className="h-3.5 w-3.5 text-[coral] shrink-0" />
                             Payments are secured and processed by Razorpay
                         </div>
                     </div>
@@ -97,7 +97,7 @@ function CheckoutContent() {
 
                 {/* ── Pay Now ─────────────────────────────── */}
                 <div className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm overflow-hidden flex flex-col">
-                    <div className="h-1.5 bg-gradient-to-r from-[#FF9933] to-orange-300" />
+                    <div className="h-1.5 bg-gradient-to-r from-[coral] to-orange-300" />
                     <div className="p-6 flex flex-col flex-1 space-y-5">
                         <div>
                             <p className="text-xs text-gray-400 uppercase tracking-wide font-medium mb-1">Amount Due</p>
@@ -111,7 +111,7 @@ function CheckoutContent() {
                             <ul className="space-y-1.5 text-xs text-gray-400">
                                 {["UPI, Cards, Net Banking accepted", "256-bit SSL encryption", "Instant payment confirmation"].map((t) => (
                                     <li key={t} className="flex items-center gap-2">
-                                        <span className="h-1.5 w-1.5 rounded-full bg-[#FF9933]/50 shrink-0" />
+                                        <span className="h-1.5 w-1.5 rounded-full bg-[coral]/50 shrink-0" />
                                         {t}
                                     </li>
                                 ))}
@@ -120,7 +120,7 @@ function CheckoutContent() {
 
                         <Button
                             onClick={handlePayment}
-                            className="w-full gap-2 bg-[#FF9933] hover:bg-[#FF9933]/90 text-white rounded-xl"
+                            className="w-full gap-2 bg-[coral] hover:bg-[coral]/90 text-white rounded-xl"
                         >
                             <CreditCard className="h-4 w-4" />
                             Pay with Razorpay

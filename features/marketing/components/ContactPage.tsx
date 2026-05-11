@@ -88,12 +88,12 @@ export function ContactPage() {
             <main className="min-h-screen bg-white flex items-center justify-center px-6">
                 <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none opacity-60" />
                 <div className="relative w-full max-w-md text-center">
-                    <div className="border border-gray-200 rounded-2xl p-10 bg-white shadow-sm">
-                        <div className="h-14 w-14 rounded-full bg-[#6BAE3A]/10 flex items-center justify-center mx-auto mb-6">
-                            <Send className="h-6 w-6 text-[#6BAE3A]" />
+                    <div className="border border-hairline rounded-lg p-10 bg-white">
+                        <div className="h-14 w-14 rounded-full bg-deep-green/10 flex items-center justify-center mx-auto mb-6">
+                            <Send className="h-6 w-6 text-deep-green" />
                         </div>
-                        <h2 className="text-2xl font-serif text-gray-900 mb-2">Message sent!</h2>
-                        <p className="text-sm text-gray-500">
+                        <h2 className="text-2xl md:text-3xl font-display font-normal tracking-tight text-ink mb-2">Message sent!</h2>
+                        <p className="font-sans text-base text-body-muted leading-relaxed">
                             Thank you for reaching out. Our team will get back to you within 1 business day.
                         </p>
                     </div>
@@ -108,9 +108,9 @@ export function ContactPage() {
 
             {/* Tricolor top bar */}
             <div className="absolute top-0 left-0 right-0 flex h-1">
-                <div className="flex-1 bg-[#FF9933]" />
-                <div className="flex-1 bg-white border-t border-gray-200" />
-                <div className="flex-1 bg-[#6BAE3A]" />
+                <div className="flex-1 bg-[#ff7759]" />
+                <div className="flex-1 bg-white border-t border-hairline" />
+                <div className="flex-1 bg-[#003c33]" />
             </div>
 
             <div className="relative w-full max-w-5xl">
@@ -119,43 +119,43 @@ export function ContactPage() {
                     {/* Left — info panel */}
                     <div className="lg:col-span-2 space-y-6">
                         <div>
-                            <p className="text-xs tracking-[0.3em] uppercase font-mono mb-2 font-medium text-[#FF9933]">
+                            <p className="font-mono text-xs uppercase tracking-[0.28px] text-coral mb-2">
                                 Get in touch
                             </p>
-                            <h1 className="text-4xl text-black font-serif font-normal leading-tight">
+                            <h1 className="text-4xl md:text-6xl font-display font-normal tracking-tight text-ink leading-tight">
                                 We'd love to<br />hear from you
                             </h1>
-                            <p className="mt-3 text-sm text-gray-500">
+                            <p className="mt-3 font-sans text-base text-body-muted leading-relaxed">
                                 Have a question about our services? Need help choosing the right compliance package? Our experts are here to help.
                             </p>
                         </div>
 
                         <div className="space-y-4 pt-2">
                             <div className="flex items-start gap-3">
-                                <div className="h-8 w-8 rounded-lg bg-[#FF9933]/10 flex items-center justify-center shrink-0 mt-0.5">
-                                    <Mail className="h-4 w-4 text-[#FF9933]" />
+                                <div className="h-8 w-8 rounded-lg bg-coral/10 flex items-center justify-center shrink-0 mt-0.5">
+                                    <Mail className="h-4 w-4 text-coral" />
                                 </div>
                                 <div>
-                                    <p className="text-xs font-mono uppercase tracking-wider text-gray-400 mb-0.5">Email</p>
-                                    <p className="text-sm text-gray-700">hello@startupkaro.in</p>
+                                    <p className="font-mono text-xs uppercase tracking-[0.28px] text-body-muted mb-0.5">Email</p>
+                                    <p className="font-sans text-base text-ink">hello@startupkaro.in</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3">
-                                <div className="h-8 w-8 rounded-lg bg-[#000080]/8 flex items-center justify-center shrink-0 mt-0.5">
-                                    <Phone className="h-4 w-4 text-[#000080]" />
+                                <div className="h-8 w-8 rounded-lg bg-[#17171c]/8 flex items-center justify-center shrink-0 mt-0.5">
+                                    <Phone className="h-4 w-4 text-ink" />
                                 </div>
                                 <div>
-                                    <p className="text-xs font-mono uppercase tracking-wider text-gray-400 mb-0.5">Phone</p>
-                                    <p className="text-sm text-gray-700">+91 789 00000 88</p>
+                                    <p className="font-mono text-xs uppercase tracking-[0.28px] text-body-muted mb-0.5">Phone</p>
+                                    <p className="font-sans text-base text-ink">+91 789 00000 88</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3">
-                                <div className="h-8 w-8 rounded-lg bg-[#6BAE3A]/10 flex items-center justify-center shrink-0 mt-0.5">
-                                    <MapPin className="h-4 w-4 text-[#6BAE3A]" />
+                                <div className="h-8 w-8 rounded-lg bg-deep-green/10 flex items-center justify-center shrink-0 mt-0.5">
+                                    <MapPin className="h-4 w-4 text-deep-green" />
                                 </div>
                                 <div>
-                                    <p className="text-xs font-mono uppercase tracking-wider text-gray-400 mb-0.5">Office</p>
-                                    <p className="text-sm text-gray-700">Mohali, Punjab, India</p>
+                                    <p className="font-mono text-xs uppercase tracking-[0.28px] text-body-muted mb-0.5">Office</p>
+                                    <p className="font-sans text-base text-ink">Mohali, Punjab, India</p>
                                 </div>
                             </div>
                         </div>
@@ -163,12 +163,12 @@ export function ContactPage() {
 
                     {/* Right — form */}
                     <div className="lg:col-span-3">
-                        <div className="border border-gray-200 rounded-2xl p-8 bg-white shadow-sm">
+                        <div className="border border-hairline rounded-lg p-8 bg-white">
                             <form onSubmit={handleSubmit} className="space-y-5" noValidate>
 
                                 {/* Full Name */}
                                 <div>
-                                    <label className="block text-xs text-gray-500 mb-2 font-mono tracking-widest uppercase">
+                                    <label className="block font-mono text-xs uppercase tracking-[0.28px] text-body-muted mb-2">
                                         Full Name
                                     </label>
                                     <input
@@ -177,10 +177,10 @@ export function ContactPage() {
                                         onChange={handleChange("fullName")}
                                         placeholder="Rahul Sharma"
                                         autoComplete="name"
-                                        className={`w-full bg-gray-50 border rounded-xl px-4 py-3 text-black text-sm placeholder-gray-400 focus:outline-none transition-colors font-sans ${
+                                        className={`w-full bg-soft-stone border rounded-lg px-4 py-3 text-ink text-base placeholder-gray-400 focus:outline-none transition-colors font-sans ${
                                             errors.fullName
                                                 ? "border-red-300 focus:border-red-400"
-                                                : "border-gray-200 focus:border-gray-400"
+                                                : "border-hairline focus:border-gray-400"
                                         }`}
                                     />
                                     {errors.fullName && (
@@ -190,7 +190,7 @@ export function ContactPage() {
 
                                 {/* Email */}
                                 <div>
-                                    <label className="block text-xs text-gray-500 mb-2 font-mono tracking-widest uppercase">
+                                    <label className="block font-mono text-xs uppercase tracking-[0.28px] text-body-muted mb-2">
                                         Email Address
                                     </label>
                                     <input
@@ -199,10 +199,10 @@ export function ContactPage() {
                                         onChange={handleChange("email")}
                                         placeholder="rahul@company.com"
                                         autoComplete="email"
-                                        className={`w-full bg-gray-50 border rounded-xl px-4 py-3 text-black text-sm placeholder-gray-400 focus:outline-none transition-colors font-sans ${
+                                        className={`w-full bg-soft-stone border rounded-lg px-4 py-3 text-ink text-base placeholder-gray-400 focus:outline-none transition-colors font-sans ${
                                             errors.email
                                                 ? "border-red-300 focus:border-red-400"
-                                                : "border-gray-200 focus:border-gray-400"
+                                                : "border-hairline focus:border-gray-400"
                                         }`}
                                     />
                                     {errors.email && (
@@ -213,7 +213,7 @@ export function ContactPage() {
                                 {/* Phone + Date row */}
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                     <div>
-                                        <label className="block text-xs text-gray-500 mb-2 font-mono tracking-widest uppercase">
+                                        <label className="block font-mono text-xs uppercase tracking-[0.28px] text-body-muted mb-2">
                                             Mobile Number
                                         </label>
                                         <input
@@ -222,10 +222,10 @@ export function ContactPage() {
                                             onChange={handleChange("phone")}
                                             placeholder="+91 98765 43210"
                                             autoComplete="tel"
-                                            className={`w-full bg-gray-50 border rounded-xl px-4 py-3 text-black text-sm placeholder-gray-400 focus:outline-none transition-colors font-sans ${
+                                            className={`w-full bg-soft-stone border rounded-lg px-4 py-3 text-ink text-base placeholder-gray-400 focus:outline-none transition-colors font-sans ${
                                                 errors.phone
                                                     ? "border-red-300 focus:border-red-400"
-                                                    : "border-gray-200 focus:border-gray-400"
+                                                    : "border-hairline focus:border-gray-400"
                                             }`}
                                         />
                                         {errors.phone && (
@@ -234,21 +234,21 @@ export function ContactPage() {
                                     </div>
 
                                     <div>
-                                        <label className="block text-xs text-gray-500 mb-2 font-mono tracking-widest uppercase">
+                                        <label className="block font-mono text-xs uppercase tracking-[0.28px] text-body-muted mb-2">
                                             Date of Submission
                                         </label>
                                         <input
                                             type="text"
                                             value={getTodayDate()}
                                             readOnly
-                                            className="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-gray-500 text-sm cursor-default select-none font-sans"
+                                            className="w-full bg-soft-stone border border-hairline rounded-lg px-4 py-3 text-body-muted text-base cursor-default select-none font-sans"
                                         />
                                     </div>
                                 </div>
 
                                 {/* Message */}
                                 <div>
-                                    <label className="block text-xs text-gray-500 mb-2 font-mono tracking-widest uppercase">
+                                    <label className="block font-mono text-xs uppercase tracking-[0.28px] text-body-muted mb-2">
                                         Message
                                     </label>
                                     <textarea
@@ -256,10 +256,10 @@ export function ContactPage() {
                                         onChange={handleChange("message")}
                                         placeholder="Tell us about your business and what you need help with…"
                                         rows={5}
-                                        className={`w-full bg-gray-50 border rounded-xl px-4 py-3 text-black text-sm placeholder-gray-400 focus:outline-none transition-colors font-sans resize-none ${
+                                        className={`w-full bg-soft-stone border rounded-lg px-4 py-3 text-ink text-base placeholder-gray-400 focus:outline-none transition-colors font-sans resize-none ${
                                             errors.message
                                                 ? "border-red-300 focus:border-red-400"
-                                                : "border-gray-200 focus:border-gray-400"
+                                                : "border-hairline focus:border-gray-400"
                                         }`}
                                     />
                                     <div className="flex items-start justify-between mt-1.5">
@@ -268,7 +268,7 @@ export function ContactPage() {
                                         ) : (
                                             <span />
                                         )}
-                                        <p className="text-xs text-gray-400 shrink-0 ml-2">
+                                        <p className="font-mono text-xs text-body-muted shrink-0 ml-2">
                                             {form.message.length}/1000
                                         </p>
                                     </div>
@@ -277,7 +277,7 @@ export function ContactPage() {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full mt-1 py-3.5 rounded-xl text-sm font-mono tracking-widest uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-white bg-[#FF9933] hover:bg-[#FF9933]/90 flex items-center justify-center gap-2"
+                                    className="w-full mt-1 py-3.5 rounded-lg font-mono text-xs tracking-[0.28px] uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-white bg-coral hover:bg-coral/90 flex items-center justify-center gap-2"
                                 >
                                     {loading ? (
                                         "Sending…"

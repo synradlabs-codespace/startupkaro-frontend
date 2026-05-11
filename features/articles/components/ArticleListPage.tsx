@@ -33,11 +33,11 @@ export function ArticleListPage({
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 space-y-8">
             {/* Page header */}
             <div>
-                <p className="text-xs tracking-[0.3em] uppercase font-mono text-[#FF9933] mb-3">
+                <p className="font-mono text-xs uppercase tracking-[0.28px] text-coral mb-3">
                     Insights &amp; Expertise
                 </p>
-                <h1 className="font-serif text-3xl md:text-4xl font-normal text-gray-900 mb-2">Articles</h1>
-                <p className="text-sm text-gray-500">
+                <h1 className="font-display text-3xl md:text-4xl font-normal tracking-tight leading-snug text-ink mb-2">Articles</h1>
+                <p className="text-sm text-body-muted">
                     Expert perspectives from CAs, tax analysts, lawyers, and business founders.
                 </p>
             </div>
@@ -47,7 +47,7 @@ export function ArticleListPage({
 
             {/* Result count */}
             {total > 0 && (
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-body-muted">
                     {total} article{total !== 1 ? "s" : ""}
                     {activeCategoryTitle ? ` in ${activeCategoryTitle}` : ""}
                 </p>
@@ -56,11 +56,11 @@ export function ArticleListPage({
             {/* Article grid */}
             {items.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-20 text-center gap-3">
-                    <div className="h-12 w-12 rounded-2xl bg-gray-100 flex items-center justify-center">
-                        <BookOpen className="h-5 w-5 text-gray-400" />
+                    <div className="h-12 w-12 rounded-lg bg-soft-stone flex items-center justify-center">
+                        <BookOpen className="h-5 w-5 text-body-muted" />
                     </div>
-                    <p className="text-sm font-medium text-gray-700">No articles found</p>
-                    <p className="text-xs text-gray-400">Try a different category</p>
+                    <p className="text-sm font-medium text-ink">No articles found</p>
+                    <p className="text-xs text-body-muted">Try a different category</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">

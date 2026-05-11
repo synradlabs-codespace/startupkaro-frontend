@@ -57,8 +57,8 @@ export function CustomerServiceDetailPage({ id }: { id: string }) {
                     <div className="md:col-span-2 space-y-5">
 
                         {/* Hero banner */}
-                        <div className="relative overflow-hidden rounded-2xl border border-[#FF9933]/15 bg-gradient-to-br from-[#FF9933]/8 via-white/90 to-orange-50/50 p-6">
-                            <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full bg-[#FF9933]/8 blur-3xl" />
+                        <div className="relative overflow-hidden rounded-2xl border border-[coral]/15 bg-gradient-to-br from-[coral]/8 via-white/90 to-orange-50/50 p-6">
+                            <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full bg-[coral]/8 blur-3xl" />
                             <div className="flex items-start gap-4">
                                 <div className={`h-12 w-12 rounded-xl ${meta.bg} flex items-center justify-center shrink-0`}>
                                     <Icon className={`h-6 w-6 ${meta.color}`} />
@@ -78,14 +78,14 @@ export function CustomerServiceDetailPage({ id }: { id: string }) {
                         {/* What's included */}
                         <div className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm p-6">
                             <h3 className="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-[#FF9933]" />
+                                <CheckCircle2 className="h-4 w-4 text-[coral]" />
                                 What's Included
                             </h3>
                             <ul className="space-y-3">
                                 {highlights.map((item) => (
                                     <li key={item} className="flex items-start gap-3">
-                                        <div className="h-5 w-5 rounded-full bg-[#FF9933]/10 flex items-center justify-center shrink-0 mt-0.5">
-                                            <ShieldCheck className="h-3 w-3 text-[#FF9933]" />
+                                        <div className="h-5 w-5 rounded-full bg-[coral]/10 flex items-center justify-center shrink-0 mt-0.5">
+                                            <ShieldCheck className="h-3 w-3 text-[coral]" />
                                         </div>
                                         <span className="text-sm text-gray-600">{item}</span>
                                     </li>
@@ -97,7 +97,7 @@ export function CustomerServiceDetailPage({ id }: { id: string }) {
                     {/* ── Right: Pricing card ─────────────── */}
                     <div className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm overflow-hidden">
                         {/* Card header accent */}
-                        <div className="h-1.5 bg-gradient-to-r from-[#FF9933] to-orange-300" />
+                        <div className="h-1.5 bg-gradient-to-r from-[coral] to-orange-300" />
 
                         <div className="p-6 space-y-5">
                             {/* Price */}
@@ -136,7 +136,7 @@ export function CustomerServiceDetailPage({ id }: { id: string }) {
                             {/* CTA */}
                             <Link
                                 href={`/customer/checkout?service=${service.id}`}
-                                className="flex items-center justify-center gap-2 w-full h-9 px-4 text-sm font-medium bg-[#FF9933] text-white hover:bg-[#FF9933]/90 rounded-xl transition-colors"
+                                className="flex items-center justify-center gap-2 w-full h-9 px-4 text-sm font-medium bg-[coral] text-white hover:bg-[coral]/90 rounded-xl transition-colors"
                             >
                                 Proceed to Checkout
                                 <ArrowRight className="h-4 w-4" />
@@ -144,7 +144,7 @@ export function CustomerServiceDetailPage({ id }: { id: string }) {
 
                             {/* Trust note */}
                             <p className="text-[11px] text-center text-gray-400 flex items-center justify-center gap-1.5">
-                                <ShieldCheck className="h-3 w-3 text-[#FF9933]" />
+                                <ShieldCheck className="h-3 w-3 text-[coral]" />
                                 Secured by Razorpay
                             </p>
                         </div>

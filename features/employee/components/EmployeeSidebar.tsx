@@ -23,9 +23,9 @@ const navItems = [
   { title: "Profile", href: "/employee/profile", icon: User },
 ];
 
-const ACCENT = "#000080"; // Navy Blue
-const ACCENT_BG = "rgba(0, 0, 128, 0.05)";
-const ACCENT_TEXT = "#000080";
+const ACCENT = "#071829"; // Dark Navy
+const ACCENT_BG = "rgba(7, 24, 41, 0.05)";
+const ACCENT_TEXT = "#071829";
 
 export function EmployeeSidebar() {
   const pathname = usePathname();
@@ -44,11 +44,11 @@ export function EmployeeSidebar() {
 
   return (
     <aside
-      className={`flex flex-col border-r border-gray-100 bg-white transition-all duration-300 ease-in-out relative z-20 h-screen ${collapsed ? "w-[80px]" : "w-64"
+      className={`flex flex-col border-r border-gray-800 bg-sidebar transition-all duration-300 ease-in-out relative z-20 h-screen ${collapsed ? "w-[80px]" : "w-64"
         }`}
     >
       {/* Header */}
-      <div className={`h-16 flex items-center px-4 py-5 border-b border-gray-50 ${collapsed ? "justify-center" : "justify-between"}`}>
+      <div className={`h-16 flex items-center px-4 py-5 border-b border-gray-800 ${collapsed ? "justify-center" : "justify-between"}`}>
         <div className={`flex items-center gap-3 overflow-hidden ${collapsed ? "w-auto" : "w-full"}`}>
           {collapsed ? (
             <div
@@ -85,7 +85,7 @@ export function EmployeeSidebar() {
                   title={collapsed ? item.title : undefined}
                   className={`h-9 w-full rounded-lg flex items-center gap-2.5 px-3 transition-all duration-150 cursor-pointer outline-none ${collapsed ? "justify-center" : "justify-between"
                     }`}
-                  style={active && !collapsed ? { backgroundColor: ACCENT_BG, color: ACCENT_TEXT } : { color: "#374151" }}
+                  style={active && !collapsed ? { backgroundColor: ACCENT_BG, color: ACCENT_TEXT } : { color: "#a1a1aa" }}
                 >
                   <div className="flex items-center gap-2.5">
                     <item.icon className="h-[18px] w-[18px] shrink-0" style={active ? { color: ACCENT_TEXT } : {}} />
@@ -98,7 +98,7 @@ export function EmployeeSidebar() {
                   href={item.href}
                   title={collapsed ? item.title : undefined}
                   className={`h-9 w-full rounded-lg flex items-center gap-2.5 px-3 transition-all duration-150 outline-none ${collapsed ? "justify-center" : ""}`}
-                  style={active ? { backgroundColor: ACCENT_BG, color: ACCENT_TEXT } : { color: "#374151" }}
+                  style={active ? { backgroundColor: ACCENT_BG, color: ACCENT_TEXT } : { color: "#a1a1aa" }}
                 >
                   <item.icon className="h-[18px] w-[18px] shrink-0" />
                   {!collapsed && <span className="text-[13px] font-medium whitespace-nowrap">{item.title}</span>}
@@ -110,7 +110,7 @@ export function EmployeeSidebar() {
       </div>
 
       {/* Footer */}
-      <div className="px-3 py-4 border-t border-gray-100 bg-white">
+      <div className="px-3 py-4 border-t border-gray-800">
         <div className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
           <Avatar className="h-8 w-8 shrink-0">
             <AvatarFallback className="text-white text-[11px] font-semibold" style={{ backgroundColor: ACCENT }}>EM</AvatarFallback>
@@ -118,7 +118,7 @@ export function EmployeeSidebar() {
           {!collapsed && (
             <>
               <div className="flex-1 min-w-0">
-                <p className="text-[13px] font-medium text-gray-900 truncate leading-none">Employee</p>
+                <p className="text-[13px] font-medium text-white truncate leading-none">Employee</p>
                 <p className="text-[11px] text-gray-400 truncate mt-0.5">employee@startupkaro.com</p>
               </div>
               <Link href="/employee/login" className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50" title="Sign out">

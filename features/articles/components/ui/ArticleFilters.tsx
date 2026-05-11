@@ -29,10 +29,10 @@ export function ArticleFilters({ categories, activeCategory }: ArticleFiltersPro
             <button
                 type="button"
                 onClick={() => handleCategory("all")}
-                className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all duration-150 border ${
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-150 border border-hairline ${
                     isAllActive
-                        ? "bg-[#FF9933] text-white border-[#FF9933] shadow-sm"
-                        : "bg-white text-gray-500 border-gray-200 hover:border-[#FF9933]/40 hover:text-[#FF9933]"
+                        ? "bg-primary-brand text-white border-primary-brand"
+                        : "bg-white text-body-muted hover:text-coral hover:border-coral"
                 }`}
             >
                 All
@@ -41,34 +41,16 @@ export function ArticleFilters({ categories, activeCategory }: ArticleFiltersPro
             {categories.map((cat) => {
                 const Icon = getIcon(cat.iconName);
                 const isActive = activeCategory === cat.slug;
-                const color = cat.accentColor ?? "#6B7280";
                 return (
                     <button
                         key={cat.slug}
                         type="button"
                         onClick={() => handleCategory(cat.slug)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all duration-150 border"
-                        style={
+                        className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-150 border border-hairline ${
                             isActive
-                                ? { backgroundColor: color, color: "#fff", borderColor: color }
-                                : {
-                                      backgroundColor: "#fff",
-                                      color: "#6B7280",
-                                      borderColor: "#E5E7EB",
-                                  }
-                        }
-                        onMouseEnter={(e) => {
-                            if (!isActive) {
-                                (e.currentTarget as HTMLButtonElement).style.color = color;
-                                (e.currentTarget as HTMLButtonElement).style.borderColor = `${color}66`;
-                            }
-                        }}
-                        onMouseLeave={(e) => {
-                            if (!isActive) {
-                                (e.currentTarget as HTMLButtonElement).style.color = "#6B7280";
-                                (e.currentTarget as HTMLButtonElement).style.borderColor = "#E5E7EB";
-                            }
-                        }}
+                                ? "bg-primary-brand text-white border-primary-brand"
+                                : "bg-white text-body-muted hover:text-coral hover:border-coral"
+                        }`}
                     >
                         <Icon className="h-3 w-3" />
                         {cat.title}

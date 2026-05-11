@@ -94,7 +94,7 @@ export function AdminLoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-2 py-3.5 rounded-xl text-sm font-mono tracking-widest uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-white bg-[var(--color-saffron)]"
+              className="w-full mt-2 py-3.5 rounded-xl text-sm font-mono tracking-widest uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-white bg-(--color-accent-admin)"
               
             >
               {loading ? "Signing in..." : "Sign in →"}

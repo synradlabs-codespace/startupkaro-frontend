@@ -27,7 +27,7 @@ export function ReadingProgressBar({ endElementId }: { endElementId?: string }) 
                 className="h-full transition-all duration-75 origin-left"
                 style={{
                     width: `${progress}%`,
-                    background: "linear-gradient(to right, #FF9933 33.33%, #000080 33.33%, #000080 66.66%, #6BAE3A 66.66%)",
+                    background: "linear-gradient(to right, #ff7759 33.33%, #17171c 33.33%, #17171c 66.66%, #003c33 66.66%)",
                     backgroundSize: "100vw 100%",
                     backgroundAttachment: "fixed",
                 }}

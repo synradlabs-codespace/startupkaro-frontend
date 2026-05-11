@@ -34,49 +34,40 @@ export function LoginForm({
     };
 
     return (
-        <main className="min-h-screen bg-white flex items-center justify-center px-6">
-            <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none opacity-60" />
-
-            {/* Tricolor top bar */}
-            <div className="absolute top-0 left-0 right-0 flex h-1">
-                <div className="flex-1 bg-[#FF9933]" />
-                <div className="flex-1 bg-white border-t border-gray-200" />
-                <div className="flex-1 bg-[#6BAE3A]" />
-            </div>
-
+        <main className="min-h-screen bg-soft-stone flex items-center justify-center px-6">
             <div className="relative w-full max-w-md">
                 <Link
                     href="/"
-                    className="inline-flex items-center gap-2 text-xs text-gray-400 hover:text-gray-600 transition-colors mb-10 font-['DM_Mono',monospace] tracking-widest uppercase"
+                    className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-body-muted hover:text-ink transition-colors mb-8"
                 >
                     ← Back
                 </Link>
 
-                <div className="border border-gray-200 rounded-2xl p-10 bg-white shadow-sm">
+                <div className="bg-white rounded-[22px] p-8 md:p-10 border border-hairline">
                     <div className="mb-8">
                         <p
-                            className="text-xs tracking-[0.3em] uppercase font-['DM_Mono',monospace] mb-2 font-medium"
+                            className="font-mono text-xs uppercase tracking-[0.28px] mb-2"
                             style={{ color: accentColor }}
                         >
                             StartupKaro
                         </p>
-                        <h1 className="text-4xl text-black font-['Instrument_Serif',serif] font-normal">
+                        <h1 className="font-display text-3xl font-normal tracking-tight text-ink">
                             {title}
                         </h1>
-                        <p className="mt-2 text-sm text-gray-500 font-['DM_Sans',sans-serif]">
+                        <p className="mt-2 text-sm text-body-muted">
                             {subtitle}
                         </p>
                     </div>
 
                     {error && (
-                        <div className="mb-6 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-600 font-['DM_Sans',sans-serif]">
+                        <div className="mb-6 px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-600">
                             {error}
                         </div>
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div>
-                            <label className="block text-xs text-gray-500 mb-2 font-['DM_Mono',monospace] tracking-widest uppercase">
+                            <label className="block text-sm font-medium text-ink mb-2">
                                 Email
                             </label>
                             <input
@@ -86,12 +77,12 @@ export function LoginForm({
                                 required
                                 autoComplete="email"
                                 placeholder="you@example.com"
-                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-black text-sm placeholder-gray-400 focus:outline-none focus:border-gray-400 transition-colors font-['DM_Sans',sans-serif]"
+                                className="w-full bg-soft-stone border border-hairline rounded-lg px-4 py-3 text-ink text-sm placeholder:text-body-muted focus:outline-none focus:border-ink transition-colors"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-xs text-gray-500 mb-2 font-['DM_Mono',monospace] tracking-widest uppercase">
+                            <label className="block text-sm font-medium text-ink mb-2">
                                 Password
                             </label>
                             <div className="relative">
@@ -102,12 +93,12 @@ export function LoginForm({
                                     required
                                     autoComplete="current-password"
                                     placeholder="••••••••"
-                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-black text-sm placeholder-gray-400 focus:outline-none focus:border-gray-400 transition-colors font-['DM_Sans',sans-serif] pr-12"
+                                    className="w-full bg-soft-stone border border-hairline rounded-lg px-4 py-3 text-ink text-sm placeholder:text-body-muted focus:outline-none focus:border-ink transition-colors pr-12"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs font-['DM_Mono',monospace] transition-colors"
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-xs text-body-muted hover:text-ink transition-colors"
                                 >
                                     {showPassword ? "HIDE" : "SHOW"}
                                 </button>
@@ -117,20 +108,19 @@ export function LoginForm({
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full mt-2 py-3.5 rounded-xl text-sm font-['DM_Mono',monospace] tracking-widest uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-white"
-                            style={{ backgroundColor: accentColor }}
+                            className="w-full mt-2 py-3.5 rounded-full bg-dark-navy text-white text-sm font-medium transition-opacity duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90"
                         >
                             {loading ? "Signing in..." : "Sign in →"}
                         </button>
                     </form>
 
                     {bottomLinks.length > 0 && (
-                        <div className="mt-6 pt-6 border-t border-gray-100 flex flex-wrap gap-4 justify-center">
+                        <div className="mt-6 pt-6 border-t border-hairline flex flex-wrap gap-4 justify-center">
                             {bottomLinks.map((link) => (
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className="text-xs text-gray-400 hover:text-gray-600 transition-colors font-['DM_Sans',sans-serif]"
+                                    className="text-xs text-body-muted hover:text-ink transition-colors"
                                 >
                                     {link.label}
                                 </Link>

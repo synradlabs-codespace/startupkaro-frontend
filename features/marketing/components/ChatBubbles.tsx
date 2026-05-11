@@ -68,8 +68,8 @@ export function ChatBubbles() {
                             <div
                                 className={`w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-semibold shrink-0 ${
                                     isFounder
-                                        ? "bg-[#FF9933]/20 text-[#FF9933]"
-                                        : "bg-[#000080]/15 text-[#000080]"
+                                        ? "bg-coral/40 text-coral"
+                                        : "bg-white/90 text-dark-navy"
                                 }`}
                             >
                                 {isFounder ? "F" : "CA"}
@@ -79,8 +79,8 @@ export function ChatBubbles() {
                             <div
                                 className={`max-w-[78%] px-3.5 py-2.5 text-[11px] leading-relaxed ${
                                     isFounder
-                                        ? "bg-white/92 border border-gray-200/70 text-gray-700 rounded-2xl rounded-bl-sm shadow-sm"
-                                        : "bg-[#000080] text-white rounded-2xl rounded-br-sm shadow-sm"
+                                        ? "bg-white/92 border border-white/20 text-ink rounded-2xl rounded-bl-sm"
+                                        : "bg-white/20 text-white rounded-2xl rounded-br-sm"
                                 }`}
                             >
                                 {msg.text}

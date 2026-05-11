@@ -92,8 +92,8 @@ export function CustomerChangePasswordPage() {
 
                     {/* ── Success state ─────────────────────────── */}
                     {submitted && (
-                        <div className="rounded-2xl border border-[#FF9933]/20 bg-[#FF9933]/5 p-6 flex items-center gap-4">
-                            <div className="h-10 w-10 rounded-full bg-[#FF9933] flex items-center justify-center shrink-0 shadow">
+                        <div className="rounded-2xl border border-[coral]/20 bg-[coral]/5 p-6 flex items-center gap-4">
+                            <div className="h-10 w-10 rounded-full bg-[coral] flex items-center justify-center shrink-0 shadow">
                                 <Check className="h-5 w-5 text-white" />
                             </div>
                             <div>
@@ -129,7 +129,7 @@ export function CustomerChangePasswordPage() {
                                             {...field("current")}
                                             type={show.current ? "text" : "password"}
                                             placeholder="Enter your current password"
-                                            className={`rounded-xl pr-10 border-gray-200 focus-visible:ring-[#FF9933]/30 ${errors.current ? "border-red-400" : ""}`}
+                                            className={`rounded-xl pr-10 border-gray-200 focus-visible:ring-[coral]/30 ${errors.current ? "border-red-400" : ""}`}
                                             required
                                         />
                                         <button
@@ -158,7 +158,7 @@ export function CustomerChangePasswordPage() {
                                             {...field("next")}
                                             type={show.next ? "text" : "password"}
                                             placeholder="Create a strong new password"
-                                            className={`rounded-xl pr-10 border-gray-200 focus-visible:ring-[#FF9933]/30 ${errors.next ? "border-red-400" : ""}`}
+                                            className={`rounded-xl pr-10 border-gray-200 focus-visible:ring-[coral]/30 ${errors.next ? "border-red-400" : ""}`}
                                             required
                                         />
                                         <button
@@ -209,7 +209,7 @@ export function CustomerChangePasswordPage() {
                                             {...field("confirm")}
                                             type={show.confirm ? "text" : "password"}
                                             placeholder="Re-enter your new password"
-                                            className={`rounded-xl pr-10 border-gray-200 focus-visible:ring-[#FF9933]/30 ${errors.confirm ? "border-red-400" : ""}`}
+                                            className={`rounded-xl pr-10 border-gray-200 focus-visible:ring-[coral]/30 ${errors.confirm ? "border-red-400" : ""}`}
                                             required
                                         />
                                         <button
@@ -224,7 +224,7 @@ export function CustomerChangePasswordPage() {
                                         {/* Match indicator */}
                                         {form.confirm && form.next && !errors.confirm && (
                                             <div className="absolute right-9 top-1/2 -translate-y-1/2">
-                                                <Check className="h-4 w-4 text-[#FF9933]" />
+                                                <Check className="h-4 w-4 text-[coral]" />
                                             </div>
                                         )}
                                     </div>
@@ -237,7 +237,7 @@ export function CustomerChangePasswordPage() {
                                 <div className="flex gap-3 pt-2">
                                     <Button
                                         type="submit"
-                                        className="gap-2 bg-[#FF9933] hover:bg-[#FF9933]/90 text-white rounded-xl px-6"
+                                        className="gap-2 bg-[coral] hover:bg-[coral]/90 text-white rounded-xl px-6"
                                     >
                                         <ShieldCheck className="h-4 w-4" />
                                         Update Password
@@ -268,7 +268,7 @@ export function CustomerChangePasswordPage() {
                                 "Don't reuse passwords from other sites",
                             ].map((tip) => (
                                 <li key={tip} className="flex items-center gap-2 text-xs text-gray-500">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-[#FF9933]/50 shrink-0" />
+                                    <span className="h-1.5 w-1.5 rounded-full bg-[coral]/50 shrink-0" />
                                     {tip}
                                 </li>
                             ))}

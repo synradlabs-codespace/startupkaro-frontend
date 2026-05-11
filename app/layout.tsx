@@ -1,6 +1,25 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { TooltipProvider } from "@/components/ui/tooltip"
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "StartupKaro",
@@ -9,17 +28,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Poppins:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
       <body className="antialiased">
-
         <TooltipProvider>{children}</TooltipProvider>
       </body>
     </html>

@@ -14,7 +14,7 @@ export function EmployeeDashboard() {
             label: "Total Orders",
             value: mockOrders.length,
             icon: ShoppingCart,
-            accent: "bg-[#000080]/8 text-[#000080]",
+            accent: "bg-[dark-navy]/8 text-[primary-brand]",
             sub: `${activeOrders.length} need attention`,
         },
         {
@@ -40,8 +40,8 @@ export function EmployeeDashboard() {
             <div className="flex-1 p-6 space-y-6">
 
                 {/* ── Hero Banner ───────────────────────────── */}
-                <div className="relative overflow-hidden rounded-2xl border border-[#000080]/10 bg-gradient-to-br from-[#000080]/6 via-white/80 to-indigo-50/60 backdrop-blur-sm p-6">
-                    <div className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full bg-[#000080]/6 blur-3xl" />
+                <div className="relative overflow-hidden rounded-2xl border border-[dark-navy]/10 bg-gradient-to-br from-[primary-brand]/6 via-white/80 to-indigo-50/60 backdrop-blur-sm p-6">
+                    <div className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full bg-[dark-navy]/6 blur-3xl" />
                     <div className="pointer-events-none absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-indigo-200/15 blur-2xl" />
                     <div className="relative flex items-center justify-between gap-4">
                         <div>
@@ -50,7 +50,7 @@ export function EmployeeDashboard() {
                                 {activeOrders.length} active order{activeOrders.length !== 1 ? "s" : ""} · {mockInquiries.length} open inquiries
                             </p>
                         </div>
-                        <div className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-[#000080] text-white rounded-xl">
+                        <div className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-[primary-brand] text-white rounded-xl">
                             <TrendingUp className="h-3.5 w-3.5" />
                             Active
                         </div>
@@ -85,7 +85,7 @@ export function EmployeeDashboard() {
                         </div>
                         <Link
                             href="/employee/orders"
-                            className="inline-flex items-center gap-1 text-xs font-medium text-[#000080] hover:underline"
+                            className="inline-flex items-center gap-1 text-xs font-medium text-[primary-brand] hover:underline"
                         >
                             View all <ArrowRight className="h-3 w-3" />
                         </Link>
@@ -117,7 +117,7 @@ export function EmployeeDashboard() {
                         </div>
                         <Link
                             href="/employee/inquiries"
-                            className="inline-flex items-center gap-1 text-xs font-medium text-[#000080] hover:underline"
+                            className="inline-flex items-center gap-1 text-xs font-medium text-[primary-brand] hover:underline"
                         >
                             View all <ArrowRight className="h-3 w-3" />
                         </Link>

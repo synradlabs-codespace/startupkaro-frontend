@@ -5,19 +5,19 @@ import type { Service } from "@/features/marketing/data/types";
 
 export function ServiceFeatures({ service }: { service: Service }) {
     return (
-        <section className="py-10 border-b border-gray-100">
+        <section className="py-10 border-b border-hairline">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <h2 className="text-lg font-semibold text-gray-900 mb-6">What's included</h2>
+                <h2 className="text-2xl md:text-3xl font-display font-normal tracking-tight text-ink mb-6">What's included</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl">
                     {service.features.map((feature) => (
-                        <div key={feature.title} className="flex items-start gap-3 rounded-xl bg-gray-50/80 border border-gray-100 p-4">
-                            <div className="h-6 w-6 rounded-full bg-[#FF9933]/10 flex items-center justify-center shrink-0 mt-0.5">
-                                <CheckCircle2 className="h-3.5 w-3.5 text-[#FF9933]" />
+                        <div key={feature.title} className="flex items-start gap-3 rounded-lg bg-soft-stone border border-hairline p-4">
+                            <div className="h-6 w-6 rounded-full bg-coral/10 flex items-center justify-center shrink-0 mt-0.5">
+                                <CheckCircle2 className="h-3.5 w-3.5 text-coral" />
                             </div>
                             <div>
-                                <p className="text-sm font-medium text-gray-900">{feature.title}</p>
+                                <p className="font-sans text-base text-ink">{feature.title}</p>
                                 {feature.description && (
-                                    <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{feature.description}</p>
+                                    <p className="font-sans text-base text-body-muted mt-0.5 leading-relaxed">{feature.description}</p>
                                 )}
                             </div>
                         </div>

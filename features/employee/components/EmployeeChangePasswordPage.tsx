@@ -92,8 +92,8 @@ export function EmployeeChangePasswordPage() {
 
                     {/* ── Success state ─────────────────────────── */}
                     {submitted && (
-                        <div className="rounded-2xl border border-[#000080]/20 bg-[#000080]/5 p-6 flex items-center gap-4">
-                            <div className="h-10 w-10 rounded-full bg-[#000080] flex items-center justify-center shrink-0 shadow">
+                        <div className="rounded-2xl border border-[dark-navy]/20 bg-[dark-navy]/5 p-6 flex items-center gap-4">
+                            <div className="h-10 w-10 rounded-full bg-[primary-brand] flex items-center justify-center shrink-0 shadow">
                                 <Check className="h-5 w-5 text-white" />
                             </div>
                             <div>
@@ -109,7 +109,7 @@ export function EmployeeChangePasswordPage() {
                             {/* Card header */}
                             <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-indigo-50/60 to-white flex items-center gap-3">
                                 <div className="h-8 w-8 rounded-xl bg-indigo-100 flex items-center justify-center">
-                                    <KeyRound className="h-4 w-4 text-[#000080]" />
+                                    <KeyRound className="h-4 w-4 text-[primary-brand]" />
                                 </div>
                                 <div>
                                     <p className="text-sm font-semibold text-gray-800">Update Password</p>
@@ -129,7 +129,7 @@ export function EmployeeChangePasswordPage() {
                                             {...field("current")}
                                             type={show.current ? "text" : "password"}
                                             placeholder="Enter your current password"
-                                            className={`rounded-xl pr-10 border-gray-200 focus-visible:ring-[#000080]/30 ${errors.current ? "border-red-400" : ""}`}
+                                            className={`rounded-xl pr-10 border-gray-200 focus-visible:ring-[dark-navy]/30 ${errors.current ? "border-red-400" : ""}`}
                                             required
                                         />
                                         <button
@@ -158,7 +158,7 @@ export function EmployeeChangePasswordPage() {
                                             {...field("next")}
                                             type={show.next ? "text" : "password"}
                                             placeholder="Create a strong new password"
-                                            className={`rounded-xl pr-10 border-gray-200 focus-visible:ring-[#000080]/30 ${errors.next ? "border-red-400" : ""}`}
+                                            className={`rounded-xl pr-10 border-gray-200 focus-visible:ring-[dark-navy]/30 ${errors.next ? "border-red-400" : ""}`}
                                             required
                                         />
                                         <button
@@ -209,7 +209,7 @@ export function EmployeeChangePasswordPage() {
                                             {...field("confirm")}
                                             type={show.confirm ? "text" : "password"}
                                             placeholder="Re-enter your new password"
-                                            className={`rounded-xl pr-10 border-gray-200 focus-visible:ring-[#000080]/30 ${errors.confirm ? "border-red-400" : ""}`}
+                                            className={`rounded-xl pr-10 border-gray-200 focus-visible:ring-[dark-navy]/30 ${errors.confirm ? "border-red-400" : ""}`}
                                             required
                                         />
                                         <button
@@ -224,7 +224,7 @@ export function EmployeeChangePasswordPage() {
                                         {/* Match indicator */}
                                         {form.confirm && form.next && !errors.confirm && (
                                             <div className="absolute right-9 top-1/2 -translate-y-1/2">
-                                                <Check className="h-4 w-4 text-[#000080]" />
+                                                <Check className="h-4 w-4 text-[primary-brand]" />
                                             </div>
                                         )}
                                     </div>
@@ -237,7 +237,7 @@ export function EmployeeChangePasswordPage() {
                                 <div className="flex gap-3 pt-2">
                                     <Button
                                         type="submit"
-                                        className="gap-2 bg-[#000080] hover:bg-[#000080]/90 text-white rounded-xl px-6"
+                                        className="gap-2 bg-[primary-brand] hover:bg-[primary-brand]/90 text-white rounded-xl px-6"
                                     >
                                         <ShieldCheck className="h-4 w-4" />
                                         Update Password
@@ -268,7 +268,7 @@ export function EmployeeChangePasswordPage() {
                                 "Don't reuse passwords from other sites",
                             ].map((tip) => (
                                 <li key={tip} className="flex items-center gap-2 text-xs text-gray-500">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-[#000080]/50 shrink-0" />
+                                    <span className="h-1.5 w-1.5 rounded-full bg-[dark-navy]/50 shrink-0" />
                                     {tip}
                                 </li>
                             ))}

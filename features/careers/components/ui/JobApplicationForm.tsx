@@ -165,8 +165,8 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
     if (submitted) {
         return (
             <div className="flex flex-col items-center justify-center py-16 text-center" id="apply">
-                <div className="h-16 w-16 rounded-full bg-[#FF9933]/10 flex items-center justify-center mb-6">
-                    <CheckCircle2 className="h-8 w-8 text-[#FF9933]" />
+                <div className="h-16 w-16 rounded-full bg-[#ff7759]/10 flex items-center justify-center mb-6">
+                    <CheckCircle2 className="h-8 w-8 text-[#ff7759]" />
                 </div>
                 <h3 className="font-serif text-2xl text-gray-900 font-normal mb-2">
                     Application submitted!
@@ -343,7 +343,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                                     <RadioGroupItem
                                         value={opt.value}
                                         id={`current-ctc-${opt.value}`}
-                                        className="border-gray-300 data-[state=checked]:border-[#FF9933] data-[state=checked]:text-[#FF9933]"
+                                        className="border-gray-300 data-[state=checked]:border-[#ff7759] data-[state=checked]:text-[#ff7759]"
                                     />
                                     <Label
                                         htmlFor={`current-ctc-${opt.value}`}
@@ -372,7 +372,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                                     <RadioGroupItem
                                         value={opt.value}
                                         id={`expected-ctc-${opt.value}`}
-                                        className="border-gray-300 data-[state=checked]:border-[#FF9933] data-[state=checked]:text-[#FF9933]"
+                                        className="border-gray-300 data-[state=checked]:border-[#ff7759] data-[state=checked]:text-[#ff7759]"
                                     />
                                     <Label
                                         htmlFor={`expected-ctc-${opt.value}`}
@@ -401,7 +401,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                                     <RadioGroupItem
                                         value={opt.value}
                                         id={`notice-${opt.value}`}
-                                        className="border-gray-300 data-[state=checked]:border-[#FF9933] data-[state=checked]:text-[#FF9933]"
+                                        className="border-gray-300 data-[state=checked]:border-[#ff7759] data-[state=checked]:text-[#ff7759]"
                                     />
                                     <Label
                                         htmlFor={`notice-${opt.value}`}
@@ -464,7 +464,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                                     <RadioGroupItem
                                         value={val}
                                         id={`criminal-${val}`}
-                                        className="border-gray-300 data-[state=checked]:border-[#FF9933] data-[state=checked]:text-[#FF9933]"
+                                        className="border-gray-300 data-[state=checked]:border-[#ff7759] data-[state=checked]:text-[#ff7759]"
                                     />
                                     <Label
                                         htmlFor={`criminal-${val}`}
@@ -486,12 +486,12 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                             id="agree"
                             checked={form.agreeToTerms}
                             onCheckedChange={(checked) => set("agreeToTerms", checked === true)}
-                            className="mt-0.5 border-gray-300 data-[state=checked]:bg-[#FF9933] data-[state=checked]:border-[#FF9933]"
+                            className="mt-0.5 border-gray-300 data-[state=checked]:bg-[#ff7759] data-[state=checked]:border-[#ff7759]"
                         />
                         <div>
                             <Label htmlFor="agree" className="text-sm text-gray-700 cursor-pointer leading-relaxed">
                                 I agree that all information provided above is accurate, failing which my employment could be impacted.
-                                <span className="text-[#FF9933] ml-0.5">*</span>
+                                <span className="text-[#ff7759] ml-0.5">*</span>
                             </Label>
                             {errors.agreeToTerms && (
                                 <p className="mt-1 text-xs text-red-500">{errors.agreeToTerms}</p>
@@ -507,7 +507,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-3.5 rounded-xl text-sm font-mono tracking-widest uppercase transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-white bg-[#FF9933] hover:bg-[#FF9933]/90 shadow-sm shadow-[#FF9933]/20"
+                        className="w-full py-3.5 rounded-xl text-sm font-mono tracking-widest uppercase transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-white bg-[#ff7759] hover:bg-[#ff7759]/90 shadow-sm shadow-[#ff7759]/20"
                     >
                         {loading ? "Submitting…" : "Submit Application"}
                     </button>

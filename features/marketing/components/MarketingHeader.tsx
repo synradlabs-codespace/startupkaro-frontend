@@ -54,7 +54,7 @@ export function MarketingHeader() {
                     <div className="hidden md:flex items-center gap-3">
                         <Link
                             href="/login"
-                            className="inline-flex items-center h-9 px-4 text-sm font-medium text-[#000080] border border-[#000080]/30 rounded-xl hover:bg-[#000080]/5 transition-colors"
+                            className="inline-flex items-center h-9 px-5 text-sm font-medium text-foreground border border-border rounded-full hover:bg-muted transition-colors"
                         >
                             Login
                         </Link>
@@ -90,7 +90,7 @@ export function MarketingHeader() {
                         <Link
                             href="/login"
                             onClick={() => setOpen(false)}
-                            className="flex items-center justify-center h-9 px-4 text-sm font-medium text-[#000080] border border-[#000080]/30 rounded-xl hover:bg-[#000080]/5 transition-colors"
+                            className="flex items-center justify-center h-9 px-5 text-sm font-medium text-foreground border border-border rounded-full hover:bg-muted transition-colors"
                         >
                             Login
                         </Link>

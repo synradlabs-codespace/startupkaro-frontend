@@ -17,12 +17,12 @@ export function TermsOfServicePage() {
             {/* Header */}
             <div className="relative border-b border-gray-100 px-4 sm:px-6 lg:px-8 py-16">
                 <div className="absolute top-0 left-0 right-0 flex h-1">
-                    <div className="flex-1 bg-[#FF9933]" />
+                    <div className="flex-1 bg-[#ff7759]" />
                     <div className="flex-1 bg-white border-t border-gray-200" />
-                    <div className="flex-1 bg-[#6BAE3A]" />
+                    <div className="flex-1 bg-[#003c33]" />
                 </div>
                 <div className="mx-auto max-w-3xl">
-                    <p className="text-xs tracking-[0.3em] uppercase font-mono font-medium text-[#000080] mb-3">Legal</p>
+                    <p className="text-xs tracking-[0.3em] uppercase font-mono font-medium text-[#17171c] mb-3">Legal</p>
                     <h1 className="text-4xl font-serif font-normal text-gray-900 mb-3">Terms of Service</h1>
                     <p className="text-sm text-gray-400">Last updated: April 9, 2026</p>
                 </div>
@@ -85,7 +85,7 @@ export function TermsOfServicePage() {
                 <Section title="Refunds">
                     <p>
                         Refund eligibility and amounts are determined solely at the discretion of StartupKaro. Please review our{" "}
-                        <Link href="/refund-policy" className="text-[#FF9933] hover:underline">Refund Policy</Link> for details.
+                        <Link href="/refund-policy" className="text-[#ff7759] hover:underline">Refund Policy</Link> for details.
                     </p>
                 </Section>
 
@@ -139,7 +139,7 @@ export function TermsOfServicePage() {
                 <Section title="Privacy">
                     <p>
                         Your use of our services is also governed by our{" "}
-                        <Link href="/privacy-policy" className="text-[#FF9933] hover:underline">Privacy Policy</Link>, which is
+                        <Link href="/privacy-policy" className="text-[#ff7759] hover:underline">Privacy Policy</Link>, which is
                         incorporated into these Terms by reference.
                     </p>
                 </Section>
@@ -151,7 +151,7 @@ export function TermsOfServicePage() {
                         <p className="text-gray-500 mt-1">Mohali, Punjab, India</p>
                         <p className="text-gray-500">
                             Email:{" "}
-                            <a href="mailto:hello@startupkaro.in" className="text-[#FF9933] hover:underline">
+                            <a href="mailto:hello@startupkaro.in" className="text-[#ff7759] hover:underline">
                                 hello@startupkaro.in
                             </a>
                         </p>

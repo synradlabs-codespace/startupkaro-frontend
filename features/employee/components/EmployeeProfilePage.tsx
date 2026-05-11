@@ -40,22 +40,22 @@ export function EmployeeProfilePage() {
             <div className="flex-1 p-6 space-y-6">
 
                 {/* ── Hero Card ───────────────────────────── */}
-                <div className="relative overflow-hidden rounded-2xl border border-[#000080]/15 bg-gradient-to-br from-[#000080]/8 via-white/80 to-indigo-50/60 backdrop-blur-sm shadow-sm p-8">
-                    <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-[#000080]/8 blur-3xl" />
+                <div className="relative overflow-hidden rounded-2xl border border-[dark-navy]/15 bg-gradient-to-br from-[dark-navy]/8 via-white/80 to-indigo-50/60 backdrop-blur-sm shadow-sm p-8">
+                    <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-[dark-navy]/8 blur-3xl" />
                     <div className="pointer-events-none absolute -bottom-10 -left-10 h-36 w-36 rounded-full bg-indigo-300/10 blur-2xl" />
 
                     <div className="relative flex flex-col sm:flex-row items-center sm:items-start gap-6">
                         {/* Avatar with camera */}
                         <div className="relative shrink-0">
-                            <div className="h-24 w-24 rounded-full bg-gradient-to-br from-[#000080]/20 to-indigo-200/40 border-2 border-[#000080]/20 flex items-center justify-center shadow-inner">
-                                <span className="text-2xl font-semibold text-[#000080]">
+                            <div className="h-24 w-24 rounded-full bg-gradient-to-br from-[primary-brand]/20 to-indigo-200/40 border-2 border-[dark-navy]/20 flex items-center justify-center shadow-inner">
+                                <span className="text-2xl font-semibold text-[primary-brand]">
                                     {profile.initials}
                                 </span>
                             </div>
                             <button
                                 type="button"
                                 title="Upload photo"
-                                className="absolute bottom-0 right-0 h-7 w-7 rounded-full bg-[#000080] text-white flex items-center justify-center shadow-md hover:bg-[#000080]/90 transition-colors"
+                                className="absolute bottom-0 right-0 h-7 w-7 rounded-full bg-[primary-brand] text-white flex items-center justify-center shadow-md hover:bg-[primary-brand]/90 transition-colors"
                             >
                                 <Camera className="h-3.5 w-3.5" />
                             </button>
@@ -65,7 +65,7 @@ export function EmployeeProfilePage() {
                         <div className="flex-1 text-center sm:text-left">
                             <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
                                 <h2 className="text-xl font-semibold text-gray-900">{profile.name}</h2>
-                                <span className="inline-flex items-center gap-1 rounded-full bg-[#000080]/10 px-2.5 py-0.5 text-[11px] font-medium text-[#000080]">
+                                <span className="inline-flex items-center gap-1 rounded-full bg-[dark-navy]/10 px-2.5 py-0.5 text-[11px] font-medium text-[primary-brand]">
                                     <BadgeCheck className="h-3 w-3" />
                                     Employee
                                 </span>
@@ -92,8 +92,8 @@ export function EmployeeProfilePage() {
                     {/* Personal Information — all locked */}
                     <div className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm p-6 space-y-5">
                         <div className="flex items-center gap-2 pb-1 border-b border-gray-100">
-                            <div className="h-7 w-7 rounded-lg bg-[#000080]/10 flex items-center justify-center">
-                                <User className="h-3.5 w-3.5 text-[#000080]" />
+                            <div className="h-7 w-7 rounded-lg bg-[dark-navy]/10 flex items-center justify-center">
+                                <User className="h-3.5 w-3.5 text-[primary-brand]" />
                             </div>
                             <h3 className="text-sm font-semibold text-gray-800">Personal Information</h3>
                             <span className="ml-auto inline-flex items-center gap-1 text-[10px] text-gray-400 bg-gray-100 rounded-full px-2 py-0.5">
@@ -162,7 +162,7 @@ export function EmployeeProfilePage() {
                         {/* Photo upload */}
                         <div className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 bg-gradient-to-r from-gray-50/80 to-white">
                             <div className="h-9 w-9 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0">
-                                <Camera className="h-4 w-4 text-[#000080]" />
+                                <Camera className="h-4 w-4 text-[primary-brand]" />
                             </div>
                             <div className="flex-1 min-w-0">
                                 <p className="text-sm font-medium text-gray-800">Profile Photo</p>
@@ -179,7 +179,7 @@ export function EmployeeProfilePage() {
                         {/* Password */}
                         <div className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 bg-gradient-to-r from-gray-50/80 to-white">
                             <div className="h-9 w-9 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0">
-                                <KeyRound className="h-4 w-4 text-[#000080]" />
+                                <KeyRound className="h-4 w-4 text-[primary-brand]" />
                             </div>
                             <div className="flex-1 min-w-0">
                                 <p className="text-sm font-medium text-gray-800">Password</p>
@@ -194,8 +194,8 @@ export function EmployeeProfilePage() {
                         </div>
 
                         {/* Security tip */}
-                        <div className="rounded-xl bg-[#000080]/5 border border-[#000080]/10 p-3 flex gap-2.5">
-                            <ShieldCheck className="h-4 w-4 text-[#000080] shrink-0 mt-0.5" />
+                        <div className="rounded-xl bg-[dark-navy]/5 border border-[dark-navy]/10 p-3 flex gap-2.5">
+                            <ShieldCheck className="h-4 w-4 text-[primary-brand] shrink-0 mt-0.5" />
                             <p className="text-xs text-gray-600 leading-relaxed">
                                 Use a strong, unique password and never share it. We will never ask for your password via email or phone.
                             </p>

@@ -46,7 +46,7 @@ export const portableTextComponents: PortableTextComponents = {
         ),
 
         quote: ({ value }: { value: QuoteBlock }) => (
-            <blockquote className="border-l-4 border-[#FF9933] pl-5 py-0.5 my-5">
+            <blockquote className="border-l-4 border-[#ff7759] pl-5 py-0.5 my-5">
                 <p className="text-base italic text-gray-600 leading-relaxed">{value.text}</p>
                 {value.cite && (
                     <cite className="text-xs text-gray-400 not-italic mt-2 block">
@@ -124,7 +124,7 @@ export const portableTextComponents: PortableTextComponents = {
             <h3 className="text-base font-semibold text-gray-900 pt-1">{children}</h3>
         ),
         blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-[#FF9933] pl-5 py-0.5">
+            <blockquote className="border-l-4 border-[#ff7759] pl-5 py-0.5">
                 <p className="text-base italic text-gray-600 leading-relaxed">{children}</p>
             </blockquote>
         ),
@@ -132,12 +132,12 @@ export const portableTextComponents: PortableTextComponents = {
 
     list: {
         bullet: ({ children }) => (
-            <ul className="space-y-2 pl-5 list-disc marker:text-[#FF9933] text-gray-700">
+            <ul className="space-y-2 pl-5 list-disc marker:text-[#ff7759] text-gray-700">
                 {children}
             </ul>
         ),
         number: ({ children }) => (
-            <ol className="space-y-2 pl-5 list-decimal marker:text-[#FF9933] text-gray-700">
+            <ol className="space-y-2 pl-5 list-decimal marker:text-[#ff7759] text-gray-700">
                 {children}
             </ol>
         ),
@@ -158,7 +158,7 @@ export const portableTextComponents: PortableTextComponents = {
                 href={value?.href}
                 target={value?.blank ? "_blank" : undefined}
                 rel={value?.blank ? "noreferrer noopener" : undefined}
-                className="text-[#000080] underline underline-offset-2 hover:text-[#FF9933] transition-colors"
+                className="text-[#17171c] underline underline-offset-2 hover:text-[#ff7759] transition-colors"
             >
                 {children}
             </a>

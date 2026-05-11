@@ -7,9 +7,9 @@ import { cn } from "@/lib/utils";
 type ColorVariant = "saffron" | "navy" | "green";
 
 const colorMap: Record<ColorVariant, string> = {
-    saffron: "#FF9933",
-    navy: "#000080",
-    green: "#6BAE3A",
+    saffron: "#ff7759",
+    navy: "#17171c",
+    green: "#003c33",
 };
 
 interface FlowButtonProps {
@@ -53,7 +53,7 @@ export function FlowButton({
     };
 
     const base = cn(
-        "group relative inline-flex items-center justify-center overflow-hidden rounded-[12px] border-[1.5px] px-8 py-3 text-sm font-semibold cursor-pointer transition-all duration-[600ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:rounded-[100px] active:scale-[0.95] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+        "group relative inline-flex items-center justify-center overflow-hidden rounded-full border-[1.5px] px-8 py-3 text-sm font-medium cursor-pointer transition-all duration-[600ms] ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.95] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
         className,
         disabled && "opacity-60 pointer-events-none"
     );

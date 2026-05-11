@@ -16,8 +16,8 @@ export function CustomerDashboard() {
             <div className="flex-1 p-6 space-y-6">
 
                 {/* ── Hero Banner ───────────────────────────── */}
-                <div className="relative overflow-hidden rounded-2xl border border-[#FF9933]/15 bg-gradient-to-br from-[#FF9933]/8 via-white/80 to-orange-50/60 backdrop-blur-sm p-6">
-                    <div className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full bg-[#FF9933]/8 blur-3xl" />
+                <div className="relative overflow-hidden rounded-2xl border border-[coral]/15 bg-gradient-to-br from-[coral]/8 via-white/80 to-orange-50/60 backdrop-blur-sm p-6">
+                    <div className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full bg-[coral]/8 blur-3xl" />
                     <div className="pointer-events-none absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-orange-200/15 blur-2xl" />
                     <div className="relative flex items-center justify-between gap-4">
                         <div>
@@ -28,7 +28,7 @@ export function CustomerDashboard() {
                         </div>
                         <Link
                             href="/customer/services"
-                            className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-[#FF9933] text-white hover:bg-[#FF9933]/90 rounded-xl transition-colors shrink-0"
+                            className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-[coral] text-white hover:bg-[coral]/90 rounded-xl transition-colors shrink-0"
                         >
                             <Store className="h-3.5 w-3.5" />
                             Browse Services
@@ -41,8 +41,8 @@ export function CustomerDashboard() {
                     <div className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm p-5">
                         <div className="flex items-start justify-between mb-3">
                             <p className="text-xs text-gray-500 font-medium">My Purchases</p>
-                            <div className="h-8 w-8 rounded-xl bg-[#FF9933]/10 flex items-center justify-center">
-                                <ShoppingBag className="h-4 w-4 text-[#FF9933]" />
+                            <div className="h-8 w-8 rounded-xl bg-[coral]/10 flex items-center justify-center">
+                                <ShoppingBag className="h-4 w-4 text-[coral]" />
                             </div>
                         </div>
                         <p className="text-2xl font-bold text-gray-900">{mockPurchases.length}</p>
@@ -68,7 +68,7 @@ export function CustomerDashboard() {
                             <p className="text-sm font-semibold text-gray-800">Recent Purchases</p>
                             <p className="text-xs text-gray-400">Your latest service orders</p>
                         </div>
-                        <Link href="/customer/purchases" className="inline-flex items-center gap-1 text-xs font-medium text-[#FF9933] hover:underline">
+                        <Link href="/customer/purchases" className="inline-flex items-center gap-1 text-xs font-medium text-[coral] hover:underline">
                             View all <ArrowRight className="h-3 w-3" />
                         </Link>
                     </div>
@@ -98,10 +98,10 @@ export function CustomerDashboard() {
                 </div>
 
                 {/* ── Browse CTA ───────────────────────────── */}
-                <div className="rounded-2xl border-2 border-dashed border-[#FF9933]/25 bg-[#FF9933]/4 p-5 flex items-center justify-between gap-4">
+                <div className="rounded-2xl border-2 border-dashed border-[coral]/25 bg-[coral]/4 p-5 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
-                        <div className="h-9 w-9 rounded-xl bg-[#FF9933]/10 flex items-center justify-center shrink-0">
-                            <Sparkles className="h-4 w-4 text-[#FF9933]" />
+                        <div className="h-9 w-9 rounded-xl bg-[coral]/10 flex items-center justify-center shrink-0">
+                            <Sparkles className="h-4 w-4 text-[coral]" />
                         </div>
                         <div>
                             <p className="text-sm font-medium text-gray-800">Need another service?</p>
@@ -110,7 +110,7 @@ export function CustomerDashboard() {
                     </div>
                     <Link
                         href="/customer/services"
-                        className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-[#FF9933] text-white hover:bg-[#FF9933]/90 rounded-xl transition-colors shrink-0"
+                        className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-[coral] text-white hover:bg-[coral]/90 rounded-xl transition-colors shrink-0"
                     >
                         Browse
                         <ArrowRight className="h-3.5 w-3.5" />

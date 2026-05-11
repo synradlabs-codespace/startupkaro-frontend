@@ -106,7 +106,7 @@ export function JobFilters({ locations }: JobFiltersProps) {
                     id="remote-only"
                     checked={remoteOnly}
                     onCheckedChange={(v) => update("remoteOnly", v)}
-                    className="data-[state=checked]:bg-[#FF9933]"
+                    className="data-[state=checked]:bg-[#ff7759]"
                 />
                 <Label htmlFor="remote-only" className="text-sm text-gray-600 cursor-pointer select-none">
                     Remote only

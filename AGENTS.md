@@ -57,10 +57,47 @@ All API calls return `ApiResponse<T>` (`types/api.types.ts`):
 ```
 Paginated endpoints return `PaginatedResponse<T>` with a `pagination` object.
 
-## Brand colors
-- `#FF9933` — saffron/orange
-- `#000080` — navy/indigo
-- `#6BAE3A` — green
+## Design system
+
+The site uses a Cohere-inspired design system defined in `DESIGN.md` at the repo root. All palette tokens are declared in `app/globals.css` `@theme` and available as Tailwind utilities.
+
+### Palette (key tokens)
+| Utility | Hex | Role |
+|---|---|---|
+| `bg-primary-brand` / `text-primary-brand` | `#17171c` | Near-black — primary CTAs, dark text |
+| `bg-deep-green` / `text-deep-green` | `#003c33` | Dark feature bands, admin accent |
+| `bg-dark-navy` / `text-dark-navy` | `#071829` | Employee panel accent, dark surfaces |
+| `bg-coral` / `text-coral` | `#ff7759` | Editorial eyebrows, customer accent, taxonomy chips |
+| `bg-coral-soft` / `text-coral-soft` | `#ffad9b` | Warm accent tint |
+| `bg-soft-stone` | `#eeece7` | Secondary surfaces, form page backgrounds |
+| `bg-pale-green` | `#edfce9` | Light wash, decorative blobs |
+| `bg-pale-blue` | `#f1f5ff` | Light wash, editorial CTA backgrounds |
+| `border-hairline` | `#d9d9dd` | Default card/divider border |
+| `text-ink` | `#212121` | Default body text |
+| `text-body-muted` | `#616161` | Secondary / muted body text |
+| `text-muted-brand` | `#93939f` | Metadata, captions |
+| `text-action-blue` | `#1863dc` | Editorial links |
+
+### Per-panel accent colors
+- **Admin** — `#003c33` deep-green
+- **Employee** — `#071829` dark-navy
+- **Customer** — `#ff7759` coral
+
+### Typography
+- **Display / headings** — `font-display` (Space Grotesk via `next/font`)
+- **Body / UI** — `font-sans` (Inter via `next/font`)
+- **Labels / eyebrows** — `font-mono` (JetBrains Mono via `next/font`)
+- Headline pattern: `font-display font-normal tracking-tight leading-none` — large sections 48-72px, section headings 40-48px
+- Eyebrow pattern: `font-mono text-xs uppercase tracking-[0.28px] text-coral`
+
+### Component conventions
+- **Primary CTA buttons** — `rounded-full bg-primary-brand text-white` (default Button variant)
+- **Pill-outline buttons** — `variant="pill-outline"` on the Button component
+- **Cards** — `rounded-lg border border-hairline bg-white` — flat, NO `shadow-*`
+- **Large media cards** — `rounded-[22px]`
+- **Dark feature bands** — `bg-deep-green rounded-[22px] p-12 text-white`
+- **Sidebar** — `bg-sidebar` (CSS var set to `#17171c`); active item uses per-panel accent
+- Do NOT use `shadow-*` on cards. Do NOT use `asChild` prop (button is not Radix UI).
 
 ### Note
 

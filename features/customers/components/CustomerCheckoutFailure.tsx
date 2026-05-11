@@ -53,7 +53,7 @@ function FailureContent() {
                         <div className="flex flex-col sm:flex-row gap-3">
                             <Link
                                 href={retryHref}
-                                className="flex-1 inline-flex items-center justify-center gap-2 h-9 px-4 text-sm font-medium bg-[#FF9933] text-white hover:bg-[#FF9933]/90 rounded-xl transition-colors"
+                                className="flex-1 inline-flex items-center justify-center gap-2 h-9 px-4 text-sm font-medium bg-[coral] text-white hover:bg-[coral]/90 rounded-xl transition-colors"
                             >
                                 <RefreshCw className="h-4 w-4" />
                                 Try Again
@@ -71,7 +71,7 @@ function FailureContent() {
                         <p className="text-xs text-gray-400 flex items-center justify-center gap-1.5">
                             <Phone className="h-3 w-3" />
                             Need help?{" "}
-                            <Link href="/customer/services" className="text-[#FF9933] underline underline-offset-2 hover:text-[#FF9933]/80">
+                            <Link href="/customer/services" className="text-[coral] underline underline-offset-2 hover:text-[coral]/80">
                                 Contact support
                             </Link>
                         </p>
