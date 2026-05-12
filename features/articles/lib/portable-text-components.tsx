@@ -6,6 +6,11 @@ import type {
     EmbedInstagramBlock,
     EmbedYouTubeBlock,
 } from "@/features/articles/types/portable-text";
+import type { PortableTextBlock } from "@portabletext/types";
+
+type HeadingBlockWithId = PortableTextBlock & {
+    headingId?: string;
+};
 
 function extractYouTubeId(url: string): string | null {
     const match = url.match(
@@ -115,13 +120,31 @@ export const portableTextComponents: PortableTextComponents = {
 
     block: {
         normal: ({ children }) => (
-            <p className="text-base leading-relaxed text-gray-700">{children}</p>
+            <p className="text-base leading-relaxed text-charcoal">{children}</p>
         ),
-        h2: ({ children }) => (
-            <h2 className="font-serif text-xl font-normal text-gray-900 pt-2">{children}</h2>
+        h1: ({ children, value }) => (
+            <h1
+                id={(value as HeadingBlockWithId).headingId}
+                className="scroll-mt-24 pt-3 font-display text-3xl font-semibold tracking-tight text-ink leading-tight"
+            >
+                {children}
+            </h1>
         ),
-        h3: ({ children }) => (
-            <h3 className="text-base font-semibold text-gray-900 pt-1">{children}</h3>
+        h2: ({ children, value }) => (
+            <h2
+                id={(value as HeadingBlockWithId).headingId}
+                className="scroll-mt-24 pt-2 font-display text-2xl font-semibold tracking-tight text-ink leading-tight"
+            >
+                {children}
+            </h2>
+        ),
+        h3: ({ children, value }) => (
+            <h3
+                id={(value as HeadingBlockWithId).headingId}
+                className="scroll-mt-24 pt-1 text-lg font-semibold text-charcoal leading-snug"
+            >
+                {children}
+            </h3>
         ),
         blockquote: ({ children }) => (
             <blockquote className="border-l-4 border-[#ff7759] pl-5 py-0.5">

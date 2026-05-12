@@ -28,7 +28,7 @@ export function ArticleFilters({ categories, activeCategory }: ArticleFiltersPro
             <button
                 type="button"
                 onClick={() => handleCategory("all")}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-150 border ${
+                className={`cursor-pointer px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-150 border ${
                     isAllActive
                         ? "bg-primary-brand text-white border-primary-brand"
                         : "bg-canvas text-slate border-hairline hover:border-hairline-strong hover:text-ink"
@@ -45,7 +45,7 @@ export function ArticleFilters({ categories, activeCategory }: ArticleFiltersPro
                         key={cat.slug}
                         type="button"
                         onClick={() => handleCategory(cat.slug)}
-                        className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-150 border ${
+                        className={`inline-flex cursor-pointer items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-150 border ${
                             isActive
                                 ? "bg-primary-brand text-white border-primary-brand"
                                 : "bg-canvas text-slate border-hairline hover:border-hairline-strong hover:text-ink"

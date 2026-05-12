@@ -4,8 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { Calendar, Clock, ArrowLeft, User } from "lucide-react";
 import { getIcon } from "@/features/articles/lib/icon-map";
+import { getArticleHeadings } from "@/features/articles/lib/article-headings";
 import { ArticleBody } from "./ui/ArticleBody";
+import { ArticleIndex } from "./ui/ArticleIndex";
 import { ArticleCard } from "./ui/ArticleCard";
+import { ArticleShareButton } from "./ui/ArticleShareButton";
 import { ReadingProgressBar } from "./ui/ReadingProgressBar";
 import type { Article, ArticleCard as ArticleCardType } from "@/features/articles/types";
 
@@ -15,6 +18,7 @@ interface ArticleDetailPageProps {
 }
 
 export function ArticleDetailPage({ article, related }: ArticleDetailPageProps) {
+    const headings = getArticleHeadings(article.body);
     const formattedDate = new Date(article.publishedAt).toLocaleDateString("en-IN", {
         day: "numeric",
         month: "long",
@@ -29,7 +33,7 @@ export function ArticleDetailPage({ article, related }: ArticleDetailPageProps) 
             <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 pt-10 pb-8">
                 <Link
                     href="/article"
-                    className="inline-flex items-center gap-1.5 text-xs text-stone hover:text-slate transition-colors mb-6"
+                    className="mb-6 inline-flex items-center gap-1.5 text-xs text-stone hover:text-slate transition-colors"
                 >
                     <ArrowLeft className="h-3.5 w-3.5" />
                     All Articles
@@ -90,6 +94,9 @@ export function ArticleDetailPage({ article, related }: ArticleDetailPageProps) 
                             </span>
                         )}
                     </div>
+                    <div className="w-full md:hidden">
+                        <ArticleShareButton title={article.title} summary={article.summary} />
+                    </div>
                 </div>
             </div>
 
@@ -114,8 +121,16 @@ export function ArticleDetailPage({ article, related }: ArticleDetailPageProps) 
             </div>
 
             {/* Article body */}
-            <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-10">
-                <ArticleBody blocks={article.body} />
+            <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[minmax(0,768px)_220px] lg:px-8 xl:grid-cols-[minmax(0,768px)_260px]">
+                <article className="min-w-0">
+                    <ArticleBody blocks={article.body} headings={headings} />
+                </article>
+                <aside className="hidden lg:block">
+                    <div className="sticky top-24 space-y-5">
+                        <ArticleShareButton title={article.title} summary={article.summary} className="w-full" />
+                        <ArticleIndex headings={headings} />
+                    </div>
+                </aside>
             </div>
 
             {/* Author bio */}
