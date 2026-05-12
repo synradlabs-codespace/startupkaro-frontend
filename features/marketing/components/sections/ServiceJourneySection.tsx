@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, useState } from "react";
 import {
     motion,
@@ -25,10 +26,9 @@ const steps = [
         accentBg: "bg-tint-peach",
         accentText: "text-charcoal",
         accentBorder: "border-hairline-strong",
-        gradientFrom: "from-tint-cream",
-        gradientTo: "to-tint-peach",
         iconBg: "bg-tint-peach",
         iconText: "text-charcoal",
+        image: "/assets/journey-start-your-business.png",
         description:
             "Get legally incorporated and ready to operate. Our experts handle every filing end to end, so you can stay focused on building.",
         services: [
@@ -49,10 +49,9 @@ const steps = [
         accentBg: "bg-tint-sky",
         accentText: "text-charcoal",
         accentBorder: "border-hairline-strong",
-        gradientFrom: "from-tint-sky",
-        gradientTo: "to-blue-50",
         iconBg: "bg-tint-sky",
         iconText: "text-charcoal",
+        image: "/assets/journey-manage-your-business.png",
         description:
             "Stay compliant and financially healthy month to month. We handle the recurring filings so nothing slips through the cracks.",
         services: [
@@ -73,10 +72,9 @@ const steps = [
         accentBg: "bg-tint-mint",
         accentText: "text-charcoal",
         accentBorder: "border-hairline-strong",
-        gradientFrom: "from-tint-mint",
-        gradientTo: "to-emerald-50",
         iconBg: "bg-tint-mint",
         iconText: "text-charcoal",
+        image: "/assets/journey-protect-your-business.png",
         description:
             "Safeguard the brand, IP, and legal footing you've built. Lock in your trademarks and have expert legal cover on standby.",
         services: [
@@ -106,7 +104,7 @@ export function ServiceJourneySection() {
         else setActiveStep(2);
     });
 
-    const activeAccent = steps[activeStep].accent;
+    const activeImage = steps[activeStep].image;
 
     return (
         <section className="bg-canvas py-20 md:py-24">
@@ -132,8 +130,8 @@ export function ServiceJourneySection() {
                 <div className="lg:grid lg:grid-cols-2 lg:gap-16">
                     <div>
                         <div className="lg:sticky lg:top-24 lg:h-[calc(100vh-6rem)] flex flex-col justify-center items-center gap-6">
-                            {/* Illustration area */}
-                            <div className="relative w-full max-w-sm aspect-square">
+                            {/* Illustration */}
+                            <div className="relative h-[440px] w-full max-w-md overflow-hidden rounded-2xl">
                                 <AnimatePresence mode="wait">
                                     <motion.div
                                         key={activeStep}
@@ -141,51 +139,16 @@ export function ServiceJourneySection() {
                                         animate={{ opacity: 1, scale: 1, y: 0 }}
                                         exit={{ opacity: 0, scale: 0.97, y: -10 }}
                                         transition={{ duration: 0.45, ease: "easeOut" }}
-                                        className={`absolute inset-0 rounded-2xl bg-linear-to-br ${steps[activeStep].gradientFrom} ${steps[activeStep].gradientTo} flex flex-col items-center justify-center gap-5 border border-hairline`}
+                                        className="absolute inset-0"
                                     >
-                                        <div
-                                            className="absolute inset-0 rounded-2xl opacity-20"
-                                            style={{
-                                                background: `radial-gradient(circle at 70% 30%, ${activeAccent}22 0%, transparent 60%)`,
-                                            }}
+                                        <Image
+                                            src={activeImage}
+                                            alt={steps[activeStep].heading}
+                                            fill
+                                            className="object-cover"
+                                            sizes="(min-width: 1024px) 448px, 100vw"
+                                            priority={activeStep === 0}
                                         />
-                                        <div
-                                            className="w-24 h-24 rounded-lg flex items-center justify-center"
-                                            style={{ backgroundColor: `${activeAccent}18` }}
-                                        >
-                                            {(() => {
-                                                const S = steps[activeStep];
-                                                return (
-                                                    <S.Icon
-                                                        className="h-10 w-10"
-                                                        style={{ color: activeAccent }}
-                                                    />
-                                                );
-                                            })()}
-                                        </div>
-                                        <div className="text-center px-6 relative">
-                                            <p
-                                                className="text-xs uppercase tracking-[0.28px] font-medium mb-1"
-                                                style={{ color: activeAccent }}
-                                            >
-                                                Step {steps[activeStep].number}
-                                            </p>
-                                            <p className="font-display text-xl text-ink font-semibold">
-                                                {steps[activeStep].heading}
-                                            </p>
-                                            <p className="text-xs text-slate mt-1.5">
-                                                {steps[activeStep].visualLabel}
-                                            </p>
-                                        </div>
-                                        <div className="absolute bottom-6 right-6 grid grid-cols-3 gap-1.5 opacity-20">
-                                            {Array.from({ length: 9 }).map((_, i) => (
-                                                <div
-                                                    key={i}
-                                                    className="w-1.5 h-1.5 rounded-full"
-                                                    style={{ backgroundColor: activeAccent }}
-                                                />
-                                            ))}
-                                        </div>
                                     </motion.div>
                                 </AnimatePresence>
                             </div>

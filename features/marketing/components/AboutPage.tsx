@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight, Shield, Clock, Users, Award } from "lucide-react";
+import { FlowButton, FlowSecondaryButton } from "@/components/custom/FlowButton";
 
 const stats = [
     { value: "500+", label: "Businesses served" },
@@ -181,19 +182,17 @@ export function AboutPage() {
                         Tell us what you need and we&apos;ll match you with the right service and a dedicated expert.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                        <Link
+                        <FlowButton
                             href="/services"
-                            className="h-10 px-6 rounded-md bg-primary-brand text-white text-sm font-medium hover:bg-primary-brand/90 transition-colors inline-flex items-center gap-2"
-                        >
-                            Browse services
-                            <ArrowRight className="h-4 w-4" />
-                        </Link>
-                        <Link
+                            text="Explore Services"
+                            iconName="briefcase"
+                            colorVariant="navy"
+                        />
+                        <FlowSecondaryButton
                             href="/contact"
-                            className="h-10 px-6 rounded-md border border-hairline-strong bg-canvas text-charcoal text-sm font-medium hover:bg-surface transition-colors inline-flex items-center"
-                        >
-                            Talk to us
-                        </Link>
+                            text="Talk to an Expert"
+                            iconName="message-circle"
+                        />
                     </div>
                 </div>
             </section>

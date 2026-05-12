@@ -1,8 +1,7 @@
 // features/marketing/components/sections/LandingCTASection.tsx
 
-import Link from "next/link";
 import { ShieldCheck } from "lucide-react";
-import { FlowButton } from "@/components/custom/FlowButton";
+import { FlowButton, FlowSecondaryButton } from "@/components/custom/FlowButton";
 
 export function LandingCTASection() {
     return (
@@ -18,14 +17,14 @@ export function LandingCTASection() {
                     <FlowButton
                         href="/services"
                         text="Browse Services"
+                        iconName="briefcase"
                         colorVariant="navy"
                     />
-                    <Link
+                    <FlowSecondaryButton
                         href="/contact"
-                        className="inline-flex items-center gap-2 h-10 px-6 text-sm font-medium text-charcoal border border-hairline-strong rounded-md hover:bg-white/60 transition-colors"
-                    >
-                        Talk to an Expert
-                    </Link>
+                        text="Talk to an Expert"
+                        iconName="message-circle"
+                    />
                 </div>
                 <p className="mt-6 text-steel text-xs flex items-center justify-center gap-1.5">
                     <ShieldCheck className="h-3.5 w-3.5" />

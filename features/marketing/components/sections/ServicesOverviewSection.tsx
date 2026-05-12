@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight, FileText, Building2, Scale, FileCheck } from "lucide-react";
+import { FlowSecondaryButton } from "@/components/custom/FlowButton";
 
 const categories = [
     {
@@ -45,13 +46,12 @@ export function ServicesOverviewSection() {
                             Services for every stage
                         </h2>
                     </div>
-                    <Link
+                    <FlowSecondaryButton
                         href="/services"
-                        className="inline-flex items-center gap-1.5 text-base text-ink hover:text-charcoal transition-colors shrink-0"
-                    >
-                        View all services
-                        <ArrowRight className="h-4 w-4" />
-                    </Link>
+                        text="View All Services"
+                        iconName="arrow-right"
+                        wrapperClassName="shrink-0"
+                    />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

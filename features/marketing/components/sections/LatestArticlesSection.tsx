@@ -19,7 +19,7 @@ export function LatestArticlesSection({ articles }: LatestArticlesSectionProps) 
     const cards = articles.slice(0, 3);
 
     return (
-        <section className="bg-tint-mint rounded-2xl py-20 md:py-24">
+        <section className="bg-canvas rounded-2xl py-20 md:py-24">
             <div className="mx-auto max-w-7xl px-8">
                 {/* Header row */}
                 <div className="flex items-end justify-between mb-10 gap-4">
@@ -41,7 +41,8 @@ export function LatestArticlesSection({ articles }: LatestArticlesSectionProps) 
                 </div>
 
                 {/* 3-column equal grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="rounded-2xl bg-tint-sky p-5 md:p-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     {cards.map((article) => (
                         <Link
                             key={article._id}
@@ -76,6 +77,7 @@ export function LatestArticlesSection({ articles }: LatestArticlesSectionProps) 
                             </div>
                         </Link>
                     ))}
+                    </div>
                 </div>
             </div>
         </section>
