@@ -5,9 +5,9 @@ import { CustomerSidebar } from "@/features/customers/components/CustomerSidebar
 
 export default function CustomerLayout({ children }: { children: React.ReactNode }) {
     return (
-        <SidebarProvider className="h-screen overflow-hidden">
+        <SidebarProvider className="h-screen overflow-hidden bg-canvas text-ink">
             <CustomerSidebar />
-            <SidebarInset className="overflow-y-auto">
+            <SidebarInset className="overflow-y-auto bg-canvas">
                 <div className="flex flex-col min-h-full">
                     {children}
                 </div>

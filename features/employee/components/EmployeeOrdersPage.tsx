@@ -99,13 +99,13 @@ export function EmployeeOrdersPage() {
                                             <TableCell className="font-medium">{order.customer}</TableCell>
                                             <TableCell className="text-muted-foreground text-sm">{order.service}</TableCell>
                                             <TableCell className="font-medium">₹{order.amount.toLocaleString("en-IN")}</TableCell>
-                                            <TableCell><OrderStatusBadge status={order.status as any} /></TableCell>
-                                            <TableCell><PaymentStatusBadge status={order.paymentStatus as any} /></TableCell>
+                                            <TableCell><OrderStatusBadge status={order.status} /></TableCell>
+                                            <TableCell><PaymentStatusBadge status={order.paymentStatus} /></TableCell>
                                             <TableCell className="text-muted-foreground text-sm">{order.date}</TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex gap-1 justify-end">
                                                     <Link href={`/employee/orders/${order.id}`}>
-                                                        <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[var(--color-indigo)]/10 hover:text-[var(--color-indigo)]">
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-brand/10 hover:text-charcoal">
                                                             <Eye className="h-4 w-4" />
                                                         </Button>
                                                     </Link>

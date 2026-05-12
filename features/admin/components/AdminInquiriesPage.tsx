@@ -109,14 +109,14 @@ export function AdminInquiriesPage() {
                                             <TableCell className="text-right">
                                                 <div className="flex gap-1 justify-end">
                                                     <Link href={`/admin/inquiries/${inq.id}`}>
-                                                        <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[var(--color-green)]/10 hover:text-[var(--color-green)]">
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-brand/10 hover:text-charcoal">
                                                             <Eye className="h-4 w-4" />
                                                         </Button>
                                                     </Link>
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
-                                                        className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50"
+                                                        className="h-8 w-8 text-error-brand hover:text-red-600 hover:bg-red-50"
                                                         onClick={() => handleDelete(inq.id)}
                                                     >
                                                         <Trash2 className="h-4 w-4" />

@@ -6,9 +6,9 @@ import { EmployeeSidebar } from "@/features/employee/components/EmployeeSidebar"
 
 export default function EmployeeLayout({ children }: { children: React.ReactNode }) {
     return (
-        <SidebarProvider className="h-screen overflow-hidden">
+        <SidebarProvider className="h-screen overflow-hidden bg-canvas text-ink">
             <EmployeeSidebar />
-            <SidebarInset className="overflow-y-auto">
+            <SidebarInset className="overflow-y-auto bg-canvas">
                 <div className="flex flex-col min-h-full">
                     {children}
                 </div>

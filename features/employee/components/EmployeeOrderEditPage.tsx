@@ -78,7 +78,7 @@ export function EmployeeOrderEditPage({ id }: { id: string }) {
 
                             <div className="flex gap-3 pt-2">
                                 <Button
-                                    className="bg-[var(--color-indigo)] hover:bg-[var(--color-indigo)]/90 text-white"
+                                    className="bg-primary-brand hover:bg-primary-brand/90 text-white"
                                     onClick={handleSave}
                                     disabled={saved || !statusChanged}
                                 >
@@ -135,7 +135,7 @@ export function EmployeeOrderEditPage({ id }: { id: string }) {
                                 />
                                 <Button
                                     size="icon"
-                                    className="shrink-0 self-end bg-[var(--color-indigo)] hover:bg-[var(--color-indigo)]/90 text-white"
+                                    className="shrink-0 self-end bg-primary-brand hover:bg-primary-brand/90 text-white"
                                     onClick={handleAddNote}
                                     disabled={!newNote.trim()}
                                 >

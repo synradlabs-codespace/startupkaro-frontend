@@ -29,60 +29,60 @@ export function AdminEmployeeNewPage() {
             <PageHeader title="Add Employee" description="Create a new employee account" />
 
             <div className="flex-1 p-6 max-w-lg">
-                <div className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm p-6 space-y-5">
-                    <div className="flex items-center gap-3 pb-3 border-b border-gray-100">
-                        <div className="h-9 w-9 rounded-full bg-gradient-to-br from-[var(--color-green)]/20 to-green-200/40 border border-[var(--color-green)]/20 flex items-center justify-center shrink-0">
-                            <UserPlus className="h-4 w-4 text-[var(--color-green)]" />
+                <div className="rounded-lg border border-hairline bg-canvas p-6 space-y-5">
+                    <div className="flex items-center gap-3 pb-3 border-b border-hairline">
+                        <div className="h-9 w-9 rounded-full bg-gradient-to-br from-accent-admin to-accent-admin border border-hairline flex items-center justify-center shrink-0">
+                            <UserPlus className="h-4 w-4 text-charcoal" />
                         </div>
                         <div>
-                            <h3 className="text-sm font-semibold text-gray-800">Employee Details</h3>
-                            <p className="text-xs text-gray-500">Fill in the details to add them to the team</p>
+                            <h3 className="text-sm font-semibold text-charcoal">Employee Details</h3>
+                            <p className="text-xs text-steel">Fill in the details to add them to the team</p>
                         </div>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-1.5">
-                            <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
+                            <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
                                 <User className="h-3 w-3" /> Full Name
                             </Label>
                             <Input
                                 {...field("name")}
                                 placeholder="Arjun Verma"
-                                className="rounded-xl border-gray-200 focus-visible:ring-[var(--color-green)]/30"
+                                className="rounded-lg border-hairline focus-visible:ring-primary-brand/20"
                             />
-                            <p className="text-xs text-gray-400">As it will appear on the employee profile</p>
+                            <p className="text-xs text-stone">As it will appear on the employee profile</p>
                         </div>
 
                         <div className="space-y-1.5">
-                            <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
+                            <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
                                 <Mail className="h-3 w-3" /> Work Email
                             </Label>
                             <Input
                                 {...field("email")}
                                 type="email"
                                 placeholder="arjun@startupkaro.com"
-                                className="rounded-xl border-gray-200 focus-visible:ring-[var(--color-green)]/30"
+                                className="rounded-lg border-hairline focus-visible:ring-primary-brand/20"
                             />
-                            <p className="text-xs text-gray-400">Used for login and communications</p>
+                            <p className="text-xs text-stone">Used for login and communications</p>
                         </div>
 
                         <div className="space-y-1.5">
-                            <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
+                            <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
                                 <KeyRound className="h-3 w-3" /> Temporary Password
                             </Label>
                             <Input
                                 {...field("password")}
                                 type="password"
                                 placeholder="••••••••"
-                                className="rounded-xl border-gray-200 focus-visible:ring-[var(--color-green)]/30"
+                                className="rounded-lg border-hairline focus-visible:ring-primary-brand/20"
                             />
-                            <p className="text-xs text-gray-400">Employee can change this after first login</p>
+                            <p className="text-xs text-stone">Employee can change this after first login</p>
                         </div>
 
                         <div className="flex gap-3 pt-1">
                             <Button
                                 type="submit"
-                                className="bg-[var(--color-green)] hover:bg-[var(--color-green)]/90 text-white rounded-xl gap-2"
+                                className="bg-primary-brand hover:bg-primary-brand/90 text-white rounded-lg gap-2"
                             >
                                 <UserPlus className="h-4 w-4" />
                                 Create Employee
@@ -91,7 +91,7 @@ export function AdminEmployeeNewPage() {
                                 type="button"
                                 variant="outline"
                                 onClick={() => router.push("/admin/employees")}
-                                className="rounded-xl"
+                                className="rounded-lg"
                             >
                                 Cancel
                             </Button>

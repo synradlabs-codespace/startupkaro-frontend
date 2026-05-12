@@ -41,7 +41,7 @@ export function AdminEmployeesPage() {
                 description={`${mockEmployees.length} team members`}
                 action={
                     <Link href="/admin/employees/new">
-                        <Button size="sm" className="bg-[var(--color-green)] hover:bg-[var(--color-green)]/90 text-white">
+                        <Button size="sm" className="bg-primary-brand hover:bg-primary-brand/90 text-white">
                             <Plus className="h-4 w-4 mr-1" /> Add Employee
                         </Button>
                     </Link>
@@ -84,7 +84,7 @@ export function AdminEmployeesPage() {
                                             <TableCell>
                                                 <div className="flex items-center gap-3">
                                                     <Avatar className="h-8 w-8">
-                                                        <AvatarFallback className="text-xs bg-[var(--color-indigo)]/10 text-[var(--color-indigo)] font-semibold">
+                                                        <AvatarFallback className="text-xs bg-primary-brand/10 text-charcoal font-semibold">
                                                             {emp.name.split(" ").map(n => n[0]).join("")}
                                                         </AvatarFallback>
                                                     </Avatar>
@@ -93,7 +93,7 @@ export function AdminEmployeesPage() {
                                             </TableCell>
                                             <TableCell className="text-muted-foreground text-sm">{emp.email}</TableCell>
                                             <TableCell>
-                                                <Badge variant="outline" className="text-xs bg-[var(--color-indigo)]/5 border-[var(--color-indigo)]/20 text-[var(--color-indigo)]">
+                                                <Badge variant="outline" className="text-xs bg-primary-brand/5 border-hairline text-charcoal">
                                                     {emp.role}
                                                 </Badge>
                                             </TableCell>
@@ -102,7 +102,7 @@ export function AdminEmployeesPage() {
                                                     variant="outline"
                                                     className={emp.status === "active"
                                                         ? "bg-green-100 text-green-800 border-green-200 hover:bg-green-100"
-                                                        : "bg-gray-100 text-gray-600 border-gray-200 hover:bg-gray-100"
+                                                        : "bg-surface text-slate border-hairline hover:bg-surface"
                                                     }
                                                 >
                                                     {emp.status}
@@ -111,7 +111,7 @@ export function AdminEmployeesPage() {
                                             <TableCell className="text-muted-foreground text-sm">{emp.joined}</TableCell>
                                             <TableCell className="text-right">
                                                 <Link href={`/admin/employees/${emp.id}`}>
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[var(--color-green)]/10 hover:text-[var(--color-green)]">
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-brand/10 hover:text-charcoal">
                                                         <Eye className="h-4 w-4" />
                                                     </Button>
                                                 </Link>

@@ -16,19 +16,19 @@ export function CustomerDashboard() {
             <div className="flex-1 p-6 space-y-6">
 
                 {/* ── Hero Banner ───────────────────────────── */}
-                <div className="relative overflow-hidden rounded-2xl border border-[coral]/15 bg-gradient-to-br from-[coral]/8 via-white/80 to-orange-50/60 backdrop-blur-sm p-6">
-                    <div className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full bg-[coral]/8 blur-3xl" />
-                    <div className="pointer-events-none absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-orange-200/15 blur-2xl" />
+                <div className="relative overflow-hidden rounded-lg border border-hairline bg-accent-customer p-6">
+                    <div className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full bg-primary-brand/8 blur-3xl" />
+                    <div className="pointer-events-none absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-accent-customer blur-2xl" />
                     <div className="relative flex items-center justify-between gap-4">
                         <div>
-                            <h2 className="text-lg font-semibold text-gray-900">Hello, Rahul 👋</h2>
-                            <p className="text-sm text-gray-500 mt-0.5">
+                            <h2 className="text-lg font-semibold text-ink">Hello, Rahul 👋</h2>
+                            <p className="text-sm text-steel mt-0.5">
                                 You have {mockPurchases.length} active purchase{mockPurchases.length !== 1 ? "s" : ""} · {mockServices.length} services available
                             </p>
                         </div>
                         <Link
                             href="/customer/services"
-                            className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-[coral] text-white hover:bg-[coral]/90 rounded-xl transition-colors shrink-0"
+                            className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-primary-brand text-white hover:bg-primary-brand/90 rounded-lg transition-colors shrink-0"
                         >
                             <Store className="h-3.5 w-3.5" />
                             Browse Services
@@ -38,58 +38,58 @@ export function CustomerDashboard() {
 
                 {/* ── Stats ─────────────────────────────────── */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm p-5">
+                    <div className="rounded-lg border border-hairline bg-canvas p-5">
                         <div className="flex items-start justify-between mb-3">
-                            <p className="text-xs text-gray-500 font-medium">My Purchases</p>
-                            <div className="h-8 w-8 rounded-xl bg-[coral]/10 flex items-center justify-center">
-                                <ShoppingBag className="h-4 w-4 text-[coral]" />
+                            <p className="text-xs text-steel font-medium">My Purchases</p>
+                            <div className="h-8 w-8 rounded-lg bg-primary-brand/10 flex items-center justify-center">
+                                <ShoppingBag className="h-4 w-4 text-charcoal" />
                             </div>
                         </div>
-                        <p className="text-2xl font-bold text-gray-900">{mockPurchases.length}</p>
-                        <p className="text-xs text-gray-400 mt-1">Total services ordered</p>
+                        <p className="text-2xl font-bold text-ink">{mockPurchases.length}</p>
+                        <p className="text-xs text-stone mt-1">Total services ordered</p>
                     </div>
 
-                    <div className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm p-5">
+                    <div className="rounded-lg border border-hairline bg-canvas p-5">
                         <div className="flex items-start justify-between mb-3">
-                            <p className="text-xs text-gray-500 font-medium">Services Available</p>
-                            <div className="h-8 w-8 rounded-xl bg-orange-50 flex items-center justify-center">
-                                <Store className="h-4 w-4 text-orange-500" />
+                            <p className="text-xs text-steel font-medium">Services Available</p>
+                            <div className="h-8 w-8 rounded-lg bg-tint-peach flex items-center justify-center">
+                                <Store className="h-4 w-4 text-charcoal" />
                             </div>
                         </div>
-                        <p className="text-2xl font-bold text-gray-900">{mockServices.length}</p>
-                        <p className="text-xs text-gray-400 mt-1">Compliance &amp; legal services</p>
+                        <p className="text-2xl font-bold text-ink">{mockServices.length}</p>
+                        <p className="text-xs text-stone mt-1">Compliance &amp; legal services</p>
                     </div>
                 </div>
 
                 {/* ── Recent Purchases ─────────────────────── */}
-                <div className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm overflow-hidden">
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                <div className="rounded-lg border border-hairline bg-canvas overflow-hidden">
+                    <div className="flex items-center justify-between px-6 py-4 border-b border-hairline">
                         <div>
-                            <p className="text-sm font-semibold text-gray-800">Recent Purchases</p>
-                            <p className="text-xs text-gray-400">Your latest service orders</p>
+                            <p className="text-sm font-semibold text-charcoal">Recent Purchases</p>
+                            <p className="text-xs text-stone">Your latest service orders</p>
                         </div>
-                        <Link href="/customer/purchases" className="inline-flex items-center gap-1 text-xs font-medium text-[coral] hover:underline">
+                        <Link href="/customer/purchases" className="inline-flex items-center gap-1 text-xs font-medium text-charcoal hover:underline">
                             View all <ArrowRight className="h-3 w-3" />
                         </Link>
                     </div>
 
                     {recentPurchases.length === 0 ? (
                         <div className="px-6 py-10 text-center">
-                            <p className="text-sm text-gray-400">No purchases yet.</p>
+                            <p className="text-sm text-stone">No purchases yet.</p>
                         </div>
                     ) : (
-                        <div className="divide-y divide-gray-50">
+                        <div className="divide-y divide-hairline">
                             {recentPurchases.map((p) => (
-                                <div key={p.id} className="flex items-center justify-between px-6 py-3.5 hover:bg-gray-50/50 transition-colors">
+                                <div key={p.id} className="flex items-center justify-between px-6 py-3.5 hover:bg-surface-soft transition-colors">
                                     <div>
-                                        <p className="text-sm font-medium text-gray-800">{p.service}</p>
-                                        <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
+                                        <p className="text-sm font-medium text-charcoal">{p.service}</p>
+                                        <p className="text-xs text-stone flex items-center gap-1 mt-0.5">
                                             <Clock className="h-3 w-3" /> {p.date}
                                         </p>
                                     </div>
                                     <div className="flex items-center gap-3">
-                                        <span className="text-sm font-semibold text-gray-800">₹{p.amount.toLocaleString("en-IN")}</span>
-                                        <OrderStatusBadge status={p.status as any} />
+                                        <span className="text-sm font-semibold text-charcoal">₹{p.amount.toLocaleString("en-IN")}</span>
+                                        <OrderStatusBadge status={p.status as OrderStatus} />
                                     </div>
                                 </div>
                             ))}
@@ -98,19 +98,19 @@ export function CustomerDashboard() {
                 </div>
 
                 {/* ── Browse CTA ───────────────────────────── */}
-                <div className="rounded-2xl border-2 border-dashed border-[coral]/25 bg-[coral]/4 p-5 flex items-center justify-between gap-4">
+                <div className="rounded-lg border-2 border-dashed border-hairline-strong bg-primary-brand/4 p-5 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
-                        <div className="h-9 w-9 rounded-xl bg-[coral]/10 flex items-center justify-center shrink-0">
-                            <Sparkles className="h-4 w-4 text-[coral]" />
+                        <div className="h-9 w-9 rounded-lg bg-primary-brand/10 flex items-center justify-center shrink-0">
+                            <Sparkles className="h-4 w-4 text-charcoal" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-800">Need another service?</p>
-                            <p className="text-xs text-gray-500">Browse our catalogue and get started today.</p>
+                            <p className="text-sm font-medium text-charcoal">Need another service?</p>
+                            <p className="text-xs text-steel">Browse our catalogue and get started today.</p>
                         </div>
                     </div>
                     <Link
                         href="/customer/services"
-                        className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-[coral] text-white hover:bg-[coral]/90 rounded-xl transition-colors shrink-0"
+                        className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-primary-brand text-white hover:bg-primary-brand/90 rounded-lg transition-colors shrink-0"
                     >
                         Browse
                         <ArrowRight className="h-3.5 w-3.5" />

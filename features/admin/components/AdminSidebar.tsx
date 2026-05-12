@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -44,9 +45,8 @@ const navItems = [
     { title: "Analytics", href: "/admin/analytics", icon: BarChart3 },
 ];
 
-const ACCENT = "#003c33";
-const ACCENT_BG = "rgba(0, 60, 51, 0.10)";
-const ACCENT_TEXT = "#003c33";
+const ACCENT_BG_CLASS = "bg-accent-admin";
+const ACCENT_TEXT_CLASS = "text-charcoal";
 
 export function AdminSidebar() {
     const pathname = usePathname();
@@ -76,27 +76,28 @@ export function AdminSidebar() {
 
     return (
         <aside
-            className={`flex flex-col border-r border-gray-800 bg-sidebar transition-all duration-300 ease-in-out relative z-20 h-screen ${collapsed ? "w-[80px]" : "w-64"
+            className={`flex flex-col border-r border-hairline bg-canvas transition-all duration-300 ease-in-out relative z-20 h-screen ${collapsed ? "w-[80px]" : "w-64"
                 }`}
         >
             {/* Header */}
-            <div className={`h-16 flex items-center px-4 py-5 transition-all duration-200 border-b border-gray-800 ${collapsed ? "justify-center" : "justify-between"}`}>
+            <div className={`h-16 flex items-center px-4 py-5 transition-all duration-200 border-b border-hairline ${collapsed ? "justify-center" : "justify-between"}`}>
                 <div className={`flex items-center gap-3 overflow-hidden ${collapsed ? "w-auto" : "w-full"}`}>
                     {collapsed ? (
                         <div
-                            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl font-bold text-xs text-white shadow-sm"
-                            style={{ backgroundColor: ACCENT }}
+                            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg font-bold text-xs text-charcoal ${ACCENT_BG_CLASS}`}
                         >
                             SK
                         </div>
                     ) : (
                         <div className="flex flex-col whitespace-nowrap fade-in gap-0.5">
-                            <img
+                            <Image
                                 src="/startupkaro-logo.svg"
                                 alt="StartupKaro"
+                                width={140}
+                                height={26}
                                 className="h-7 w-auto object-contain"
                             />
-                            <p className="text-[11px] text-gray-400 leading-none pl-0.5">Admin Panel</p>
+                            <p className="text-[11px] text-steel leading-none pl-0.5">Admin Panel</p>
                         </div>
                     )}
                 </div>
@@ -118,25 +119,23 @@ export function AdminSidebar() {
                                     onClick={() => toggleMenu(item.title)}
                                     // 4. Added native 'title' attribute for tooltips instead of CSS divs
                                     title={collapsed ? item.title : undefined}
-                                    className={`h-9 w-full rounded-lg flex items-center gap-2.5 px-3 transition-all duration-150 cursor-pointer outline-none ${collapsed ? "justify-center" : "justify-between"
+                                    className={`h-9 w-full rounded-md flex items-center gap-2.5 px-3 transition-all duration-150 cursor-pointer outline-none ${active ? `${ACCENT_BG_CLASS} ${ACCENT_TEXT_CLASS}` : "text-steel hover:bg-surface hover:text-ink"} ${collapsed ? "justify-center" : "justify-between"
                                         }`}
-                                    style={active && !collapsed ? { backgroundColor: ACCENT_BG, color: ACCENT_TEXT } : { color: "#a1a1aa" }}
                                 >
                                     <div className="flex items-center gap-2.5">
-                                        <item.icon className="h-[18px] w-[18px] shrink-0" style={active ? { color: ACCENT_TEXT } : {}} />
+                                        <item.icon className="h-[18px] w-[18px] shrink-0" />
                                         {!collapsed && <span className="text-[13px] font-medium whitespace-nowrap">{item.title}</span>}
                                     </div>
                                     {!collapsed && (
-                                        <ChevronRight className={`h-3.5 w-3.5 shrink-0 text-gray-400 transition-transform duration-200 ${isOpen ? "rotate-90" : ""}`} />
+                                        <ChevronRight className={`h-3.5 w-3.5 shrink-0 text-stone transition-transform duration-200 ${isOpen ? "rotate-90" : ""}`} />
                                     )}
                                 </button>
                             ) : (
                                 <Link
                                     href={item.href}
                                     title={collapsed ? item.title : undefined}
-                                    className={`h-9 w-full rounded-lg flex items-center gap-2.5 px-3 transition-all duration-150 outline-none ${collapsed ? "justify-center" : ""
+                                    className={`h-9 w-full rounded-md flex items-center gap-2.5 px-3 transition-all duration-150 outline-none ${active ? `${ACCENT_BG_CLASS} ${ACCENT_TEXT_CLASS}` : "text-steel hover:bg-surface hover:text-ink"} ${collapsed ? "justify-center" : ""
                                         }`}
-                                    style={active ? { backgroundColor: ACCENT_BG, color: ACCENT_TEXT } : { color: "#a1a1aa" }}
                                 >
                                     <item.icon className="h-[18px] w-[18px] shrink-0" />
                                     {!collapsed && <span className="text-[13px] font-medium whitespace-nowrap">{item.title}</span>}
@@ -145,20 +144,15 @@ export function AdminSidebar() {
 
                             {/* Accordion Content */}
                             {hasChildren && isOpen && !collapsed && (
-                                <div className="ml-[22px] mt-1 border-l border-gray-700 pl-3 space-y-1 py-1">
+                                <div className="ml-[22px] mt-1 border-l border-hairline pl-3 space-y-1 py-1">
                                     {item.children?.map((child) => {
                                         const childActive = pathname === child.href;
                                         return (
                                             <Link
                                                 key={child.href}
                                                 href={child.href}
-                                                className={`h-8 rounded-md flex items-center text-[12.5px] font-medium w-full px-2 transition-all duration-150 ${childActive ? "bg-opacity-50" : "hover:bg-white/10 hover:text-white"
+                                                className={`h-8 rounded-md flex items-center text-[12.5px] font-medium w-full px-2 transition-all duration-150 ${childActive ? `${ACCENT_BG_CLASS} ${ACCENT_TEXT_CLASS}` : "text-steel hover:bg-surface hover:text-ink"
                                                     }`}
-                                                style={
-                                                    childActive
-                                                        ? { color: ACCENT_TEXT, backgroundColor: ACCENT_BG }
-                                                        : { color: "#a1a1aa" }
-                                                }
                                             >
                                                 {child.title}
                                             </Link>
@@ -172,13 +166,12 @@ export function AdminSidebar() {
             </div>
 
             {/* Footer */}
-            <div className="px-3 py-4 border-t border-gray-800">
+            <div className="px-3 py-4 border-t border-hairline">
                 {collapsed ? (
                     <div className="group relative flex justify-center cursor-pointer" title="Admin">
                         <Avatar className="h-8 w-8">
                             <AvatarFallback
-                                className="text-white text-[11px] font-semibold"
-                                style={{ backgroundColor: ACCENT }}
+                                className={`text-charcoal text-[11px] font-semibold ${ACCENT_BG_CLASS}`}
                             >
                                 AD
                             </AvatarFallback>
@@ -188,19 +181,18 @@ export function AdminSidebar() {
                     <div className="flex items-center gap-3">
                         <Avatar className="h-8 w-8 shrink-0">
                             <AvatarFallback
-                                className="text-white text-[11px] font-semibold"
-                                style={{ backgroundColor: ACCENT }}
+                                className={`text-charcoal text-[11px] font-semibold ${ACCENT_BG_CLASS}`}
                             >
                                 AD
                             </AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
-                            <p className="text-[13px] font-medium text-white truncate leading-none">Admin</p>
-                            <p className="text-[11px] text-gray-400 truncate mt-0.5">admin@startupkaro.com</p>
+                            <p className="text-[13px] font-medium text-ink truncate leading-none">Admin</p>
+                            <p className="text-[11px] text-steel truncate mt-0.5">admin@startupkaro.com</p>
                         </div>
                         <Link
                             href="/admin/login"
-                            className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all duration-150 block"
+                            className="p-1.5 rounded-md text-stone hover:text-error-brand hover:bg-red-50 transition-all duration-150 block"
                             title="Sign out"
                         >
                             <LogOut className="h-[15px] w-[15px]" />

@@ -77,7 +77,7 @@ export function EmployeeInquiryDetailPage({ id }: { id: string }) {
                                 {(statusChanged || statusSaved) && (
                                     <Button
                                         size="sm"
-                                        className="w-full mt-1 bg-[var(--color-indigo)] hover:bg-[var(--color-indigo)]/90 text-white"
+                                        className="w-full mt-1 bg-primary-brand hover:bg-primary-brand/90 text-white"
                                         onClick={handleSaveStatus}
                                         disabled={statusSaved}
                                     >
@@ -132,7 +132,7 @@ export function EmployeeInquiryDetailPage({ id }: { id: string }) {
                                 />
                                 <Button
                                     size="icon"
-                                    className="shrink-0 self-end bg-[var(--color-indigo)] hover:bg-[var(--color-indigo)]/90 text-white"
+                                    className="shrink-0 self-end bg-primary-brand hover:bg-primary-brand/90 text-white"
                                     onClick={handleAddNote}
                                     disabled={!newNote.trim()}
                                 >

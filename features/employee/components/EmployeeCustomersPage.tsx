@@ -73,7 +73,7 @@ export function EmployeeCustomersPage() {
                                             <TableCell>
                                                 <div className="flex items-center gap-3">
                                                     <Avatar className="h-8 w-8">
-                                                        <AvatarFallback className="text-xs bg-[var(--color-indigo)]/10 text-[var(--color-indigo)] font-semibold">
+                                                        <AvatarFallback className="text-xs bg-primary-brand/10 text-charcoal font-semibold">
                                                             {customer.name.split(" ").map(n => n[0]).join("")}
                                                         </AvatarFallback>
                                                     </Avatar>
@@ -88,7 +88,7 @@ export function EmployeeCustomersPage() {
                                             <TableCell className="text-muted-foreground text-sm">{customer.joined}</TableCell>
                                             <TableCell className="text-right">
                                                 <Link href={`/employee/customers/${customer.id}`}>
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[var(--color-indigo)]/10 hover:text-[var(--color-indigo)]">
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-brand/10 hover:text-charcoal">
                                                         <Eye className="h-4 w-4" />
                                                     </Button>
                                                 </Link>

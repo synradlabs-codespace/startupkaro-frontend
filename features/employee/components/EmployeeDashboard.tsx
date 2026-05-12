@@ -14,21 +14,21 @@ export function EmployeeDashboard() {
             label: "Total Orders",
             value: mockOrders.length,
             icon: ShoppingCart,
-            accent: "bg-[dark-navy]/8 text-[primary-brand]",
+            accent: "bg-accent-employee text-charcoal",
             sub: `${activeOrders.length} need attention`,
         },
         {
             label: "Customers",
             value: mockCustomers.length,
             icon: Users,
-            accent: "bg-violet-50 text-violet-600",
+            accent: "bg-tint-lavender text-charcoal",
             sub: "Registered accounts",
         },
         {
             label: "Open Inquiries",
             value: mockInquiries.length,
             icon: MessageSquare,
-            accent: "bg-orange-50 text-orange-500",
+            accent: "bg-tint-peach text-charcoal",
             sub: "Awaiting response",
         },
     ];
@@ -40,17 +40,17 @@ export function EmployeeDashboard() {
             <div className="flex-1 p-6 space-y-6">
 
                 {/* ── Hero Banner ───────────────────────────── */}
-                <div className="relative overflow-hidden rounded-2xl border border-[dark-navy]/10 bg-gradient-to-br from-[primary-brand]/6 via-white/80 to-indigo-50/60 backdrop-blur-sm p-6">
-                    <div className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full bg-[dark-navy]/6 blur-3xl" />
-                    <div className="pointer-events-none absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-indigo-200/15 blur-2xl" />
+                <div className="relative overflow-hidden rounded-lg border border-hairline bg-accent-employee p-6">
+                    <div className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full bg-accent-employee blur-3xl" />
+                    <div className="pointer-events-none absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-accent-employee blur-2xl" />
                     <div className="relative flex items-center justify-between gap-4">
                         <div>
-                            <h2 className="text-lg font-semibold text-gray-900">Employee Portal</h2>
-                            <p className="text-sm text-gray-500 mt-0.5">
+                            <h2 className="text-lg font-semibold text-ink">Employee Portal</h2>
+                            <p className="text-sm text-steel mt-0.5">
                                 {activeOrders.length} active order{activeOrders.length !== 1 ? "s" : ""} · {mockInquiries.length} open inquiries
                             </p>
                         </div>
-                        <div className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-[primary-brand] text-white rounded-xl">
+                        <div className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-primary-brand text-white rounded-lg">
                             <TrendingUp className="h-3.5 w-3.5" />
                             Active
                         </div>
@@ -62,46 +62,46 @@ export function EmployeeDashboard() {
                     {stats.map((stat) => (
                         <div
                             key={stat.label}
-                            className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm p-5"
+                            className="rounded-lg border border-hairline bg-canvas p-5"
                         >
                             <div className="flex items-start justify-between mb-3">
-                                <p className="text-xs text-gray-500 font-medium">{stat.label}</p>
-                                <div className={`h-8 w-8 rounded-xl flex items-center justify-center ${stat.accent}`}>
+                                <p className="text-xs text-steel font-medium">{stat.label}</p>
+                                <div className={`h-8 w-8 rounded-lg flex items-center justify-center ${stat.accent}`}>
                                     <stat.icon className="h-4 w-4" />
                                 </div>
                             </div>
-                            <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                            <p className="text-xs text-gray-400 mt-1">{stat.sub}</p>
+                            <p className="text-2xl font-bold text-ink">{stat.value}</p>
+                            <p className="text-xs text-stone mt-1">{stat.sub}</p>
                         </div>
                     ))}
                 </div>
 
                 {/* ── Recent Orders ────────────────────────── */}
-                <div className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm overflow-hidden">
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                <div className="rounded-lg border border-hairline bg-canvas overflow-hidden">
+                    <div className="flex items-center justify-between px-6 py-4 border-b border-hairline">
                         <div>
-                            <p className="text-sm font-semibold text-gray-800">Recent Orders</p>
-                            <p className="text-xs text-gray-400">Latest orders to action</p>
+                            <p className="text-sm font-semibold text-charcoal">Recent Orders</p>
+                            <p className="text-xs text-stone">Latest orders to action</p>
                         </div>
                         <Link
                             href="/employee/orders"
-                            className="inline-flex items-center gap-1 text-xs font-medium text-[primary-brand] hover:underline"
+                            className="inline-flex items-center gap-1 text-xs font-medium text-charcoal hover:underline"
                         >
                             View all <ArrowRight className="h-3 w-3" />
                         </Link>
                     </div>
-                    <div className="divide-y divide-gray-50">
+                    <div className="divide-y divide-hairline">
                         {mockOrders.slice(0, 4).map((order) => (
-                            <div key={order.id} className="flex items-center justify-between px-6 py-3.5 hover:bg-gray-50/50 transition-colors">
+                            <div key={order.id} className="flex items-center justify-between px-6 py-3.5 hover:bg-surface-soft transition-colors">
                                 <div>
-                                    <p className="text-sm font-medium text-gray-800">{order.customer}</p>
-                                    <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
+                                    <p className="text-sm font-medium text-charcoal">{order.customer}</p>
+                                    <p className="text-xs text-stone flex items-center gap-1 mt-0.5">
                                         <Clock className="h-3 w-3" /> {order.service}
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <OrderStatusBadge status={order.status as any} />
-                                    <PaymentStatusBadge status={order.paymentStatus as any} />
+                                    <OrderStatusBadge status={order.status as OrderStatus} />
+                                    <PaymentStatusBadge status={order.paymentStatus as PaymentStatus} />
                                 </div>
                             </div>
                         ))}
@@ -109,27 +109,27 @@ export function EmployeeDashboard() {
                 </div>
 
                 {/* ── Open Inquiries ───────────────────────── */}
-                <div className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm overflow-hidden">
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                <div className="rounded-lg border border-hairline bg-canvas overflow-hidden">
+                    <div className="flex items-center justify-between px-6 py-4 border-b border-hairline">
                         <div>
-                            <p className="text-sm font-semibold text-gray-800">Open Inquiries</p>
-                            <p className="text-xs text-gray-400">Leads awaiting response</p>
+                            <p className="text-sm font-semibold text-charcoal">Open Inquiries</p>
+                            <p className="text-xs text-stone">Leads awaiting response</p>
                         </div>
                         <Link
                             href="/employee/inquiries"
-                            className="inline-flex items-center gap-1 text-xs font-medium text-[primary-brand] hover:underline"
+                            className="inline-flex items-center gap-1 text-xs font-medium text-charcoal hover:underline"
                         >
                             View all <ArrowRight className="h-3 w-3" />
                         </Link>
                     </div>
-                    <div className="divide-y divide-gray-50">
+                    <div className="divide-y divide-hairline">
                         {mockInquiries.slice(0, 3).map((inq) => (
-                            <div key={inq.id} className="flex items-start justify-between px-6 py-3.5 hover:bg-gray-50/50 transition-colors gap-4">
+                            <div key={inq.id} className="flex items-start justify-between px-6 py-3.5 hover:bg-surface-soft transition-colors gap-4">
                                 <div className="min-w-0">
-                                    <p className="text-sm font-medium text-gray-800">{inq.name}</p>
-                                    <p className="text-xs text-gray-400 truncate mt-0.5">{inq.message}</p>
+                                    <p className="text-sm font-medium text-charcoal">{inq.name}</p>
+                                    <p className="text-xs text-stone truncate mt-0.5">{inq.message}</p>
                                 </div>
-                                <p className="text-xs text-gray-400 shrink-0">{inq.date}</p>
+                                <p className="text-xs text-stone shrink-0">{inq.date}</p>
                             </div>
                         ))}
                     </div>

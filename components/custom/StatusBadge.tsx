@@ -5,35 +5,35 @@ type PaymentStatus = "paid" | "unpaid" | "refunded" | "partial";
 type InquiryStatus = "unresolved" | "resolved";
 
 const orderStatusConfig: Record<OrderStatus, { label: string; className: string }> = {
-  pending:    { label: "Pending",    className: "bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-100" },
-  processing: { label: "Processing", className: "bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-100" },
-  completed:  { label: "Completed",  className: "bg-green-100 text-green-800 border-green-200 hover:bg-green-100" },
-  cancelled:  { label: "Cancelled",  className: "bg-red-100 text-red-800 border-red-200 hover:bg-red-100" },
+  pending:    { label: "Pending",    className: "bg-tint-cream text-charcoal border-hairline hover:bg-tint-cream" },
+  processing: { label: "Processing", className: "bg-tint-sky text-charcoal border-hairline hover:bg-tint-sky" },
+  completed:  { label: "Completed",  className: "bg-tint-mint text-charcoal border-hairline hover:bg-tint-mint" },
+  cancelled:  { label: "Cancelled",  className: "bg-red-50 text-error-brand border-red-100 hover:bg-red-50" },
 };
 
 const paymentStatusConfig: Record<PaymentStatus, { label: string; className: string }> = {
-  paid:     { label: "Paid",     className: "bg-green-100 text-green-800 border-green-200 hover:bg-green-100" },
-  unpaid:   { label: "Unpaid",   className: "bg-red-100 text-red-800 border-red-200 hover:bg-red-100" },
-  refunded: { label: "Refunded", className: "bg-purple-100 text-purple-800 border-purple-200 hover:bg-purple-100" },
-  partial:  { label: "Partial",  className: "bg-orange-100 text-orange-800 border-orange-200 hover:bg-orange-100" },
+  paid:     { label: "Paid",     className: "bg-tint-mint text-charcoal border-hairline hover:bg-tint-mint" },
+  unpaid:   { label: "Unpaid",   className: "bg-red-50 text-error-brand border-red-100 hover:bg-red-50" },
+  refunded: { label: "Refunded", className: "bg-tint-lavender text-charcoal border-hairline hover:bg-tint-lavender" },
+  partial:  { label: "Partial",  className: "bg-tint-peach text-charcoal border-hairline hover:bg-tint-peach" },
 };
 
 const inquiryStatusConfig: Record<InquiryStatus, { label: string; className: string }> = {
-  unresolved: { label: "Unresolved", className: "bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-100" },
-  resolved:   { label: "Resolved",   className: "bg-teal-100 text-teal-800 border-teal-200 hover:bg-teal-100" },
+  unresolved: { label: "Unresolved", className: "bg-tint-peach text-charcoal border-hairline hover:bg-tint-peach" },
+  resolved:   { label: "Resolved",   className: "bg-tint-mint text-charcoal border-hairline hover:bg-tint-mint" },
 };
 
-export function OrderStatusBadge({ status }: { status: OrderStatus }) {
-  const config = orderStatusConfig[status] ?? orderStatusConfig.pending;
+export function OrderStatusBadge({ status }: { status: string }) {
+  const config = orderStatusConfig[status as OrderStatus] ?? orderStatusConfig.pending;
   return <Badge variant="outline" className={config.className}>{config.label}</Badge>;
 }
 
-export function PaymentStatusBadge({ status }: { status: PaymentStatus }) {
-  const config = paymentStatusConfig[status] ?? paymentStatusConfig.unpaid;
+export function PaymentStatusBadge({ status }: { status: string }) {
+  const config = paymentStatusConfig[status as PaymentStatus] ?? paymentStatusConfig.unpaid;
   return <Badge variant="outline" className={config.className}>{config.label}</Badge>;
 }
 
-export function InquiryStatusBadge({ status }: { status: InquiryStatus }) {
-  const config = inquiryStatusConfig[status] ?? inquiryStatusConfig.unresolved;
+export function InquiryStatusBadge({ status }: { status: string }) {
+  const config = inquiryStatusConfig[status as InquiryStatus] ?? inquiryStatusConfig.unresolved;
   return <Badge variant="outline" className={config.className}>{config.label}</Badge>;
 }

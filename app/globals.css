@@ -204,3 +204,27 @@
     @apply font-sans;
   }
 }
+
+@layer components {
+  .bento-ambient-icon {
+    animation: bento-icon-pulse 5.5s ease-in-out infinite;
+  }
+
+  @keyframes bento-icon-pulse {
+    0%,
+    100% {
+      opacity: 0.08;
+      transform: translate(-50%, -50%) scale(0.94) rotate(-4deg);
+    }
+
+    45% {
+      opacity: 0.2;
+      transform: translate(-50%, -50%) scale(1.06) rotate(3deg);
+    }
+
+    70% {
+      opacity: 0.12;
+      transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    }
+  }
+}

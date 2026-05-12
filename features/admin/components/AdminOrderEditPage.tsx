@@ -86,7 +86,7 @@ export function AdminOrderEditPage({ id }: { id: string }) {
                                     </Select>
                                 </div>
                                 <div className="flex gap-3 pt-2">
-                                    <Button type="submit" className="bg-[var(--color-green)] hover:bg-[var(--color-green)]/90 text-white">
+                                    <Button type="submit" className="bg-primary-brand hover:bg-primary-brand/90 text-white">
                                         Save Changes
                                     </Button>
                                     <Button type="button" variant="outline" onClick={() => router.back()}>
@@ -138,7 +138,7 @@ export function AdminOrderEditPage({ id }: { id: string }) {
                                 <Button
                                     type="button"
                                     size="icon"
-                                    className="shrink-0 self-end bg-[var(--color-green)] hover:bg-[var(--color-green)]/90 text-white"
+                                    className="shrink-0 self-end bg-primary-brand hover:bg-primary-brand/90 text-white"
                                     onClick={handleAddNote}
                                     disabled={!newNote.trim()}
                                 >

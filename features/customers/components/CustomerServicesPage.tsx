@@ -6,7 +6,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { mockServices } from "@/lib/mock-data";
 import {
     Search,
@@ -49,9 +48,9 @@ const categoryMeta: Record<string, { icon: React.ElementType; color: string; bg:
 
 const fallbackMeta = {
     icon: LayoutGrid,
-    color: "text-gray-600",
-    bg: "bg-gray-100",
-    badge: "bg-gray-100 text-gray-600",
+    color: "text-slate",
+    bg: "bg-surface",
+    badge: "bg-surface text-slate",
 };
 
 const categories = ["All", ...Array.from(new Set(mockServices.map((s) => s.category)))];
@@ -77,12 +76,12 @@ export function CustomerServicesPage() {
                 {/* ── Search + Filter row ──────────────────── */}
                 <div className="flex flex-col sm:flex-row gap-3">
                     <div className="relative flex-1 max-w-sm">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone" />
                         <Input
                             placeholder="Search services..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            className="pl-9 rounded-xl border-gray-200 focus-visible:ring-[coral]/30"
+                            className="pl-9 rounded-lg border-hairline focus-visible:ring-primary-brand/20"
                         />
                     </div>
                     <div className="flex gap-2 flex-wrap">
@@ -90,10 +89,10 @@ export function CustomerServicesPage() {
                             <button
                                 key={cat}
                                 onClick={() => setActiveCategory(cat)}
-                                className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all duration-150 border ${
+                                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 border ${
                                     activeCategory === cat
-                                        ? "bg-[coral] text-white border-[coral] shadow-sm"
-                                        : "bg-white text-gray-500 border-gray-200 hover:border-[coral]/40 hover:text-[coral]"
+                                        ? "bg-primary-brand text-white border-primary-brand "
+                                        : "bg-canvas text-steel border-hairline hover:border-primary-brand/40 hover:text-charcoal"
                                 }`}
                             >
                                 {cat}
@@ -105,11 +104,11 @@ export function CustomerServicesPage() {
                 {/* ── Service Grid ─────────────────────────── */}
                 {filtered.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-20 text-center gap-3">
-                        <div className="h-12 w-12 rounded-2xl bg-gray-100 flex items-center justify-center">
-                            <Search className="h-5 w-5 text-gray-400" />
+                        <div className="h-12 w-12 rounded-lg bg-surface flex items-center justify-center">
+                            <Search className="h-5 w-5 text-stone" />
                         </div>
-                        <p className="text-sm font-medium text-gray-700">No services found</p>
-                        <p className="text-xs text-gray-400">Try a different search or category</p>
+                        <p className="text-sm font-medium text-slate">No services found</p>
+                        <p className="text-xs text-stone">Try a different search or category</p>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -120,15 +119,15 @@ export function CustomerServicesPage() {
                             return (
                                 <div
                                     key={service.id}
-                                    className="group relative flex flex-col rounded-2xl border border-gray-200/70 bg-white/80 backdrop-blur-sm shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
+                                    className="group relative flex flex-col rounded-lg border border-hairline bg-canvas hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
                                 >
                                     {/* Top accent strip */}
-                                    <div className="h-1 w-full bg-gradient-to-r from-[coral] to-orange-300 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                                    <div className="h-1 w-full bg-gradient-to-r from-primary-brand to-accent-customer opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
 
                                     <div className="flex flex-col flex-1 p-5">
                                         {/* Icon + category */}
                                         <div className="flex items-start justify-between mb-4">
-                                            <div className={`h-10 w-10 rounded-xl ${meta.bg} flex items-center justify-center`}>
+                                            <div className={`h-10 w-10 rounded-lg ${meta.bg} flex items-center justify-center`}>
                                                 <Icon className={`h-5 w-5 ${meta.color}`} />
                                             </div>
                                             <span className={`text-[11px] font-semibold px-2.5 py-1 rounded-full ${meta.badge}`}>
@@ -137,30 +136,30 @@ export function CustomerServicesPage() {
                                         </div>
 
                                         {/* Name + description */}
-                                        <h3 className="text-sm font-semibold text-gray-900 mb-1.5 leading-snug">
+                                        <h3 className="text-sm font-semibold text-ink mb-1.5 leading-snug">
                                             {service.name}
                                         </h3>
-                                        <p className="text-xs text-gray-500 leading-relaxed flex-1">
+                                        <p className="text-xs text-steel leading-relaxed flex-1">
                                             {service.description}
                                         </p>
 
                                         {/* Divider */}
-                                        <div className="h-px bg-gray-100 my-4" />
+                                        <div className="h-px bg-surface my-4" />
 
                                         {/* Price + duration + CTA */}
                                         <div className="flex items-center justify-between">
                                             <div>
-                                                <p className="text-lg font-bold text-gray-900">
+                                                <p className="text-lg font-bold text-ink">
                                                     ₹{service.price.toLocaleString("en-IN")}
                                                 </p>
-                                                <p className="text-[11px] text-gray-400 flex items-center gap-1 mt-0.5">
+                                                <p className="text-[11px] text-stone flex items-center gap-1 mt-0.5">
                                                     <Clock className="h-3 w-3" />
                                                     {service.duration}
                                                 </p>
                                             </div>
                                             <Link
                                                 href={`/customer/services/${service.id}`}
-                                                className="inline-flex items-center gap-1.5 h-7 px-2.5 text-[0.8rem] font-medium bg-[coral] text-white hover:bg-[coral]/90 rounded-xl transition-colors shrink-0"
+                                                className="inline-flex items-center gap-1.5 h-7 px-2.5 text-[0.8rem] font-medium bg-primary-brand text-white hover:bg-primary-brand/90 rounded-lg transition-colors shrink-0"
                                             >
                                                 Details
                                                 <ArrowRight className="h-3.5 w-3.5" />
@@ -174,8 +173,8 @@ export function CustomerServicesPage() {
                 )}
 
                 {/* ── Footer note ──────────────────────────── */}
-                <div className="flex items-center gap-2 text-xs text-gray-400 pt-2">
-                    <Sparkles className="h-3.5 w-3.5 text-[coral]" />
+                <div className="flex items-center gap-2 text-xs text-stone pt-2">
+                    <Sparkles className="h-3.5 w-3.5 text-charcoal" />
                     All services include expert assistance and end-to-end document handling.
                 </div>
             </div>

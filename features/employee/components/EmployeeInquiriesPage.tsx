@@ -102,7 +102,7 @@ export function EmployeeInquiriesPage() {
                                             <TableCell className="text-muted-foreground text-sm">{inq.date}</TableCell>
                                             <TableCell className="text-right">
                                                 <Link href={`/employee/inquiries/${inq.id}`}>
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[var(--color-indigo)]/10 hover:text-[var(--color-indigo)]">
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-brand/10 hover:text-charcoal">
                                                         <Eye className="h-4 w-4" />
                                                     </Button>
                                                 </Link>

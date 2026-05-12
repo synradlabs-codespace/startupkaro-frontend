@@ -99,11 +99,11 @@ export function AdminPaymentsPage() {
                                             <TableCell className="font-mono text-xs text-muted-foreground">{payment.orderId}</TableCell>
                                             <TableCell className="font-medium">{payment.customer}</TableCell>
                                             <TableCell className="font-medium">₹{payment.amount.toLocaleString("en-IN")}</TableCell>
-                                            <TableCell><PaymentStatusBadge status={payment.status as any} /></TableCell>
+                                            <TableCell><PaymentStatusBadge status={payment.status} /></TableCell>
                                             <TableCell className="text-muted-foreground text-sm">{payment.date}</TableCell>
                                             <TableCell className="text-right">
                                                 <Link href={`/admin/payments/${payment.id}`}>
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[var(--color-green)]/10 hover:text-[var(--color-green)]">
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-brand/10 hover:text-charcoal">
                                                         <Eye className="h-4 w-4" />
                                                     </Button>
                                                 </Link>

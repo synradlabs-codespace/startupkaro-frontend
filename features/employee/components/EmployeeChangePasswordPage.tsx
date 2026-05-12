@@ -79,7 +79,7 @@ export function EmployeeChangePasswordPage() {
                         variant="ghost"
                         size="sm"
                         onClick={() => router.push("/employee/profile")}
-                        className="gap-1.5 text-gray-500 hover:text-gray-800 rounded-xl"
+                        className="gap-1.5 text-steel hover:text-charcoal rounded-lg"
                     >
                         <ArrowLeft className="h-3.5 w-3.5" />
                         Back to Profile
@@ -92,28 +92,28 @@ export function EmployeeChangePasswordPage() {
 
                     {/* ── Success state ─────────────────────────── */}
                     {submitted && (
-                        <div className="rounded-2xl border border-[dark-navy]/20 bg-[dark-navy]/5 p-6 flex items-center gap-4">
-                            <div className="h-10 w-10 rounded-full bg-[primary-brand] flex items-center justify-center shrink-0 shadow">
+                        <div className="rounded-lg border border-hairline bg-accent-employee p-6 flex items-center gap-4">
+                            <div className="h-10 w-10 rounded-full bg-primary-brand flex items-center justify-center shrink-0 ">
                                 <Check className="h-5 w-5 text-white" />
                             </div>
                             <div>
-                                <p className="text-sm font-semibold text-gray-800">Password updated successfully</p>
-                                <p className="text-xs text-gray-500">Redirecting you back to your profile…</p>
+                                <p className="text-sm font-semibold text-charcoal">Password updated successfully</p>
+                                <p className="text-xs text-steel">Redirecting you back to your profile…</p>
                             </div>
                         </div>
                     )}
 
                     {/* ── Form card ─────────────────────────────── */}
                     {!submitted && (
-                        <div className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm overflow-hidden">
+                        <div className="rounded-lg border border-hairline bg-canvas overflow-hidden">
                             {/* Card header */}
-                            <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-indigo-50/60 to-white flex items-center gap-3">
-                                <div className="h-8 w-8 rounded-xl bg-indigo-100 flex items-center justify-center">
-                                    <KeyRound className="h-4 w-4 text-[primary-brand]" />
+                            <div className="px-6 py-4 border-b border-hairline bg-accent-employee flex items-center gap-3">
+                                <div className="h-8 w-8 rounded-lg bg-indigo-100 flex items-center justify-center">
+                                    <KeyRound className="h-4 w-4 text-charcoal" />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-semibold text-gray-800">Update Password</p>
-                                    <p className="text-xs text-gray-400">Choose a strong password you haven't used before</p>
+                                    <p className="text-sm font-semibold text-charcoal">Update Password</p>
+                                    <p className="text-xs text-stone">Choose a strong password you have not used before</p>
                                 </div>
                             </div>
 
@@ -121,7 +121,7 @@ export function EmployeeChangePasswordPage() {
 
                                 {/* Current password */}
                                 <div className="space-y-1.5">
-                                    <Label className="text-xs font-medium text-gray-600 uppercase tracking-wide">
+                                    <Label className="text-xs font-medium text-slate uppercase tracking-wide">
                                         Current Password
                                     </Label>
                                     <div className="relative">
@@ -129,28 +129,28 @@ export function EmployeeChangePasswordPage() {
                                             {...field("current")}
                                             type={show.current ? "text" : "password"}
                                             placeholder="Enter your current password"
-                                            className={`rounded-xl pr-10 border-gray-200 focus-visible:ring-[dark-navy]/30 ${errors.current ? "border-red-400" : ""}`}
+                                            className={`rounded-lg pr-10 border-hairline focus-visible:ring-primary-brand/20 ${errors.current ? "border-error-brand" : ""}`}
                                             required
                                         />
                                         <button
                                             type="button"
                                             onClick={() => toggleShow("current")}
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-stone hover:text-slate transition-colors"
                                             tabIndex={-1}
                                         >
                                             {show.current ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                                         </button>
                                     </div>
                                     {errors.current && (
-                                        <p className="text-xs text-red-500">{errors.current}</p>
+                                        <p className="text-xs text-error-brand">{errors.current}</p>
                                     )}
                                 </div>
 
-                                <div className="h-px bg-gray-100" />
+                                <div className="h-px bg-surface" />
 
                                 {/* New password */}
                                 <div className="space-y-1.5">
-                                    <Label className="text-xs font-medium text-gray-600 uppercase tracking-wide">
+                                    <Label className="text-xs font-medium text-slate uppercase tracking-wide">
                                         New Password
                                     </Label>
                                     <div className="relative">
@@ -158,13 +158,13 @@ export function EmployeeChangePasswordPage() {
                                             {...field("next")}
                                             type={show.next ? "text" : "password"}
                                             placeholder="Create a strong new password"
-                                            className={`rounded-xl pr-10 border-gray-200 focus-visible:ring-[dark-navy]/30 ${errors.next ? "border-red-400" : ""}`}
+                                            className={`rounded-lg pr-10 border-hairline focus-visible:ring-primary-brand/20 ${errors.next ? "border-error-brand" : ""}`}
                                             required
                                         />
                                         <button
                                             type="button"
                                             onClick={() => toggleShow("next")}
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-stone hover:text-slate transition-colors"
                                             tabIndex={-1}
                                         >
                                             {show.next ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -178,7 +178,7 @@ export function EmployeeChangePasswordPage() {
                                                 {[1, 2, 3, 4, 5].map((i) => (
                                                     <div
                                                         key={i}
-                                                        className={`h-1 flex-1 rounded-full transition-colors duration-300 ${i <= strength.score ? strength.color : "bg-gray-200"}`}
+                                                        className={`h-1 flex-1 rounded-full transition-colors duration-300 ${i <= strength.score ? strength.color : "bg-hairline"}`}
                                                     />
                                                 ))}
                                             </div>
@@ -189,9 +189,9 @@ export function EmployeeChangePasswordPage() {
                                     )}
 
                                     {errors.next
-                                        ? <p className="text-xs text-red-500">{errors.next}</p>
+                                        ? <p className="text-xs text-error-brand">{errors.next}</p>
                                         : (
-                                            <div className="flex gap-1.5 items-start text-xs text-gray-400 pt-0.5">
+                                            <div className="flex gap-1.5 items-start text-xs text-stone pt-0.5">
                                                 <Info className="h-3 w-3 shrink-0 mt-0.5" />
                                                 <span>Min 8 chars, include one uppercase letter and one number</span>
                                             </div>
@@ -201,7 +201,7 @@ export function EmployeeChangePasswordPage() {
 
                                 {/* Confirm password */}
                                 <div className="space-y-1.5">
-                                    <Label className="text-xs font-medium text-gray-600 uppercase tracking-wide">
+                                    <Label className="text-xs font-medium text-slate uppercase tracking-wide">
                                         Confirm New Password
                                     </Label>
                                     <div className="relative">
@@ -209,13 +209,13 @@ export function EmployeeChangePasswordPage() {
                                             {...field("confirm")}
                                             type={show.confirm ? "text" : "password"}
                                             placeholder="Re-enter your new password"
-                                            className={`rounded-xl pr-10 border-gray-200 focus-visible:ring-[dark-navy]/30 ${errors.confirm ? "border-red-400" : ""}`}
+                                            className={`rounded-lg pr-10 border-hairline focus-visible:ring-primary-brand/20 ${errors.confirm ? "border-error-brand" : ""}`}
                                             required
                                         />
                                         <button
                                             type="button"
                                             onClick={() => toggleShow("confirm")}
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-stone hover:text-slate transition-colors"
                                             tabIndex={-1}
                                         >
                                             {show.confirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -224,12 +224,12 @@ export function EmployeeChangePasswordPage() {
                                         {/* Match indicator */}
                                         {form.confirm && form.next && !errors.confirm && (
                                             <div className="absolute right-9 top-1/2 -translate-y-1/2">
-                                                <Check className="h-4 w-4 text-[primary-brand]" />
+                                                <Check className="h-4 w-4 text-charcoal" />
                                             </div>
                                         )}
                                     </div>
                                     {errors.confirm && (
-                                        <p className="text-xs text-red-500">{errors.confirm}</p>
+                                        <p className="text-xs text-error-brand">{errors.confirm}</p>
                                     )}
                                 </div>
 
@@ -237,7 +237,7 @@ export function EmployeeChangePasswordPage() {
                                 <div className="flex gap-3 pt-2">
                                     <Button
                                         type="submit"
-                                        className="gap-2 bg-[primary-brand] hover:bg-[primary-brand]/90 text-white rounded-xl px-6"
+                                        className="gap-2 bg-primary-brand hover:bg-primary-brand/90 text-white rounded-lg px-6"
                                     >
                                         <ShieldCheck className="h-4 w-4" />
                                         Update Password
@@ -246,7 +246,7 @@ export function EmployeeChangePasswordPage() {
                                         type="button"
                                         variant="outline"
                                         onClick={() => router.push("/employee/profile")}
-                                        className="rounded-xl"
+                                        className="rounded-lg"
                                     >
                                         Cancel
                                     </Button>
@@ -256,8 +256,8 @@ export function EmployeeChangePasswordPage() {
                     )}
 
                     {/* ── Tips card ─────────────────────────────── */}
-                    <div className="rounded-2xl border border-gray-100 bg-gray-50/60 backdrop-blur-sm p-5 space-y-3">
-                        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
+                    <div className="rounded-lg border border-hairline bg-surface p-5 space-y-3">
+                        <p className="text-xs font-semibold text-steel uppercase tracking-wide flex items-center gap-1.5">
                             <ShieldCheck className="h-3.5 w-3.5" /> Password Tips
                         </p>
                         <ul className="space-y-1.5">
@@ -267,8 +267,8 @@ export function EmployeeChangePasswordPage() {
                                 "Avoid your name, birthday, or common words",
                                 "Don't reuse passwords from other sites",
                             ].map((tip) => (
-                                <li key={tip} className="flex items-center gap-2 text-xs text-gray-500">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-[dark-navy]/50 shrink-0" />
+                                <li key={tip} className="flex items-center gap-2 text-xs text-steel">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-accent-employee0 shrink-0" />
                                     {tip}
                                 </li>
                             ))}

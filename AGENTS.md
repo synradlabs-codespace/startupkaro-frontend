@@ -150,3 +150,8 @@ Article, Author, and Category documents live in Sanity Content Lake. Studio is e
 
 ### Adding new content types to Sanity
 Add a schema file to `sanity/schemaTypes/`, register it in `sanity/schemaTypes/index.ts`, and add corresponding GROQ queries in `sanity/queries.ts`.
+
+### Prompt for gemini image creation
+Square 1:1 composition, 1600x1600, main subject centered with safe margins, clean white background, no text, suitable for rounded-corner web card crop.
+
+Generate 1 indian people with same navy blue T shirt with the logo on their right pec - "Startupkaro" in small font size and white color,

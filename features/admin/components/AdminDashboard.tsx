@@ -24,28 +24,28 @@ export function AdminDashboard() {
             label: "Total Revenue",
             value: `₹${mockAnalytics.totalRevenue.toLocaleString("en-IN")}`,
             icon: IndianRupee,
-            accent: "bg-[deep-green]/10 text-[deep-green]",
+            accent: "bg-primary-brand/10 text-charcoal",
             sub: `Avg ₹${avgOrderValue.toLocaleString("en-IN")} / order`,
         },
         {
             label: "Total Orders",
             value: mockAnalytics.totalOrders,
             icon: ShoppingCart,
-            accent: "bg-blue-50 text-blue-600",
+            accent: "bg-tint-sky text-charcoal",
             sub: `${mockAnalytics.activeOrders} currently active`,
         },
         {
             label: "Customers",
             value: mockAnalytics.totalCustomers,
             icon: Users,
-            accent: "bg-violet-50 text-violet-600",
+            accent: "bg-tint-lavender text-charcoal",
             sub: "Registered accounts",
         },
         {
             label: "Completion Rate",
             value: `${completionRate}%`,
             icon: CheckCircle2,
-            accent: "bg-emerald-50 text-emerald-600",
+            accent: "bg-tint-mint text-charcoal",
             sub: `${completedCount} of ${mockOrders.length} orders done`,
         },
     ];
@@ -57,19 +57,19 @@ export function AdminDashboard() {
             <div className="flex-1 p-6 space-y-6">
 
                 {/* ── Hero Banner ───────────────────────────── */}
-                <div className="relative overflow-hidden rounded-2xl border border-[deep-green]/15 bg-gradient-to-br from-[deep-green]/8 via-white/80 to-emerald-50/60 backdrop-blur-sm p-6">
-                    <div className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full bg-[deep-green]/8 blur-3xl" />
-                    <div className="pointer-events-none absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-emerald-200/15 blur-2xl" />
+                <div className="relative overflow-hidden rounded-lg border border-hairline bg-accent-admin p-6">
+                    <div className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full bg-primary-brand/8 blur-3xl" />
+                    <div className="pointer-events-none absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-accent-admin blur-2xl" />
                     <div className="relative flex items-center justify-between gap-4">
                         <div>
-                            <h2 className="text-lg font-semibold text-gray-900">Admin Overview</h2>
-                            <p className="text-sm text-gray-500 mt-0.5">
+                            <h2 className="text-lg font-semibold text-ink">Admin Overview</h2>
+                            <p className="text-sm text-steel mt-0.5">
                                 {collectionRate}% collected · {completionRate}% completion · ₹{avgOrderValue.toLocaleString("en-IN")} avg order
                             </p>
                         </div>
                         <Link
                             href="/admin/analytics"
-                            className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-[deep-green] text-white hover:bg-[deep-green]/90 rounded-xl transition-colors shrink-0"
+                            className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-primary-brand text-white hover:bg-primary-brand/90 rounded-lg transition-colors shrink-0"
                         >
                             <BarChart3 className="h-3.5 w-3.5" />
                             Analytics
@@ -82,16 +82,16 @@ export function AdminDashboard() {
                     {stats.map((stat) => (
                         <div
                             key={stat.label}
-                            className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm p-5"
+                            className="rounded-lg border border-hairline bg-canvas p-5"
                         >
                             <div className="flex items-start justify-between mb-3">
-                                <p className="text-xs text-gray-500 font-medium">{stat.label}</p>
-                                <div className={`h-8 w-8 rounded-xl flex items-center justify-center ${stat.accent}`}>
+                                <p className="text-xs text-steel font-medium">{stat.label}</p>
+                                <div className={`h-8 w-8 rounded-lg flex items-center justify-center ${stat.accent}`}>
                                     <stat.icon className="h-4 w-4" />
                                 </div>
                             </div>
-                            <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                            <p className="text-xs text-gray-400 mt-1">{stat.sub}</p>
+                            <p className="text-2xl font-bold text-ink">{stat.value}</p>
+                            <p className="text-xs text-stone mt-1">{stat.sub}</p>
                         </div>
                     ))}
                 </div>
@@ -105,7 +105,7 @@ export function AdminDashboard() {
                             sub: `₹${totalCollected.toLocaleString("en-IN")} of ₹${mockAnalytics.totalRevenue.toLocaleString("en-IN")}`,
                             icon: CreditCard,
                             bar: collectionRate,
-                            barColor: "bg-[deep-green]",
+                            barColor: "bg-primary-brand",
                         },
                         {
                             label: "Order Completion",
@@ -113,7 +113,7 @@ export function AdminDashboard() {
                             sub: `${completedCount} completed orders`,
                             icon: CheckCircle2,
                             bar: completionRate,
-                            barColor: "bg-emerald-500",
+                            barColor: "bg-primary-brand",
                         },
                         {
                             label: "Active Pipeline",
@@ -121,50 +121,50 @@ export function AdminDashboard() {
                             sub: "Orders in progress",
                             icon: TrendingUp,
                             bar: Math.round((mockAnalytics.activeOrders / mockOrders.length) * 100),
-                            barColor: "bg-blue-500",
+                            barColor: "bg-primary-brand",
                         },
                     ].map((kpi) => (
-                        <div key={kpi.label} className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm p-5 space-y-3">
+                        <div key={kpi.label} className="rounded-lg border border-hairline bg-canvas p-5 space-y-3">
                             <div className="flex items-center justify-between">
-                                <p className="text-xs text-gray-500 font-medium">{kpi.label}</p>
-                                <kpi.icon className="h-4 w-4 text-gray-400" />
+                                <p className="text-xs text-steel font-medium">{kpi.label}</p>
+                                <kpi.icon className="h-4 w-4 text-stone" />
                             </div>
-                            <p className="text-xl font-bold text-gray-900">{kpi.value}</p>
+                            <p className="text-xl font-bold text-ink">{kpi.value}</p>
                             <div className="space-y-1">
-                                <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                <div className="h-1.5 bg-surface rounded-full overflow-hidden">
                                     <div className={`h-full rounded-full ${kpi.barColor} transition-all`} style={{ width: `${kpi.bar}%` }} />
                                 </div>
-                                <p className="text-xs text-gray-400">{kpi.sub}</p>
+                                <p className="text-xs text-stone">{kpi.sub}</p>
                             </div>
                         </div>
                     ))}
                 </div>
 
                 {/* ── Recent Orders ────────────────────────── */}
-                <div className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm overflow-hidden">
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                <div className="rounded-lg border border-hairline bg-canvas overflow-hidden">
+                    <div className="flex items-center justify-between px-6 py-4 border-b border-hairline">
                         <div>
-                            <p className="text-sm font-semibold text-gray-800">Recent Orders</p>
-                            <p className="text-xs text-gray-400">Latest 5 orders across all customers</p>
+                            <p className="text-sm font-semibold text-charcoal">Recent Orders</p>
+                            <p className="text-xs text-stone">Latest 5 orders across all customers</p>
                         </div>
                         <Link
                             href="/admin/orders"
-                            className="inline-flex items-center gap-1 text-xs font-medium text-[deep-green] hover:underline"
+                            className="inline-flex items-center gap-1 text-xs font-medium text-charcoal hover:underline"
                         >
                             View all <ArrowRight className="h-3 w-3" />
                         </Link>
                     </div>
-                    <div className="divide-y divide-gray-50">
+                    <div className="divide-y divide-hairline">
                         {mockOrders.slice(0, 5).map((order) => (
-                            <div key={order.id} className="flex items-center justify-between px-6 py-3.5 hover:bg-gray-50/50 transition-colors">
+                            <div key={order.id} className="flex items-center justify-between px-6 py-3.5 hover:bg-surface-soft transition-colors">
                                 <div>
-                                    <p className="text-sm font-medium text-gray-800">{order.customer}</p>
-                                    <p className="text-xs text-gray-400">{order.service} · {order.date}</p>
+                                    <p className="text-sm font-medium text-charcoal">{order.customer}</p>
+                                    <p className="text-xs text-stone">{order.service} · {order.date}</p>
                                 </div>
                                 <div className="flex items-center gap-3">
-                                    <span className="text-sm font-semibold text-gray-800">₹{order.amount.toLocaleString("en-IN")}</span>
-                                    <OrderStatusBadge status={order.status as any} />
-                                    <PaymentStatusBadge status={order.paymentStatus as any} />
+                                    <span className="text-sm font-semibold text-charcoal">₹{order.amount.toLocaleString("en-IN")}</span>
+                                    <OrderStatusBadge status={order.status as OrderStatus} />
+                                    <PaymentStatusBadge status={order.paymentStatus as PaymentStatus} />
                                 </div>
                             </div>
                         ))}

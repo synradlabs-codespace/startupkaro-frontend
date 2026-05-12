@@ -8,6 +8,7 @@ import Link from "next/link";
 import { NAV_LINKS, type NavLink, type NavMenu } from "./header/nav-data";
 import { MegaMenu } from "./header/mega-menu";
 import { cn } from "@/lib/utils";
+import { FlowButton, FlowSecondaryButton } from "@/components/custom/FlowButton";
 
 type Direction = "ltr" | "rtl";
 const SHELL_EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
@@ -63,29 +64,19 @@ const panelVariants = {
 function HeaderActions({ mobile = false, onAction }: { mobile?: boolean; onAction?: () => void }) {
   return (
     <div className={cn("flex items-center gap-3", mobile && "grid w-full grid-cols-2 gap-4")}>
-      <Link
+      <FlowSecondaryButton
         href="/login"
         onClick={onAction}
-        className={cn(
-          "select-none rounded-md border border-hairline-strong font-medium text-charcoal transition-colors duration-150 hover:bg-tint-cream",
-          mobile
-            ? "flex min-h-14 items-center justify-center text-base"
-            : "px-5 py-2 text-sm",
-        )}
-      >
-        Login
-      </Link>
-      <Link
+        text="Login"
+        iconName="log-in"
+      />
+      <FlowButton
         href="/services"
         onClick={onAction}
-        className={cn(
-          "flex select-none items-center justify-center gap-1.5 rounded-md bg-primary-brand font-semibold text-white transition-colors duration-150 hover:opacity-90 active:opacity-80",
-          mobile ? "min-h-14 text-base" : "px-5 py-2 text-sm",
-        )}
-      >
-        Get Started
-        <ArrowRight className="size-3.5 shrink-0" strokeWidth={1.6} />
-      </Link>
+        text="Explore Services"
+        iconName="briefcase"
+        colorVariant="navy"
+      />
     </div>
   );
 }
@@ -284,7 +275,7 @@ export function Header() {
               const isOpen = hasMenu && activeMenu?.id === link.menu!.id;
               const itemClassName = cn(
                 "flex select-none items-center gap-1.5 rounded-md px-3.5 py-2 text-sm font-medium transition-colors duration-150",
-                isOpen ? "text-ink bg-tint-sky/50" : "text-slate hover:text-ink hover:bg-tint-sky/30",
+                isOpen ? "text-link-blue bg-tint-sky/50" : "text-slate hover:text-link-blue hover:bg-tint-sky/30",
               );
 
               return (
@@ -459,25 +450,25 @@ export function Header() {
                                   <button
                                     type="button"
                                     onClick={() => setMobileMenu(link.menu!)}
-                                    className="flex w-full items-center justify-between gap-4 px-3 py-6 text-left"
+                                    className="group flex w-full items-center justify-between gap-4 px-3 py-6 text-left transition-colors duration-150 hover:bg-tint-sky/40"
                                   >
-                                    <span className="text-base font-semibold text-ink">{link.label}</span>
-                                    <ArrowRight className="size-4 text-stone" strokeWidth={2} />
+                                    <span className="text-base font-semibold text-ink transition-colors duration-150 group-hover:text-link-blue">{link.label}</span>
+                                    <ArrowRight className="size-4 text-stone transition-colors duration-150 group-hover:text-link-blue" strokeWidth={2} />
                                   </button>
                                 ) : hasNavigableHref(link.href) ? (
                                   <a
                                     href={link.href}
                                     onClick={closeMobileMenu}
-                                    className="flex items-center justify-between gap-4 px-3 py-6"
+                                    className="group flex items-center justify-between gap-4 px-3 py-6 transition-colors duration-150 hover:bg-tint-sky/40"
                                   >
-                                    <span className="text-base font-semibold text-ink">{link.label}</span>
+                                    <span className="text-base font-semibold text-ink transition-colors duration-150 group-hover:text-link-blue">{link.label}</span>
                                   </a>
                                 ) : (
                                   <button
                                     type="button"
-                                    className="flex w-full items-center justify-between gap-4 px-3 py-6 text-left"
+                                    className="group flex w-full items-center justify-between gap-4 px-3 py-6 text-left transition-colors duration-150 hover:bg-tint-sky/40"
                                   >
-                                    <span className="text-base font-semibold text-ink">{link.label}</span>
+                                    <span className="text-base font-semibold text-ink transition-colors duration-150 group-hover:text-link-blue">{link.label}</span>
                                   </button>
                                 )}
                               </motion.div>

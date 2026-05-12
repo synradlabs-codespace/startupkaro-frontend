@@ -10,6 +10,15 @@ import { OrderStatusBadge, PaymentStatusBadge } from "@/components/custom/Status
 import { mockPurchases } from "@/lib/mock-data";
 import { Download, CreditCard } from "lucide-react";
 
+type RazorpayInstance = {
+    on: (event: "payment.failed", handler: () => void) => void;
+    open: () => void;
+};
+
+type RazorpayWindow = Window & {
+    Razorpay: new (options: unknown) => RazorpayInstance;
+};
+
 export function CustomerPurchaseDetailPage({ id }: { id: string }) {
     const purchase = mockPurchases.find((p) => p.id === id) ?? mockPurchases[0];
     const router = useRouter();
@@ -42,7 +51,7 @@ export function CustomerPurchaseDetailPage({ id }: { id: string }) {
                 theme: { color: "#ff7759" },
             };
 
-            const rzp = new (window as any).Razorpay(options);
+            const rzp = new (window as RazorpayWindow).Razorpay(options);
             rzp.on("payment.failed", function () {
                 router.push("/customer/checkout/failure");
             });
@@ -65,7 +74,7 @@ export function CustomerPurchaseDetailPage({ id }: { id: string }) {
                             <Button
                                 size="sm"
                                 onClick={handlePayNow}
-                                className="bg-[coral] hover:bg-[coral]/90 text-white"
+                                className="bg-primary-brand hover:bg-primary-brand/90 text-white"
                             >
                                 <CreditCard className="h-4 w-4 mr-1" /> Pay Now
                             </Button>
@@ -93,11 +102,11 @@ export function CustomerPurchaseDetailPage({ id }: { id: string }) {
                         ))}
                         <div className="flex justify-between">
                             <span className="text-muted-foreground">Service Status</span>
-                            <OrderStatusBadge status={purchase.status as any} />
+                            <OrderStatusBadge status={purchase.status} />
                         </div>
                         <div className="flex justify-between">
                             <span className="text-muted-foreground">Payment</span>
-                            <PaymentStatusBadge status={purchase.paymentStatus as any} />
+                            <PaymentStatusBadge status={purchase.paymentStatus} />
                         </div>
                     </CardContent>
                 </Card>

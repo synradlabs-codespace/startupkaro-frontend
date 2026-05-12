@@ -20,7 +20,7 @@ export function EmployeeOrderDetailPage({ id }: { id: string }) {
                 action={
                     <div className="flex gap-2">
                         <Link href={`/employee/orders/${order.id}/edit`}>
-                            <Button size="sm" className="gap-1.5 bg-[var(--color-indigo)] hover:bg-[var(--color-indigo)]/90 text-white">
+                            <Button size="sm" className="gap-1.5 bg-primary-brand hover:bg-primary-brand/90 text-white">
                                 <Pencil className="h-3.5 w-3.5" /> Edit Order
                             </Button>
                         </Link>
@@ -47,11 +47,11 @@ export function EmployeeOrderDetailPage({ id }: { id: string }) {
                         ))}
                         <div className="flex justify-between items-center pt-1 border-t">
                             <span className="text-muted-foreground">Order Status</span>
-                            <OrderStatusBadge status={order.status as any} />
+                            <OrderStatusBadge status={order.status} />
                         </div>
                         <div className="flex justify-between items-center">
                             <span className="text-muted-foreground">Payment Status</span>
-                            <PaymentStatusBadge status={order.paymentStatus as any} />
+                            <PaymentStatusBadge status={order.paymentStatus} />
                         </div>
                     </CardContent>
                 </Card>

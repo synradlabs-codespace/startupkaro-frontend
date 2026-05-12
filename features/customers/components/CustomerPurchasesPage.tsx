@@ -43,7 +43,7 @@ export function CustomerPurchasesPage() {
                                     <TableRow>
                                         <TableCell colSpan={7} className="text-center text-muted-foreground py-12">
                                             No purchases yet.{" "}
-                                            <Link href="/customer/services" className="text-[var(--color-saffron)] hover:underline">
+                                            <Link href="/customer/services" className="text-charcoal hover:underline">
                                                 Browse services
                                             </Link>
                                         </TableCell>
@@ -54,13 +54,13 @@ export function CustomerPurchasesPage() {
                                             <TableCell className="font-mono text-xs text-muted-foreground">{p.id}</TableCell>
                                             <TableCell className="font-medium">{p.service}</TableCell>
                                             <TableCell className="font-medium">₹{p.amount.toLocaleString("en-IN")}</TableCell>
-                                            <TableCell><OrderStatusBadge status={p.status as any} /></TableCell>
-                                            <TableCell><PaymentStatusBadge status={p.paymentStatus as any} /></TableCell>
+                                            <TableCell><OrderStatusBadge status={p.status} /></TableCell>
+                                            <TableCell><PaymentStatusBadge status={p.paymentStatus} /></TableCell>
                                             <TableCell className="text-muted-foreground text-sm">{p.date}</TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex gap-1 justify-end">
                                                     <Link href={`/customer/purchases/${p.id}`}>
-                                                        <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[var(--color-saffron)]/10 hover:text-[var(--color-saffron)]">
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-accent-customer hover:text-charcoal">
                                                             <Eye className="h-4 w-4" />
                                                         </Button>
                                                     </Link>

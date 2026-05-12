@@ -90,7 +90,7 @@ export function CustomerProfilePage() {
                         <Button
                             size="sm"
                             onClick={() => setEditing(true)}
-                            className="gap-2 bg-[coral] hover:bg-[coral]/90 text-white rounded-xl shadow-sm"
+                            className="gap-2 bg-primary-brand hover:bg-primary-brand/90 text-white rounded-lg "
                         >
                             <Pencil className="h-3.5 w-3.5" />
                             Edit Profile
@@ -102,16 +102,12 @@ export function CustomerProfilePage() {
             <div className="flex-1 p-6 space-y-6">
 
                 {/* ── Hero Card ───────────────────────────── */}
-                <div className="relative overflow-hidden rounded-2xl border border-[coral]/15 bg-gradient-to-br from-[coral]/8 via-white/80 to-orange-50/60 backdrop-blur-sm shadow-sm p-8">
-                    {/* decorative blobs */}
-                    <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-[coral]/8 blur-3xl" />
-                    <div className="pointer-events-none absolute -bottom-10 -left-10 h-36 w-36 rounded-full bg-orange-300/10 blur-2xl" />
-
-                    <div className="relative flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                <div className="rounded-lg border border-hairline bg-accent-customer p-8">
+                    <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
                         {/* Avatar */}
                         <div className="relative shrink-0">
-                            <div className="h-24 w-24 rounded-full bg-gradient-to-br from-[coral]/20 to-orange-200/40 border-2 border-[coral]/20 flex items-center justify-center shadow-inner">
-                                <span className="text-2xl font-semibold text-[coral]">
+                            <div className="h-24 w-24 rounded-full border-2 border-hairline bg-canvas flex items-center justify-center">
+                                <span className="text-2xl font-semibold text-charcoal">
                                     {profile.initials}
                                 </span>
                             </div>
@@ -119,7 +115,7 @@ export function CustomerProfilePage() {
                                 <button
                                     type="button"
                                     title="Upload photo"
-                                    className="absolute bottom-0 right-0 h-7 w-7 rounded-full bg-[coral] text-white flex items-center justify-center shadow-md hover:bg-[coral]/90 transition-colors"
+                                    className="absolute bottom-0 right-0 h-7 w-7 rounded-full bg-primary-brand text-white flex items-center justify-center  hover:bg-primary-brand/90 transition-colors"
                                 >
                                     <Camera className="h-3.5 w-3.5" />
                                 </button>
@@ -129,17 +125,17 @@ export function CustomerProfilePage() {
                         {/* Name + meta */}
                         <div className="flex-1 text-center sm:text-left">
                             <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
-                                <h2 className="text-xl font-semibold text-gray-900">{profile.name}</h2>
-                                <span className="inline-flex items-center gap-1 rounded-full bg-[coral]/10 px-2.5 py-0.5 text-[11px] font-medium text-[#d4720a]">
+                                <h2 className="text-xl font-semibold text-ink">{profile.name}</h2>
+                                <span className="inline-flex items-center gap-1 rounded-full bg-canvas/70 px-2.5 py-0.5 text-[11px] font-medium text-charcoal">
                                     <BadgeCheck className="h-3 w-3" />
                                     Customer
                                 </span>
                             </div>
-                            <p className="text-sm text-gray-500 flex items-center justify-center sm:justify-start gap-1.5">
+                            <p className="text-sm text-steel flex items-center justify-center sm:justify-start gap-1.5">
                                 <Mail className="h-3.5 w-3.5 shrink-0" />
                                 {profile.email}
                             </p>
-                            <p className="mt-2 text-xs text-gray-400 flex items-center justify-center sm:justify-start gap-1.5">
+                            <p className="mt-2 text-xs text-stone flex items-center justify-center sm:justify-start gap-1.5">
                                 <Calendar className="h-3.5 w-3.5 shrink-0" />
                                 Member since {profile.joined}
                             </p>
@@ -151,7 +147,7 @@ export function CustomerProfilePage() {
                                 <Button
                                     size="sm"
                                     onClick={handleSave}
-                                    className="gap-1.5 bg-[coral] hover:bg-[coral]/90 text-white rounded-xl"
+                                    className="gap-1.5 bg-primary-brand hover:bg-primary-brand/90 text-white rounded-lg"
                                 >
                                     <Check className="h-3.5 w-3.5" />
                                     Save
@@ -160,7 +156,7 @@ export function CustomerProfilePage() {
                                     size="sm"
                                     variant="outline"
                                     onClick={handleCancel}
-                                    className="gap-1.5 rounded-xl"
+                                    className="gap-1.5 rounded-lg"
                                 >
                                     <X className="h-3.5 w-3.5" />
                                     Cancel
@@ -174,17 +170,17 @@ export function CustomerProfilePage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
                     {/* Personal Information */}
-                    <div className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm p-6 space-y-5">
-                        <div className="flex items-center gap-2 pb-1 border-b border-gray-100">
-                            <div className="h-7 w-7 rounded-lg bg-[coral]/10 flex items-center justify-center">
-                                <User className="h-3.5 w-3.5 text-[coral]" />
+                    <div className="rounded-lg border border-hairline bg-canvas p-6 space-y-5">
+                        <div className="flex items-center gap-2 pb-1 border-b border-hairline">
+                            <div className="h-7 w-7 rounded-lg bg-primary-brand/10 flex items-center justify-center">
+                                <User className="h-3.5 w-3.5 text-charcoal" />
                             </div>
-                            <h3 className="text-sm font-semibold text-gray-800">Personal Information</h3>
+                            <h3 className="text-sm font-semibold text-charcoal">Personal Information</h3>
                         </div>
 
                         {/* Name */}
                         <div className="space-y-1.5">
-                            <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
+                            <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
                                 <User className="h-3 w-3" /> Full Name
                             </Label>
                             {editing ? (
@@ -192,39 +188,39 @@ export function CustomerProfilePage() {
                                     <Input
                                         {...field("name")}
                                         placeholder="Your full name"
-                                        className={`rounded-xl border-gray-200 focus-visible:ring-[coral]/30 ${errors.name ? "border-red-400" : ""}`}
+                                        className={`rounded-lg border-hairline focus-visible:ring-primary-brand/20 ${errors.name ? "border-error-brand" : ""}`}
                                     />
                                     {errors.name
-                                        ? <p className="text-xs text-red-500">{errors.name}</p>
-                                        : <p className="text-xs text-gray-400">As it will appear on invoices and documents</p>
+                                        ? <p className="text-xs text-error-brand">{errors.name}</p>
+                                        : <p className="text-xs text-stone">As it will appear on invoices and documents</p>
                                     }
                                 </div>
                             ) : (
-                                <p className="text-sm font-medium text-gray-900">{profile.name}</p>
+                                <p className="text-sm font-medium text-ink">{profile.name}</p>
                             )}
                         </div>
 
                         {/* Email — always read-only */}
                         <div className="space-y-1.5">
-                            <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
+                            <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
                                 <Mail className="h-3 w-3" /> Email Address
                             </Label>
                             <div className="flex items-center gap-2">
-                                <p className="text-sm text-gray-700">{profile.email}</p>
+                                <p className="text-sm text-slate">{profile.email}</p>
                                 {editing && (
-                                    <span className="inline-flex items-center gap-1 text-[10px] text-gray-400 bg-gray-100 rounded-full px-2 py-0.5">
+                                    <span className="inline-flex items-center gap-1 text-[10px] text-stone bg-surface rounded-full px-2 py-0.5">
                                         <Lock className="h-2.5 w-2.5" /> cannot be changed
                                     </span>
                                 )}
                             </div>
                             {editing && (
-                                <p className="text-xs text-gray-400">Email is your primary account identifier and cannot be edited.</p>
+                                <p className="text-xs text-stone">Email is your primary account identifier and cannot be edited.</p>
                             )}
                         </div>
 
                         {/* Phone */}
                         <div className="space-y-1.5">
-                            <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
+                            <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
                                 <Phone className="h-3 w-3" /> Phone Number
                             </Label>
                             {editing ? (
@@ -233,15 +229,15 @@ export function CustomerProfilePage() {
                                         {...field("phone")}
                                         type="tel"
                                         placeholder="+91 98765 43210"
-                                        className={`rounded-xl border-gray-200 focus-visible:ring-[coral]/30 ${errors.phone ? "border-red-400" : ""}`}
+                                        className={`rounded-lg border-hairline focus-visible:ring-primary-brand/20 ${errors.phone ? "border-error-brand" : ""}`}
                                     />
                                     {errors.phone
-                                        ? <p className="text-xs text-red-500">{errors.phone}</p>
-                                        : <p className="text-xs text-gray-400">Include country code (e.g. +91)</p>
+                                        ? <p className="text-xs text-error-brand">{errors.phone}</p>
+                                        : <p className="text-xs text-stone">Include country code (e.g. +91)</p>
                                     }
                                 </div>
                             ) : (
-                                <p className="text-sm text-gray-700">{profile.phone}</p>
+                                <p className="text-sm text-slate">{profile.phone}</p>
                             )}
                         </div>
 
@@ -251,7 +247,7 @@ export function CustomerProfilePage() {
                                 <Button
                                     size="sm"
                                     onClick={handleSave}
-                                    className="gap-1.5 bg-[coral] hover:bg-[coral]/90 text-white rounded-xl flex-1"
+                                    className="gap-1.5 bg-primary-brand hover:bg-primary-brand/90 text-white rounded-lg flex-1"
                                 >
                                     <Check className="h-3.5 w-3.5" />
                                     Save Changes
@@ -260,7 +256,7 @@ export function CustomerProfilePage() {
                                     size="sm"
                                     variant="outline"
                                     onClick={handleCancel}
-                                    className="gap-1.5 rounded-xl"
+                                    className="gap-1.5 rounded-lg"
                                 >
                                     <X className="h-3.5 w-3.5" />
                                     Cancel
@@ -270,44 +266,44 @@ export function CustomerProfilePage() {
                     </div>
 
                     {/* Account & Security */}
-                    <div className="rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm p-6 space-y-5">
-                        <div className="flex items-center gap-2 pb-1 border-b border-gray-100">
-                            <div className="h-7 w-7 rounded-lg bg-indigo-50 flex items-center justify-center">
-                                <ShieldCheck className="h-3.5 w-3.5 text-indigo-500" />
+                    <div className="rounded-lg border border-hairline bg-canvas p-6 space-y-5">
+                        <div className="flex items-center gap-2 pb-1 border-b border-hairline">
+                            <div className="h-7 w-7 rounded-lg bg-accent-customer flex items-center justify-center">
+                                <ShieldCheck className="h-3.5 w-3.5 text-charcoal" />
                             </div>
-                            <h3 className="text-sm font-semibold text-gray-800">Account &amp; Security</h3>
+                            <h3 className="text-sm font-semibold text-charcoal">Account &amp; Security</h3>
                         </div>
 
                         {/* Joined */}
-                        <div className="flex items-start gap-3 p-3 rounded-xl bg-gray-50/80">
-                            <Calendar className="h-4 w-4 text-gray-400 mt-0.5 shrink-0" />
+                        <div className="flex items-start gap-3 p-3 rounded-lg bg-surface">
+                            <Calendar className="h-4 w-4 text-stone mt-0.5 shrink-0" />
                             <div>
-                                <p className="text-xs text-gray-500 font-medium">Member Since</p>
-                                <p className="text-sm text-gray-800 font-medium">{profile.joined}</p>
+                                <p className="text-xs text-steel font-medium">Member Since</p>
+                                <p className="text-sm text-charcoal font-medium">{profile.joined}</p>
                             </div>
                         </div>
 
                         {/* Password */}
-                        <div className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 bg-gradient-to-r from-gray-50/80 to-white">
-                            <div className="h-9 w-9 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
-                                <KeyRound className="h-4 w-4 text-[coral]" />
+                        <div className="flex items-center gap-4 p-4 rounded-lg border border-hairline bg-surface">
+                            <div className="h-9 w-9 rounded-lg bg-tint-peach flex items-center justify-center shrink-0">
+                                <KeyRound className="h-4 w-4 text-charcoal" />
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-gray-800">Password</p>
-                                <p className="text-xs text-gray-400">Keep your account secure with a strong password</p>
+                                <p className="text-sm font-medium text-charcoal">Password</p>
+                                <p className="text-xs text-stone">Keep your account secure with a strong password</p>
                             </div>
                             <Link
                                 href="/customer/profile/change-password"
-                                className="inline-flex items-center h-7 px-2.5 text-xs font-medium border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 rounded-xl transition-colors shrink-0"
+                                className="inline-flex items-center h-7 px-2.5 text-xs font-medium border border-hairline bg-canvas text-slate hover:bg-surface rounded-lg transition-colors shrink-0"
                             >
                                 Change
                             </Link>
                         </div>
 
                         {/* Security tip */}
-                        <div className="rounded-xl bg-[coral]/5 border border-[coral]/10 p-3 flex gap-2.5">
-                            <ShieldCheck className="h-4 w-4 text-[coral] shrink-0 mt-0.5" />
-                            <p className="text-xs text-gray-600 leading-relaxed">
+                        <div className="rounded-lg bg-accent-customer border border-hairline p-3 flex gap-2.5">
+                            <ShieldCheck className="h-4 w-4 text-charcoal shrink-0 mt-0.5" />
+                            <p className="text-xs text-slate leading-relaxed">
                                 Use a strong, unique password and never share it. We will never ask for your password via email or phone.
                             </p>
                         </div>

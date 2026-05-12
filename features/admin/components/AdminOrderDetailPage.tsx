@@ -22,7 +22,7 @@ export function AdminOrderDetailPage({ id }: { id: string }) {
                             <Download className="h-4 w-4 mr-1" /> Invoice
                         </Button>
                         <Link href={`/admin/orders/${id}/edit`}>
-                            <Button size="sm" className="bg-[var(--color-green)] hover:bg-[var(--color-green)]/90 text-white">
+                            <Button size="sm" className="bg-primary-brand hover:bg-primary-brand/90 text-white">
                                 <Pencil className="h-4 w-4 mr-1" /> Edit
                             </Button>
                         </Link>
@@ -39,11 +39,11 @@ export function AdminOrderDetailPage({ id }: { id: string }) {
                         <Row label="Date" value={order.date} />
                         <div className="flex items-center justify-between pt-1 border-t">
                             <span className="text-muted-foreground">Order Status</span>
-                            <OrderStatusBadge status={order.status as any} />
+                            <OrderStatusBadge status={order.status} />
                         </div>
                         <div className="flex items-center justify-between">
                             <span className="text-muted-foreground">Payment Status</span>
-                            <PaymentStatusBadge status={order.paymentStatus as any} />
+                            <PaymentStatusBadge status={order.paymentStatus} />
                         </div>
                     </CardContent>
                 </Card>
