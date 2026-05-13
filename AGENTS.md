@@ -59,50 +59,34 @@ Paginated endpoints return `PaginatedResponse<T>` with a `pagination` object.
 
 ## Design system
 
-The site uses a Notion-inspired design system defined in `DESIGN.md` at the repo root. All palette tokens are declared in `app/globals.css` `@theme` and available as Tailwind utilities. Page background is white (`bg-canvas`). Marketing sections are wrapped in borderless `rounded-2xl` pastel cards that alternate tints.
+The site uses the HP-inspired design system defined in `DESIGN.md` at the repo root. All palette tokens are declared in `app/globals.css` `@theme` and available as Tailwind utilities. Preserve existing utility names where possible, but their values now map to HP's white-paper palette.
 
 ### Palette (key tokens)
 | Utility | Hex | Role |
 |---|---|---|
-| `bg-primary-brand` / `text-primary-brand` | `#17171c` | Near-black — primary CTAs, dark text |
-| `text-ink` | `#1a1a1a` | Headlines |
-| `text-charcoal` | `#37352f` | Body copy |
-| `text-slate` | `#5d5b54` | Secondary body |
-| `text-steel` | `#787671` | Tertiary / eyebrows |
-| `text-stone` | `#a4a097` | Muted labels / metadata |
-| `border-hairline` | `#e5e3df` | Default card/divider border |
-| `border-hairline-strong` | `#c8c4be` | Input borders |
-| `bg-surface` | `#f6f5f4` | Quiet neutral surface |
-| `bg-canvas` | `#ffffff` | Page bg + white cards |
-| `bg-tint-sky` | `#dcecfa` | Anchor pastel (hero, career pages) |
-| `bg-tint-mint` | `#d9f3e1` | Anchor pastel (features, articles) |
-| `bg-tint-peach` | `#ffe8d4` | Anchor pastel (CTA sections) |
-| `bg-tint-cream` | `#f8f5e8` | Hero default, legal pages |
-| `bg-tint-lavender` | `#e6e0f5` | Supporting pastel (used sparingly) |
-| `text-link-blue` | `#0075de` | Inline links |
-
-### Per-panel accent tokens (forward-looking, not yet applied to panels)
-- **Admin** — `bg-accent-admin` (`#d9f3e1` mint)
-- **Employee** — `bg-accent-employee` (`#dcecfa` sky)
-- **Customer** — `bg-accent-customer` (`#ffe8d4` peach)
+| `bg-primary-brand` / `text-primary-brand` | `#296ef9` | HP Bright Blue — primary CTAs and active accents |
+| `text-ink` | `#1a1a1a` | Primary headlines and body text |
+| `text-charcoal` | `#3d3d3d` | Body emphasis |
+| `text-slate` / `text-graphite` | `#636363` | Secondary text and metadata |
+| `border-hairline` | `#e8e8e8` | Default card/divider border |
+| `border-hairline-strong` | `#c2c2c2` | Strong borders and inputs |
+| `bg-surface` / `bg-cloud` | `#f7f7f7` | Light section and form surfaces |
+| `bg-canvas` / `bg-paper` | `#ffffff` | Page and card surfaces |
+| `bg-tint-sky` | `#c9e0fc` | Soft HP blue surface |
+| `bg-tint-peach` / `bg-bloom-rose` | `#f9d4d2` | Sale/support accent surface |
+| `bg-bloom-coral` | `#ff5050` | Sale/emphasis accent, used sparingly |
+| `bg-storm-deep` | `#356373` | Supporting status/illustration accent |
 
 ### Typography
-- **All text** — Inter only (`font-sans`, `font-display`, `font-mono` are all aliased to Inter)
-- Space Grotesk and JetBrains Mono have been removed
-- Headline pattern: `font-display font-semibold tracking-tight` — large sections text-4xl–text-6xl, section headings text-3xl–text-4xl
-- Eyebrow pattern: `text-xs font-medium uppercase tracking-[0.28px] text-steel`
+- HP's source font is Forma DJR Micro. The project uses Inter as the available fallback while keeping `font-sans`, `font-display`, and `font-mono` aliased consistently.
+- Headline weight should stay lighter and geometric: prefer `font-display font-medium` for new HP-aligned display work.
+- Button labels should be compact uppercase with modest positive tracking.
 
-### Section card conventions (marketing pages)
-- Each major section is a `rounded-2xl` borderless pastel card: `bg-tint-* rounded-2xl px-8 py-16 md:py-20`
-- Page container: `mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-4`
-- Inner cards (features, job cards, article cards): `rounded-xl border border-hairline bg-canvas` — flat, NO `shadow-*`
-- Alternating rhythm: hero pastel → white → pastel → white → CTA pastel
-
-### Button conventions
-- **Primary CTA** — `rounded-md bg-primary-brand text-white h-10` (default Button variant, NOT rounded-full)
-- **Pill-outline** — `variant="pill-outline"` for taxonomy chips / filter buttons
-- **Outline** — `rounded-md border-hairline-strong`
-- Do NOT use `shadow-*` on cards. Do NOT use `asChild` prop (button is not Radix UI).
+### Layout and components
+- Keep body surfaces mostly white with light `bg-surface`/`bg-fog` section bands.
+- Use HP Electric Blue sparingly: primary CTA, link, active state, or hero-level brand accent.
+- Buttons stay sharp (`rounded-md`); cards and photo/content frames can remain softer (`rounded-xl`/`rounded-2xl`) in existing layouts.
+- Do NOT use `asChild` prop because the Button component is not Radix UI.
 
 ### Note
 

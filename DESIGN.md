@@ -1,157 +1,145 @@
 ---
 version: alpha
-name: Notion
-description: Notion presents itself as the all-in-one workspace through a confident, illustration-rich brand voice — anchored by a deep navy hero band ({colors.brand-navy}) decorated with brand-colored sticky-note dots and mesh wire illustrations, a signature purple pill primary CTA ({colors.primary}), and a rich palette of pastel-tinted feature cards that echo the colorful database properties of the live product. The system uses a Notion-Sans (Inter-based) typeface across every UI surface, anchors a 4-tier pricing comparison (Free / Plus / Business / Enterprise), and presents the live workspace UI mockup directly inside the hero band. Coverage spans homepage, Enterprise, Product AI, Product Agents, Startups, and Pricing surfaces.
+name: HP-design-analysis
+description: An inspired interpretation of HP's design language — a white-paper enterprise-consumer system anchored by HP Bright Blue (`#296ef9`) as the lone signal CTA, near-black ink (`#1a1a1a`) for headlines, geometric Forma-DJR sans throughout, and angular blue-chevron decorations that nod to the HP wordmark's slashes. Cards round at 8–16px, photos sit in soft 16px frames, and dark navy slabs anchor the customer-story and "how can we help" closing bands.
 
 colors:
-  primary: "#5645d4"
-  primary-pressed: "#4534b3"
-  primary-deep: "#3a2a99"
+  primary: "#296ef9"
+  primary-bright: "#296ef9"
+  primary-deep: "#0e3191"
+  primary-soft: "#c9e0fc"
   on-primary: "#ffffff"
-  brand-navy: "#0a1530"
-  brand-navy-deep: "#070f24"
-  brand-navy-mid: "#1a2a52"
-  link-blue: "#0075de"
-  link-blue-pressed: "#005bab"
-  brand-orange: "#dd5b00"
-  brand-orange-deep: "#793400"
-  brand-pink: "#ff64c8"
-  brand-pink-deep: "#a02e6d"
-  brand-purple: "#7b3ff2"
-  brand-purple-300: "#d6b6f6"
-  brand-purple-800: "#391c57"
-  brand-teal: "#2a9d99"
-  brand-green: "#1aae39"
-  brand-yellow: "#f5d75e"
-  brand-brown: "#523410"
-  card-tint-peach: "#ffe8d4"
-  card-tint-rose: "#fde0ec"
-  card-tint-mint: "#d9f3e1"
-  card-tint-lavender: "#e6e0f5"
-  card-tint-sky: "#dcecfa"
-  card-tint-yellow: "#fef7d6"
-  card-tint-yellow-bold: "#f9e79f"
-  card-tint-cream: "#f8f5e8"
-  card-tint-gray: "#f0eeec"
-  canvas: "#ffffff"
-  surface: "#f6f5f4"
-  surface-soft: "#fafaf9"
-  hairline: "#e5e3df"
-  hairline-soft: "#ede9e4"
-  hairline-strong: "#c8c4be"
-  ink-deep: "#000000"
   ink: "#1a1a1a"
-  charcoal: "#37352f"
-  slate: "#5d5b54"
-  steel: "#787671"
-  stone: "#a4a097"
-  muted: "#bbb8b1"
-  on-dark: "#ffffff"
-  on-dark-muted: "#a4a097"
-  semantic-success: "#1aae39"
-  semantic-warning: "#dd5b00"
-  semantic-error: "#e03131"
+  ink-deep: "#000000"
+  ink-soft: "#292929"
+  on-ink: "#ffffff"
+  canvas: "#ffffff"
+  paper: "#ffffff"
+  cloud: "#f7f7f7"
+  fog: "#e8e8e8"
+  steel: "#c2c2c2"
+  graphite: "#636363"
+  charcoal: "#3d3d3d"
+  hairline: "#e8e8e8"
+  hairline-strong: "#c2c2c2"
+  link: "#024ad8"
+  link-pressed: "#0e3191"
+  bloom-coral: "#ff5050"
+  bloom-rose: "#f9d4d2"
+  bloom-deep: "#b3262b"
+  bloom-wine: "#5a1313"
+  storm-mist: "#8ebdce"
+  storm-sea: "#7fadbe"
+  storm-deep: "#356373"
+  error: "#b3262b"
 
 typography:
-  hero-display:
-    fontFamily: Notion Sans
-    fontSize: 80px
-    fontWeight: 600
-    lineHeight: 1.05
-    letterSpacing: -2px
-  display-lg:
-    fontFamily: Notion Sans
+  display-xxl:
+    fontFamily: Forma DJR Micro
+    fontSize: 72px
+    fontWeight: 500
+    lineHeight: 1.0
+    letterSpacing: 0
+  display-xl:
+    fontFamily: Forma DJR Micro
     fontSize: 56px
-    fontWeight: 600
-    lineHeight: 1.10
-    letterSpacing: -1px
-  heading-1:
-    fontFamily: Notion Sans
-    fontSize: 48px
-    fontWeight: 600
-    lineHeight: 1.15
-    letterSpacing: -0.5px
-  heading-2:
-    fontFamily: Notion Sans
-    fontSize: 36px
-    fontWeight: 600
-    lineHeight: 1.20
-    letterSpacing: -0.5px
-  heading-3:
-    fontFamily: Notion Sans
-    fontSize: 28px
-    fontWeight: 600
-    lineHeight: 1.25
-  heading-4:
-    fontFamily: Notion Sans
-    fontSize: 22px
-    fontWeight: 600
-    lineHeight: 1.30
-  heading-5:
-    fontFamily: Notion Sans
-    fontSize: 18px
-    fontWeight: 600
-    lineHeight: 1.40
-  subtitle:
-    fontFamily: Notion Sans
+    fontWeight: 500
+    lineHeight: 1.0
+    letterSpacing: 0
+  display-lg:
+    fontFamily: Forma DJR Micro
+    fontSize: 44px
+    fontWeight: 500
+    lineHeight: 1.0
+    letterSpacing: 0
+  display-md:
+    fontFamily: Forma DJR Micro
+    fontSize: 32px
+    fontWeight: 500
+    lineHeight: 1.0
+    letterSpacing: 0
+  display-sm:
+    fontFamily: Forma DJR Micro
+    fontSize: 24px
+    fontWeight: 500
+    lineHeight: 1.17
+    letterSpacing: 0
+  display-xs:
+    fontFamily: Forma DJR Micro
+    fontSize: 20px
+    fontWeight: 500
+    lineHeight: 1.0
+    letterSpacing: 0
+  body-lg:
+    fontFamily: Forma DJR Micro
     fontSize: 18px
     fontWeight: 400
-    lineHeight: 1.50
+    lineHeight: 1.33
+    letterSpacing: 0
   body-md:
-    fontFamily: Notion Sans
+    fontFamily: Forma DJR Micro
     fontSize: 16px
     fontWeight: 400
-    lineHeight: 1.55
-  body-md-medium:
-    fontFamily: Notion Sans
+    lineHeight: 1.38
+    letterSpacing: 0
+  body-emphasis:
+    fontFamily: Forma DJR Micro
     fontSize: 16px
     fontWeight: 500
-    lineHeight: 1.55
-  body-sm:
-    fontFamily: Notion Sans
+    lineHeight: 1.38
+    letterSpacing: 0
+  caption-md:
+    fontFamily: Forma DJR Micro
     fontSize: 14px
     fontWeight: 400
-    lineHeight: 1.50
-  body-sm-medium:
-    fontFamily: Notion Sans
-    fontSize: 14px
-    fontWeight: 500
-    lineHeight: 1.50
-  caption:
-    fontFamily: Notion Sans
-    fontSize: 13px
-    fontWeight: 400
-    lineHeight: 1.40
-  caption-bold:
-    fontFamily: Notion Sans
-    fontSize: 13px
-    fontWeight: 600
-    lineHeight: 1.40
-  micro:
-    fontFamily: Notion Sans
+    lineHeight: 1.5
+    letterSpacing: 0
+  caption-sm:
+    fontFamily: Forma DJR Micro
     fontSize: 12px
-    fontWeight: 500
-    lineHeight: 1.40
-  micro-uppercase:
-    fontFamily: Notion Sans
-    fontSize: 11px
-    fontWeight: 600
-    lineHeight: 1.40
-    letterSpacing: 1px
-  button-md:
-    fontFamily: Notion Sans
+    fontWeight: 400
+    lineHeight: 1.33
+    letterSpacing: 0
+  caption-bold:
+    fontFamily: Forma DJR Micro
     fontSize: 14px
+    fontWeight: 700
+    lineHeight: 1.3
+    letterSpacing: 0
+  link-md:
+    fontFamily: Forma DJR Micro
+    fontSize: 16px
     fontWeight: 500
-    lineHeight: 1.30
+    lineHeight: 1.38
+    letterSpacing: 0
+  button-md:
+    fontFamily: Forma DJR Micro
+    fontSize: 14px
+    fontWeight: 600
+    lineHeight: 1.4
+    letterSpacing: 0.7px
+    textTransform: uppercase
+  button-sm:
+    fontFamily: Forma DJR Micro
+    fontSize: 12.6px
+    fontWeight: 700
+    lineHeight: 1.0
+    letterSpacing: 0.126px
+  price-md:
+    fontFamily: Forma DJR Micro
+    fontSize: 24px
+    fontWeight: 500
+    lineHeight: 1.17
+    letterSpacing: 0
 
 rounded:
-  xs: 4px
-  sm: 6px
-  md: 8px
-  lg: 12px
+  none: 0px
+  xs: 2px
+  sm: 3px
+  md: 4px
+  lg: 8px
   xl: 16px
-  xxl: 20px
-  xxxl: 24px
+  pill: 9999px
   full: 9999px
 
 spacing:
@@ -162,11 +150,7 @@ spacing:
   lg: 20px
   xl: 24px
   xxl: 32px
-  xxxl: 40px
-  section-sm: 48px
-  section: 64px
-  section-lg: 96px
-  hero: 120px
+  section: 80px
 
 components:
   button-primary:
@@ -174,415 +158,303 @@ components:
     textColor: "{colors.on-primary}"
     typography: "{typography.button-md}"
     rounded: "{rounded.md}"
-    padding: "10px 18px"
+    padding: 12px 24px
+    height: 44px
   button-primary-pressed:
-    backgroundColor: "{colors.primary-pressed}"
+    backgroundColor: "{colors.primary-deep}"
     textColor: "{colors.on-primary}"
   button-primary-disabled:
-    backgroundColor: "{colors.hairline}"
-    textColor: "{colors.muted}"
-  button-dark:
-    backgroundColor: "{colors.ink-deep}"
-    textColor: "{colors.on-dark}"
+    backgroundColor: "{colors.steel}"
+    textColor: "{colors.on-primary}"
+  button-ink:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.on-primary}"
     typography: "{typography.button-md}"
     rounded: "{rounded.md}"
-    padding: "10px 18px"
-  button-secondary:
-    backgroundColor: "transparent"
+    padding: 12px 24px
+    height: 44px
+  button-outline:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.primary}"
+    typography: "{typography.button-md}"
+    rounded: "{rounded.md}"
+    padding: 12px 24px
+    height: 44px
+  button-outline-ink:
+    backgroundColor: "{colors.canvas}"
     textColor: "{colors.ink}"
     typography: "{typography.button-md}"
     rounded: "{rounded.md}"
-    padding: "10px 18px"
-    border: "1px solid {colors.hairline-strong}"
-  button-on-dark:
-    backgroundColor: "{colors.on-dark}"
+    padding: 12px 24px
+    height: 44px
+  button-text-link:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.primary}"
+    typography: "{typography.link-md}"
+    padding: 4px 0
+  badge-pill-ink:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.lg}"
+    padding: 6px 12px
+  badge-pill-outline:
+    backgroundColor: "{colors.canvas}"
     textColor: "{colors.ink}"
-    typography: "{typography.button-md}"
-    rounded: "{rounded.md}"
-    padding: "10px 18px"
-  button-secondary-on-dark:
-    backgroundColor: "transparent"
-    textColor: "{colors.on-dark}"
-    typography: "{typography.button-md}"
-    rounded: "{rounded.md}"
-    padding: "10px 18px"
-    border: "1px solid {colors.on-dark-muted}"
-  button-ghost:
-    backgroundColor: "transparent"
-    textColor: "{colors.ink}"
-    typography: "{typography.button-md}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.lg}"
+    padding: 6px 12px
+  badge-sale-coral:
+    backgroundColor: "{colors.bloom-coral}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.caption-bold}"
     rounded: "{rounded.sm}"
-    padding: "8px 12px"
-  button-link:
-    backgroundColor: "transparent"
-    textColor: "{colors.link-blue}"
-    typography: "{typography.body-sm-medium}"
-    padding: "0"
-  card-base:
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
-    border: "1px solid {colors.hairline}"
-  card-feature:
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xxl}"
-    border: "1px solid {colors.hairline}"
-  card-feature-yellow-bold:
-    backgroundColor: "{colors.card-tint-yellow-bold}"
-    textColor: "{colors.charcoal}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xxl}"
-  card-feature-peach:
-    backgroundColor: "{colors.card-tint-peach}"
-    textColor: "{colors.charcoal}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xxl}"
-  card-feature-rose:
-    backgroundColor: "{colors.card-tint-rose}"
-    textColor: "{colors.charcoal}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xxl}"
-  card-feature-mint:
-    backgroundColor: "{colors.card-tint-mint}"
-    textColor: "{colors.charcoal}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xxl}"
-  card-feature-sky:
-    backgroundColor: "{colors.card-tint-sky}"
-    textColor: "{colors.charcoal}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xxl}"
-  card-feature-lavender:
-    backgroundColor: "{colors.card-tint-lavender}"
-    textColor: "{colors.charcoal}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xxl}"
-  card-feature-yellow:
-    backgroundColor: "{colors.card-tint-yellow}"
-    textColor: "{colors.charcoal}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xxl}"
-  card-feature-cream:
-    backgroundColor: "{colors.card-tint-cream}"
-    textColor: "{colors.charcoal}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xxl}"
-  card-agent-tile:
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
-    border: "1px solid {colors.hairline}"
-  card-template:
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.lg}"
-    border: "1px solid {colors.hairline}"
-  card-startup-perk:
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
-    border: "1px solid {colors.hairline}"
-  pricing-card:
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xxl}"
-    border: "1px solid {colors.hairline}"
-  pricing-card-featured:
-    backgroundColor: "{colors.surface}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xxl}"
-    border: "2px solid {colors.primary}"
+    padding: 4px 8px
   text-input:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.ink}"
     typography: "{typography.body-md}"
     rounded: "{rounded.md}"
-    padding: "{spacing.sm} {spacing.md}"
-    border: "1px solid {colors.hairline-strong}"
+    padding: 12px 16px
     height: 44px
   text-input-focused:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.ink}"
-    border: "2px solid {colors.primary}"
-  search-pill:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.steel}"
+  text-input-search:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
     typography: "{typography.body-md}"
     rounded: "{rounded.md}"
-    padding: "{spacing.sm} {spacing.md}"
-    height: 44px
-    border: "1px solid {colors.hairline}"
-  pill-tab:
-    backgroundColor: "transparent"
-    textColor: "{colors.steel}"
-    typography: "{typography.body-sm-medium}"
-    rounded: "{rounded.full}"
-    padding: "{spacing.xs} {spacing.md}"
-    border: "1px solid {colors.hairline}"
-  pill-tab-active:
-    backgroundColor: "{colors.ink-deep}"
-    textColor: "{colors.on-dark}"
-    rounded: "{rounded.full}"
-    border: "1px solid {colors.ink-deep}"
-  segmented-tab:
-    backgroundColor: "transparent"
-    textColor: "{colors.steel}"
-    typography: "{typography.body-sm-medium}"
-    padding: "{spacing.sm} {spacing.md}"
-    border: "0 0 2px transparent solid"
-  segmented-tab-active:
-    backgroundColor: "transparent"
+    padding: 12px 16px
+    height: 40px
+  card-product:
+    backgroundColor: "{colors.canvas}"
     textColor: "{colors.ink}"
-    typography: "{typography.body-sm-medium}"
-    border: "0 0 2px {colors.ink} solid"
-  badge-purple:
+    rounded: "{rounded.xl}"
+    padding: 24px
+  card-product-feature:
+    backgroundColor: "{colors.cloud}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.xl}"
+    padding: 32px
+  card-pricing-tier:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.xl}"
+    padding: 24px
+  card-pricing-tier-featured:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.xl}"
+    padding: 24px
+  card-customer-story:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.xl}"
+    padding: 16px
+  card-article-tile:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.xl}"
+    padding: 16px
+  card-category-icon:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-emphasis}"
+    rounded: "{rounded.lg}"
+    padding: 16px
+  promo-strip-dark:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.xl}"
+    padding: 48px
+  hero-promo-card:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.xl}"
+    padding: 32px
+  utility-strip:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.caption-md}"
+    height: 36px
+    padding: 0 24px
+  nav-bar-top:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-md}"
+    height: 64px
+    padding: 0 32px
+  nav-link:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-md}"
+    padding: 8px 16px
+  category-tab:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-emphasis}"
+    rounded: "{rounded.pill}"
+    padding: 8px 20px
+  category-tab-active:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.on-primary}"
+    rounded: "{rounded.pill}"
+  faq-row:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-emphasis}"
+    rounded: "{rounded.lg}"
+    padding: 20px 24px
+  chevron-decoration:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.on-primary}"
-    typography: "{typography.caption-bold}"
-    rounded: "{rounded.full}"
-    padding: "4px 10px"
-  badge-pink:
-    backgroundColor: "{colors.brand-pink}"
+    rounded: "{rounded.none}"
+  help-band-dark:
+    backgroundColor: "{colors.ink}"
     textColor: "{colors.on-primary}"
-    typography: "{typography.caption-bold}"
-    rounded: "{rounded.full}"
-    padding: "4px 10px"
-  badge-orange:
-    backgroundColor: "{colors.brand-orange}"
+    typography: "{typography.body-md}"
+    padding: 64px 32px
+  footer-dark:
+    backgroundColor: "{colors.ink}"
     textColor: "{colors.on-primary}"
-    typography: "{typography.caption-bold}"
-    rounded: "{rounded.full}"
-    padding: "4px 10px"
-  badge-tag-purple:
-    backgroundColor: "{colors.card-tint-lavender}"
-    textColor: "{colors.brand-purple-800}"
-    typography: "{typography.caption-bold}"
-    rounded: "{rounded.sm}"
-    padding: "2px 8px"
-  badge-tag-orange:
-    backgroundColor: "{colors.card-tint-peach}"
-    textColor: "{colors.brand-orange-deep}"
-    typography: "{typography.caption-bold}"
-    rounded: "{rounded.sm}"
-    padding: "2px 8px"
-  badge-tag-green:
-    backgroundColor: "{colors.card-tint-mint}"
-    textColor: "{colors.brand-green}"
-    typography: "{typography.caption-bold}"
-    rounded: "{rounded.sm}"
-    padding: "2px 8px"
-  badge-popular:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.on-primary}"
-    typography: "{typography.caption-bold}"
-    rounded: "{rounded.full}"
-    padding: "4px 10px"
-  promo-banner:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body-sm-medium}"
-    padding: "{spacing.sm} {spacing.md}"
-  hero-band-dark:
-    backgroundColor: "{colors.brand-navy}"
-    textColor: "{colors.on-dark}"
-    rounded: "0"
-    padding: "{spacing.hero}"
-  workspace-mockup-card:
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.lg}"
-    padding: "0"
-    border: "1px solid {colors.hairline}"
-    shadow: "rgba(15, 15, 15, 0.2) 0px 24px 48px -8px"
-  cta-banner-light:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.section}"
-  comparison-table:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body-sm}"
-    rounded: "{rounded.md}"
-    border: "1px solid {colors.hairline}"
-  comparison-row:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    padding: "{spacing.md} {spacing.lg}"
-    border: "0 0 1px {colors.hairline-soft} solid"
-  testimonial-card:
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xxl}"
-    border: "1px solid {colors.hairline}"
-  logo-wall-item:
-    backgroundColor: "transparent"
-    textColor: "{colors.steel}"
-    typography: "{typography.body-md-medium}"
-    padding: "{spacing.lg}"
-  faq-accordion-item:
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.xl}"
-    border: "0 0 1px {colors.hairline} solid"
-  stat-row:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.section-sm}"
-  footer-region:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.charcoal}"
-    typography: "{typography.body-sm}"
-    padding: "{spacing.section} {spacing.xxl}"
-    border: "1px solid {colors.hairline}"
-  footer-link:
-    backgroundColor: "transparent"
-    textColor: "{colors.steel}"
-    typography: "{typography.body-sm}"
-    padding: "{spacing.xxs} 0"
+    typography: "{typography.body-md}"
+    padding: 64px 32px
 ---
 
 ## Overview
 
-Notion presents itself as the all-in-one workspace through a confident, illustration-rich brand voice. The homepage opens with **"Meet the night shift."** rendered centered over a deep navy hero band ({colors.brand-navy}), decorated with brand-colored sticky-note dots and mesh wire illustrations scattered around the headline. The signature **purple pill primary CTA** ({colors.primary}) "Get Notion free" sits at the visual center, paired with an outlined "Request a demo" secondary. Below the buttons, a real Notion workspace UI mockup card (the "Ramp HQ" kanban board) breaks out of the hero band with a deep diffuse drop shadow.
+HP reads like a long-running consumer-electronics catalog crossed with an enterprise-software product page. The whole system sits on **pure white** (`{colors.canvas}` — `#ffffff`) with thin gray panels (`{colors.cloud}` / `{colors.fog}`) for alternating section bands. There is one chromatic action color — **HP Bright Blue** (`{colors.primary}` — `#296ef9`) — and one ink color (`{colors.ink}` — `#1a1a1a`); together they do ninety percent of the work. Type is a single family across every surface: **Forma DJR Micro**, HP's bespoke geometric grotesque, set at weight 500 for headlines and 400 for body — clean, neutral, slightly mechanical.
 
-Below the hero, the page cycles through a distinctive sequence of feature sections: a dense sticky-note "Keep work moving 24/7" panel with red/blue/green/purple/teal status icons; a **bold yellow** ({colors.card-tint-yellow-bold}) "Ask your on-demand assistants" banner card flanked by orange/rose/mint pastel feature tiles showing assistant UI mockups; and a "Bring all your work together" 3-column grid with brand-colored mockups (sky-blue tutorial card, light Notion calendar, brown/rust testimonial slate). The pricing page renders 4 tiers (Free / Plus / Business / Enterprise) horizontally with one tier featured (purple-bordered) and a dense feature comparison table running below.
+The signature gesture is **angular blue chevrons** — sharp 0-radius slashes derived from the HP wordmark's pair of parallel slashes — that anchor the homepage hero, the laptop-page hero, and the printer pricing page. They appear on the left and right edges of the primary banner card, layered behind product photography. Outside those decorative slashes, every other surface is rectilinear with **soft 8–16px corners** on cards and a 4px corner on buttons.
 
-The system uses a Notion-Sans typeface (Inter-based) across every UI surface — humanist-geometric character that pairs naturally with the colorful illustrations. Buttons are `{rounded.md}` (8px) rectangles, NOT pills — distinguishing Notion's sober rectangular geometry from competitors that use pills universally. Cards use `{rounded.lg}` (12px) consistently.
+The system breaks into three voice modes: a **white commercial body** for product browsing (cards, category icons, pricing tiers); a **dark navy slab** (`{colors.ink}` near-black) for testimonial bands, the closing "How can we help?" footer-prelude, and the page footer; and a **light fog band** (`{colors.cloud}` / `{colors.fog}`) for utility sections like comparison strips and FAQ accordions. The blue accent appears only on filled CTAs, link text, the chevron decorations, and the active price-stamp on a featured tier — never as a section background.
 
 **Key Characteristics:**
-- Deep navy hero band ({colors.brand-navy}) with scattered sticky-note dots + mesh wire decorative illustrations
-- **Signature purple pill** ({colors.primary}) primary CTA — Notion's recognizable "Get Notion free" button color
-- Real Notion workspace UI mockup card embedded in the hero with deep drop shadow
-- Bold yellow feature banner ({colors.card-tint-yellow-bold}) for high-emphasis content sections
-- Pastel feature card palette (peach, rose, mint, lavender, sky, yellow) echoing the live product database properties
-- Notion-Sans (Inter-based) across every UI surface
-- 8px-rounded buttons (NOT pills), 12px-rounded cards — sober editorial geometry
-- 4-tier pricing comparison with dense feature table
-- Centered hero layout (different from the left-aligned norm of most B2B SaaS)
+- Pure white canvas (`{colors.canvas}`) with deep ink (`{colors.ink}`) running every body surface; light fog bands (`{colors.cloud}`, `{colors.fog}`) alternate for section rhythm
+- HP Bright Blue (`{colors.primary}`) is the lone CTA fill and link color; it appears at most twice per viewport
+- Bespoke Forma DJR Micro across every surface — display, body, button, caption — at weights 400 / 500 / 600 / 700
+- Cards round at `{rounded.xl}` (16px) for product/pricing tiles; buttons sit at `{rounded.md}` (4px) with capitalize labels
+- Geometric blue chevrons (`{colors.primary}` rectangles cut at 45°) frame hero photography and reinforce the wordmark
+- Dark-navy slabs (`{colors.ink}`) close every page rhythm — testimonial bands, "how can we help?" prelude, and the footer
+- Section rhythm: utility-strip → top nav → white body → cloud-band → ink slab → cloud-band → ink footer
 
 ## Colors
 
-> Source pages: notion.com/ (homepage), /enterprise, /product/ai, /product/agents, /startups, /pricing. Token coverage was identical across all six pages.
+> **No Interaction sub-section.** Hover colors are silently filtered. Allowed sub-sections: Brand & Accent, Surface, Text, Semantic.
 
-### Brand & Primary
-- **Notion Purple** ({colors.primary}): Signature primary CTA color — the unmistakable "Get Notion free" pill button. Reserved for the dominant CTA only.
-- **Purple Pressed** ({colors.primary-pressed}): Pressed-state variant
-- **Purple Deep** ({colors.primary-deep}): Deeper variant for emphasis
-- **Brand Navy** ({colors.brand-navy}): Hero band background — deep navy
-- **Brand Navy Deep** ({colors.brand-navy-deep}): Deeper navy for promo banner
-- **Brand Navy Mid** ({colors.brand-navy-mid}): Mid-spectrum navy
-- **Link Blue** ({colors.link-blue}): Inline text link blue (NOT primary CTA)
-- **Link Blue Pressed** ({colors.link-blue-pressed}): Pressed-state link blue
-
-### Brand Color Spectrum (echoes live product database properties)
-- **Brand Pink** ({colors.brand-pink}): Pink accent
-- **Brand Pink Deep** ({colors.brand-pink-deep}): Deeper pink
-- **Brand Orange** ({colors.brand-orange}): Orange accent
-- **Brand Orange Deep** ({colors.brand-orange-deep}): Deeper orange-rust
-- **Brand Purple** ({colors.brand-purple}): Purple accent variant
-- **Brand Purple 300** ({colors.brand-purple-300}): Light purple
-- **Brand Purple 800** ({colors.brand-purple-800}): Deep purple for tag text
-- **Brand Teal** ({colors.brand-teal}): Teal accent
-- **Brand Green** ({colors.brand-green}): Bright green
-- **Brand Yellow** ({colors.brand-yellow}): Soft yellow
-- **Brand Brown** ({colors.brand-brown}): Brand brown for "earthy" tints
-
-### Card Tints (Pastel Feature Card Backgrounds)
-- **Tint Peach** ({colors.card-tint-peach}): Pale peach
-- **Tint Rose** ({colors.card-tint-rose}): Pale rose-pink
-- **Tint Mint** ({colors.card-tint-mint}): Pale mint-green
-- **Tint Lavender** ({colors.card-tint-lavender}): Pale lavender
-- **Tint Sky** ({colors.card-tint-sky}): Pale sky-blue
-- **Tint Yellow** ({colors.card-tint-yellow}): Pale yellow
-- **Tint Yellow Bold** ({colors.card-tint-yellow-bold}): Bold yellow for high-emphasis feature banners ("Ask your on-demand assistants")
-- **Tint Cream** ({colors.card-tint-cream}): Cream tint
-- **Tint Gray** ({colors.card-tint-gray}): Neutral surface
+### Brand & Accent
+- **HP Bright Blue** (`{colors.primary}` — `#296ef9`): the system's lone signal — primary CTA fill, link color, chevron-decoration fill, active sub-nav indicator. Reserved.
+- **Bright Blue** (`{colors.primary-bright}` — `#296ef9`): a slightly lighter variant used inside dark slabs (testimonial-card buttons, dark-band CTA links) where the deeper blue would muddy.
+- **Deep Navy** (`{colors.primary-deep}` — `#0e3191`): pressed state for the primary CTA and the visited-link color.
+- **Soft Blue** (`{colors.primary-soft}` — `#c9e0fc`): pale-blue surface used inside customer-story cards and selection chips.
 
 ### Surface
-- **Canvas White** ({colors.canvas}): Page background and primary card surface
-- **Surface** ({colors.surface}): Subtle section backgrounds, search-pill rest, featured pricing tier
-- **Surface Soft** ({colors.surface-soft}): Quieter section divisions
-- **Hairline** ({colors.hairline}): 1px borders and primary dividers
-- **Hairline Soft** ({colors.hairline-soft}): Quieter dividers
-- **Hairline Strong** ({colors.hairline-strong}): Stronger 1px border for inputs
+- **Canvas** (`{colors.canvas}` — `#ffffff`): the universal page background. White, full opacity.
+- **Paper** (`{colors.paper}` — `#ffffff`): card surfaces — same white as canvas, with hairline borders or shadows providing the lift.
+- **Cloud** (`{colors.cloud}` — `#f7f7f7`): the lightest gray section band, used for alternating-row backgrounds and product-feature card groups.
+- **Fog** (`{colors.fog}` — `#e8e8e8`): a slightly darker gray surface band, used for FAQ outer panels and the "Trending laptops" header strip.
+- **Steel** (`{colors.steel}` — `#c2c2c2`): hairline border used on outlined elements with stronger emphasis (focus states, active filter).
+- **Bloom Coral / Bloom Rose** (`{colors.bloom-coral}` / `{colors.bloom-rose}` — `#ff5050`, `#f9d4d2`): the "Get 25% off" sale-tag chip + soft pink lifestyle accent on the sale hero.
+- **Storm Mist / Sea / Deep** (`{colors.storm-mist}`, `{colors.storm-sea}`, `{colors.storm-deep}` — `#8ebdce`, `#7fadbe`, `#356373`): the teal-storm tones reserved for the printer-plan illustration backdrop and supporting infographic accents.
 
 ### Text
-- **Ink Deep** ({colors.ink-deep}): Pure black for emphasis
-- **Ink** ({colors.ink}): Primary headlines and body text
-- **Charcoal** ({colors.charcoal}): Body emphasis (Notion's signature warm-charcoal)
-- **Slate** ({colors.slate}): Secondary text
-- **Steel** ({colors.steel}): Tertiary, footer links
-- **Stone** ({colors.stone}): Muted labels
-- **Muted** ({colors.muted}): Disabled, placeholders
-- **On Dark** ({colors.on-dark}): White text on dark surfaces
-- **On Dark Muted** ({colors.on-dark-muted}): Reduced-opacity white
+- **Ink** (`{colors.ink}` — `#1a1a1a`): the universal text color on white surfaces — headlines, body, button labels, navigation.
+- **Ink Deep** (`{colors.ink-deep}` — `#000000`): pure black used for the wordmark and 1px hairline strokes around badge outlines.
+- **Ink Soft** (`{colors.ink-soft}` — `#292929`): an alternate near-black used inside dark-navy slabs as a subtle textural shift.
+- **On Ink** (`{colors.on-ink}` — `#ffffff`): pure white used for headline and body text on every dark-navy slab.
+- **Charcoal** (`{colors.charcoal}` — `#3d3d3d`): muted body color on white surfaces — secondary descriptions, fine-print disclaimers.
+- **Graphite** (`{colors.graphite}` — `#636363`): smaller-print color, used for legal lines and timestamp metadata.
 
 ### Semantic
-- **Success** ({colors.semantic-success}): Confirmation green
-- **Warning** ({colors.semantic-warning}): Mid-priority alerts (orange)
-- **Error** ({colors.semantic-error}): Validation errors (red)
+- **Bloom Deep** (`{colors.bloom-deep}` — `#b3262b`) + **Bloom Wine** (`{colors.bloom-wine}` — `#5a1313`): error and discount-emphasis colors. The deep brick reads as "sale" or "destructive" depending on placement.
+- **Storm Deep** (`{colors.storm-deep}` — `#356373`): used as a neutral status accent (e.g., printer-plan tier "Versatile" tier color).
 
 ## Typography
 
 ### Font Family
-**Notion Sans** (primary): Notion's custom Inter-based variable typeface. Fallbacks: Inter, -apple-system, system-ui, 'Segoe UI', Helvetica, sans-serif. Humanist-geometric character used across every UI surface.
+
+The voice is **single-family**: Forma DJR Micro (HP's bespoke geometric grotesque, fallback Arial) across every surface — display, body, button, caption. Forma DJR Micro is a wide, slightly rounded grotesque designed at small optical sizes to stay legible at UI-chrome scale. HP runs it at weight 400 for body, 500 for display headlines, 600/700 for emphasis and button labels.
+
+The 16/14/12-px caption tier carries the catalog metadata — model numbers, spec rows, fine print — at weight 400 with a 1.4–1.5 line-height. Button labels lift to weight 600/700 with positive 0.5–1.1px letter-spacing and uppercase transform — the only place the system tracks letters.
 
 ### Hierarchy
 
 | Token | Size | Weight | Line Height | Letter Spacing | Use |
 |---|---|---|---|---|---|
-| `{typography.hero-display}` | 80px | 600 | 1.05 | -2px | Hero ("Meet the night shift") |
-| `{typography.display-lg}` | 56px | 600 | 1.10 | -1px | Section openers |
-| `{typography.heading-1}` | 48px | 600 | 1.15 | -0.5px | Page-level headlines ("Try for free") |
-| `{typography.heading-2}` | 36px | 600 | 1.20 | -0.5px | Subsection headlines ("Keep work moving 24/7") |
-| `{typography.heading-3}` | 28px | 600 | 1.25 | 0 | Card titles |
-| `{typography.heading-4}` | 22px | 600 | 1.30 | 0 | Feature tile titles |
-| `{typography.heading-5}` | 18px | 600 | 1.40 | 0 | FAQ questions |
-| `{typography.subtitle}` | 18px | 400 | 1.50 | 0 | Hero subtitle |
-| `{typography.body-md}` | 16px | 400 | 1.55 | 0 | Primary body text |
-| `{typography.body-md-medium}` | 16px | 500 | 1.55 | 0 | Body emphasis |
-| `{typography.body-sm}` | 14px | 400 | 1.50 | 0 | Secondary body |
-| `{typography.body-sm-medium}` | 14px | 500 | 1.50 | 0 | Active sidebar, button labels |
-| `{typography.caption-bold}` | 13px | 600 | 1.40 | 0 | Badge labels |
-| `{typography.button-md}` | 14px | 500 | 1.30 | 0 | Button labels |
+| `{typography.display-xxl}` | 72px | 500 | 1.0 | 0 | Hero headline (homepage, laptop hub) |
+| `{typography.display-xl}` | 56px | 500 | 1.0 | 0 | Section headlines on landing pages |
+| `{typography.display-lg}` | 44px | 500 | 1.0 | 0 | Sub-section headlines on shop pages |
+| `{typography.display-md}` | 32px | 500 | 1.0 | 0 | Promo strip headlines, FAQ section headers |
+| `{typography.display-sm}` | 24px | 500 | 1.17 | 0 | Card titles, pricing-tier names |
+| `{typography.display-xs}` | 20px | 500 | 1.0 | 0 | Inline list headers, accordion labels |
+| `{typography.body-lg}` | 18px | 400 | 1.33 | 0 | Lead paragraphs |
+| `{typography.body-md}` | 16px | 400 | 1.38 | 0 | Default body |
+| `{typography.body-emphasis}` | 16px | 500 | 1.38 | 0 | Bolded run-in copy |
+| `{typography.caption-md}` | 14px | 400 | 1.5 | 0 | Specs, metadata, captions |
+| `{typography.caption-bold}` | 14px | 700 | 1.3 | 0 | Sale tags, in-card highlights |
+| `{typography.caption-sm}` | 12px | 400 | 1.33 | 0 | Footnotes, legal lines |
+| `{typography.link-md}` | 16px | 500 | 1.38 | 0 | Inline link emphasis |
+| `{typography.button-md}` | 14px | 600 | 1.4 | 0.7px | Primary/secondary button labels (uppercase) |
+| `{typography.button-sm}` | 12.6px | 700 | 1.0 | 0.126px | Compact button labels in tight cells |
+| `{typography.price-md}` | 24px | 500 | 1.17 | 0 | Tier and product price stamps |
 
 ### Principles
-- Tight hero leading (1.05) on 80px display
-- Negative letter-spacing on display sizes (-2px to -0.5px)
-- Generous body leading (1.55) for documentation readability
-- 600 weight for headlines + 500 for buttons; 400 body
+
+The typographic decision worth flagging: HP runs **weight 500 for every display size**, including the largest 72px hero headline. Most editorial systems jump to 600/700 at hero scale; HP doesn't. The result feels open and approachable rather than commanding — appropriate for a brand that sells across consumer, SMB, and enterprise audiences in the same catalog.
+
+Forma DJR Micro's rounded-grotesque shapes do most of the warmth. There's no italic in the system except inside legal disclaimers; emphasis is carried by weight (500 → body-emphasis, 700 → caption-bold) instead.
+
+### Note on Font Substitutes
+
+Forma DJR Micro is proprietary (Commercial Type / Mark Caneso). Closest open-source substitutes:
+- **Inter** at weights 400 / 500 / 600 / 700 — slightly narrower than Forma DJR Micro; bump font-size by ~3% to compensate
+- **Manrope** at weights 400 / 500 / 600 / 700 — closer in proportion, gentler curves; use directly with no metric adjustment
+- **Roboto** at weights 400 / 500 / 700 — flatter character; use as last-resort fallback
+
+When swapping, set body line-height to 1.4 and display line-height to 1.0 explicitly — the Forma DJR Micro line-height numbers are tight, and most substitutes default looser.
 
 ## Layout
 
 ### Spacing System
-- **Base unit**: 4px (8px primary increment)
-- **Tokens**: `{spacing.xxs}` (4px) through `{spacing.hero}` (120px)
-- **Section rhythm**: Marketing pages use `{spacing.section-lg}` (96px); pricing tightens to `{spacing.section}` (64px)
+
+- **Base unit**: 8px. Smaller half-step at 4px. The scale is gentle — most card padding lands at 16px or 24px; section gap at 80px.
+- **Tokens (front matter)**: `{spacing.xxs}` 4px · `{spacing.xs}` 8px · `{spacing.sm}` 12px · `{spacing.md}` 16px · `{spacing.lg}` 20px · `{spacing.xl}` 24px · `{spacing.xxl}` 32px · `{spacing.section}` 80px
+- **Section padding**: `{spacing.section}` (80px) vertical between major bands on desktop; collapses to ~48px on mobile.
+- **Card internal padding**: `{spacing.xl}` (24px) for product cards; `{spacing.xxl}` (32px) for promo strips and feature cards; `{spacing.md}` (16px) for compact article tiles.
+- **Gutter**: `{spacing.xl}` (24px) between grid columns at desktop; `{spacing.md}` (16px) on tablet/mobile.
+
+The 80px section gap is the universal rhythm constant — it appears between every major homepage band, between the hero and the comparison table on the printer-plan page, and between feature rows on the laptop-shop page.
 
 ### Grid & Container
-- 1280px max-width with 32px gutters
-- Pricing: 4-tier card row at desktop with dense comparison table
-- Homepage: centered hero with workspace mockup below buttons; alternating colorful feature card sections
+
+- **Desktop max-width**: 1366px content container with full-bleed-on-canvas section backgrounds.
+- **Hero**: a single full-width photo card (homepage and laptop-hub hero) with the headline overlay positioned upper-left or upper-right.
+- **Product family grid**: 4 columns at >1200px, 3 at 1024–1199px, 2 at 768–1023px, 1 below 768px.
+- **Pricing tiers**: 4 columns at >1024px, 2x2 grid at 768–1023px, single-column accordion below 768px.
+- **Footer**: 5-column link grid at >1024px, collapsing to 2-column then accordion on mobile.
 
 ### Whitespace Philosophy
-Marketing surfaces use generous breathing room between feature card bands. Workspace mockup card on hero gets full-width treatment with deep drop shadow.
+
+Whitespace is **commercial-clean** — generous around hero photography, tight around catalog spec rows. Product cards leave breathing room above and below the photo (≥32px) so the laptop or printer reads as a hero shot rather than a thumbnail. The fine-print disclaimer regions (legal, footnote rows) tighten line-height to 1.3 and shrink type to 11–12px so the bulk of fine print stays compact.
 
 ## Elevation & Depth
 
 | Level | Treatment | Use |
 |---|---|---|
-| 0 (flat) | No shadow; `{colors.hairline}` border | Default cards, table rows |
-| 1 (subtle) | `rgba(15, 15, 15, 0.04) 0px 1px 2px 0px` | Hover-elevated tiles |
-| 2 (card) | `rgba(15, 15, 15, 0.08) 0px 4px 12px 0px` | Feature cards |
-| 3 (mockup) | `rgba(15, 15, 15, 0.20) 0px 24px 48px -8px` | Hero workspace mockup card |
-| 4 (modal) | `rgba(15, 15, 15, 0.16) 0px 16px 48px -8px` | Modals, dropdowns |
+| 0 — Flat | No border, no shadow. | Section bands (white, cloud, fog), full-bleed photo heroes |
+| 1 — Hairline | 1px solid `{colors.hairline}` (`#e8e8e8`) border, no shadow. | Outlined buttons, comparison-table cells, FAQ accordion outers |
+| 2 — Soft Lift | `0 2px 8px rgba(26, 26, 26, 0.08)`. | Product cards, pricing-tier columns, customer-story tiles |
+| 3 — Floating Modal | `0 8px 24px rgba(26, 26, 26, 0.12)`. | Add-to-cart drawer, mobile-nav sheet, image zoom modal |
+
+The system is mostly flat — depth is communicated by **color contrast** (cloud-band vs. white card on the same band) rather than shadow elevation. The Soft Lift level is the workhorse for the catalog — every product tile and pricing column gets it; nothing else does. Modal-floating is rare and reserved for transient overlays.
 
 ### Decorative Depth
-- Hero workspace mockup card uses deep diffuse drop shadow (Level 3) — significant elevation against the navy band
-- Pastel feature cards carry their own visual weight via tint backgrounds
-- Sticky-note dot illustrations and mesh wires add atmospheric decoration to navy hero
+
+The system's most distinctive depth gesture is the **HP blue chevron pair** — two angular `{colors.primary}` slashes (no radius, no shadow) that sit on the left and right of the homepage hero card and the laptop-shop hero. They're not decorative noise; they're a literal echo of the HP wordmark's two parallel slashes, scaled up to architectural size. Treat them as a brand artifact, not a generic geometric flourish.
+
+Photography on the homepage and laptop-shop pages frames product imagery inside `{rounded.xl}` (16px) containers with a soft 1px hairline. Lifestyle photography (testimonials, "How HP works for X") sits full-bleed inside dark-navy slabs without rounding.
 
 ## Shapes
 
@@ -590,232 +462,209 @@ Marketing surfaces use generous breathing room between feature card bands. Works
 
 | Token | Value | Use |
 |---|---|---|
-| `{rounded.xs}` | 4px | Tag chips |
-| `{rounded.sm}` | 6px | Type badges |
-| `{rounded.md}` | 8px | Buttons, inputs, search-pill |
-| `{rounded.lg}` | 12px | Cards, pricing tiers, agent tiles, workspace mockup |
-| `{rounded.xl}` | 16px | Larger feature panels |
-| `{rounded.xxl}` | 20px | Featured product showcases |
-| `{rounded.xxxl}` | 24px | Larger feature cards |
-| `{rounded.full}` | 9999px | Status badges, pill tabs (NOT regular buttons) |
+| `{rounded.none}` | 0px | Hero chevron decorations, full-bleed photo heroes, marquee strips |
+| `{rounded.xs}` | 2px | Secondary chip backgrounds, sale-tag pills |
+| `{rounded.sm}` | 3px | Default secondary CTA radius (small touch zones) |
+| `{rounded.md}` | 4px | Primary buttons, secondary buttons, text inputs |
+| `{rounded.lg}` | 8px | Badge pills, category-icon cards, FAQ row containers |
+| `{rounded.xl}` | 16px | Product cards, pricing tiers, customer-story tiles, photo frames |
+| `{rounded.pill}` | 9999px | Category sub-nav tabs, search-pill input, filter chips |
 
-Notion's geometry is sober-editorial — `{rounded.md}` (8px) buttons distinguish it from pill-button-everywhere brands.
+The system maintains a clear two-tier philosophy: **buttons stay sharp** (4px, almost rectilinear) while **cards and photo frames stay soft** (16px). This split is the visual signature — sharp interactive elements against softer container surfaces.
+
+### Photography Geometry
+
+Hero photography sits in `{rounded.xl}` (16px) frames with no border. Product family thumbnails inside the laptop-grid are 1:1 (square) on a `{colors.canvas}` background, padded so the laptop is shown at ~70% of the frame. Customer-story photography uses 16:9 inside the same `{rounded.xl}` frame. There are no full-bleed circular avatars; testimonial avatars are 4px-rounded squares.
 
 ## Components
 
-> Per the no-hover policy, hover states are NOT documented.
+> **No hover states documented.** Every component spec below documents only Default and Active/Pressed states. Variants live as separate front-matter entries.
 
 ### Buttons
 
-**`button-primary`** — Signature purple rectangular primary CTA, the dominant action.
-- Background `{colors.primary}`, text `{colors.on-primary}`, typography `{typography.button-md}`, padding `10px 18px`, rounded `{rounded.md}`.
-- Pressed state `button-primary-pressed` deepens to `{colors.primary-pressed}`.
-- Disabled state uses `{colors.hairline}` background.
+**`button-primary`** — the lone HP Bright Blue CTA
+- Background `{colors.primary}`, text `{colors.on-primary}`, type `{typography.button-md}` (uppercase, 0.7px tracking), padding `{spacing.sm} {spacing.xl}` (12 × 24), height 44px, rounded `{rounded.md}`
+- Pressed state `button-primary-pressed` — background `{colors.primary-deep}`, same text
+- Disabled state `button-primary-disabled` — background `{colors.steel}`, white text
+- Used for: "Buy now", "Shop now", "Get a printer", primary form submit
 
-**`button-dark`** — Black rectangular CTA on light backgrounds.
-- Background `{colors.ink-deep}`, text `{colors.on-dark}`, typography `{typography.button-md}`, padding `10px 18px`, rounded `{rounded.md}`.
+**`button-ink`** — black filled CTA
+- Background `{colors.ink}`, text `{colors.on-primary}`, padding `{spacing.sm} {spacing.xl}`, height 44px, rounded `{rounded.md}`, type `{typography.button-md}`
+- Used for: "Buy now" on dark photo overlays, secondary primary actions where the blue would clash with imagery
 
-**`button-secondary`** — Outlined rectangular for secondary actions ("Request a demo").
-- Background transparent, text `{colors.ink}`, border `1px solid {colors.hairline-strong}`, typography `{typography.button-md}`, padding `10px 18px`, rounded `{rounded.md}`.
+**`button-outline`** — blue-text outlined CTA
+- Background `{colors.canvas}`, text `{colors.primary}`, 1px `{colors.primary}` border, padding `{spacing.sm} {spacing.xl}`, height 44px, rounded `{rounded.md}`
+- Used for: "Compare", "Customize", "Learn more" — secondary actions on white surfaces
 
-**`button-on-dark`** — White button on dark hero bands.
-- Background `{colors.on-dark}`, text `{colors.ink}`, typography `{typography.button-md}`, padding `10px 18px`, rounded `{rounded.md}`.
+**`button-outline-ink`** — black-text outlined CTA
+- Background `{colors.canvas}`, text `{colors.ink}`, 1px `{colors.ink}` border, padding `{spacing.sm} {spacing.xl}`, height 44px, rounded `{rounded.md}`
+- Used for: "View" buttons inside product family card grids — neutral against the blue primary
 
-**`button-secondary-on-dark`** — Outlined button on dark.
-- Background transparent, text `{colors.on-dark}`, border `1px solid {colors.on-dark-muted}`, typography `{typography.button-md}`, padding `10px 18px`, rounded `{rounded.md}`.
-
-**`button-ghost`** — Quieter ghost button.
-- Background transparent, text `{colors.ink}`, typography `{typography.button-md}`, padding `8px 12px`, rounded `{rounded.sm}`.
-
-**`button-link`** — Inline blue text link (NOT primary purple).
-- Background transparent, text `{colors.link-blue}`, typography `{typography.body-sm-medium}`, padding `0`.
+**`button-text-link`** — inline blue link with underline
+- Background `{colors.canvas}`, text `{colors.primary}`, type `{typography.link-md}`, padding `{spacing.xxs} 0`
+- Used for: "See details", "Read more" inside cards and disclaimer rows
 
 ### Cards & Containers
 
-**`card-base`** — Standard content card.
-- Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xl}`, border `1px solid {colors.hairline}`.
+**`card-product`** — the workhorse product tile
+- Background `{colors.canvas}`, rounded `{rounded.xl}` (16px), padding `{spacing.xl}` (24px), Soft Lift shadow
+- Layout: hero photo (1:1 ratio) on top, title in `{typography.display-xs}`, spec rows in `{typography.caption-md}`, price in `{typography.price-md}`, CTA pinned to bottom
+- Used for: laptop catalog cards, desktop catalog cards
 
-**`card-feature`** — Feature card with larger padding.
-- Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `1px solid {colors.hairline}`.
+**`card-product-feature`** — full-row feature card with photo + copy
+- Background `{colors.cloud}`, rounded `{rounded.xl}`, padding `{spacing.xxl}` (32px)
+- Layout: photo on the left (50% width), copy on the right with section eyebrow + title + body + CTA pair
+- Used for: "Trending laptops" feature rows, "Shop these must haves"
 
-**`card-feature-yellow-bold`** — Bold yellow feature banner for high-emphasis content ("Ask your on-demand assistants").
-- Background `{colors.card-tint-yellow-bold}`, text `{colors.charcoal}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`.
+**`card-pricing-tier`** + **`card-pricing-tier-featured`**
+- Background `{colors.canvas}`, rounded `{rounded.xl}`, padding `{spacing.xl}`, Soft Lift shadow
+- Tier name in `{typography.display-sm}`, monthly price in `{typography.display-md}` with `{typography.caption-md}` cadence, page count caption, full feature list, primary CTA
+- Featured tier carries `{colors.primary}` text accent on the price-stamp + a `{colors.primary}` thin top border instead of a colored card background — never inverted to dark
 
-**`card-feature-peach`** + **`card-feature-rose`** + **`card-feature-mint`** + **`card-feature-sky`** + **`card-feature-lavender`** + **`card-feature-yellow`** + **`card-feature-cream`** — Pastel-tinted feature cards.
-- Each variant uses its corresponding `card-tint-*` color as background, text `{colors.charcoal}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`.
+**`card-customer-story`** — the three-up testimonial tile
+- Background `{colors.canvas}`, rounded `{rounded.xl}`, padding `{spacing.md}` (16px), Soft Lift shadow
+- 16:9 photo at top in `{rounded.xl}` frame, quote excerpt in `{typography.body-md}`, attribution row at the bottom
+- Used in the "See what our customers say" homepage section
 
-**`card-agent-tile`** — Agent assistant tile.
-- Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xl}`, border `1px solid {colors.hairline}`.
+**`card-article-tile`** — the four-up "Latest from HP" tile
+- Background `{colors.canvas}`, rounded `{rounded.xl}`, padding `{spacing.md}`, Soft Lift shadow
+- 16:9 thumbnail at top, date eyebrow in `{typography.caption-sm}`, title in `{typography.body-emphasis}`, "Read more" link
 
-**`card-template`** — Template thumbnail card.
-- Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.lg}`, border `1px solid {colors.hairline}`.
+**`card-category-icon`** — the small icon-and-label card in the homepage "Our Products" row
+- Background `{colors.canvas}`, rounded `{rounded.lg}` (8px), padding `{spacing.md}`
+- 48px icon at top, label in `{typography.body-emphasis}` below
+- Used for: Laptops, Desktops, Printers, Computer Tools, Accessories, Enterprise Solutions
 
-**`card-startup-perk`** — Startup-program perk grid item.
-- Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xl}`, border `1px solid {colors.hairline}`.
+**`hero-promo-card`** — the homepage hero card with chevron decorations
+- Background `{colors.canvas}`, rounded `{rounded.xl}`, padding `{spacing.xxl}` (32px)
+- Photography occupies left half; copy block (eyebrow + headline + price stamp + CTA pair) occupies right half
+- Flanked by `chevron-decoration` blue slashes outside the card's bounding box on left and right edges
 
-**`pricing-card`** — Standard pricing tier card.
-- Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `1px solid {colors.hairline}`.
-
-**`pricing-card-featured`** — Featured pricing tier (Plus or Business — purple-bordered).
-- Background `{colors.surface}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `2px solid {colors.primary}`.
+**`promo-strip-dark`** — the inline dark navy promo block
+- Background `{colors.ink}`, text `{colors.on-ink}`, rounded `{rounded.xl}`, padding `{spacing.xxl} 48px`
+- Used for: "When did work start getting in the way of work?" mid-page promo, the SMB testimonial slab
 
 ### Inputs & Forms
 
-**`text-input`** — Standard text field.
-- Background `{colors.canvas}`, text `{colors.ink}`, border `1px solid {colors.hairline-strong}`, rounded `{rounded.md}`, padding `{spacing.sm} {spacing.md}`, height 44px.
+**`text-input`** + **`text-input-focused`**
+- Background `{colors.canvas}`, text `{colors.ink}`, rounded `{rounded.md}`, padding `{spacing.sm} {spacing.md}`, height 44px
+- 1px `{colors.steel}` border in default; gains 1px `{colors.ink}` border on focus (no halo)
 
-**`text-input-focused`** — Activated state.
-- Border switches to `2px solid {colors.primary}` (purple).
+**`text-input-search`** — pill search in the top nav
+- Background `{colors.canvas}`, rounded `{rounded.md}`, padding `{spacing.sm} {spacing.md}`, height 40px, 1px `{colors.steel}` border, magnifying-glass icon at right
 
-**`search-pill`** — Search bar.
-- Background `{colors.surface}`, text `{colors.steel}`, typography `{typography.body-md}`, rounded `{rounded.md}`, height 44px, border `1px solid {colors.hairline}`.
+**`badge-pill-ink`** — filled tag pill
+- Background `{colors.ink}`, text `{colors.on-primary}`, rounded `{rounded.lg}`, padding 6px 12px, type `{typography.body-md}`
+- Used inline next to product titles to mark "New" or featured indicators
 
-### Tabs
+**`badge-pill-outline`** — outlined tag pill
+- Background `{colors.canvas}`, text `{colors.ink}`, 1px `{colors.ink}` border, rounded `{rounded.lg}`, padding 6px 12px
 
-**`pill-tab`** + **`pill-tab-active`** — Pill-style tab nav for top-level switching.
-- Inactive: text `{colors.steel}`, border `1px solid {colors.hairline}`, padding `{spacing.xs} {spacing.md}`, rounded `{rounded.full}`.
-- Active: background `{colors.ink-deep}`, text `{colors.on-dark}`.
-
-**`segmented-tab`** + **`segmented-tab-active`** — Underline-style tab navigation.
-- Inactive: text `{colors.steel}`, no border. Active: text `{colors.ink}`, 2px bottom border in `{colors.ink}`.
-
-### Badges & Status
-
-**`badge-purple`** — Purple status badge (matches primary CTA).
-- Background `{colors.primary}`, text `{colors.on-primary}`, typography `{typography.caption-bold}`, rounded `{rounded.full}`, padding `4px 10px`.
-
-**`badge-pink`** — Pink accent badge.
-- Background `{colors.brand-pink}`, text `{colors.on-primary}`, typography `{typography.caption-bold}`, rounded `{rounded.full}`, padding `4px 10px`.
-
-**`badge-orange`** — Orange accent badge.
-- Background `{colors.brand-orange}`, text `{colors.on-primary}`, typography `{typography.caption-bold}`, rounded `{rounded.full}`, padding `4px 10px`.
-
-**`badge-tag-purple`** — Soft-purple feature tag chip.
-- Background `{colors.card-tint-lavender}`, text `{colors.brand-purple-800}`, typography `{typography.caption-bold}`, rounded `{rounded.sm}`, padding `2px 8px`.
-
-**`badge-tag-orange`** — Soft-orange feature tag.
-- Background `{colors.card-tint-peach}`, text `{colors.brand-orange-deep}`, typography `{typography.caption-bold}`, rounded `{rounded.sm}`, padding `2px 8px`.
-
-**`badge-tag-green`** — Soft-mint feature tag.
-- Background `{colors.card-tint-mint}`, text `{colors.brand-green}`, typography `{typography.caption-bold}`, rounded `{rounded.sm}`, padding `2px 8px`.
-
-**`badge-popular`** — "Most Popular" tier indicator.
-- Background `{colors.primary}`, text `{colors.on-primary}`, typography `{typography.caption-bold}`, rounded `{rounded.full}`, padding `4px 10px`.
-
-**`promo-banner`** — Light surface promo strip ABOVE the top nav.
-- Background `{colors.surface}`, text `{colors.ink}`, typography `{typography.body-sm-medium}`, padding `{spacing.sm} {spacing.md}`. ("Developers: Get a first look at our new Developer Platform on May 13.")
-
-### Tables
-
-**`comparison-table`** — Pricing feature comparison table.
-- Background `{colors.canvas}`, text `{colors.ink}`, typography `{typography.body-sm}`, rounded `{rounded.md}`, border `1px solid {colors.hairline}`.
-
-**`comparison-row`** — Individual feature row.
-- Background `{colors.canvas}`, text `{colors.ink}`, padding `{spacing.md} {spacing.lg}`, bottom border `1px solid {colors.hairline-soft}`.
-
-### Documentation Components
-
-**`workspace-mockup-card`** — Embedded Notion workspace UI mockup on hero band ("Ramp HQ" kanban board).
-- Background `{colors.canvas}`, rounded `{rounded.lg}`, border `1px solid {colors.hairline}`, deep shadow `rgba(15, 15, 15, 0.20) 0px 24px 48px -8px`. Carries actual Notion product UI mock.
-
-**`testimonial-card`** — Customer testimonial card.
-- Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `1px solid {colors.hairline}`.
-
-**`logo-wall-item`** — Customer logo wordmark cell.
-- Background transparent, text `{colors.steel}`, typography `{typography.body-md-medium}`, padding `{spacing.lg}`.
-
-**`faq-accordion-item`** — FAQ panel.
-- Background `{colors.canvas}`, rounded `{rounded.md}`, padding `{spacing.xl}`, bottom border `1px solid {colors.hairline}`.
-
-**`stat-row`** — Stats strip with bar chart visualization ("More productivity. Fewer tools.").
-- Background `{colors.surface}`, text `{colors.ink}`, rounded `{rounded.lg}`, padding `{spacing.section-sm}`.
-
-**`cta-banner-light`** — Light surface CTA banner.
-- Background `{colors.surface}`, text `{colors.ink}`, rounded `{rounded.lg}`, padding `{spacing.section}`.
+**`badge-sale-coral`** — the sale price-stamp
+- Background `{colors.bloom-coral}`, text `{colors.on-primary}`, rounded `{rounded.sm}`, padding `{spacing.xxs} {spacing.xs}`, type `{typography.caption-bold}`
+- Used for: "Save $200", "25% off" overlay tags on hero promo cards
 
 ### Navigation
 
-**Top Navigation (Marketing)** — Sticky white bar.
-- Background `{colors.canvas}`, height ~64px, bottom border `1px solid {colors.hairline}`.
-- Left: Notion "N" logo + "Product / AI / Solutions / Resources / Enterprise / Pricing / Request a demo" links.
-- Right: "Get Notion free" purple button + "Log in" link.
+**`utility-strip`** — the top-of-page utility bar
+- Background `{colors.ink}`, text `{colors.on-primary}`, height 36px, padding 0 {spacing.xl}, type `{typography.caption-md}`
+- Holds: country/locale picker, "For Business / For Home" toggle, "Sign in" link, cart link
+
+**`nav-bar-top`** — desktop top nav (sits below utility strip)
+- Background `{colors.canvas}`, height 64px, padding 0 32px
+- Layout: HP wordmark logo flush left → middle category list (Laptops / Desktops / Printers / Accessories / Solutions / Support) → right slot with Search field, Sign-in link, Cart icon
+- 1px `{colors.hairline}` bottom border separates nav from page
+
+**`nav-link`**
+- Background `{colors.canvas}`, text `{colors.ink}`, type `{typography.body-md}`, padding `{spacing.xs} {spacing.md}`
+- Active page draws a 2px `{colors.primary}` underline below the text baseline
+
+**Top Nav (Mobile)**
+- Same height, hamburger icon replaces the middle category list, Search and Cart stay visible
+- Drawer expands as a full-canvas sheet with `{typography.body-lg}` link list and a sticky Sign-in CTA at bottom
+
+**`category-tab`** + **`category-tab-active`** — the pill sub-nav
+- Default: background `{colors.canvas}`, text `{colors.ink}`, type `{typography.body-emphasis}`, rounded `{rounded.pill}`, padding `{spacing.xs} {spacing.lg}`
+- Active: background `{colors.ink}`, text `{colors.on-primary}`, same rounding
+- Used on the laptop-shop page for "All / Trending / On Sale" filtering, and on the homepage "How can we help?" closing band
 
 ### Signature Components
 
-**`hero-band-dark`** — Deep navy hero band with embedded workspace mockup and decorative dots/wires.
-- Background `{colors.brand-navy}`, text `{colors.on-dark}`, padding `{spacing.hero}`.
-- Layout: centered headline `{typography.hero-display}`, subtitle, button row (`button-primary` purple + `button-secondary-on-dark`), `workspace-mockup-card` below.
-- Atmospheric decoration: scattered colorful sticky-note dots and mesh wire illustrations around the hero content (NOT a literal pattern fill — handled per-page via SVG/illustration).
+**`chevron-decoration`** — the geometric blue slash motif
+- Background `{colors.primary}`, rounded `{rounded.none}`, no shadow
+- Renders as a sharp parallelogram cut at ~60° angle, sized to the height of the hero card it flanks
+- Reserved for hero bands and full-page banners — never decorative noise inside cards
 
-**`footer-region`** — Multi-column light footer.
-- Background `{colors.canvas}`, padding `{spacing.section} {spacing.xxl}`, top border `1px solid {colors.hairline}`.
-- 6-column link grid (Product / Download / Resources / Notion for / Company / Legal).
+**`faq-row`** — the accordion row on the printer-plan FAQ
+- Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.lg} {spacing.xl}`, type `{typography.body-emphasis}`
+- 1px `{colors.hairline}` divider between rows; chevron-down icon on the right collapsed, chevron-up when expanded
+- Body answer renders inside the same row container in `{typography.body-md}` after expansion
 
-**`footer-link`** — Individual footer link.
-- Background transparent, text `{colors.steel}`, typography `{typography.body-sm}`, padding `{spacing.xxs} 0`.
+**`help-band-dark`** — the closing "How can we help?" prelude band
+- Background `{colors.ink}`, text `{colors.on-primary}`, padding 64px {spacing.xl}
+- Layout: large lifestyle photograph as the band background (low-opacity) with chip-style category tabs centered: Browse Topics / Live Chat / Contact / Diagnose / Order Status
+
+**`footer-dark`**
+- Background `{colors.ink}`, text `{colors.on-primary}`, type `{typography.body-md}`, padding 64px {spacing.xl}
+- 5-column link grid (Company / Shop / Support / Resources / Connect) with `{typography.body-emphasis}` headers and `{typography.caption-md}` link rows
+- Bottom strip carries social icons, language picker, and legal lines in `{typography.caption-sm}` muted to `{colors.steel}`
 
 ## Do's and Don'ts
 
 ### Do
-- Use `{colors.primary}` (purple) as the dominant CTA across all surfaces — it's the brand's recognizable signal
-- Pair deep navy hero bands ({colors.brand-navy}) with the purple button + decorative sticky-note dots
-- Use pastel feature card tints (peach, rose, mint, lavender, sky, yellow) generously
-- Use `{colors.card-tint-yellow-bold}` for high-emphasis "Ask the assistant"-style banner cards
-- Apply `{rounded.md}` (8px) to buttons consistently — Notion uses rectangles, not pills
-- Apply `{rounded.lg}` (12px) to all card families
-- Maintain Notion-Sans across every UI surface
-- Use the workspace mockup card on hero bands to show actual product UI
+- Reserve `{colors.primary}` for the primary CTA, link color, and `chevron-decoration` motif — at most twice per viewport
+- Set every headline in Forma DJR Micro at weight 500 with line-height 1.0 — resist the urge to bump weight at hero scale
+- Use `{rounded.xl}` (16px) for cards and photo frames; `{rounded.md}` (4px) for buttons and inputs — keep the two-tier split sharp
+- Pair white `{colors.canvas}` body bands with `{colors.cloud}` (`#f7f7f7`) alternating bands; let the gray do the breathing
+- Close every page rhythm with a dark-navy `{colors.ink}` slab — the "How can we help?" prelude + footer
+- Set button labels in uppercase with `{typography.button-md}` (0.7px tracking) — the only place the system tracks letters
+- Use Soft Lift shadow exclusively for product cards and pricing tiers — leave section bands flat
+- Frame product photography inside `{rounded.xl}` containers; never use full-bleed circular masks
 
 ### Don't
-- Don't use the purple for body text or large background surfaces
-- Don't use pill-shaped buttons; Notion's geometry is rectangular-sober
-- Don't mix link-blue ({colors.link-blue}) with primary-purple ({colors.primary}) — they have distinct roles
-- Don't apply heavy shadows on flat documentation cards
-- Don't replace Notion-Sans with a generic Inter
+- Don't introduce secondary saturated colors outside `{colors.primary}` family + the `bloom-coral` sale-tag and `storm` printer-plan accents
+- Don't apply heavy material shadows — depth is via color contrast (cloud vs. white) and Soft Lift only
+- Don't round buttons above `{rounded.md}` (4px); a soft 8px+ button reads as a different brand
+- Don't run Forma DJR Micro below 12px — small caption at 11px is the floor
+- Don't use the chevron decoration as inline noise; it is a hero-only architectural element tied to the wordmark
+- Don't drop ink text opacity to create hierarchy — switch surface or shift to `{colors.charcoal}` / `{colors.graphite}` instead
+- Don't replace the HP wordmark with a generic sans lockup; the wordmark is a custom mark with its own ratio
 
 ## Responsive Behavior
 
 ### Breakpoints
+
 | Name | Width | Key Changes |
 |---|---|---|
-| Mobile (small) | < 480px | Single column. Hero 36px. Pricing 1-up. |
-| Mobile (large) | 480 – 767px | Feature cards 2-up. Hero 48px. |
-| Tablet | 768 – 1023px | 2-column feature grids. Hero 56px. |
-| Desktop | 1024 – 1279px | 4-tier pricing card row. Hero 72px. |
-| Wide Desktop | ≥ 1280px | Full 80px hero presentation. |
+| Mobile | < 480px | Single-column stack; hamburger nav; section padding drops to ~48px; hero serif scales to ~36px |
+| Mobile-Large | 480–767px | Same column count; hero scales to ~44px; pricing tiers stack vertically |
+| Tablet | 768–1023px | 2-column product grid; pricing 2x2; nav still full text labels |
+| Desktop | 1024–1279px | 3-column product grid; 4-column pricing; full nav |
+| Desktop-Large | ≥ 1280px | 4-column product grid; 1366px content max-width with full-bleed bands |
 
 ### Touch Targets
-- Buttons render at 40–44px effective height
-- Form inputs render at 44px height
-- Pill tabs ~32px → 44px on mobile
+
+Every interactive element clears 44×44px on mobile. `button-primary` at 44px height + 24px horizontal padding meets WCAG-AAA touch target. `category-tab` at 8px 20px padding bumps to 12px 24px on touch screens. Nav-link tap areas extend invisibly beyond the text run to the full 44px row height. Sticky cart/sign-in icons in the top nav use 44×44 invisible hit boxes around their visible 24×24 glyph.
 
 ### Collapsing Strategy
-- **Promo banner** stays full-width; truncates at < 480px
-- **Top nav** below 1024px collapses to hamburger
-- **Hero band**: workspace mockup card moves below text/buttons on mobile
-- **Pricing tiers**: 4-column → 2-column tablet → 1-column mobile
-- **Feature cards**: 3-up desktop → 2-up tablet → 1-up mobile
-- **Hero typography**: 80px → 56px → 48px → 36px
-- **Footer**: 6-column desktop → 3-column tablet → accordion mobile
+
+- **Utility strip**: stays visible on every breakpoint; dropdowns collapse into a single "Account" icon below 768px
+- **Top nav**: middle category list collapses into a hamburger drawer below 1024px; the right-side Search + Sign-in + Cart stay visible
+- **Hero**: stays single-column at every breakpoint; chevron decorations shrink to ~60% size on tablet and disappear entirely on mobile
+- **Product family grid**: 4 → 3 → 2 → 1 column as breakpoints shrink; cards keep `{rounded.xl}` corners at every size
+- **Pricing comparison table**: 4-column grid on desktop collapses to 2x2 on tablet, then stacks into individual accordion-style cards on mobile
+- **Footer**: 5-column link grid → 2-column tablet → single-column accordion on mobile; HP wordmark stays flush left
 
 ### Image Behavior
-- Workspace mockup card maintains aspect ratio
-- Pastel illustrations inside feature cards scale proportionally
-- Customer logo wall: wordmarks at consistent 60–80px height
+
+Hero photography uses `{rounded.xl}` containers at every breakpoint. The chevron decorations vanish on mobile; the underlying photo card centers in the viewport. Lifestyle photography in the testimonial and "how-can-we-help" bands maintains 16:9 ratio with horizontal cropping rather than letterboxing on mobile. There are no art-direction crop swaps between desktop and mobile — the same image is used at every size.
 
 ## Iteration Guide
 
-1. Focus on ONE component at a time
-2. Reference component names and tokens directly
-3. Run `npx @google/design.md lint DESIGN.md` after edits
-4. Add new variants as separate `components:` entries
-5. Default to `{typography.body-md}` for body
-6. Keep `{colors.primary}` (purple) as the primary CTA — distinct from `{colors.link-blue}` for inline links
-7. Use `{rounded.md}` for buttons (rectangles), `{rounded.lg}` for cards, `{rounded.full}` for pill tabs/badges only
-
-## Known Gaps
-
-- Specific dark-mode token values not surfaced beyond hero bands
-- Animation/transition timings not extracted; recommend 150–200ms ease
-- Form validation success state not explicitly captured
-- Pastel-tint mapping (which feature uses which tint) is observation-based — the actual brand library may have more entries
+1. Focus on ONE component at a time; resist refactoring an entire section in one pass
+2. Reference component names and tokens directly (`{colors.primary}`, `{typography.display-xxl}`, `{rounded.xl}`, `card-product`) — do not paraphrase to hex/px in prose
+3. Run `npx @google/design.md lint DESIGN.md` after edits — `broken-ref`, `contrast-ratio`, and `orphaned-tokens` warnings flag issues automatically
+4. Add new variants as separate component entries (`-pressed`, `-disabled`, `-focused`); never bury state inside prose
+5. Default body to `{typography.body-md}`; reach for `{typography.body-emphasis}` for run-in bolds; keep display sizes for true heading roles
+6. Keep `{colors.primary}` scarce — at most two flame elements per viewport (one CTA + one chevron decoration). Three flame items in one viewport is over-saturation
+7. When introducing a new section band, choose from `{colors.canvas}` / `{colors.cloud}` / `{colors.fog}` / `{colors.ink}` — six pre-defined surface modes is the entire surface vocabulary
