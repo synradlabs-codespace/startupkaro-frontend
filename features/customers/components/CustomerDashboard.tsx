@@ -89,7 +89,7 @@ export function CustomerDashboard() {
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <span className="text-sm font-semibold text-charcoal">₹{p.amount.toLocaleString("en-IN")}</span>
-                                        <OrderStatusBadge status={p.status as OrderStatus} />
+                                        <OrderStatusBadge status={p.status} />
                                     </div>
                                 </div>
                             ))}

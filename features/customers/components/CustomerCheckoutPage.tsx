@@ -50,7 +50,7 @@ function CheckoutContent() {
                 theme: { color: "#ff7759" },
             };
 
-            const rzp = new (window as RazorpayWindow).Razorpay(options);
+            const rzp = new (window as unknown as RazorpayWindow).Razorpay(options);
             rzp.on("payment.failed", function () {
                 router.push(`/customer/checkout/failure?service=${serviceId}`);
             });

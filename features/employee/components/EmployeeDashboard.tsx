@@ -100,8 +100,8 @@ export function EmployeeDashboard() {
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <OrderStatusBadge status={order.status as OrderStatus} />
-                                    <PaymentStatusBadge status={order.paymentStatus as PaymentStatus} />
+                                    <OrderStatusBadge status={order.status} />
+                                    <PaymentStatusBadge status={order.paymentStatus} />
                                 </div>
                             </div>
                         ))}

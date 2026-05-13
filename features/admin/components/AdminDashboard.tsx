@@ -163,8 +163,8 @@ export function AdminDashboard() {
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <span className="text-sm font-semibold text-charcoal">₹{order.amount.toLocaleString("en-IN")}</span>
-                                    <OrderStatusBadge status={order.status as OrderStatus} />
-                                    <PaymentStatusBadge status={order.paymentStatus as PaymentStatus} />
+                                    <OrderStatusBadge status={order.status} />
+                                    <PaymentStatusBadge status={order.paymentStatus} />
                                 </div>
                             </div>
                         ))}
