@@ -102,6 +102,11 @@ export const NAV_LINKS: NavLink[] = [
               description: "Join our growing team",
               href: "/careers",
             },
+            {
+              label: "Contact",
+              description: "Talk to our team",
+              href: "/contact",
+            },
           ],
         },
         {
@@ -115,9 +120,5 @@ export const NAV_LINKS: NavLink[] = [
         },
       ],
     },
-  },
-  {
-    label: "Contact",
-    href: "/contact",
   },
 ];

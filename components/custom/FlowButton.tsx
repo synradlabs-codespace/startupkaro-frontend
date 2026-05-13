@@ -4,13 +4,13 @@ import { ArrowRight, Briefcase, LogIn, MessageCircle, Rocket, type LucideIcon } 
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-type ColorVariant = "saffron" | "navy" | "green";
+type ColorVariant = "primary" | "ink" | "storm";
 type IconName = "arrow-right" | "briefcase" | "log-in" | "message-circle" | "rocket";
 
 const colorMap: Record<ColorVariant, string> = {
-    saffron: "#ff7759",
-    navy: "#17171c",
-    green: "#003c33",
+    primary: "#296ef9",
+    ink: "#1a1a1a",
+    storm: "#356373",
 };
 
 const iconMap: Record<IconName, LucideIcon> = {
@@ -56,7 +56,7 @@ export function FlowButton({
     disabled,
     className,
     wrapperClassName,
-    colorVariant = "saffron",
+    colorVariant = "primary",
 }: FlowButtonProps) {
     const hex = colorMap[colorVariant];
     const Icon = icon ?? iconMap[iconName];
@@ -141,7 +141,7 @@ export function FlowSecondaryButton({
     const Icon = icon ?? iconMap[iconName];
 
     const base = cn(
-        "group inline-flex items-center justify-center gap-2 rounded-md border-[1.5px] border-primary-brand bg-white/65 px-8 py-3 text-sm font-medium text-primary-brand cursor-pointer transition-all duration-[450ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-primary-brand hover:text-white active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-brand focus-visible:ring-offset-2",
+        "group inline-flex items-center justify-center gap-2 rounded-md border-[1.5px] border-primary-brand bg-canvas/65 px-8 py-3 text-sm font-medium text-primary-brand cursor-pointer transition-all duration-[450ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-primary-brand hover:text-white active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-brand focus-visible:ring-offset-2",
         className,
         disabled && "opacity-60 pointer-events-none"
     );

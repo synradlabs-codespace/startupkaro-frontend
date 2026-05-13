@@ -75,7 +75,7 @@ function HeaderActions({ mobile = false, onAction }: { mobile?: boolean; onActio
         onClick={onAction}
         text="Explore Services"
         iconName="briefcase"
-        colorVariant="navy"
+        colorVariant="primary"
       />
     </div>
   );
@@ -252,7 +252,7 @@ export function Header() {
           },
         )}
       >
-        <div className="flex h-16 w-full items-center justify-between gap-6 px-5">
+        <div className="flex h-16 w-full items-center justify-between gap-3 px-4 sm:gap-6 sm:px-5">
           <div className="flex min-w-0 items-center">
             {isMobileMenuOpen && mobileMenu ? (
               <button
@@ -275,7 +275,7 @@ export function Header() {
               const isOpen = hasMenu && activeMenu?.id === link.menu!.id;
               const itemClassName = cn(
                 "flex select-none items-center gap-1.5 rounded-md px-3.5 py-2 text-sm font-medium transition-colors duration-150",
-                isOpen ? "text-link-blue bg-tint-sky/50" : "text-slate hover:text-link-blue hover:bg-tint-sky/30",
+                isOpen ? "text-link-blue bg-primary-soft/50" : "text-slate hover:text-link-blue hover:bg-primary-soft/30",
               );
 
               return (
@@ -390,7 +390,7 @@ export function Header() {
                             className={cn(
                               "px-4 py-8",
                               index !== 0 && "border-t border-hairline",
-                              column.accent ? "bg-tint-lavender/40" : "bg-canvas",
+                              column.accent ? "bg-primary-soft/40" : "bg-canvas",
                             )}
                           >
                             <p className="mb-6 text-xs font-semibold uppercase tracking-widest text-stone">
@@ -450,7 +450,7 @@ export function Header() {
                                   <button
                                     type="button"
                                     onClick={() => setMobileMenu(link.menu!)}
-                                    className="group flex w-full items-center justify-between gap-4 px-3 py-6 text-left transition-colors duration-150 hover:bg-tint-sky/40"
+                                    className="group flex w-full items-center justify-between gap-4 px-3 py-6 text-left transition-colors duration-150 hover:bg-primary-soft/40"
                                   >
                                     <span className="text-base font-semibold text-ink transition-colors duration-150 group-hover:text-link-blue">{link.label}</span>
                                     <ArrowRight className="size-4 text-stone transition-colors duration-150 group-hover:text-link-blue" strokeWidth={2} />
@@ -459,14 +459,14 @@ export function Header() {
                                   <a
                                     href={link.href}
                                     onClick={closeMobileMenu}
-                                    className="group flex items-center justify-between gap-4 px-3 py-6 transition-colors duration-150 hover:bg-tint-sky/40"
+                                    className="group flex items-center justify-between gap-4 px-3 py-6 transition-colors duration-150 hover:bg-primary-soft/40"
                                   >
                                     <span className="text-base font-semibold text-ink transition-colors duration-150 group-hover:text-link-blue">{link.label}</span>
                                   </a>
                                 ) : (
                                   <button
                                     type="button"
-                                    className="group flex w-full items-center justify-between gap-4 px-3 py-6 text-left transition-colors duration-150 hover:bg-tint-sky/40"
+                                    className="group flex w-full items-center justify-between gap-4 px-3 py-6 text-left transition-colors duration-150 hover:bg-primary-soft/40"
                                   >
                                     <span className="text-base font-semibold text-ink transition-colors duration-150 group-hover:text-link-blue">{link.label}</span>
                                   </button>

@@ -24,8 +24,8 @@ export function DashboardSidebar({ role }: { role: "admin" | "employee" }) {
   const links = role === "admin" ? adminLinks : employeeLinks
 
   return (
-    <aside className="w-64 border-r bg-white h-screen p-6 hidden md:block">
-      <div className="text-2xl font-bold mb-10 text-[var(--color-indigo)]">
+    <aside className="w-64 border-r bg-canvas h-screen p-6 hidden md:block">
+      <div className="text-2xl font-bold mb-10 text-primary-brand">
         StartupKaro
       </div>
 
@@ -41,8 +41,8 @@ export function DashboardSidebar({ role }: { role: "admin" | "employee" }) {
               className={cn(
                 "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition",
                 active
-                  ? "bg-[var(--color-saffron)] text-white"
-                  : "hover:bg-gray-100 text-gray-700"
+                  ? "bg-bloom-coral text-white"
+                  : "hover:bg-fog text-charcoal"
               )}
             >
               <Icon size={18} />

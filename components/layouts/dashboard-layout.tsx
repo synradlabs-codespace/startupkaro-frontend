@@ -12,7 +12,7 @@ export default function DashboardLayout({
         <div className="flex">
             <DashboardSidebar role={role} />
 
-            <div className="flex-1 min-h-screen bg-gray-50">
+            <div className="flex-1 min-h-screen bg-surface">
                 <DashboardHeader role={role} />
                 <main className="p-6">{children}</main>
             </div>

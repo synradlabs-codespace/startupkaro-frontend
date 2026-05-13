@@ -120,7 +120,7 @@ function MegaMenuPanel({
                 key={column.heading}
                 className={cn(
                   "flex-1 px-8 py-8",
-                  column.accent ? "bg-tint-lavender/40" : "bg-canvas",
+                  column.accent ? "bg-primary-soft/40" : "bg-canvas",
                   colIdx !== 0 && "border-l border-hairline",
                 )}
               >
@@ -142,7 +142,7 @@ function MegaMenuPanel({
                         initial={initial}
                         animate={{ opacity: 1, x: 0, y: 0 }}
                         transition={itemTransition(colIdx, rowIdx, menu.columns, direction)}
-                        className="group -mx-3 block rounded-lg px-3 py-2 transition-colors duration-150 hover:bg-tint-sky/50"
+                        className="group -mx-3 block rounded-lg px-3 py-2 transition-colors duration-150 hover:bg-primary-soft/50"
                         data-mega-menu-item="true"
                       >
                         <span className="block text-sm font-semibold leading-snug text-ink transition-colors duration-150 group-hover:text-link-blue">
@@ -161,7 +161,7 @@ function MegaMenuPanel({
                         initial={initial}
                         animate={{ opacity: 1, x: 0, y: 0 }}
                         transition={itemTransition(colIdx, rowIdx, menu.columns, direction)}
-                        className="group -mx-3 block w-full rounded-lg px-3 py-2 text-left transition-colors duration-150 hover:bg-tint-sky/50"
+                        className="group -mx-3 block w-full rounded-lg px-3 py-2 text-left transition-colors duration-150 hover:bg-primary-soft/50"
                         data-mega-menu-item="true"
                       >
                         <span className="block text-sm font-semibold leading-snug text-ink transition-colors duration-150 group-hover:text-link-blue">

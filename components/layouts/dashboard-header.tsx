@@ -5,11 +5,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 
 export function DashboardHeader({ role }: { role: "admin" | "employee" }) {
     return (
-        <header className="h-16 border-b bg-white flex items-center justify-end px-6">
+        <header className="h-16 border-b bg-canvas flex items-center justify-end px-6">
             <DropdownMenu>
                 <DropdownMenuTrigger>
                     <Avatar className="cursor-pointer">
-                        <AvatarFallback className="bg-[var(--color-indigo)] text-white">
+                        <AvatarFallback className="bg-primary-brand text-white">
                             {role === "admin" ? "AD" : "EM"}
                         </AvatarFallback>
                     </Avatar>
