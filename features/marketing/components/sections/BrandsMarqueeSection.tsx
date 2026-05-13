@@ -6,7 +6,6 @@ const BRANDS = [
     { name: "Kleenjal Sipster", src: "/brands/kleenjal-sipster.jpg" },
     { name: "Nadar Properties", src: "/brands/nadar-properties.jpg" },
     { name: "Paggnation", src: "/brands/paggnation.jpeg" },
-    { name: "Picos", src: "/brands/picos.jpeg" },
     { name: "Sardar Ji", src: "/brands/sardar-ji.jpg" },
     { name: "Social", src: "/brands/social.jpeg" },
     { name: "Swastik Finance", src: "/brands/swastik-finance.jpg" },

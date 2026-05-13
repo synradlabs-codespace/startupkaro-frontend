@@ -35,98 +35,98 @@ colors:
 
 typography:
   display-xxl:
-    fontFamily: Forma DJR Micro
+    fontFamily: Urbanist
     fontSize: 72px
     fontWeight: 500
     lineHeight: 1.0
     letterSpacing: 0
   display-xl:
-    fontFamily: Forma DJR Micro
+    fontFamily: Urbanist
     fontSize: 56px
     fontWeight: 500
     lineHeight: 1.0
     letterSpacing: 0
   display-lg:
-    fontFamily: Forma DJR Micro
+    fontFamily: Urbanist
     fontSize: 44px
     fontWeight: 500
     lineHeight: 1.0
     letterSpacing: 0
   display-md:
-    fontFamily: Forma DJR Micro
+    fontFamily: Urbanist
     fontSize: 32px
     fontWeight: 500
     lineHeight: 1.0
     letterSpacing: 0
   display-sm:
-    fontFamily: Forma DJR Micro
+    fontFamily: Urbanist
     fontSize: 24px
     fontWeight: 500
     lineHeight: 1.17
     letterSpacing: 0
   display-xs:
-    fontFamily: Forma DJR Micro
+    fontFamily: Urbanist
     fontSize: 20px
     fontWeight: 500
     lineHeight: 1.0
     letterSpacing: 0
   body-lg:
-    fontFamily: Forma DJR Micro
+    fontFamily: Quicksand
     fontSize: 18px
     fontWeight: 400
     lineHeight: 1.33
     letterSpacing: 0
   body-md:
-    fontFamily: Forma DJR Micro
+    fontFamily: Quicksand
     fontSize: 16px
     fontWeight: 400
     lineHeight: 1.38
     letterSpacing: 0
   body-emphasis:
-    fontFamily: Forma DJR Micro
+    fontFamily: Quicksand
     fontSize: 16px
     fontWeight: 500
     lineHeight: 1.38
     letterSpacing: 0
   caption-md:
-    fontFamily: Forma DJR Micro
+    fontFamily: Quicksand
     fontSize: 14px
     fontWeight: 400
     lineHeight: 1.5
     letterSpacing: 0
   caption-sm:
-    fontFamily: Forma DJR Micro
+    fontFamily: Quicksand
     fontSize: 12px
     fontWeight: 400
     lineHeight: 1.33
     letterSpacing: 0
   caption-bold:
-    fontFamily: Forma DJR Micro
+    fontFamily: Quicksand
     fontSize: 14px
     fontWeight: 700
     lineHeight: 1.3
     letterSpacing: 0
   link-md:
-    fontFamily: Forma DJR Micro
+    fontFamily: Quicksand
     fontSize: 16px
     fontWeight: 500
     lineHeight: 1.38
     letterSpacing: 0
   button-md:
-    fontFamily: Forma DJR Micro
+    fontFamily: Quicksand
     fontSize: 14px
     fontWeight: 600
     lineHeight: 1.4
     letterSpacing: 0.7px
     textTransform: uppercase
   button-sm:
-    fontFamily: Forma DJR Micro
+    fontFamily: Quicksand
     fontSize: 12.6px
     fontWeight: 700
     lineHeight: 1.0
     letterSpacing: 0.126px
   price-md:
-    fontFamily: Forma DJR Micro
+    fontFamily: Quicksand
     fontSize: 24px
     fontWeight: 500
     lineHeight: 1.17
@@ -325,7 +325,7 @@ components:
 
 ## Overview
 
-HP reads like a long-running consumer-electronics catalog crossed with an enterprise-software product page. The whole system sits on **pure white** (`{colors.canvas}` — `#ffffff`) with thin gray panels (`{colors.cloud}` / `{colors.fog}`) for alternating section bands. There is one chromatic action color — **HP Bright Blue** (`{colors.primary}` — `#296ef9`) — and one ink color (`{colors.ink}` — `#1a1a1a`); together they do ninety percent of the work. Type is a single family across every surface: **Forma DJR Micro**, HP's bespoke geometric grotesque, set at weight 500 for headlines and 400 for body — clean, neutral, slightly mechanical.
+HP reads like a long-running consumer-electronics catalog crossed with an enterprise-software product page. The whole system sits on **pure white** (`{colors.canvas}` — `#ffffff`) with thin gray panels (`{colors.cloud}` / `{colors.fog}`) for alternating section bands. There is one chromatic action color — **HP Bright Blue** (`{colors.primary}` — `#296ef9`) — and one ink color (`{colors.ink}` — `#1a1a1a`); together they do ninety percent of the work. Type uses two families: **Urbanist** (geometric, Gilroy-inspired) for all headings and display text, and **Quicksand** (rounded, approachable) for body, captions, buttons, and all other UI text.
 
 The signature gesture is **angular blue chevrons** — sharp 0-radius slashes derived from the HP wordmark's pair of parallel slashes — that anchor the homepage hero, the laptop-page hero, and the printer pricing page. They appear on the left and right edges of the primary banner card, layered behind product photography. Outside those decorative slashes, every other surface is rectilinear with **soft 8–16px corners** on cards and a 4px corner on buttons.
 
@@ -334,7 +334,7 @@ The system breaks into three voice modes: a **white commercial body** for produc
 **Key Characteristics:**
 - Pure white canvas (`{colors.canvas}`) with deep ink (`{colors.ink}`) running every body surface; light fog bands (`{colors.cloud}`, `{colors.fog}`) alternate for section rhythm
 - HP Bright Blue (`{colors.primary}`) is the lone CTA fill and link color; it appears at most twice per viewport
-- Bespoke Forma DJR Micro across every surface — display, body, button, caption — at weights 400 / 500 / 600 / 700
+- **Urbanist** for all headings and display text (`font-display`); **Quicksand** for body, captions, buttons, and all other UI text (`font-sans`) — both at weights 400 / 500 / 600 / 700
 - Cards round at `{rounded.xl}` (16px) for product/pricing tiles; buttons sit at `{rounded.md}` (4px) with capitalize labels
 - Geometric blue chevrons (`{colors.primary}` rectangles cut at 45°) frame hero photography and reinforce the wordmark
 - Dark-navy slabs (`{colors.ink}`) close every page rhythm — testimonial bands, "how can we help?" prelude, and the footer
@@ -375,9 +375,12 @@ The system breaks into three voice modes: a **white commercial body** for produc
 
 ### Font Family
 
-The voice is **single-family**: Forma DJR Micro (HP's bespoke geometric grotesque, fallback Arial) across every surface — display, body, button, caption. Forma DJR Micro is a wide, slightly rounded grotesque designed at small optical sizes to stay legible at UI-chrome scale. HP runs it at weight 400 for body, 500 for display headlines, 600/700 for emphasis and button labels.
+The system uses **two complementary families**, both from Google Fonts:
 
-The 16/14/12-px caption tier carries the catalog metadata — model numbers, spec rows, fine print — at weight 400 with a 1.4–1.5 line-height. Button labels lift to weight 600/700 with positive 0.5–1.1px letter-spacing and uppercase transform — the only place the system tracks letters.
+- **Urbanist** (`font-display`) — headings and display text only (`display-xxl` through `display-xs` and `price-md`). Urbanist is a geometric grotesque with the clean, elegant proportions of Gilroy. It runs at weight 500 for all display sizes — open and modern without being commanding.
+- **Quicksand** (`font-sans`) — everything else: body copy, captions, button labels, nav links, form inputs, metadata. Quicksand is a rounded geometric sans that stays warm and legible down to 12px.
+
+Both fonts are loaded via `next/font/google` at weights 300 / 400 / 500 / 600 / 700. The 16/14/12-px caption tier carries metadata at weight 400 with 1.4–1.5 line-height. Button labels lift to weight 600/700 with 0.5–1.1px letter-spacing and uppercase transform — the only place the system tracks letters.
 
 ### Hierarchy
 
@@ -404,16 +407,11 @@ The 16/14/12-px caption tier carries the catalog metadata — model numbers, spe
 
 The typographic decision worth flagging: HP runs **weight 500 for every display size**, including the largest 72px hero headline. Most editorial systems jump to 600/700 at hero scale; HP doesn't. The result feels open and approachable rather than commanding — appropriate for a brand that sells across consumer, SMB, and enterprise audiences in the same catalog.
 
-Forma DJR Micro's rounded-grotesque shapes do most of the warmth. There's no italic in the system except inside legal disclaimers; emphasis is carried by weight (500 → body-emphasis, 700 → caption-bold) instead.
+Quicksand's rounded terminals carry warmth in body and UI text; Urbanist's geometric clarity carries authority in headings. There is no italic in the system except inside legal disclaimers; emphasis is carried by weight (500 → body-emphasis, 700 → caption-bold) instead.
 
-### Note on Font Substitutes
+### Note on Gilroy Equivalence
 
-Forma DJR Micro is proprietary (Commercial Type / Mark Caneso). Closest open-source substitutes:
-- **Inter** at weights 400 / 500 / 600 / 700 — slightly narrower than Forma DJR Micro; bump font-size by ~3% to compensate
-- **Manrope** at weights 400 / 500 / 600 / 700 — closer in proportion, gentler curves; use directly with no metric adjustment
-- **Roboto** at weights 400 / 500 / 700 — flatter character; use as last-resort fallback
-
-When swapping, set body line-height to 1.4 and display line-height to 1.0 explicitly — the Forma DJR Micro line-height numbers are tight, and most substitutes default looser.
+Gilroy (Radomir Tinkov) is a proprietary font and not available on Google Fonts. **Urbanist** is the closest freely available substitute — it shares Gilroy's geometric proportions, wide apertures, and clean rounded terminals. No metric adjustments needed; use Urbanist directly wherever Gilroy would appear.
 
 ## Layout
 
@@ -613,7 +611,7 @@ Hero photography sits in `{rounded.xl}` (16px) frames with no border. Product fa
 
 ### Do
 - Reserve `{colors.primary}` for the primary CTA, link color, and `chevron-decoration` motif — at most twice per viewport
-- Set every headline in Forma DJR Micro at weight 500 with line-height 1.0 — resist the urge to bump weight at hero scale
+- Set every headline in Urbanist (`font-display`) at weight 500 with line-height 1.0 — resist the urge to bump weight at hero scale
 - Use `{rounded.xl}` (16px) for cards and photo frames; `{rounded.md}` (4px) for buttons and inputs — keep the two-tier split sharp
 - Pair white `{colors.canvas}` body bands with `{colors.cloud}` (`#f7f7f7`) alternating bands; let the gray do the breathing
 - Close every page rhythm with a dark-navy `{colors.ink}` slab — the "How can we help?" prelude + footer
@@ -625,7 +623,7 @@ Hero photography sits in `{rounded.xl}` (16px) frames with no border. Product fa
 - Don't introduce secondary saturated colors outside `{colors.primary}` family + the `bloom-coral` sale-tag and `storm` printer-plan accents
 - Don't apply heavy material shadows — depth is via color contrast (cloud vs. white) and Soft Lift only
 - Don't round buttons above `{rounded.md}` (4px); a soft 8px+ button reads as a different brand
-- Don't run Forma DJR Micro below 12px — small caption at 11px is the floor
+- Don't run Quicksand below 12px — small caption at 11px is the floor
 - Don't use the chevron decoration as inline noise; it is a hero-only architectural element tied to the wordmark
 - Don't drop ink text opacity to create hierarchy — switch surface or shift to `{colors.charcoal}` / `{colors.graphite}` instead
 - Don't replace the HP wordmark with a generic sans lockup; the wordmark is a custom mark with its own ratio

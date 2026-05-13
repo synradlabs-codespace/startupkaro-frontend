@@ -78,7 +78,7 @@ The site uses the HP-inspired design system defined in `DESIGN.md` at the repo r
 | `bg-storm-deep` | `#356373` | Supporting status/illustration accent |
 
 ### Typography
-- HP's source font is Forma DJR Micro. The project uses Inter as the available fallback while keeping `font-sans`, `font-display`, and `font-mono` aliased consistently.
+- The project uses **Urbanist** (`font-display`) for all headings/display text and **Quicksand** (`font-sans`) for body, captions, buttons, and all other UI text. Both are loaded via `next/font/google`. Do not introduce any other fonts.
 - Headline weight should stay lighter and geometric: prefer `font-display font-medium` for new HP-aligned display work.
 - Button labels should be compact uppercase with modest positive tracking.
 
