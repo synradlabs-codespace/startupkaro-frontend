@@ -101,7 +101,7 @@ export function AdminEmployeesPage() {
                                                 <Badge
                                                     variant="outline"
                                                     className={emp.status === "active"
-                                                        ? "bg-green-100 text-green-800 border-green-200 hover:bg-green-100"
+                                                        ? "bg-tint-sky text-primary-deep border-primary-soft hover:bg-tint-sky"
                                                         : "bg-surface text-slate border-hairline hover:bg-surface"
                                                     }
                                                 >

@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { OrderStatusBadge, PaymentStatusBadge } from "@/components/custom/StatusBadge";
 import { mockPurchases } from "@/lib/mock-data";
-import { Download, CreditCard } from "lucide-react";
+import { CreditCard, Download, Mail, Phone } from "lucide-react";
 
 type RazorpayInstance = {
     on: (event: "payment.failed", handler: () => void) => void;
@@ -48,7 +48,7 @@ export function CustomerPurchaseDetailPage({ id }: { id: string }) {
                         router.push("/customer/checkout/failure");
                     },
                 },
-                theme: { color: "#ff7759" },
+                theme: { color: "#296ef9" },
             };
 
             const rzp = new (window as unknown as RazorpayWindow).Razorpay(options);
@@ -85,7 +85,7 @@ export function CustomerPurchaseDetailPage({ id }: { id: string }) {
                     </div>
                 }
             />
-            <div className="p-6 max-w-lg">
+            <div className="p-6 max-w-lg space-y-4">
                 <Card>
                     <CardHeader><CardTitle className="text-base">Purchase Details</CardTitle></CardHeader>
                     <CardContent className="space-y-3 text-sm">
@@ -107,6 +107,24 @@ export function CustomerPurchaseDetailPage({ id }: { id: string }) {
                         <div className="flex justify-between">
                             <span className="text-muted-foreground">Payment</span>
                             <PaymentStatusBadge status={purchase.paymentStatus} />
+                        </div>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader><CardTitle className="text-base">Next Steps</CardTitle></CardHeader>
+                    <CardContent className="space-y-3 text-sm text-muted-foreground">
+                        <p>
+                            StartupKaro will coordinate required documents through our official email. There is no document upload step inside the customer dashboard.
+                        </p>
+                        <div className="flex flex-wrap gap-2 text-xs">
+                            <span className="inline-flex items-center gap-1.5 rounded-md border border-hairline bg-surface px-2.5 py-1">
+                                <Mail className="h-3 w-3" />
+                                Email checklist
+                            </span>
+                            <span className="inline-flex items-center gap-1.5 rounded-md border border-hairline bg-surface px-2.5 py-1">
+                                <Phone className="h-3 w-3" />
+                                Expert call updates
+                            </span>
                         </div>
                     </CardContent>
                 </Card>

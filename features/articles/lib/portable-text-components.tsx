@@ -43,7 +43,7 @@ export const portableTextComponents: PortableTextComponents = {
                     />
                 </div>
                 {value.caption && (
-                    <figcaption className="text-xs text-gray-400 text-center mt-2">
+                    <figcaption className="text-xs text-stone text-center mt-2">
                         {value.caption}
                     </figcaption>
                 )}
@@ -51,10 +51,10 @@ export const portableTextComponents: PortableTextComponents = {
         ),
 
         quote: ({ value }: { value: QuoteBlock }) => (
-            <blockquote className="border-l-4 border-[#ff7759] pl-5 py-0.5 my-5">
-                <p className="text-base italic text-gray-600 leading-relaxed">{value.text}</p>
+            <blockquote className="border-l-4 border-[#296ef9] pl-5 py-0.5 my-5">
+                <p className="text-base italic text-slate leading-relaxed">{value.text}</p>
                 {value.cite && (
-                    <cite className="text-xs text-gray-400 not-italic mt-2 block">
+                    <cite className="text-xs text-stone not-italic mt-2 block">
                         — {value.cite}
                     </cite>
                 )}
@@ -65,7 +65,7 @@ export const portableTextComponents: PortableTextComponents = {
             const videoId = extractYouTubeId(value.url);
             if (!videoId) {
                 return (
-                    <p className="text-sm text-gray-400 my-4">
+                    <p className="text-sm text-stone my-4">
                         [Invalid YouTube URL: {value.url}]
                     </p>
                 );
@@ -82,7 +82,7 @@ export const portableTextComponents: PortableTextComponents = {
                         />
                     </div>
                     {value.title && (
-                        <figcaption className="text-xs text-gray-400 text-center mt-2">
+                        <figcaption className="text-xs text-stone text-center mt-2">
                             {value.title}
                         </figcaption>
                     )}
@@ -94,14 +94,14 @@ export const portableTextComponents: PortableTextComponents = {
             const reelId = extractInstagramId(value.url);
             if (!reelId) {
                 return (
-                    <p className="text-sm text-gray-400 my-4">
+                    <p className="text-sm text-stone my-4">
                         [Invalid Instagram URL: {value.url}]
                     </p>
                 );
             }
             return (
                 <figure className="my-6 flex justify-center">
-                    <div className="relative w-full max-w-sm overflow-hidden rounded-2xl bg-gray-50">
+                    <div className="relative w-full max-w-sm overflow-hidden rounded-2xl bg-surface">
                         <div className="relative" style={{ paddingBottom: "177.78%" }}>
                             <iframe
                                 src={`https://www.instagram.com/reel/${reelId}/embed/`}
@@ -147,20 +147,20 @@ export const portableTextComponents: PortableTextComponents = {
             </h3>
         ),
         blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-[#ff7759] pl-5 py-0.5">
-                <p className="text-base italic text-gray-600 leading-relaxed">{children}</p>
+            <blockquote className="border-l-4 border-[#296ef9] pl-5 py-0.5">
+                <p className="text-base italic text-slate leading-relaxed">{children}</p>
             </blockquote>
         ),
     },
 
     list: {
         bullet: ({ children }) => (
-            <ul className="space-y-2 pl-5 list-disc marker:text-[#ff7759] text-gray-700">
+            <ul className="space-y-2 pl-5 list-disc marker:text-[#296ef9] text-charcoal">
                 {children}
             </ul>
         ),
         number: ({ children }) => (
-            <ol className="space-y-2 pl-5 list-decimal marker:text-[#ff7759] text-gray-700">
+            <ol className="space-y-2 pl-5 list-decimal marker:text-[#296ef9] text-charcoal">
                 {children}
             </ol>
         ),
@@ -181,13 +181,13 @@ export const portableTextComponents: PortableTextComponents = {
                 href={value?.href}
                 target={value?.blank ? "_blank" : undefined}
                 rel={value?.blank ? "noreferrer noopener" : undefined}
-                className="text-[#17171c] underline underline-offset-2 hover:text-[#ff7759] transition-colors"
+                className="text-[#1a1a1a] underline underline-offset-2 hover:text-[#296ef9] transition-colors"
             >
                 {children}
             </a>
         ),
         code: ({ children }) => (
-            <code className="bg-gray-100 rounded px-1 py-0.5 text-sm font-mono text-gray-800">
+            <code className="bg-fog rounded px-1 py-0.5 text-sm font-mono text-ink-soft">
                 {children}
             </code>
         ),

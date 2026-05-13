@@ -28,8 +28,8 @@ const fallbackMeta = { icon: LayoutGrid, color: "text-slate", bg: "bg-surface", 
 const highlights = [
     "100% legal compliance guaranteed",
     "Expert CA / CS assigned to your case",
-    "End-to-end document handling",
-    "Real-time status updates",
+    "Documents coordinated through official email",
+    "Status updates by email and expert call",
 ];
 
 export function CustomerServiceDetailPage({ id }: { id: string }) {

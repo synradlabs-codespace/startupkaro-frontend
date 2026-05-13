@@ -47,7 +47,7 @@ function CheckoutContent() {
                         router.push(`/customer/checkout/failure?service=${serviceId}`);
                     },
                 },
-                theme: { color: "#ff7759" },
+                theme: { color: "#296ef9" },
             };
 
             const rzp = new (window as unknown as RazorpayWindow).Razorpay(options);

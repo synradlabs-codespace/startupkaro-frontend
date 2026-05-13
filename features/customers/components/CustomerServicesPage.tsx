@@ -175,7 +175,7 @@ export function CustomerServicesPage() {
                 {/* ── Footer note ──────────────────────────── */}
                 <div className="flex items-center gap-2 text-xs text-stone pt-2">
                     <Sparkles className="h-3.5 w-3.5 text-charcoal" />
-                    All services include expert assistance and end-to-end document handling.
+                    All services include expert assistance, email-based document coordination, and updates from your assigned expert.
                 </div>
             </div>
         </div>

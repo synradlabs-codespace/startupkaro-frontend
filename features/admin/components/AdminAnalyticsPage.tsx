@@ -274,11 +274,11 @@ export function AdminAnalyticsPage() {
                                 <span className="font-semibold text-charcoal">{collectionRate}%</span>
                             </div>
                             <div className="h-3 rounded-full bg-surface overflow-hidden flex">
-                                <div className="h-full bg-green-500 transition-all" style={{ width: `${collectionRate}%` }} />
+                                <div className="h-full bg-tint-sky0 transition-all" style={{ width: `${collectionRate}%` }} />
                                 <div className="h-full bg-yellow-400 transition-all" style={{ width: `${Math.round((pendingCollection / mockAnalytics.totalRevenue) * 100)}%` }} />
                             </div>
                             <div className="flex gap-3 text-[11px] text-stone">
-                                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-green-500 inline-block" /> Collected</span>
+                                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-tint-sky0 inline-block" /> Collected</span>
                                 <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-yellow-400 inline-block" /> Pending</span>
                                 <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-red-400 inline-block" /> Refunded</span>
                             </div>

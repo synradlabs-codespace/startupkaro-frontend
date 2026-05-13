@@ -108,7 +108,7 @@ export function EmployeeChangePasswordPage() {
                         <div className="rounded-lg border border-hairline bg-canvas overflow-hidden">
                             {/* Card header */}
                             <div className="px-6 py-4 border-b border-hairline bg-accent-employee flex items-center gap-3">
-                                <div className="h-8 w-8 rounded-lg bg-indigo-100 flex items-center justify-center">
+                                <div className="h-8 w-8 rounded-lg bg-tint-sky flex items-center justify-center">
                                     <KeyRound className="h-4 w-4 text-charcoal" />
                                 </div>
                                 <div>

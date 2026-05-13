@@ -49,7 +49,7 @@ export function AdminOrderNewPage() {
                 {/* Hero Banner */}
                 <div className="relative overflow-hidden rounded-lg border border-hairline bg-accent-admin p-8">
                     <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-primary-brand/8 blur-3xl" />
-                    <div className="pointer-events-none absolute -bottom-10 -left-10 h-36 w-36 rounded-full bg-green-300/10 blur-2xl" />
+                    <div className="pointer-events-none absolute -bottom-10 -left-10 h-36 w-36 rounded-full bg-storm-mist/20 blur-2xl" />
                     <div className="relative flex flex-col items-center text-center gap-3">
                         <div className="h-16 w-16 rounded-full bg-gradient-to-br from-accent-admin to-accent-admin border-2 border-hairline flex items-center justify-center ">
                             <ShoppingBag className="h-7 w-7 text-charcoal" />

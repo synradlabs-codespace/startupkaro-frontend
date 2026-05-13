@@ -59,7 +59,7 @@ export function AdminEmployeeDetailPage({ id }: { id: string }) {
                 {/* Hero Card */}
                 <div className="relative overflow-hidden rounded-lg border border-hairline bg-accent-admin p-8">
                     <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-primary-brand/8 blur-3xl" />
-                    <div className="pointer-events-none absolute -bottom-10 -left-10 h-36 w-36 rounded-full bg-green-300/10 blur-2xl" />
+                    <div className="pointer-events-none absolute -bottom-10 -left-10 h-36 w-36 rounded-full bg-storm-mist/20 blur-2xl" />
 
                     <div className="relative flex flex-col items-center text-center gap-4">
                         <Avatar className="h-20 w-20">
@@ -94,7 +94,7 @@ export function AdminEmployeeDetailPage({ id }: { id: string }) {
                                     </SelectContent>
                                 </Select>
                             ) : (
-                                <Badge className={status === "active" ? "bg-green-100 text-green-800 hover:bg-green-100" : "bg-surface text-slate hover:bg-surface"}>
+                                <Badge className={status === "active" ? "bg-tint-sky text-primary-deep hover:bg-tint-sky" : "bg-surface text-slate hover:bg-surface"}>
                                     {status}
                                 </Badge>
                             )}

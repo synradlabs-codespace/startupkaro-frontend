@@ -38,14 +38,14 @@ function SuccessContent() {
                         <div className="space-y-2">
                             <h1 className="text-2xl font-bold text-ink">Payment Successful!</h1>
                             <p className="text-sm text-steel leading-relaxed">
-                                Your order has been placed. Our team will reach out shortly to begin processing your service.
+                                Your order has been placed. Our team will email you the required document checklist and assign an expert to your case.
                             </p>
                         </div>
 
                         {/* Info pill */}
                         <div className="inline-flex items-center gap-2 bg-primary-brand/8 border border-hairline text-charcoal text-xs font-medium px-4 py-2 rounded-full">
                             <Sparkles className="h-3.5 w-3.5" />
-                            You will receive a confirmation email shortly
+                            Updates will be shared by email and expert call
                         </div>
 
                         {paymentId && (

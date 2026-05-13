@@ -4,7 +4,7 @@ import Link from "next/link";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { OrderStatusBadge } from "@/components/custom/StatusBadge";
 import { mockPurchases, mockServices } from "@/lib/mock-data";
-import { ShoppingBag, Store, ArrowRight, Sparkles, Clock } from "lucide-react";
+import { Mail, Phone, ShoppingBag, Store, ArrowRight, Sparkles, Clock } from "lucide-react";
 
 export function CustomerDashboard() {
     const recentPurchases = mockPurchases.slice(0, 3);
@@ -37,6 +37,27 @@ export function CustomerDashboard() {
                 </div>
 
                 {/* ── Stats ─────────────────────────────────── */}
+                <div className="rounded-lg border border-hairline bg-canvas p-5">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                        <div>
+                            <p className="text-sm font-semibold text-charcoal">Document sharing happens over email</p>
+                            <p className="mt-1 text-xs leading-relaxed text-steel">
+                                After you purchase a service, StartupKaro will email you the required checklist from our official email. Your assigned expert will keep you updated by email and call.
+                            </p>
+                        </div>
+                        <div className="flex shrink-0 flex-wrap gap-2 text-xs text-stone">
+                            <span className="inline-flex items-center gap-1.5 rounded-md border border-hairline bg-surface px-2.5 py-1">
+                                <Mail className="h-3 w-3" />
+                                Email checklist
+                            </span>
+                            <span className="inline-flex items-center gap-1.5 rounded-md border border-hairline bg-surface px-2.5 py-1">
+                                <Phone className="h-3 w-3" />
+                                Expert call
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="rounded-lg border border-hairline bg-canvas p-5">
                         <div className="flex items-start justify-between mb-3">
