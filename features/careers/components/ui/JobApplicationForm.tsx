@@ -50,11 +50,11 @@ const YEARS = Array.from({ length: 41 }, (_, i) => String(i));
 const MONTHS = Array.from({ length: 12 }, (_, i) => String(i));
 
 const INPUT_BASE =
-    "w-full bg-gray-50 border rounded-xl px-4 py-3 text-black text-sm placeholder-gray-400 focus:outline-none transition-colors font-sans";
-const INPUT_DEFAULT = "border-gray-200 focus:border-gray-400";
+    "w-full bg-surface border rounded-xl px-4 py-3 text-ink text-sm placeholder-gray-400 focus:outline-none transition-colors font-sans";
+const INPUT_DEFAULT = "border-hairline focus:border-hairline-strong";
 const INPUT_ERROR = "border-red-300 focus:border-red-400";
 
-const LABEL_CLASS = "block text-xs text-gray-500 mb-2 font-mono tracking-widest uppercase";
+const LABEL_CLASS = "block text-xs text-graphite mb-2 font-mono tracking-widest uppercase";
 
 function validateLinkedin(v: string): string | null {
     if (!v.trim()) return "LinkedIn URL is required";
@@ -165,13 +165,13 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
     if (submitted) {
         return (
             <div className="flex flex-col items-center justify-center py-16 text-center" id="apply">
-                <div className="h-16 w-16 rounded-full bg-[#ff7759]/10 flex items-center justify-center mb-6">
-                    <CheckCircle2 className="h-8 w-8 text-[#ff7759]" />
+                <div className="h-16 w-16 rounded-full bg-[#296ef9]/10 flex items-center justify-center mb-6">
+                    <CheckCircle2 className="h-8 w-8 text-[#296ef9]" />
                 </div>
-                <h3 className="font-serif text-2xl text-gray-900 font-normal mb-2">
+                <h3 className="font-serif text-2xl text-ink font-normal mb-2">
                     Application submitted!
                 </h3>
-                <p className="text-sm text-gray-500 max-w-md">
+                <p className="text-sm text-graphite max-w-md">
                     Thank you for your interest in joining StartupKaro. We review every application carefully and will be in touch soon.
                 </p>
             </div>
@@ -180,9 +180,9 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
 
     return (
         <div id="apply" className="scroll-mt-20">
-            <div className="border border-gray-200 rounded-2xl p-6 md:p-10 bg-white shadow-sm">
-                <h2 className="font-serif text-2xl text-gray-900 font-normal mb-1">Apply for this role</h2>
-                <p className="text-sm text-gray-500 mb-8">All fields are required unless marked optional.</p>
+            <div className="border border-hairline rounded-2xl p-6 md:p-10 bg-canvas shadow-sm">
+                <h2 className="font-serif text-2xl text-ink font-normal mb-1">Apply for this role</h2>
+                <p className="text-sm text-graphite mb-8">All fields are required unless marked optional.</p>
 
                 <form onSubmit={handleSubmit} noValidate className="space-y-7">
 
@@ -193,7 +193,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                             <input
                                 readOnly
                                 value={job.jobId}
-                                className={`${INPUT_BASE} ${INPUT_DEFAULT} bg-gray-100 text-gray-500 cursor-default select-none`}
+                                className={`${INPUT_BASE} ${INPUT_DEFAULT} bg-fog text-graphite cursor-default select-none`}
                             />
                         </div>
                         <div className="sm:col-span-2">
@@ -201,12 +201,12 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                             <input
                                 readOnly
                                 value={job.title}
-                                className={`${INPUT_BASE} ${INPUT_DEFAULT} bg-gray-100 text-gray-500 cursor-default select-none`}
+                                className={`${INPUT_BASE} ${INPUT_DEFAULT} bg-fog text-graphite cursor-default select-none`}
                             />
                         </div>
                     </div>
 
-                    <div className="h-px bg-gray-100" />
+                    <div className="h-px bg-fog" />
 
                     {/* Name row */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
@@ -226,7 +226,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                         </div>
                         <div>
                             <label className={LABEL_CLASS}>
-                                Middle Name <span className="normal-case text-gray-400">(optional)</span>
+                                Middle Name <span className="normal-case text-stone">(optional)</span>
                             </label>
                             <input
                                 type="text"
@@ -295,7 +295,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                                     value={form.experienceYears}
                                     onValueChange={(v) => set("experienceYears", v ?? "0")}
                                 >
-                                    <SelectTrigger className={`h-11 rounded-xl bg-gray-50 text-sm ${errors.experienceYears ? "border-red-300" : "border-gray-200"}`}>
+                                    <SelectTrigger className={`h-11 rounded-xl bg-surface text-sm ${errors.experienceYears ? "border-red-300" : "border-hairline"}`}>
                                         <SelectValue placeholder="Years" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -312,7 +312,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                                     value={form.experienceMonths}
                                     onValueChange={(v) => set("experienceMonths", v ?? "0")}
                                 >
-                                    <SelectTrigger className="h-11 rounded-xl bg-gray-50 text-sm border-gray-200">
+                                    <SelectTrigger className="h-11 rounded-xl bg-surface text-sm border-hairline">
                                         <SelectValue placeholder="Months" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -343,11 +343,11 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                                     <RadioGroupItem
                                         value={opt.value}
                                         id={`current-ctc-${opt.value}`}
-                                        className="border-gray-300 data-[state=checked]:border-[#ff7759] data-[state=checked]:text-[#ff7759]"
+                                        className="border-hairline-strong data-[state=checked]:border-[#296ef9] data-[state=checked]:text-[#296ef9]"
                                     />
                                     <Label
                                         htmlFor={`current-ctc-${opt.value}`}
-                                        className="text-sm text-gray-700 cursor-pointer"
+                                        className="text-sm text-charcoal cursor-pointer"
                                     >
                                         {opt.label}
                                     </Label>
@@ -372,11 +372,11 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                                     <RadioGroupItem
                                         value={opt.value}
                                         id={`expected-ctc-${opt.value}`}
-                                        className="border-gray-300 data-[state=checked]:border-[#ff7759] data-[state=checked]:text-[#ff7759]"
+                                        className="border-hairline-strong data-[state=checked]:border-[#296ef9] data-[state=checked]:text-[#296ef9]"
                                     />
                                     <Label
                                         htmlFor={`expected-ctc-${opt.value}`}
-                                        className="text-sm text-gray-700 cursor-pointer"
+                                        className="text-sm text-charcoal cursor-pointer"
                                     >
                                         {opt.label}
                                     </Label>
@@ -401,11 +401,11 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                                     <RadioGroupItem
                                         value={opt.value}
                                         id={`notice-${opt.value}`}
-                                        className="border-gray-300 data-[state=checked]:border-[#ff7759] data-[state=checked]:text-[#ff7759]"
+                                        className="border-hairline-strong data-[state=checked]:border-[#296ef9] data-[state=checked]:text-[#296ef9]"
                                     />
                                     <Label
                                         htmlFor={`notice-${opt.value}`}
-                                        className="text-sm text-gray-700 cursor-pointer"
+                                        className="text-sm text-charcoal cursor-pointer"
                                     >
                                         {opt.label}
                                     </Label>
@@ -436,7 +436,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                     <div>
                         <label className={LABEL_CLASS}>
                             Summary, Achievements &amp; Work Links{" "}
-                            <span className="normal-case text-gray-400">(optional)</span>
+                            <span className="normal-case text-stone">(optional)</span>
                         </label>
                         <textarea
                             value={form.summary}
@@ -447,7 +447,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                         />
                     </div>
 
-                    <div className="h-px bg-gray-100" />
+                    <div className="h-px bg-fog" />
 
                     {/* Criminal cases */}
                     <div>
@@ -464,11 +464,11 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                                     <RadioGroupItem
                                         value={val}
                                         id={`criminal-${val}`}
-                                        className="border-gray-300 data-[state=checked]:border-[#ff7759] data-[state=checked]:text-[#ff7759]"
+                                        className="border-hairline-strong data-[state=checked]:border-[#296ef9] data-[state=checked]:text-[#296ef9]"
                                     />
                                     <Label
                                         htmlFor={`criminal-${val}`}
-                                        className="text-sm text-gray-700 cursor-pointer"
+                                        className="text-sm text-charcoal cursor-pointer"
                                     >
                                         {val}
                                     </Label>
@@ -486,12 +486,12 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                             id="agree"
                             checked={form.agreeToTerms}
                             onCheckedChange={(checked) => set("agreeToTerms", checked === true)}
-                            className="mt-0.5 border-gray-300 data-[state=checked]:bg-[#ff7759] data-[state=checked]:border-[#ff7759]"
+                            className="mt-0.5 border-hairline-strong data-[state=checked]:bg-[#296ef9] data-[state=checked]:border-[#296ef9]"
                         />
                         <div>
-                            <Label htmlFor="agree" className="text-sm text-gray-700 cursor-pointer leading-relaxed">
+                            <Label htmlFor="agree" className="text-sm text-charcoal cursor-pointer leading-relaxed">
                                 I agree that all information provided above is accurate, failing which my employment could be impacted.
-                                <span className="text-[#ff7759] ml-0.5">*</span>
+                                <span className="text-[#296ef9] ml-0.5">*</span>
                             </Label>
                             {errors.agreeToTerms && (
                                 <p className="mt-1 text-xs text-red-500">{errors.agreeToTerms}</p>
@@ -507,7 +507,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-3.5 rounded-xl text-sm font-mono tracking-widest uppercase transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-white bg-[#ff7759] hover:bg-[#ff7759]/90 shadow-sm shadow-[#ff7759]/20"
+                        className="w-full py-3.5 rounded-xl text-sm font-mono tracking-widest uppercase transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-white bg-[#296ef9] hover:bg-[#296ef9]/90 shadow-sm shadow-[#296ef9]/20"
                     >
                         {loading ? "Submitting…" : "Submit Application"}
                     </button>

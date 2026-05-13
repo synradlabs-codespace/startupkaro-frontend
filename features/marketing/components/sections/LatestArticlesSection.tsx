@@ -19,15 +19,15 @@ export function LatestArticlesSection({ articles }: LatestArticlesSectionProps) 
     const cards = articles.slice(0, 3);
 
     return (
-        <section className="bg-canvas rounded-2xl py-20 md:py-24">
+        <section className="bg-canvas py-20 md:py-24">
             <div className="mx-auto max-w-7xl px-8">
                 {/* Header row */}
-                <div className="flex items-end justify-between mb-10 gap-4">
+                <div className="flex flex-col items-start justify-between gap-4 mb-10 sm:flex-row sm:items-end">
                     <div>
-                        <p className="text-xs font-medium uppercase tracking-[0.28px] text-steel mb-2">
+                        <p className="text-xs font-medium uppercase tracking-[0.28px] text-graphite mb-2">
                             Expert Insights
                         </p>
-                        <h2 className="font-display text-4xl md:text-5xl text-ink font-semibold tracking-tight leading-tight">
+                        <h2 className="font-display text-4xl md:text-5xl text-ink font-medium leading-tight">
                             From the Knowledge Hub
                         </h2>
                     </div>
@@ -41,13 +41,13 @@ export function LatestArticlesSection({ articles }: LatestArticlesSectionProps) 
                 </div>
 
                 {/* 3-column equal grid */}
-                <div className="rounded-2xl bg-tint-sky p-5 md:p-6">
+                <div className="rounded-2xl border border-hairline bg-cloud p-5 md:p-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     {cards.map((article) => (
                         <Link
                             key={article._id}
                             href={`/article/${article.slug}`}
-                            className="group flex flex-col rounded-xl border border-hairline bg-canvas overflow-hidden transition-all duration-200 hover:-translate-y-0.5"
+                            className="group flex flex-col overflow-hidden rounded-xl border border-hairline bg-canvas transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-brand hover:shadow-[0_2px_8px_rgba(26,26,26,0.08)]"
                         >
                             <div className="relative h-44 shrink-0 overflow-hidden bg-surface">
                                 {article.coverImage?.url ? (
@@ -63,7 +63,7 @@ export function LatestArticlesSection({ articles }: LatestArticlesSectionProps) 
                                 )}
                             </div>
                             <div className="flex flex-col gap-2.5 p-5 flex-1">
-                                <div className="flex items-center gap-2 text-xs text-stone">
+                                <div className="flex items-center gap-2 text-xs text-graphite">
                                     <span className="font-medium text-slate">{article.author?.name}</span>
                                     <span>·</span>
                                     <span>{formatDate(article.publishedAt)}</span>

@@ -39,7 +39,7 @@ export function CookiesPolicyPage() {
     return (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-4">
             {/* Header */}
-            <div className="bg-tint-cream rounded-2xl px-8 py-12">
+            <div className="bg-canvas rounded-2xl px-8 py-12">
                 <div className="max-w-3xl">
                     <p className="text-xs font-medium uppercase tracking-[0.28px] text-steel mb-3">Legal</p>
                     <h1 className="font-display text-4xl font-semibold tracking-tight text-ink mb-3">Cookies &amp; Data Collection</h1>
@@ -113,7 +113,7 @@ export function CookiesPolicyPage() {
                             </thead>
                             <tbody className="divide-y divide-hairline">
                                 {cookieTable.map((row) => (
-                                    <tr key={row.name} className="bg-white">
+                                    <tr key={row.name} className="bg-canvas">
                                         <td className="px-4 py-3 font-mono text-xs text-charcoal whitespace-nowrap">{row.name}</td>
                                         <td className="px-4 py-3 text-slate whitespace-nowrap">{row.provider}</td>
                                         <td className="px-4 py-3 text-slate">{row.purpose}</td>

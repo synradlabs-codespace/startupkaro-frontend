@@ -9,10 +9,34 @@ import { ServiceCard } from "./ui/ServiceCard";
 import type { Service } from "@/features/marketing/data/types";
 
 const categories = ["All", "Tax", "Business", "Legal", "License"] as const;
+type CategoryFilter = (typeof categories)[number];
+
+const categoryPillStyles: Record<CategoryFilter, { idle: string; active: string }> = {
+    All: {
+        idle: "border-hairline bg-canvas text-charcoal hover:border-ink hover:text-ink",
+        active: "border-ink bg-ink text-white",
+    },
+    Tax: {
+        idle: "border-bloom-rose bg-bloom-rose/45 text-bloom-wine hover:border-bloom-deep",
+        active: "border-bloom-deep bg-bloom-deep text-white",
+    },
+    Business: {
+        idle: "border-storm-mist bg-storm-mist/35 text-storm-deep hover:border-storm-deep",
+        active: "border-storm-deep bg-storm-deep text-white",
+    },
+    Legal: {
+        idle: "border-bloom-coral bg-bloom-coral/15 text-bloom-wine hover:border-bloom-coral",
+        active: "border-bloom-coral bg-bloom-coral text-white",
+    },
+    License: {
+        idle: "border-hairline-strong bg-fog text-ink hover:border-ink",
+        active: "border-ink bg-ink text-white",
+    },
+};
 
 export function ServicesListingPage({ services }: { services: Service[] }) {
     const [search, setSearch] = useState("");
-    const [activeCategory, setActiveCategory] = useState<string>("All");
+    const [activeCategory, setActiveCategory] = useState<CategoryFilter>("All");
 
     const filtered = services.filter((s) => {
         const matchSearch =
@@ -27,14 +51,14 @@ export function ServicesListingPage({ services }: { services: Service[] }) {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 space-y-8">
             {/* Page title */}
             <div>
-                <h1 className="font-display text-4xl md:text-6xl font-semibold tracking-tight text-ink mb-2">Our Services</h1>
-                <p className="text-base text-slate leading-relaxed">Startup compliance and legal services, handled end-to-end by expert CAs.</p>
+                <h1 className="mb-2 font-display text-4xl font-medium text-ink md:text-6xl">Our Services</h1>
+                <p className="text-base leading-relaxed text-charcoal">Startup compliance and legal services, handled end-to-end by expert CAs.</p>
             </div>
 
             {/* Search + filter */}
             <div className="flex flex-col sm:flex-row gap-3">
                 <div className="relative flex-1 max-w-sm">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone" />
+                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-graphite" />
                     <Input
                         placeholder="Search services..."
                         value={search}
@@ -43,20 +67,21 @@ export function ServicesListingPage({ services }: { services: Service[] }) {
                     />
                 </div>
                 <div className="flex gap-2 flex-wrap">
-                    {categories.map((cat) => (
-                        <button
-                            key={cat}
-                            type="button"
-                            onClick={() => setActiveCategory(cat)}
-                            className={`px-3 py-1.5 rounded-md text-xs font-medium uppercase tracking-[0.28px] transition-all duration-150 border ${
-                                activeCategory === cat
-                                    ? "bg-primary-brand text-white border-primary-brand"
-                                    : "bg-canvas text-slate border-hairline hover:border-hairline-strong hover:text-ink"
-                            }`}
-                        >
-                            {cat}
-                        </button>
-                    ))}
+                    {categories.map((cat) => {
+                        const styles = categoryPillStyles[cat];
+                        return (
+                            <button
+                                key={cat}
+                                type="button"
+                                onClick={() => setActiveCategory(cat)}
+                                className={`rounded-md border px-3 py-1.5 text-xs font-medium uppercase tracking-[0.28px] transition-all duration-150 ${
+                                    activeCategory === cat ? styles.active : styles.idle
+                                }`}
+                            >
+                                {cat}
+                            </button>
+                        );
+                    })}
                 </div>
             </div>
 
@@ -67,7 +92,7 @@ export function ServicesListingPage({ services }: { services: Service[] }) {
                         <Search className="h-5 w-5 text-stone" />
                     </div>
                     <p className="text-base text-ink">No services found</p>
-                    <p className="text-xs uppercase tracking-[0.28px] text-stone">Try a different search or category</p>
+                    <p className="text-xs uppercase tracking-[0.28px] text-graphite">Try a different search or category</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -78,9 +103,9 @@ export function ServicesListingPage({ services }: { services: Service[] }) {
             )}
 
             {/* Footer note */}
-            <div className="flex items-center gap-2 text-xs text-stone pt-2">
+            <div className="flex items-center gap-2 pt-2 text-xs text-graphite">
                 <Sparkles className="h-3.5 w-3.5 text-charcoal" />
-                All services include expert assistance and end-to-end document handling.
+                All services include expert assistance, email-based document coordination, and updates from your assigned expert.
             </div>
         </div>
     );

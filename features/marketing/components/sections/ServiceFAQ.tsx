@@ -10,10 +10,11 @@ export function ServiceFAQ({ service }: { service: Service }) {
     const [open, setOpen] = useState<number | null>(0);
 
     return (
-        <section className="py-10">
+        <section className="bg-canvas py-14 md:py-18">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="max-w-2xl">
-                    <h2 className="text-2xl md:text-3xl font-display font-semibold tracking-tight text-ink mb-6">Frequently asked questions</h2>
+                <div className="max-w-3xl">
+                    <p className="mb-2 text-xs font-medium uppercase tracking-[0.28px] text-graphite">Questions</p>
+                    <h2 className="mb-6 font-display text-3xl font-medium text-ink md:text-4xl">Frequently asked questions</h2>
                     <div className="space-y-3">
                         {service.faqs.map((faq, idx) => (
                             <div
@@ -23,16 +24,16 @@ export function ServiceFAQ({ service }: { service: Service }) {
                                 <button
                                     type="button"
                                     onClick={() => setOpen(open === idx ? null : idx)}
-                                    className="w-full flex items-start justify-between gap-4 p-4 text-left"
+                                    className="flex w-full items-start justify-between gap-4 p-4 text-left"
                                 >
-                                    <span className="text-sm font-medium text-ink">{faq.question}</span>
+                                    <span className="text-base font-medium text-ink">{faq.question}</span>
                                     <ChevronDown
-                                        className={`h-4 w-4 text-stone shrink-0 mt-0.5 transition-transform duration-200 ${open === idx ? "rotate-180" : ""}`}
+                                        className={`mt-0.5 h-4 w-4 shrink-0 text-graphite transition-transform duration-200 ${open === idx ? "rotate-180" : ""}`}
                                     />
                                 </button>
                                 {open === idx && (
                                     <div className="px-4 pb-4">
-                                        <p className="text-sm text-slate leading-relaxed">{faq.answer}</p>
+                                        <p className="text-sm leading-relaxed text-charcoal">{faq.answer}</p>
                                     </div>
                                 )}
                             </div>

@@ -30,11 +30,11 @@ export function JobsGroupedList({ jobs }: JobsGroupedListProps) {
     if (filtered.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center py-20 text-center">
-                <div className="h-12 w-12 rounded-xl bg-gray-100 flex items-center justify-center mb-4">
-                    <Briefcase className="h-5 w-5 text-gray-400" />
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary-soft">
+                    <Briefcase className="h-5 w-5 text-primary-brand" />
                 </div>
-                <p className="text-sm font-medium text-gray-700">No openings found</p>
-                <p className="text-xs text-gray-400 mt-1">Try adjusting your filters or check back soon.</p>
+                <p className="text-sm font-medium text-charcoal">No openings found</p>
+                <p className="mt-1 text-xs text-graphite">Try adjusting your filters or check back soon.</p>
             </div>
         );
     }
@@ -60,7 +60,7 @@ export function JobsGroupedList({ jobs }: JobsGroupedListProps) {
         <div className="space-y-12">
             {Object.entries(groups).map(([dept, items]) => (
                 <section key={dept}>
-                    <h2 className="font-serif text-2xl text-gray-900 font-normal mb-6">{dept}</h2>
+                    <h2 className="mb-6 font-display text-2xl font-medium text-ink">{dept}</h2>
                     <div className="space-y-3">
                         {items.map((job) => (
                             <JobCard key={job._id} job={job} index={globalIndex++} />

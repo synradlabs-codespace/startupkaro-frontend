@@ -11,13 +11,13 @@ import type { Service } from "@/features/marketing/data/types";
 
 export function ServiceDetailPage({ service }: { service: Service }) {
     return (
-        <>
+        <main className="bg-canvas">
             <ServiceHero service={service} />
             <ServiceOverview service={service} />
             <ServiceFeatures service={service} />
             <ServiceProcess service={service} />
             <ServicePricingCTA service={service} />
             <ServiceFAQ service={service} />
-        </>
+        </main>
     );
 }

@@ -8,8 +8,8 @@ export function ComingSoonPage({ title }: { title: string }) {
         <div className="flex-1 flex items-center justify-center px-6 py-24">
             <div className="text-center space-y-6 max-w-sm">
                 <div className="flex justify-center">
-                    <div className="h-16 w-16 rounded-xl bg-tint-peach flex items-center justify-center">
-                        <Construction className="h-8 w-8 text-charcoal" />
+                    <div className="h-16 w-16 rounded-xl bg-electric-blue flex items-center justify-center">
+                        <Construction className="h-8 w-8 text-white" />
                     </div>
                 </div>
                 <div className="space-y-2">

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight, Shield, Clock, Users, Award } from "lucide-react";
-import { FlowButton, FlowSecondaryButton } from "@/components/custom/FlowButton";
+import { MarketingCTASection } from "./sections/MarketingCTASection";
 
 const stats = [
     { value: "500+", label: "Businesses served" },
@@ -14,28 +14,28 @@ const stats = [
 const values = [
     {
         icon: Shield,
-        tint: "bg-tint-peach",
+        tint: "bg-primary-soft",
         title: "Compliance-first",
         description:
             "Every service we offer is designed around keeping your business fully compliant with Indian law, no shortcuts, no guesswork.",
     },
     {
         icon: Clock,
-        tint: "bg-tint-sky",
+        tint: "bg-primary-soft",
         title: "Transparent timelines",
         description:
             "We quote real timelines and stick to them. Government delays happen, we keep you informed every step of the way.",
     },
     {
         icon: Users,
-        tint: "bg-tint-mint",
+        tint: "bg-primary-soft",
         title: "Human experts, always",
         description:
             "A dedicated CA or CS is assigned to your case. You get a real professional, not a chatbot or a generic form submission.",
     },
     {
         icon: Award,
-        tint: "bg-tint-lavender",
+        tint: "bg-primary-soft",
         title: "Fixed pricing, zero surprises",
         description:
             "Government fees, professional charges, and any incidentals are included in our flat pricing upfront. What we quote is what you pay.",
@@ -53,20 +53,18 @@ const services = [
 
 export function AboutPage() {
     return (
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-4">
+        <div className="bg-canvas py-6">
 
             {/* Hero */}
-            <section className="bg-tint-cream rounded-2xl px-8 pt-20 pb-24 text-center relative overflow-hidden">
-                <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-tint-mint/50 blur-3xl" />
-                <div className="pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-tint-sky/50 blur-3xl" />
+            <section className="relative mx-4 max-w-7xl overflow-hidden rounded-2xl border border-hairline bg-canvas px-8 pb-24 pt-20 text-center sm:mx-6 lg:mx-auto">
                 <div className="relative mx-auto max-w-4xl">
-                    <p className="text-xs uppercase tracking-[0.28px] text-steel font-medium mb-4">
+                    <p className="mb-4 text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                         About StartupKaro
                     </p>
-                    <h1 className="text-4xl md:text-6xl font-display font-semibold tracking-tight text-ink leading-tight mb-6">
+                    <h1 className="mb-6 font-display text-4xl font-medium leading-none text-ink md:text-6xl">
                         India&apos;s compliance partner<br className="hidden sm:block" /> for growing businesses
                     </h1>
-                    <p className="text-base text-slate max-w-2xl mx-auto leading-relaxed">
+                    <p className="mx-auto max-w-2xl text-base leading-relaxed text-charcoal">
                         StartupKaro was built for founders, freelancers, and small business owners who want to spend less time
                         navigating paperwork and more time building. We handle the legal and compliance work, end to end.
                     </p>
@@ -74,27 +72,27 @@ export function AboutPage() {
             </section>
 
             {/* Stats */}
-            <section className="bg-surface rounded-2xl py-12 px-8">
+            <section className="mx-4 max-w-7xl rounded-2xl border border-hairline bg-cloud px-8 py-12 sm:mx-6 lg:mx-auto">
                 <div className="mx-auto max-w-4xl grid grid-cols-2 md:grid-cols-4 gap-8">
                     {stats.map((s) => (
                         <div key={s.label} className="text-center">
-                            <p className="text-3xl font-display font-semibold tracking-tight text-ink">{s.value}</p>
-                            <p className="mt-1 text-sm text-slate leading-relaxed">{s.label}</p>
+                            <p className="font-display text-3xl font-medium text-ink">{s.value}</p>
+                            <p className="mt-1 text-sm leading-relaxed text-charcoal">{s.label}</p>
                         </div>
                     ))}
                 </div>
             </section>
 
             {/* Mission */}
-            <section className="bg-canvas rounded-2xl px-8 py-16 mx-auto">
-                <div className="max-w-3xl">
-                    <p className="text-xs uppercase tracking-[0.28px] text-steel font-medium mb-4">
+            <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+                <div className="max-w-3xl border-y border-hairline py-10">
+                    <p className="mb-4 text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                         Our mission
                     </p>
-                    <h2 className="text-2xl md:text-3xl font-display font-semibold tracking-tight text-ink mb-6 leading-snug">
+                    <h2 className="mb-6 font-display text-2xl font-medium leading-snug text-ink md:text-3xl">
                         Making compliance accessible for every Indian business
                     </h2>
-                    <div className="space-y-4 text-base text-slate leading-relaxed">
+                    <div className="space-y-4 text-base leading-relaxed text-charcoal">
                         <p>
                             Starting a business in India has historically meant months of back-and-forth with consultants,
                             government portals, and mountains of documentation. For most first-time founders, it&apos;s overwhelming.
@@ -113,21 +111,21 @@ export function AboutPage() {
             </section>
 
             {/* Values */}
-            <section className="bg-tint-sky rounded-2xl px-8 py-16">
+            <section className="bg-cloud px-4 py-16 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-5xl">
                     <div className="text-center mb-12">
-                        <p className="text-xs uppercase tracking-[0.28px] text-steel font-medium mb-4">How we work</p>
-                        <h2 className="text-2xl md:text-3xl font-display font-semibold tracking-tight text-ink">What we stand for</h2>
+                        <p className="mb-4 text-xs font-medium uppercase tracking-[0.28px] text-graphite">How we work</p>
+                        <h2 className="font-display text-2xl font-medium text-ink md:text-3xl">What we stand for</h2>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         {values.map((v) => (
-                            <div key={v.title} className="bg-canvas rounded-xl border border-hairline p-6 flex gap-4">
+                            <div key={v.title} className="flex gap-4 rounded-xl border border-hairline bg-canvas p-6 transition-colors duration-200 hover:border-primary-brand">
                                 <div className={`h-10 w-10 rounded-xl ${v.tint} flex items-center justify-center shrink-0`}>
-                                    <v.icon className="h-5 w-5 text-charcoal" />
+                                    <v.icon className="h-5 w-5 text-primary-brand" />
                                 </div>
                                 <div>
-                                    <h3 className="text-base font-semibold text-ink mb-1">{v.title}</h3>
-                                    <p className="text-sm text-slate leading-relaxed">{v.description}</p>
+                                    <h3 className="mb-1 text-base font-medium text-ink">{v.title}</h3>
+                                    <p className="text-sm leading-relaxed text-charcoal">{v.description}</p>
                                 </div>
                             </div>
                         ))}
@@ -136,12 +134,12 @@ export function AboutPage() {
             </section>
 
             {/* Services */}
-            <section className="bg-canvas rounded-2xl px-8 py-16">
+            <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-5xl">
                     <div className="text-center mb-12">
-                        <p className="text-xs uppercase tracking-[0.28px] text-steel font-medium mb-4">What we offer</p>
-                        <h2 className="text-2xl md:text-3xl font-display font-semibold tracking-tight text-ink">Our services</h2>
-                        <p className="mt-3 text-base text-slate leading-relaxed max-w-xl mx-auto">
+                        <p className="mb-4 text-xs font-medium uppercase tracking-[0.28px] text-graphite">What we offer</p>
+                        <h2 className="font-display text-2xl font-medium text-ink md:text-3xl">Our services</h2>
+                        <p className="mx-auto mt-3 max-w-xl text-base leading-relaxed text-charcoal">
                             Fixed services at fixed prices, delivered by qualified professionals.
                         </p>
                     </div>
@@ -150,20 +148,20 @@ export function AboutPage() {
                             <Link
                                 key={svc.slug}
                                 href={`/services/${svc.slug}`}
-                                className="group border border-hairline rounded-xl p-5 bg-canvas hover:bg-surface transition-all duration-200 flex items-center justify-between"
+                                className="group flex items-center justify-between rounded-xl border border-hairline bg-canvas p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-brand"
                             >
                                 <div>
-                                    <p className="text-xs font-medium uppercase tracking-[0.28px] text-stone mb-1">{svc.category}</p>
-                                    <p className="text-sm text-ink">{svc.name}</p>
+                                    <p className="mb-1 text-xs font-medium uppercase tracking-[0.28px] text-graphite">{svc.category}</p>
+                                    <p className="text-sm font-medium text-ink">{svc.name}</p>
                                 </div>
-                                <ArrowRight className="h-4 w-4 text-stone group-hover:text-charcoal group-hover:translate-x-0.5 transition-all" />
+                                <ArrowRight className="h-4 w-4 text-graphite transition-all group-hover:translate-x-0.5 group-hover:text-primary-brand" />
                             </Link>
                         ))}
                     </div>
                     <div className="mt-8 text-center">
                         <Link
                             href="/services"
-                            className="inline-flex items-center gap-2 text-sm font-medium text-ink hover:text-charcoal transition-colors"
+                            className="inline-flex items-center gap-2 text-sm font-medium text-primary-brand transition-colors hover:text-primary-deep"
                         >
                             View all services
                             <ArrowRight className="h-4 w-4" />
@@ -172,30 +170,12 @@ export function AboutPage() {
                 </div>
             </section>
 
-            {/* CTA */}
-            <section className="bg-tint-peach rounded-2xl px-8 py-16 text-center">
-                <div className="mx-auto max-w-2xl">
-                    <h2 className="text-2xl md:text-3xl font-display font-semibold tracking-tight text-ink mb-4">
-                        Ready to get started?
-                    </h2>
-                    <p className="text-base text-slate mb-8 leading-relaxed">
-                        Tell us what you need and we&apos;ll match you with the right service and a dedicated expert.
-                    </p>
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                        <FlowButton
-                            href="/services"
-                            text="Explore Services"
-                            iconName="briefcase"
-                            colorVariant="navy"
-                        />
-                        <FlowSecondaryButton
-                            href="/contact"
-                            text="Talk to an Expert"
-                            iconName="message-circle"
-                        />
-                    </div>
-                </div>
-            </section>
+            <MarketingCTASection
+                title="Ready to get started?"
+                description="Tell us what you need and we'll match you with the right service and a dedicated expert."
+                primaryText="Explore Services"
+                trustText="Fixed pricing - Human expert support - 100% online"
+            />
         </div>
     );
 }

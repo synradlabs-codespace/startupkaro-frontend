@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa";
+import { UnderlineAnimation } from "@/components/fancy/text";
 
 const serviceLinks = [
     { href: "/services/gst-registration", label: "GST Registration" },
@@ -64,8 +65,8 @@ export function MarketingFooter() {
                         <ul className="space-y-2.5">
                             {serviceLinks.map((link) => (
                                 <li key={link.href}>
-                                    <Link href={link.href} className="text-sm text-steel hover:text-ink transition-colors">
-                                        {link.label}
+                                    <Link href={link.href} className="group text-sm text-steel hover:text-ink transition-colors">
+                                        <UnderlineAnimation>{link.label}</UnderlineAnimation>
                                     </Link>
                                 </li>
                             ))}
@@ -78,8 +79,8 @@ export function MarketingFooter() {
                         <ul className="space-y-2.5">
                             {companyLinks.map((link) => (
                                 <li key={link.href}>
-                                    <Link href={link.href} className="text-sm text-steel hover:text-ink transition-colors">
-                                        {link.label}
+                                    <Link href={link.href} className="group text-sm text-steel hover:text-ink transition-colors">
+                                        <UnderlineAnimation>{link.label}</UnderlineAnimation>
                                     </Link>
                                 </li>
                             ))}
@@ -116,10 +117,18 @@ export function MarketingFooter() {
                         © {new Date().getFullYear()} StartupKaro. All rights reserved.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
-                        <Link href="/privacy-policy" className="text-xs text-stone hover:text-ink transition-colors">Privacy Policy</Link>
-                        <Link href="/terms-of-service" className="text-xs text-stone hover:text-ink transition-colors">Terms of Service</Link>
-                        <Link href="/cookies-policy" className="text-xs text-stone hover:text-ink transition-colors">Cookies Policy</Link>
-                        <Link href="/refund-policy" className="text-xs text-stone hover:text-ink transition-colors">Refund Policy</Link>
+                        <Link href="/privacy-policy" className="group text-xs text-stone hover:text-ink transition-colors">
+                            <UnderlineAnimation>Privacy Policy</UnderlineAnimation>
+                        </Link>
+                        <Link href="/terms-of-service" className="group text-xs text-stone hover:text-ink transition-colors">
+                            <UnderlineAnimation>Terms of Service</UnderlineAnimation>
+                        </Link>
+                        <Link href="/cookies-policy" className="group text-xs text-stone hover:text-ink transition-colors">
+                            <UnderlineAnimation>Cookies Policy</UnderlineAnimation>
+                        </Link>
+                        <Link href="/refund-policy" className="group text-xs text-stone hover:text-ink transition-colors">
+                            <UnderlineAnimation>Refund Policy</UnderlineAnimation>
+                        </Link>
                     </div>
                 </div>
             </div>

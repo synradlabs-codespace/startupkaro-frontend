@@ -15,7 +15,7 @@ export function TermsOfServicePage() {
     return (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-4">
             {/* Header */}
-            <div className="bg-tint-cream rounded-2xl px-8 py-12">
+            <div className="bg-canvas rounded-2xl px-8 py-12">
                 <div className="max-w-3xl">
                     <p className="text-xs font-medium uppercase tracking-[0.28px] text-steel mb-3">Legal</p>
                     <h1 className="font-display text-4xl font-semibold tracking-tight text-ink mb-3">Terms of Service</h1>
@@ -58,7 +58,7 @@ export function TermsOfServicePage() {
                     <p>You agree to:</p>
                     <ul className="list-disc pl-5 space-y-1.5">
                         <li>Provide accurate, complete, and up-to-date information when placing an order or filling any form</li>
-                        <li>Upload genuine documents, submitting forged or fraudulent documents is illegal and will result in immediate service termination</li>
+                        <li>Provide genuine documents through the requested official communication channel; submitting forged or fraudulent documents is illegal and will result in immediate service termination</li>
                         <li>Respond promptly to requests for additional information or document verification</li>
                         <li>Keep your account credentials confidential and notify us of any unauthorised access</li>
                         <li>Use our services only for lawful business purposes</li>

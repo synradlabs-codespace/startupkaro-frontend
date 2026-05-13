@@ -83,14 +83,14 @@ export function ContactPage() {
 
     if (submitted) {
         return (
-            <main className="min-h-screen bg-canvas flex items-center justify-center px-6">
+            <main className="flex min-h-screen items-center justify-center bg-canvas px-6">
                 <div className="w-full max-w-md text-center">
-                    <div className="border border-hairline rounded-2xl p-10 bg-tint-mint">
-                        <div className="h-14 w-14 rounded-full bg-white/60 flex items-center justify-center mx-auto mb-6">
-                            <Send className="h-6 w-6 text-charcoal" />
+                    <div className="rounded-2xl border border-hairline bg-canvas p-10 shadow-[0_2px_8px_rgba(26,26,26,0.08)]">
+                        <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-primary-soft">
+                            <Send className="h-6 w-6 text-primary-brand" />
                         </div>
-                        <h2 className="text-2xl md:text-3xl font-display font-semibold tracking-tight text-ink mb-2">Message sent!</h2>
-                        <p className="text-base text-slate leading-relaxed">
+                        <h2 className="mb-2 font-display text-2xl font-medium text-ink md:text-3xl">Message sent!</h2>
+                        <p className="text-base leading-relaxed text-charcoal">
                             Thank you for reaching out. Our team will get back to you within 1 business day.
                         </p>
                     </div>
@@ -99,54 +99,54 @@ export function ContactPage() {
         );
     }
 
-    const inputBase = "w-full bg-surface border rounded-md px-4 py-3 text-ink text-sm placeholder-stone focus:outline-none focus:ring-2 focus:ring-primary-brand/20 transition-colors";
+    const inputBase = "w-full bg-canvas border rounded-md px-4 py-3 text-ink text-sm placeholder-graphite focus:outline-none focus:ring-2 focus:ring-primary-brand/20 transition-colors";
     const inputError = "border-error-brand focus:border-error-brand";
     const inputNormal = "border-hairline-strong focus:border-hairline-strong";
 
     return (
-        <main className="min-h-screen bg-canvas flex items-center justify-center px-6 py-16">
-            <div className="w-full max-w-5xl">
-                <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <main className="min-h-screen bg-canvas px-4 py-20 sm:px-6 lg:px-8">
+            <div className="mx-auto w-full max-w-5xl">
+                <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
 
                     {/* Left — info panel */}
-                    <div className="lg:col-span-2 space-y-6">
+                    <div className="space-y-6 lg:col-span-2">
                         <div>
-                            <p className="text-xs uppercase tracking-[0.28px] text-steel font-medium mb-2">
+                            <p className="mb-2 text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                                 Get in touch
                             </p>
-                            <h1 className="text-4xl md:text-5xl font-display font-semibold tracking-tight text-ink leading-tight">
+                            <h1 className="font-display text-4xl font-medium leading-none text-ink md:text-5xl">
                                 We&apos;d love to<br />hear from you
                             </h1>
-                            <p className="mt-3 text-base text-slate leading-relaxed">
+                            <p className="mt-4 text-base leading-relaxed text-charcoal">
                                 Have a question about our services? Need help choosing the right compliance package? Our experts are here to help.
                             </p>
                         </div>
 
                         <div className="space-y-4 pt-2">
-                            <div className="flex items-start gap-3">
-                                <div className="h-8 w-8 rounded-md bg-tint-peach flex items-center justify-center shrink-0 mt-0.5">
-                                    <Mail className="h-4 w-4 text-charcoal" />
+                            <div className="flex items-start gap-3 rounded-xl border border-hairline bg-canvas p-4 transition-colors duration-200 hover:border-primary-brand">
+                                <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary-soft">
+                                    <Mail className="h-4 w-4 text-primary-brand" />
                                 </div>
                                 <div>
-                                    <p className="text-xs uppercase tracking-[0.28px] text-stone font-medium mb-0.5">Email</p>
+                                    <p className="mb-0.5 text-xs font-medium uppercase tracking-[0.28px] text-graphite">Email</p>
                                     <p className="text-sm text-ink">hello@startupkaro.in</p>
                                 </div>
                             </div>
-                            <div className="flex items-start gap-3">
-                                <div className="h-8 w-8 rounded-md bg-tint-sky flex items-center justify-center shrink-0 mt-0.5">
-                                    <Phone className="h-4 w-4 text-charcoal" />
+                            <div className="flex items-start gap-3 rounded-xl border border-hairline bg-canvas p-4 transition-colors duration-200 hover:border-primary-brand">
+                                <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary-soft">
+                                    <Phone className="h-4 w-4 text-primary-brand" />
                                 </div>
                                 <div>
-                                    <p className="text-xs uppercase tracking-[0.28px] text-stone font-medium mb-0.5">Phone</p>
+                                    <p className="mb-0.5 text-xs font-medium uppercase tracking-[0.28px] text-graphite">Phone</p>
                                     <p className="text-sm text-ink">+91 789 00000 88</p>
                                 </div>
                             </div>
-                            <div className="flex items-start gap-3">
-                                <div className="h-8 w-8 rounded-md bg-tint-mint flex items-center justify-center shrink-0 mt-0.5">
-                                    <MapPin className="h-4 w-4 text-charcoal" />
+                            <div className="flex items-start gap-3 rounded-xl border border-hairline bg-canvas p-4 transition-colors duration-200 hover:border-primary-brand">
+                                <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary-soft">
+                                    <MapPin className="h-4 w-4 text-primary-brand" />
                                 </div>
                                 <div>
-                                    <p className="text-xs uppercase tracking-[0.28px] text-stone font-medium mb-0.5">Office</p>
+                                    <p className="mb-0.5 text-xs font-medium uppercase tracking-[0.28px] text-graphite">Office</p>
                                     <p className="text-sm text-ink">Mohali, Punjab, India</p>
                                 </div>
                             </div>
@@ -155,11 +155,11 @@ export function ContactPage() {
 
                     {/* Right — form */}
                     <div className="lg:col-span-3">
-                        <div className="border border-hairline rounded-2xl p-8 bg-canvas">
+                        <div className="rounded-2xl border border-hairline bg-cloud p-6 md:p-8">
                             <form onSubmit={handleSubmit} className="space-y-5" noValidate>
 
                                 <div>
-                                    <label className="block text-xs font-medium uppercase tracking-[0.28px] text-stone mb-2">
+                                    <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                                         Full Name
                                     </label>
                                     <input
@@ -176,7 +176,7 @@ export function ContactPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-xs font-medium uppercase tracking-[0.28px] text-stone mb-2">
+                                    <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                                         Email Address
                                     </label>
                                     <input
@@ -194,7 +194,7 @@ export function ContactPage() {
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                     <div>
-                                        <label className="block text-xs font-medium uppercase tracking-[0.28px] text-stone mb-2">
+                                        <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                                             Mobile Number
                                         </label>
                                         <input
@@ -211,20 +211,20 @@ export function ContactPage() {
                                     </div>
 
                                     <div>
-                                        <label className="block text-xs font-medium uppercase tracking-[0.28px] text-stone mb-2">
+                                        <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                                             Date of Submission
                                         </label>
                                         <input
                                             type="text"
                                             value={getTodayDate()}
                                             readOnly
-                                            className="w-full bg-surface border border-hairline rounded-md px-4 py-3 text-stone text-sm cursor-default select-none"
+                                            className="w-full cursor-default select-none rounded-md border border-hairline bg-canvas px-4 py-3 text-sm text-graphite"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-xs font-medium uppercase tracking-[0.28px] text-stone mb-2">
+                                    <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                                         Message
                                     </label>
                                     <textarea
@@ -240,7 +240,7 @@ export function ContactPage() {
                                         ) : (
                                             <span />
                                         )}
-                                        <p className="text-xs text-stone shrink-0 ml-2">
+                                        <p className="ml-2 shrink-0 text-xs text-graphite">
                                             {form.message.length}/1000
                                         </p>
                                     </div>
@@ -249,7 +249,7 @@ export function ContactPage() {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full mt-1 py-3 rounded-md text-xs font-medium tracking-[0.28px] uppercase transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-white bg-primary-brand hover:bg-primary-brand/90 flex items-center justify-center gap-2"
+                                    className="mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-primary-brand py-3 text-xs font-medium uppercase tracking-[0.28px] text-white transition-all duration-200 hover:bg-primary-deep disabled:cursor-not-allowed disabled:opacity-50"
                                 >
                                     {loading ? (
                                         "Sending…"

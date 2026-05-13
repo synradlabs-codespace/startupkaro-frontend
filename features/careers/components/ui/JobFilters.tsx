@@ -45,14 +45,14 @@ export function JobFilters({ locations }: JobFiltersProps) {
     const hasFilters = department || workType || location || remoteOnly;
 
     return (
-        <div className="flex flex-wrap items-end gap-3">
+        <div className="flex flex-wrap items-end gap-3 rounded-2xl border border-hairline bg-cloud p-4">
             {/* Department */}
             <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-mono uppercase tracking-wider text-gray-400">
+                <label className="text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                     Department
                 </label>
                 <Select value={department} onValueChange={(v) => update("department", !v || v === "all" ? "" : v)}>
-                    <SelectTrigger className="w-44 h-10 rounded-xl bg-white border-gray-200 text-sm">
+                    <SelectTrigger className="h-10 w-44 rounded-md border-hairline-strong bg-canvas text-sm">
                         <SelectValue placeholder="All Departments" />
                     </SelectTrigger>
                     <SelectContent>
@@ -66,11 +66,11 @@ export function JobFilters({ locations }: JobFiltersProps) {
 
             {/* Work Type */}
             <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-mono uppercase tracking-wider text-gray-400">
+                <label className="text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                     Work Type
                 </label>
                 <Select value={workType} onValueChange={(v) => update("workType", !v || v === "all" ? "" : v)}>
-                    <SelectTrigger className="w-40 h-10 rounded-xl bg-white border-gray-200 text-sm">
+                    <SelectTrigger className="h-10 w-40 rounded-md border-hairline-strong bg-canvas text-sm">
                         <SelectValue placeholder="All Types" />
                     </SelectTrigger>
                     <SelectContent>
@@ -84,11 +84,11 @@ export function JobFilters({ locations }: JobFiltersProps) {
 
             {/* Location */}
             <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-mono uppercase tracking-wider text-gray-400">
+                <label className="text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                     Location
                 </label>
                 <Select value={location} onValueChange={(v) => update("location", !v || v === "all" ? "" : v)}>
-                    <SelectTrigger className="w-48 h-10 rounded-xl bg-white border-gray-200 text-sm">
+                    <SelectTrigger className="h-10 w-48 rounded-md border-hairline-strong bg-canvas text-sm">
                         <SelectValue placeholder="All Locations" />
                     </SelectTrigger>
                     <SelectContent>
@@ -101,14 +101,14 @@ export function JobFilters({ locations }: JobFiltersProps) {
             </div>
 
             {/* Remote only */}
-            <div className="flex items-center gap-2 h-10 px-3 rounded-xl border border-gray-200 bg-white">
+            <div className="flex h-10 items-center gap-2 rounded-md border border-hairline-strong bg-canvas px-3">
                 <Switch
                     id="remote-only"
                     checked={remoteOnly}
                     onCheckedChange={(v) => update("remoteOnly", v)}
-                    className="data-[state=checked]:bg-[#ff7759]"
+                    className="data-[state=checked]:bg-primary-brand"
                 />
-                <Label htmlFor="remote-only" className="text-sm text-gray-600 cursor-pointer select-none">
+                <Label htmlFor="remote-only" className="cursor-pointer select-none text-sm text-charcoal">
                     Remote only
                 </Label>
             </div>
@@ -117,7 +117,7 @@ export function JobFilters({ locations }: JobFiltersProps) {
             {hasFilters && (
                 <button
                     onClick={() => router.push("/careers", { scroll: false })}
-                    className="h-10 px-3 text-xs font-mono uppercase tracking-wider text-gray-400 hover:text-gray-700 transition-colors"
+                    className="h-10 px-3 text-xs font-medium uppercase tracking-[0.28px] text-graphite transition-colors hover:text-primary-brand"
                 >
                     Clear
                 </button>

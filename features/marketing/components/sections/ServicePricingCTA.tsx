@@ -6,31 +6,31 @@ import { FlowButton } from "@/components/custom/FlowButton";
 
 export function ServicePricingCTA({ service }: { service: Service }) {
     return (
-        <section className="py-10 border-b border-hairline bg-tint-peach rounded-2xl">
-            <div className="mx-auto max-w-7xl px-8">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 p-6 rounded-xl border border-hairline bg-canvas">
+        <section className="px-4 py-14 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl">
+                <div className="flex flex-col gap-6 rounded-2xl border border-ink bg-ink p-6 sm:flex-row sm:items-center sm:justify-between md:p-8">
                     <div>
-                        <p className="text-xs uppercase tracking-[0.28px] text-steel font-medium mb-1">All-inclusive fee</p>
-                        <p className="text-4xl font-display font-semibold tracking-tight text-ink">
+                        <p className="mb-1 text-xs font-medium uppercase tracking-[0.28px] text-white/70">All-inclusive fee</p>
+                        <p className="font-display text-4xl font-medium text-white">
                             ₹{service.pricing.amount.toLocaleString("en-IN")}
                         </p>
                         {service.pricing.note && (
-                            <p className="text-sm text-slate leading-relaxed mt-1">{service.pricing.note}</p>
+                            <p className="mt-1 text-sm leading-relaxed text-white/80">{service.pricing.note}</p>
                         )}
-                        <p className="text-sm text-slate flex items-center gap-1.5 mt-2">
-                            <Clock className="h-3.5 w-3.5 text-charcoal" />
+                        <p className="mt-2 flex items-center gap-1.5 text-sm text-white/80">
+                            <Clock className="h-3.5 w-3.5 text-white" />
                             Delivered in {service.duration}
                         </p>
                     </div>
 
-                    <div className="flex flex-col sm:items-end gap-3">
+                    <div className="flex flex-col gap-3 sm:items-end">
                         <FlowButton
                             href={`/customer/checkout?service=${service.slug}`}
                             text="Get Started Now"
-                            colorVariant="navy"
+                            colorVariant="primary"
                         />
-                        <p className="text-xs text-stone flex items-center gap-1.5">
-                            <ShieldCheck className="h-3 w-3 text-charcoal" />
+                        <p className="flex items-center gap-1.5 text-xs text-white/70">
+                            <ShieldCheck className="h-3 w-3 text-white" />
                             Expert CA assigned · Secured payment
                         </p>
                     </div>

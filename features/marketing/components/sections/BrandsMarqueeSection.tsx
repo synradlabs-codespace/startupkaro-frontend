@@ -34,7 +34,7 @@ export function BrandsMarqueeSection() {
     return (
         <section className="py-10">
             <div className="mx-auto max-w-7xl px-8 mb-6 text-center">
-                <p className="text-xs font-medium uppercase tracking-[0.28px] text-stone">
+                <p className="text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                     Trusted by India&apos;s fastest-growing startups
                 </p>
             </div>

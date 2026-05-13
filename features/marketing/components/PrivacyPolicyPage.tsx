@@ -15,7 +15,7 @@ export function PrivacyPolicyPage() {
     return (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-4">
             {/* Header */}
-            <div className="bg-tint-cream rounded-2xl px-8 py-12">
+            <div className="bg-canvas rounded-2xl px-8 py-12">
                 <div className="max-w-3xl">
                     <p className="text-xs font-medium uppercase tracking-[0.28px] text-steel mb-3">Legal</p>
                     <h1 className="font-display text-4xl font-semibold tracking-tight text-ink mb-3">Privacy Policy</h1>

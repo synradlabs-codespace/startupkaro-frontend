@@ -4,14 +4,17 @@ import type { Service } from "@/features/marketing/data/types";
 
 export function ServiceProcess({ service }: { service: Service }) {
     return (
-        <section className="py-10 border-b border-hairline">
+        <section className="bg-cloud py-14 md:py-18">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <h2 className="text-2xl md:text-3xl font-display font-semibold tracking-tight text-ink mb-8">How we process your request</h2>
-                <div className="max-w-2xl space-y-0">
+                <div className="mb-8 max-w-2xl">
+                    <p className="mb-2 text-xs font-medium uppercase tracking-[0.28px] text-graphite">Process</p>
+                    <h2 className="font-display text-3xl font-medium text-ink md:text-4xl">How we process your request</h2>
+                </div>
+                <div className="max-w-3xl rounded-2xl border border-hairline bg-canvas p-6 md:p-8">
                     {service.process.map((item, idx) => (
                         <div key={item.step} className="flex gap-4">
                             <div className="flex flex-col items-center">
-                                <div className="h-8 w-8 rounded-full bg-primary-brand text-white text-xs font-medium flex items-center justify-center shrink-0">
+                                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-brand text-xs font-medium text-white">
                                     {item.step}
                                 </div>
                                 {idx < service.process.length - 1 && (
@@ -19,8 +22,8 @@ export function ServiceProcess({ service }: { service: Service }) {
                                 )}
                             </div>
                             <div className={`pb-8 ${idx === service.process.length - 1 ? "pb-0" : ""}`}>
-                                <p className="text-sm font-medium text-ink leading-none mt-1.5 mb-1.5">{item.title}</p>
-                                <p className="text-sm text-slate leading-relaxed">{item.description}</p>
+                                <p className="mb-1.5 mt-1.5 text-base font-medium leading-none text-ink">{item.title}</p>
+                                <p className="text-sm leading-relaxed text-charcoal">{item.description}</p>
                             </div>
                         </div>
                     ))}

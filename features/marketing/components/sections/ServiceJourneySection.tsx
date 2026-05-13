@@ -6,7 +6,6 @@ import {
     motion,
     useScroll,
     useMotionValueEvent,
-    AnimatePresence,
 } from "framer-motion";
 import {
     Rocket,
@@ -22,12 +21,9 @@ const steps = [
         number: "01",
         heading: "Start your business",
         Icon: Rocket,
-        accent: "#37352f",
-        accentBg: "bg-tint-peach",
-        accentText: "text-charcoal",
-        accentBorder: "border-hairline-strong",
-        iconBg: "bg-tint-peach",
-        iconText: "text-charcoal",
+        accent: "#296ef9",
+        accentBg: "bg-primary-soft",
+        accentText: "text-primary-brand",
         image: "/assets/journey-start-your-business.png",
         description:
             "Get legally incorporated and ready to operate. Our experts handle every filing end to end, so you can stay focused on building.",
@@ -38,19 +34,16 @@ const steps = [
             "PAN & TAN application",
         ],
         visualLabel: "Let's get you started",
-        colorVariant: "navy" as const,
+        colorVariant: "primary" as const,
         ctaText: "Start Now",
     },
     {
         number: "02",
         heading: "Manage your business",
         Icon: LineChart,
-        accent: "#37352f",
-        accentBg: "bg-tint-sky",
-        accentText: "text-charcoal",
-        accentBorder: "border-hairline-strong",
-        iconBg: "bg-tint-sky",
-        iconText: "text-charcoal",
+        accent: "#296ef9",
+        accentBg: "bg-primary-soft",
+        accentText: "text-primary-brand",
         image: "/assets/journey-manage-your-business.png",
         description:
             "Stay compliant and financially healthy month to month. We handle the recurring filings so nothing slips through the cracks.",
@@ -61,19 +54,16 @@ const steps = [
             "ROC annual compliance",
         ],
         visualLabel: "Keeping things on track",
-        colorVariant: "navy" as const,
+        colorVariant: "primary" as const,
         ctaText: "Manage Now",
     },
     {
         number: "03",
         heading: "Protect your business",
         Icon: ShieldCheck,
-        accent: "#37352f",
-        accentBg: "bg-tint-mint",
-        accentText: "text-charcoal",
-        accentBorder: "border-hairline-strong",
-        iconBg: "bg-tint-mint",
-        iconText: "text-charcoal",
+        accent: "#296ef9",
+        accentBg: "bg-primary-soft",
+        accentText: "text-primary-brand",
         image: "/assets/journey-protect-your-business.png",
         description:
             "Safeguard the brand, IP, and legal footing you've built. Lock in your trademarks and have expert legal cover on standby.",
@@ -84,7 +74,7 @@ const steps = [
             "Dispute & notice handling",
         ],
         visualLabel: "You're covered",
-        colorVariant: "navy" as const,
+        colorVariant: "primary" as const,
         ctaText: "Protect Now",
     },
 ];
@@ -104,21 +94,19 @@ export function ServiceJourneySection() {
         else setActiveStep(2);
     });
 
-    const activeImage = steps[activeStep].image;
-
     return (
-        <section className="bg-canvas py-20 md:py-24">
+        <section className="bg-cloud py-20 md:py-24">
             {/* Section header */}
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center mb-14">
-                <p className="text-xs uppercase tracking-[0.28px] text-steel font-medium mb-2">
+                <p className="text-xs uppercase tracking-[0.28px] text-graphite font-medium mb-2">
                     Your journey
                 </p>
-                <h2 className="font-display text-4xl md:text-5xl text-ink font-semibold tracking-tight">
-                    Everything you need,{" "}
-                    <span className="italic font-normal">at every stage</span>
+                <h2 className="font-display text-4xl md:text-5xl text-ink font-medium">
+                    From setup to scale,{" "}
+                    <span className="italic font-normal">we stay with you</span>
                 </h2>
-                <p className="mt-3 text-base text-slate max-w-lg mx-auto">
-                    From the day you register to years of growth, we&apos;re with you at every step.
+                <p className="mt-3 text-base text-charcoal max-w-lg mx-auto">
+                    Register, manage, and protect your business with one expert-led compliance partner.
                 </p>
             </div>
 
@@ -131,26 +119,29 @@ export function ServiceJourneySection() {
                     <div>
                         <div className="lg:sticky lg:top-24 lg:h-[calc(100vh-6rem)] flex flex-col justify-center items-center gap-6">
                             {/* Illustration */}
-                            <div className="relative h-[440px] w-full max-w-md overflow-hidden rounded-2xl">
-                                <AnimatePresence mode="wait">
+                            <div className="relative h-[440px] w-full max-w-md overflow-hidden rounded-2xl border border-hairline bg-canvas">
+                                {steps.map((step, i) => (
                                     <motion.div
-                                        key={activeStep}
-                                        initial={{ opacity: 0, scale: 0.97, y: 10 }}
-                                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                                        exit={{ opacity: 0, scale: 0.97, y: -10 }}
-                                        transition={{ duration: 0.45, ease: "easeOut" }}
+                                        key={step.number}
+                                        initial={false}
+                                        animate={{
+                                            opacity: activeStep === i ? 1 : 0,
+                                            scale: activeStep === i ? 1 : 1.015,
+                                        }}
+                                        transition={{ duration: 0.18, ease: "easeOut" }}
                                         className="absolute inset-0"
+                                        aria-hidden={activeStep !== i}
                                     >
                                         <Image
-                                            src={activeImage}
-                                            alt={steps[activeStep].heading}
+                                            src={step.image}
+                                            alt={step.heading}
                                             fill
                                             className="object-cover"
                                             sizes="(min-width: 1024px) 448px, 100vw"
-                                            priority={activeStep === 0}
+                                            priority={i === 0}
                                         />
                                     </motion.div>
-                                </AnimatePresence>
+                                ))}
                             </div>
 
                             {/* Progress rail */}
@@ -163,7 +154,7 @@ export function ServiceJourneySection() {
                                                 width: i === activeStep ? 24 : 8,
                                                 height: 8,
                                                 backgroundColor:
-                                                    i === activeStep ? s.accent : "#e5e3df",
+                                                    i === activeStep ? s.accent : "#c2c2c2",
                                             }}
                                             transition={{ duration: 0.3 }}
                                         />
@@ -210,8 +201,8 @@ function StepCard({ step, isActive }: StepCardProps) {
         <motion.div
             animate={{ opacity: isActive ? 1 : 0.45 }}
             transition={{ duration: 0.35 }}
-            className={`w-full rounded-lg border bg-canvas p-7 md:p-8 space-y-5 ${
-                isActive ? `border-hairline-strong` : "border-hairline"
+            className={`w-full rounded-xl border bg-canvas p-7 md:p-8 space-y-5 ${
+                isActive ? `border-primary-brand shadow-[0_2px_8px_rgba(26,26,26,0.08)]` : "border-hairline"
             }`}
         >
             {/* Step badge + icon */}
@@ -229,10 +220,10 @@ function StepCard({ step, isActive }: StepCardProps) {
 
             {/* Heading + description */}
             <div>
-                <h3 className="font-display text-2xl md:text-3xl text-ink font-semibold tracking-tight mb-2">
+                <h3 className="font-display text-2xl md:text-3xl text-ink font-medium mb-2">
                     {step.heading}
                 </h3>
-                <p className="text-sm text-slate leading-relaxed">{step.description}</p>
+                <p className="text-sm text-charcoal leading-relaxed">{step.description}</p>
             </div>
 
             {/* Key services */}

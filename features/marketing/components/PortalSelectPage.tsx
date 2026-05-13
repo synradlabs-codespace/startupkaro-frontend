@@ -15,6 +15,8 @@ function PortalCard({
     tag: string;
     tintClass: string;
 }) {
+    const dark = tintClass.includes("bg-electric-blue");
+
     return (
         <Link
             href={href}
@@ -22,14 +24,14 @@ function PortalCard({
         >
             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-brand scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
             <div className="relative">
-                <span className="text-xs font-medium uppercase tracking-[0.28px] text-stone mb-6 block">
+                <span className={`text-xs font-medium uppercase tracking-[0.28px] mb-6 block ${dark ? "text-white/70" : "text-stone"}`}>
                     {tag}
                 </span>
-                <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-ink mb-3">{label}</h2>
-                <p className="text-sm text-slate leading-relaxed group-hover:text-charcoal transition-colors">
+                <h2 className={`font-display text-2xl md:text-3xl font-semibold tracking-tight mb-3 ${dark ? "text-white" : "text-ink"}`}>{label}</h2>
+                <p className={`text-sm leading-relaxed transition-colors ${dark ? "text-white/85 group-hover:text-white" : "text-slate group-hover:text-charcoal"}`}>
                     {description}
                 </p>
-                <div className="mt-8 text-xs font-medium text-charcoal flex items-center gap-2 transition-all duration-300 group-hover:gap-3">
+                <div className={`mt-8 text-xs font-medium flex items-center gap-2 transition-all duration-300 group-hover:gap-3 ${dark ? "text-white" : "text-charcoal"}`}>
                     Enter <span className="text-base leading-none">→</span>
                 </div>
             </div>
@@ -48,9 +50,9 @@ export function PortalSelectPage() {
                     Startup<span className="italic font-normal">Karo</span>
                 </h1>
                 <div className="mt-5 flex items-center justify-center gap-2">
-                    <div className="h-px w-12 bg-tint-peach" />
-                    <div className="w-2 h-2 rounded-full bg-tint-sky" />
-                    <div className="h-px w-12 bg-tint-mint" />
+                    <div className="h-px w-12 bg-electric-blue" />
+                    <div className="w-2 h-2 rounded-full bg-primary-soft" />
+                    <div className="h-px w-12 bg-primary-soft" />
                 </div>
             </div>
 
@@ -60,21 +62,21 @@ export function PortalSelectPage() {
                     label="Admin"
                     description="Manage operations, teams & analytics"
                     tag="01"
-                    tintClass="bg-tint-mint"
+                    tintClass="bg-primary-soft"
                 />
                 <PortalCard
                     href="/employee/login"
                     label="Employee"
                     description="Handle orders, customers & inquiries"
                     tag="02"
-                    tintClass="bg-tint-sky"
+                    tintClass="bg-electric-blue"
                 />
                 <PortalCard
                     href="/customer/login"
                     label="Customer"
                     description="View purchases, services & invoices"
                     tag="03"
-                    tintClass="bg-tint-peach"
+                    tintClass="bg-primary-soft"
                 />
             </div>
 

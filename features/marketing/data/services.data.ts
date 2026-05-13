@@ -12,7 +12,7 @@ export const MOCK_SERVICES: Service[] = [
         duration: "7 days",
         pricing: { amount: 1499, currency: "INR", note: "Government fees included" },
         overview:
-            "Goods and Services Tax (GST) registration is mandatory for businesses whose aggregate turnover exceeds ₹40 lakhs (₹20 lakhs for special category states) in a financial year. It is also required for e-commerce sellers, inter-state suppliers, and businesses registered under the older tax regime. Our experts handle the entire process, from document collection to GSTIN issuance, so you can focus on running your business.",
+            "Goods and Services Tax (GST) registration is mandatory for businesses whose aggregate turnover exceeds ₹40 lakhs (₹20 lakhs for special category states) in a financial year. It is also required for e-commerce sellers, inter-state suppliers, and businesses registered under the older tax regime. Our experts handle the entire process, from email-based document coordination to GSTIN issuance, so you can focus on running your business.",
         features: [
             { title: "GSTIN issued within 7 working days", description: "We expedite the application process to get your registration as fast as possible." },
             { title: "Expert CA assigned to your case", description: "A dedicated Chartered Accountant reviews your application and communicates with the GST portal on your behalf." },
@@ -22,14 +22,14 @@ export const MOCK_SERVICES: Service[] = [
         ],
         process: [
             { step: 1, title: "Share your details", description: "Fill in our simple onboarding form with your business name, PAN, and turnover details." },
-            { step: 2, title: "Document collection", description: "Upload PAN, Aadhaar, bank statement, and address proof through our secure portal." },
+            { step: 2, title: "Document sharing", description: "Share PAN, Aadhaar, bank statement, and address proof with us over StartupKaro's official email." },
             { step: 3, title: "Application filing", description: "Our CA reviews and files the GST application on your behalf on the official GST portal." },
             { step: 4, title: "OTP & verification", description: "You'll receive an OTP on your registered mobile/email to authenticate the application." },
             { step: 5, title: "GSTIN delivered", description: "Your GST Identification Number and registration certificate are shared with you within 7 days." },
         ],
         faqs: [
             { question: "Is GST registration mandatory for all businesses?", answer: "Not all — it is mandatory if your turnover exceeds ₹40 lakhs (₹20 lakhs for service providers), or if you sell on e-commerce platforms or make inter-state supplies." },
-            { question: "How long does the process take?", answer: "Typically 7 working days from the date all documents are submitted. Complex cases may take up to 14 days." },
+            { question: "How long does the process take?", answer: "Typically 7 working days from the date all documents are received over email. Complex cases may take up to 14 days." },
             { question: "What documents are required?", answer: "PAN card, Aadhaar, a recent bank statement, a business address proof (rent agreement or utility bill), and a photograph of the proprietor/partners/directors." },
             { question: "Can I apply for multiple GSTINs?", answer: "Yes — you need a separate GSTIN for each state where you have a place of business. We can handle multi-state registrations." },
         ],
@@ -52,7 +52,7 @@ export const MOCK_SERVICES: Service[] = [
             { title: "Certificate of Incorporation", description: "You receive the COI, PAN, and TAN of the company once MCA approves the application." },
         ],
         process: [
-            { step: 1, title: "Director details", description: "Provide details of all directors, PAN, Aadhaar, address, and proposed shareholding." },
+            { step: 1, title: "Director details", description: "Provide details of all directors, PAN, Aadhaar, address, and proposed shareholding over the requested email thread." },
             { step: 2, title: "Name selection", description: "We help you choose a compliant company name and file for MCA approval." },
             { step: 3, title: "DSC issuance", description: "Digital signature certificates are issued for all directors within 2 days." },
             { step: 4, title: "SPICe+ filing", description: "We file the SPICe+ form on the MCA portal, which covers DIN, incorporation, PAN, and TAN in one shot." },
@@ -83,14 +83,14 @@ export const MOCK_SERVICES: Service[] = [
             { title: "™ symbol usage from day 1", description: "Once filed, you can legally use the ™ symbol next to your mark while registration is pending." },
         ],
         process: [
-            { step: 1, title: "Share your brand assets", description: "Provide the wordmark or logo you wish to protect, along with your business details." },
+            { step: 1, title: "Share your brand assets", description: "Email us the wordmark or logo you wish to protect, along with your business details." },
             { step: 2, title: "Trademark search", description: "Our attorneys conduct a comprehensive search across existing marks to assess registrability." },
             { step: 3, title: "Class selection", description: "We identify the appropriate class(es) under the Nice Classification that cover your business activities." },
             { step: 4, title: "Application filing", description: "The trademark application is filed on the IP India portal with the government fees." },
             { step: 5, title: "Acknowledgement & TM usage", description: "You receive the application number and can immediately start using the ™ symbol." },
         ],
         faqs: [
-            { question: "How long does trademark registration take?", answer: "Filing takes 15 days from document submission. Registration (examination + publication + approval) typically takes 18–24 months. You can use ™ from filing day." },
+            { question: "How long does trademark registration take?", answer: "Filing takes 15 days from receipt of required documents over email. Registration (examination + publication + approval) typically takes 18–24 months. You can use ™ from filing day." },
             { question: "What can be trademarked?", answer: "A word, name, device (logo), label, colour combination, sound, smell, anything that uniquely identifies your goods or services in trade." },
             { question: "Is government fee included in the price?", answer: "Yes, government fee for 1 class is included. Additional classes cost extra (₹4,500 per class for individuals/MSMEs, ₹9,000 for others)." },
             { question: "What happens if my trademark is opposed?", answer: "We offer opposition handling as a separate service. Our attorneys file a counterstatement and represent you in hearings." },
@@ -114,7 +114,7 @@ export const MOCK_SERVICES: Service[] = [
             { title: "Post-filing support", description: "Any notices or queries from the Income Tax Department are handled by our team." },
         ],
         process: [
-            { step: 1, title: "Share income details", description: "Provide your salary slips, Form 16, bank statements, and investment proofs." },
+            { step: 1, title: "Share income details", description: "Email your salary slips, Form 16, bank statements, and investment proofs to our team." },
             { step: 2, title: "CA review", description: "Our CA reviews all documents, identifies deductions, and reconciles 26AS/AIS." },
             { step: 3, title: "ITR preparation", description: "The correct ITR form is prepared with accurate income and deduction entries." },
             { step: 4, title: "Your review & approval", description: "You review the prepared return before it is filed — no surprises." },
@@ -142,11 +142,11 @@ export const MOCK_SERVICES: Service[] = [
             { title: "Full application handling", description: "Our team prepares and submits the FSSAI application with all required annexures." },
             { title: "Document preparation", description: "We prepare the Site Plan, List of Food Products, and declaration forms as required." },
             { title: "FSSAI registration certificate", description: "You receive your 14-digit FSSAI licence number and certificate upon approval." },
-            { title: "Renewal reminders", description: "We track your licence expiry and remind you to renew before the due date." },
+            { title: "Renewal reminders", description: "Your assigned expert tracks your licence expiry and reminds you to renew before the due date." },
         ],
         process: [
             { step: 1, title: "Business assessment", description: "Share your business type, location, and annual turnover so we can determine the correct licence tier." },
-            { step: 2, title: "Document collection", description: "Provide PAN, address proof, list of food products, and layout of premises." },
+            { step: 2, title: "Document sharing", description: "Email PAN, address proof, list of food products, and layout of premises to our team." },
             { step: 3, title: "Application filing", description: "We file the FSSAI application on the FoSCoS portal with the correct form (Form A or Form B)." },
             { step: 4, title: "Inspection (if applicable)", description: "For State/Central licences, an FSSAI inspector may visit the premises. We prepare you for this." },
             { step: 5, title: "Licence issuance", description: "Your FSSAI licence certificate is issued and must be displayed at your place of business." },
@@ -176,7 +176,7 @@ export const MOCK_SERVICES: Service[] = [
             { title: "Export benefit guidance", description: "We brief you on DGFT export schemes (RoDTEP, MEIS) you can avail with your IEC." },
         ],
         process: [
-            { step: 1, title: "Share business details", description: "Provide your PAN, business address, bank account details, and nature of goods to be traded." },
+            { step: 1, title: "Share business details", description: "Email your PAN, business address, bank account details, and nature of goods to be traded." },
             { step: 2, title: "DGFT portal registration", description: "We create your DGFT account and link it to your PAN and business entity." },
             { step: 3, title: "IEC application filing", description: "The IEC application (ANF 2A) is filed on the DGFT portal with the ₹500 government fee." },
             { step: 4, title: "Verification & issuance", description: "DGFT verifies the application electronically. No physical visit required." },

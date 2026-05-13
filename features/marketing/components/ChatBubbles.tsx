@@ -69,7 +69,7 @@ export function ChatBubbles() {
                                 className={`w-7 h-7 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 ${
                                     isFounder
                                         ? "bg-primary-brand text-white"
-                                        : "bg-tint-sky text-charcoal border border-hairline"
+                                        : "bg-primary-soft text-charcoal border border-hairline"
                                 }`}
                             >
                                 {isFounder ? "F" : "CA"}
@@ -79,7 +79,7 @@ export function ChatBubbles() {
                             <div
                                 className={`max-w-[78%] px-3.5 py-2.5 text-[11px] leading-relaxed ${
                                     isFounder
-                                        ? "bg-tint-sky text-ink rounded-2xl rounded-bl-sm"
+                                        ? "bg-primary-soft text-ink rounded-2xl rounded-bl-sm"
                                         : "bg-canvas text-charcoal rounded-2xl rounded-br-sm border border-hairline"
                                 }`}
                             >
