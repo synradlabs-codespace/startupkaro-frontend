@@ -19,12 +19,12 @@ export function WhyChooseUsSection() {
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-10">
 
                     {/* LHS — brand image panel */}
-                    <div className="relative">
+                    <div className="relative hidden lg:block">
                         <div className="relative overflow-hidden rounded-2xl border border-hairline bg-canvas min-h-[28rem] lg:min-h-152.5 shadow-[0_2px_8px_rgba(26,26,26,0.08)]">
                             <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-canvas/40 blur-3xl" />
                             <div className="pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-canvas/40 blur-3xl" />
 
-                            <div className="absolute inset-0 lg:inset-x-0 lg:top-0 lg:bottom-[42%] z-20 overflow-hidden">
+                            <div className="hidden lg:block absolute inset-0 lg:inset-x-0 lg:top-0 lg:bottom-[42%] z-20 overflow-hidden">
                                 <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-10 bg-linear-to-t from-canvas/80 to-transparent z-10" />
                                 <ChatBubbles />
                             </div>

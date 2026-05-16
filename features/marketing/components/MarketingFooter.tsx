@@ -2,18 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, Phone, MapPin } from "lucide-react";
-import { FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa";
+import { Mail, MapPin, Phone } from "lucide-react";
+import { FaInstagram, FaLinkedinIn, FaTwitter } from "react-icons/fa";
+import { NAV_LINKS } from "@/components/directional-hover-header/header/nav-data";
 import { UnderlineAnimation } from "@/components/fancy/text";
 
-const serviceLinks = [
-    { href: "/services/gst-registration", label: "GST Registration" },
-    { href: "/services/company-incorporation", label: "Company Incorporation" },
-    { href: "/services/trademark-filing", label: "Trademark Filing" },
-    { href: "/services/income-tax-filing", label: "Income Tax Filing" },
-    { href: "/services/fssai-license", label: "FSSAI License" },
-    { href: "/services/import-export-code", label: "Import Export Code" },
-];
+const servicesMenu = NAV_LINKS.find((link) => link.label === "Services")?.menu;
 
 const companyLinks = [
     { href: "/about", label: "About Us" },
@@ -23,15 +17,20 @@ const companyLinks = [
     { href: "/login", label: "Login" },
 ];
 
+const legalLinks = [
+    { href: "/privacy-policy", label: "Privacy Policy" },
+    { href: "/terms-of-service", label: "Terms of Service" },
+    { href: "/cookies-policy", label: "Cookies Policy" },
+    { href: "/refund-policy", label: "Refund Policy" },
+];
+
 export function MarketingFooter() {
     return (
-        <footer className="bg-canvas border-t border-hairline">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-14 pb-8">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12">
-
-                    {/* Brand column */}
-                    <div className="md:col-span-1 space-y-4">
-                        <Link href="/" className="inline-block">
+        <footer className="bg-ink text-white">
+            <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+                <div className="grid gap-10 border-b border-white/10 pb-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.7fr)] lg:gap-16">
+                    <div className="space-y-5">
+                        <Link href="/" className="inline-flex rounded-md bg-canvas px-3 py-2">
                             <Image
                                 src="/startupkaro-logo.svg"
                                 alt="StartupKaro"
@@ -40,96 +39,159 @@ export function MarketingFooter() {
                                 className="h-8 w-auto"
                             />
                         </Link>
-                        <p className="text-sm text-steel leading-relaxed">
+                        <p className="max-w-sm text-sm leading-relaxed text-white/70">
                             End-to-end compliance and legal services for Indian startups, handled by expert CAs and CSs.
                         </p>
                         <div className="flex gap-3 pt-1">
-                            <a href="#" aria-label="Twitter"
-                                className="h-8 w-8 rounded-md border border-hairline flex items-center justify-center text-stone hover:text-ink hover:border-hairline-strong transition-colors">
+                            <a
+                                href="#"
+                                aria-label="Twitter"
+                                className="flex h-9 w-9 items-center justify-center rounded-md border border-white/15 text-white/65 transition-colors hover:border-primary-soft hover:text-white"
+                            >
                                 <FaTwitter className="h-3.5 w-3.5" />
                             </a>
-                            <a href="#" aria-label="LinkedIn"
-                                className="h-8 w-8 rounded-md border border-hairline flex items-center justify-center text-stone hover:text-ink hover:border-hairline-strong transition-colors">
+                            <a
+                                href="#"
+                                aria-label="LinkedIn"
+                                className="flex h-9 w-9 items-center justify-center rounded-md border border-white/15 text-white/65 transition-colors hover:border-primary-soft hover:text-white"
+                            >
                                 <FaLinkedinIn className="h-3.5 w-3.5" />
                             </a>
-                            <a href="#" aria-label="Instagram"
-                                className="h-8 w-8 rounded-md border border-hairline flex items-center justify-center text-stone hover:text-ink hover:border-hairline-strong transition-colors">
+                            <a
+                                href="#"
+                                aria-label="Instagram"
+                                className="flex h-9 w-9 items-center justify-center rounded-md border border-white/15 text-white/65 transition-colors hover:border-primary-soft hover:text-white"
+                            >
                                 <FaInstagram className="h-3.5 w-3.5" />
                             </a>
                         </div>
                     </div>
 
-                    {/* Services column */}
                     <div>
-                        <h3 className="text-xs font-semibold text-ink uppercase tracking-[0.12em] mb-4">Services</h3>
-                        <ul className="space-y-2.5">
-                            {serviceLinks.map((link) => (
-                                <li key={link.href}>
-                                    <Link href={link.href} className="group text-sm text-steel hover:text-ink transition-colors">
-                                        <UnderlineAnimation>{link.label}</UnderlineAnimation>
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                            <div>
+                                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.7px] text-primary-soft">
+                                    Services
+                                </p>
+                                <h2 className="font-display text-2xl font-medium leading-none text-white sm:text-3xl">
+                                    Business support by category
+                                </h2>
+                            </div>
+                            <Link
+                                href="/services"
+                                className="group text-sm font-medium text-primary-soft transition-colors hover:text-white"
+                            >
+                                <UnderlineAnimation lineClassName="bg-primary-soft">View all services</UnderlineAnimation>
+                            </Link>
+                        </div>
 
-                    {/* Company column */}
+                        <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
+                            {servicesMenu?.columns.map((column) => (
+                                <div key={column.heading}>
+                                    {column.href ? (
+                                        <Link
+                                            href={column.href}
+                                            className="group mb-4 block text-xs font-semibold uppercase tracking-[0.7px] text-white transition-colors hover:text-primary-soft"
+                                        >
+                                            <UnderlineAnimation lineClassName="bg-primary-soft">
+                                                {column.heading}
+                                            </UnderlineAnimation>
+                                        </Link>
+                                    ) : (
+                                        <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.7px] text-white">
+                                            {column.heading}
+                                        </h3>
+                                    )}
+                                    <ul className="space-y-3">
+                                        {column.items.map((item) => (
+                                            <li key={item.href ?? item.label}>
+                                                {item.href ? (
+                                                    <Link
+                                                        href={item.href}
+                                                        className="group block text-sm leading-snug text-white/70 transition-colors hover:text-white"
+                                                    >
+                                                        <UnderlineAnimation lineClassName="bg-primary-soft">
+                                                            {item.label}
+                                                        </UnderlineAnimation>
+                                                        {item.description && (
+                                                            <span className="mt-1 block text-xs leading-snug text-white/45">
+                                                                {item.description}
+                                                            </span>
+                                                        )}
+                                                    </Link>
+                                                ) : (
+                                                    <span className="block text-sm leading-snug text-white/70">
+                                                        {item.label}
+                                                    </span>
+                                                )}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="grid gap-10 border-b border-white/10 py-10 md:grid-cols-3">
                     <div>
-                        <h3 className="text-xs font-semibold text-ink uppercase tracking-[0.12em] mb-4">Company</h3>
+                        <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.7px] text-white">Company</h3>
                         <ul className="space-y-2.5">
                             {companyLinks.map((link) => (
                                 <li key={link.href}>
-                                    <Link href={link.href} className="group text-sm text-steel hover:text-ink transition-colors">
-                                        <UnderlineAnimation>{link.label}</UnderlineAnimation>
+                                    <Link href={link.href} className="group text-sm text-white/65 transition-colors hover:text-white">
+                                        <UnderlineAnimation lineClassName="bg-primary-soft">{link.label}</UnderlineAnimation>
                                     </Link>
                                 </li>
                             ))}
                         </ul>
                     </div>
 
-                    {/* Contact column */}
                     <div>
-                        <h3 className="text-xs font-semibold text-ink uppercase tracking-[0.12em] mb-4">Contact</h3>
+                        <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.7px] text-white">Contact</h3>
                         <ul className="space-y-3">
-                            <li className="flex items-start gap-2.5 text-sm text-steel">
-                                <Mail className="h-4 w-4 shrink-0 mt-0.5 text-stone" />
+                            <li className="flex items-start gap-2.5 text-sm text-white/65">
+                                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-primary-soft" />
                                 hello@startupkaro.in
                             </li>
-                            <li className="flex items-start gap-2.5 text-sm text-steel">
-                                <Phone className="h-4 w-4 shrink-0 mt-0.5 text-stone" />
+                            <li className="flex items-start gap-2.5 text-sm text-white/65">
+                                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary-soft" />
                                 +91 789 00000 88
                             </li>
-                            <li className="flex items-start gap-2.5 text-sm text-steel">
-                                <Phone className="h-4 w-4 shrink-0 mt-0.5 text-stone" />
+                            <li className="flex items-start gap-2.5 text-sm text-white/65">
+                                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary-soft" />
                                 +91 737 00000 88
                             </li>
-                            <li className="flex items-start gap-2.5 text-sm text-steel">
-                                <MapPin className="h-4 w-4 shrink-0 mt-0.5 text-stone" />
+                            <li className="flex items-start gap-2.5 text-sm text-white/65">
+                                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary-soft" />
                                 Mohali, Punjab, India
                             </li>
                         </ul>
                     </div>
+
+                    <div>
+                        <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.7px] text-white">Legal</h3>
+                        <div className="grid gap-2.5 sm:grid-cols-2 md:grid-cols-1">
+                            {legalLinks.map((link) => (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    className="group text-sm text-white/65 transition-colors hover:text-white"
+                                >
+                                    <UnderlineAnimation lineClassName="bg-primary-soft">{link.label}</UnderlineAnimation>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
                 </div>
 
-                {/* Bottom bar */}
-                <div className="mt-12 pt-6 border-t border-hairline flex flex-col sm:flex-row items-center justify-between gap-3">
-                    <p className="text-xs text-stone">
-                        © {new Date().getFullYear()} StartupKaro. All rights reserved.
+                <div className="flex flex-col items-start justify-between gap-3 pt-6 sm:flex-row sm:items-center">
+                    <p className="text-xs text-white/45">
+                        &copy; {new Date().getFullYear()} StartupKaro. All rights reserved.
                     </p>
-                    <div className="flex flex-wrap justify-center gap-4">
-                        <Link href="/privacy-policy" className="group text-xs text-stone hover:text-ink transition-colors">
-                            <UnderlineAnimation>Privacy Policy</UnderlineAnimation>
-                        </Link>
-                        <Link href="/terms-of-service" className="group text-xs text-stone hover:text-ink transition-colors">
-                            <UnderlineAnimation>Terms of Service</UnderlineAnimation>
-                        </Link>
-                        <Link href="/cookies-policy" className="group text-xs text-stone hover:text-ink transition-colors">
-                            <UnderlineAnimation>Cookies Policy</UnderlineAnimation>
-                        </Link>
-                        <Link href="/refund-policy" className="group text-xs text-stone hover:text-ink transition-colors">
-                            <UnderlineAnimation>Refund Policy</UnderlineAnimation>
-                        </Link>
-                    </div>
+                    <p className="text-xs text-white/45">
+                        Fixed services at fixed costs, delivered by qualified professionals.
+                    </p>
                 </div>
             </div>
         </footer>

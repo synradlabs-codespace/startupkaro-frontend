@@ -45,7 +45,7 @@ export function HeroSection() {
                             <FlowSecondaryButton
                                 href="/contact"
                                 text="Talk to an Expert"
-                                iconName="message-circle"
+                                showIcon={false}
                                 wrapperClassName="w-full sm:w-auto sm:min-w-[220px]"
                                 className="w-full"
                             />

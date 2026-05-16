@@ -54,12 +54,14 @@ export function ServiceHero({ service }: { service: Service }) {
                                 href={`/customer/checkout?service=${service.slug}`}
                                 text="Get Started"
                                 colorVariant="primary"
+                                wrapperClassName="w-full"
                                 className="h-12 w-full justify-center py-0"
                             />
                             <FlowSecondaryButton
                                 href="/contact"
                                 text="Talk to an Expert"
-                                iconName="message-circle"
+                                showIcon={false}
+                                wrapperClassName="w-full"
                                 className="h-12 w-full justify-center bg-canvas py-0"
                             />
                             <p className="text-center text-xs text-graphite">No hidden fees. Expert assistance included.</p>

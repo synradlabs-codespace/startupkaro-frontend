@@ -46,7 +46,7 @@ export function MarketingCTASection({
                     <FlowSecondaryButton
                         href={secondaryHref}
                         text={secondaryText}
-                        iconName="message-circle"
+                        showIcon={secondaryText !== "Talk to an Expert"}
                         className="border-white/70 bg-transparent text-white hover:border-white hover:bg-white hover:text-ink focus-visible:ring-white"
                     />
                 </div>
