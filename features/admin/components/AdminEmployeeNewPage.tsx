@@ -31,8 +31,8 @@ export function AdminEmployeeNewPage() {
             <div className="flex-1 p-6 max-w-lg">
                 <div className="rounded-lg border border-hairline bg-canvas p-6 space-y-5">
                     <div className="flex items-center gap-3 pb-3 border-b border-hairline">
-                        <div className="h-9 w-9 rounded-full bg-gradient-to-br from-accent-admin to-accent-admin border border-hairline flex items-center justify-center shrink-0">
-                            <UserPlus className="h-4 w-4 text-charcoal" />
+                        <div className="h-9 w-9 rounded-lg bg-primary-brand/10 flex items-center justify-center shrink-0">
+                            <UserPlus className="h-4 w-4 text-primary-brand" />
                         </div>
                         <div>
                             <h3 className="text-sm font-semibold text-charcoal">Employee Details</h3>
@@ -89,7 +89,7 @@ export function AdminEmployeeNewPage() {
                             </Button>
                             <Button
                                 type="button"
-                                variant="outline"
+                                variant="secondary"
                                 onClick={() => router.push("/admin/employees")}
                                 className="rounded-lg"
                             >

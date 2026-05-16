@@ -93,7 +93,7 @@ function CheckoutContent() {
                         </div>
                         <div className="flex items-center justify-between pt-2">
                             <span className="text-base font-semibold text-ink">Total</span>
-                            <span className="text-xl font-bold text-charcoal">₹{service.price.toLocaleString("en-IN")}</span>
+                            <span className="text-xl font-display font-medium text-charcoal">₹{service.price.toLocaleString("en-IN")}</span>
                         </div>
                     </div>
                     <div className="px-6 pb-5">
@@ -106,7 +106,7 @@ function CheckoutContent() {
 
                 {/* ── Pay Now ─────────────────────────────── */}
                 <div className="rounded-lg border border-hairline bg-canvas overflow-hidden flex flex-col">
-                    <div className="h-1.5 bg-gradient-to-r from-primary-brand to-accent-customer" />
+                    <div className="h-1.5 bg-primary-brand" />
                     <div className="p-6 flex flex-col flex-1 space-y-5">
                         <div>
                             <p className="text-xs text-stone uppercase tracking-wide font-medium mb-1">Amount Due</p>

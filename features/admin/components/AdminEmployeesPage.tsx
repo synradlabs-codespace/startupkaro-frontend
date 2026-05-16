@@ -1,4 +1,4 @@
-// features/admin/components/AdminEmployeesPage.tsx
+﻿// features/admin/components/AdminEmployeesPage.tsx
 "use client";
 
 import { useState } from "react";
@@ -49,7 +49,7 @@ export function AdminEmployeesPage() {
             />
             <div className="p-6 space-y-4">
                 <div className="relative max-w-sm">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate" />
                     <Input
                         placeholder="Search by name or email..."
                         value={search}
@@ -74,7 +74,7 @@ export function AdminEmployeesPage() {
                             <TableBody>
                                 {paginated.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={6} className="text-center text-muted-foreground py-12">
+                                        <TableCell colSpan={6} className="text-center text-slate py-12">
                                             No employees found
                                         </TableCell>
                                     </TableRow>
@@ -84,16 +84,16 @@ export function AdminEmployeesPage() {
                                             <TableCell>
                                                 <div className="flex items-center gap-3">
                                                     <Avatar className="h-8 w-8">
-                                                        <AvatarFallback className="text-xs bg-primary-brand/10 text-charcoal font-semibold">
+                                                        <AvatarFallback className="text-xs bg-primary-brand/10 text-primary-brand font-semibold">
                                                             {emp.name.split(" ").map(n => n[0]).join("")}
                                                         </AvatarFallback>
                                                     </Avatar>
                                                     <span className="font-medium">{emp.name}</span>
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="text-muted-foreground text-sm">{emp.email}</TableCell>
+                                            <TableCell className="text-slate text-sm">{emp.email}</TableCell>
                                             <TableCell>
-                                                <Badge variant="outline" className="text-xs bg-primary-brand/5 border-hairline text-charcoal">
+                                                <Badge variant="outline" className="text-xs bg-primary-brand/10 border-primary-brand/20 text-primary-brand">
                                                     {emp.role}
                                                 </Badge>
                                             </TableCell>
@@ -101,14 +101,14 @@ export function AdminEmployeesPage() {
                                                 <Badge
                                                     variant="outline"
                                                     className={emp.status === "active"
-                                                        ? "bg-tint-sky text-primary-deep border-primary-soft hover:bg-tint-sky"
-                                                        : "bg-surface text-slate border-hairline hover:bg-surface"
+                                                        ? "bg-status-positive-bg text-status-positive-fg border-status-positive-border hover:bg-status-positive-bg"
+                                                        : "bg-status-muted-bg text-status-muted-fg border-status-muted-border hover:bg-status-muted-bg"
                                                     }
                                                 >
                                                     {emp.status}
                                                 </Badge>
                                             </TableCell>
-                                            <TableCell className="text-muted-foreground text-sm">{emp.joined}</TableCell>
+                                            <TableCell className="text-slate text-sm">{emp.joined}</TableCell>
                                             <TableCell className="text-right">
                                                 <Link href={`/admin/employees/${emp.id}`}>
                                                     <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-brand/10 hover:text-charcoal">
@@ -134,3 +134,4 @@ export function AdminEmployeesPage() {
         </div>
     );
 }
+

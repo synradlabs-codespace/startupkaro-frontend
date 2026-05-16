@@ -1,4 +1,4 @@
-// features/admin/components/AdminInquiryDetailPage.tsx
+﻿// features/admin/components/AdminInquiryDetailPage.tsx
 "use client";
 
 import { useState } from "react";
@@ -51,17 +51,17 @@ export function AdminInquiryDetailPage({ id }: { id: string }) {
                 }
             />
             <div className="p-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-5xl">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
-                    {/* Left — Inquiry Info */}
-                    <Card>
+                    {/* Left Inquiry Info */}
+                    <Card className="flex flex-col">
                         <CardHeader>
                             <div className="flex items-center justify-between">
                                 <CardTitle className="text-base">Inquiry from {inquiry.name}</CardTitle>
                                 <InquiryStatusBadge status={status} />
                             </div>
                         </CardHeader>
-                        <CardContent className="space-y-4 text-sm">
+                        <CardContent className="flex flex-col flex-1 space-y-4 text-sm">
                             {[
                                 { label: "Name", value: inquiry.name },
                                 { label: "Email", value: inquiry.email },
@@ -69,16 +69,16 @@ export function AdminInquiryDetailPage({ id }: { id: string }) {
                                 { label: "Date", value: inquiry.date },
                             ].map(({ label, value }) => (
                                 <div key={label} className="flex justify-between">
-                                    <span className="text-muted-foreground">{label}</span>
+                                    <span className="text-slate">{label}</span>
                                     <span className="font-medium">{value}</span>
                                 </div>
                             ))}
                             <div className="pt-2 border-t">
-                                <p className="text-muted-foreground text-xs mb-2">Message</p>
+                                <p className="text-slate text-xs mb-2">Message</p>
                                 <p className="text-sm leading-relaxed">{inquiry.message}</p>
                             </div>
-                            <div className="pt-2 border-t space-y-1.5">
-                                <Label className="text-xs text-muted-foreground">Status</Label>
+                            <div className="mt-auto pt-2 border-t space-y-1.5">
+                                <Label className="text-xs text-slate">Status</Label>
                                 <Select value={status} onValueChange={(v) => setStatus(v as "unresolved" | "resolved")}>
                                     <SelectTrigger className="h-8 text-sm">
                                         <SelectValue />
@@ -106,26 +106,26 @@ export function AdminInquiryDetailPage({ id }: { id: string }) {
                         </CardContent>
                     </Card>
 
-                    {/* Right — Notes */}
+                    {/* Right Notes */}
                     <Card className="flex flex-col">
                         <CardHeader>
                             <CardTitle className="text-base flex items-center gap-2">
-                                <StickyNote className="h-4 w-4 text-muted-foreground" />
+                                <StickyNote className="h-4 w-4 text-slate" />
                                 Notes
                                 {notes.length > 0 && (
-                                    <span className="text-xs font-normal text-muted-foreground">({notes.length})</span>
+                                    <span className="text-xs font-normal text-slate">({notes.length})</span>
                                 )}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="flex flex-col flex-1 space-y-3">
-                            <div className="flex-1 min-h-[160px]">
+                            <div className="flex-1">
                                 {notes.length === 0 ? (
-                                    <p className="text-sm text-muted-foreground text-center py-8">No notes yet. Add the first note below.</p>
+                                    <p className="text-sm text-slate text-center py-8">No notes yet. Add the first note below.</p>
                                 ) : (
                                     <ul className="space-y-2">
                                         {notes.map((note, i) => (
                                             <li key={i} className="bg-muted/40 rounded-lg px-3 py-2 text-sm">
-                                                <span className="leading-relaxed">{note}</span>
+                                                <span className="whitespace-pre-wrap leading-relaxed">{note}</span>
                                             </li>
                                         ))}
                                     </ul>
@@ -138,7 +138,7 @@ export function AdminInquiryDetailPage({ id }: { id: string }) {
                                     onChange={(e) => setNewNote(e.target.value)}
                                     className="resize-none text-sm min-h-[60px]"
                                     onKeyDown={(e) => {
-                                        if (e.key === "Enter" && !e.shiftKey) {
+                                        if (e.key === "Enter" && e.shiftKey) {
                                             e.preventDefault();
                                             handleAddNote();
                                         }
@@ -153,7 +153,7 @@ export function AdminInquiryDetailPage({ id }: { id: string }) {
                                     <Send className="h-4 w-4" />
                                 </Button>
                             </div>
-                            <p className="text-xs text-muted-foreground">Press Enter to add, Shift+Enter for new line.</p>
+                            <p className="text-xs text-slate">Press Enter for a new line. Shift+Enter adds the note.</p>
                         </CardContent>
                     </Card>
                 </div>

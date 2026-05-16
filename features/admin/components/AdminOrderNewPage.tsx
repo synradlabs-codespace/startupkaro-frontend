@@ -47,16 +47,14 @@ export function AdminOrderNewPage() {
             <div className="flex-1 p-6 max-w-2xl space-y-6">
 
                 {/* Hero Banner */}
-                <div className="relative overflow-hidden rounded-lg border border-hairline bg-accent-admin p-8">
-                    <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-primary-brand/8 blur-3xl" />
-                    <div className="pointer-events-none absolute -bottom-10 -left-10 h-36 w-36 rounded-full bg-storm-mist/20 blur-2xl" />
-                    <div className="relative flex flex-col items-center text-center gap-3">
-                        <div className="h-16 w-16 rounded-full bg-gradient-to-br from-accent-admin to-accent-admin border-2 border-hairline flex items-center justify-center ">
-                            <ShoppingBag className="h-7 w-7 text-charcoal" />
+                <div className="rounded-xl bg-primary-brand p-8">
+                    <div className="flex flex-col items-center text-center gap-3">
+                        <div className="h-16 w-16 rounded-lg bg-white/15 flex items-center justify-center">
+                            <ShoppingBag className="h-7 w-7 text-white" />
                         </div>
                         <div>
-                            <p className="font-semibold text-ink text-base">New Order</p>
-                            <p className="text-xs text-steel mt-0.5">Assign a service to a customer and set the payment details</p>
+                            <p className="font-semibold text-white text-base">New Order</p>
+                            <p className="text-xs text-white/70 mt-0.5">Assign a service to a customer and set the payment details</p>
                         </div>
                     </div>
                 </div>
@@ -65,7 +63,7 @@ export function AdminOrderNewPage() {
                 <div className="rounded-lg border border-hairline bg-canvas p-6 space-y-5">
                     <div className="flex items-center gap-2 pb-1 border-b border-hairline">
                         <div className="h-7 w-7 rounded-lg bg-primary-brand/10 flex items-center justify-center">
-                            <ClipboardList className="h-3.5 w-3.5 text-charcoal" />
+                            <ClipboardList className="h-3.5 w-3.5 text-primary-brand" />
                         </div>
                         <h3 className="text-sm font-semibold text-charcoal">Order Details</h3>
                     </div>
@@ -157,7 +155,7 @@ export function AdminOrderNewPage() {
                             </Button>
                             <Button
                                 type="button"
-                                variant="outline"
+                                variant="secondary"
                                 onClick={() => router.push("/admin/orders")}
                                 className="rounded-lg"
                             >

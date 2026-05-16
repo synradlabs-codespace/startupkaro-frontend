@@ -8,9 +8,9 @@ interface ArticleIndexProps {
 }
 
 const levelClassName: Record<ArticleHeading["level"], string> = {
-    1: "pl-0 font-semibold text-ink",
-    2: "pl-3 text-slate",
-    3: "pl-6 text-stone",
+    1: "pl-3 font-semibold text-ink",
+    2: "pl-6 text-slate",
+    3: "pl-9 text-stone",
 };
 
 export function ArticleIndex({ headings }: ArticleIndexProps) {

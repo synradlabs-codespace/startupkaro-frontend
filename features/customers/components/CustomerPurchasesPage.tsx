@@ -1,4 +1,4 @@
-// features/customers/components/CustomerPurchasesPage.tsx
+﻿// features/customers/components/CustomerPurchasesPage.tsx
 "use client";
 
 import { useState } from "react";
@@ -41,7 +41,7 @@ export function CustomerPurchasesPage() {
                             <TableBody>
                                 {paginated.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={7} className="text-center text-muted-foreground py-12">
+                                        <TableCell colSpan={7} className="text-center text-slate py-12">
                                             No purchases yet.{" "}
                                             <Link href="/customer/services" className="text-charcoal hover:underline">
                                                 Browse services
@@ -51,12 +51,12 @@ export function CustomerPurchasesPage() {
                                 ) : (
                                     paginated.map((p) => (
                                         <TableRow key={p.id} className="hover:bg-muted/30">
-                                            <TableCell className="font-mono text-xs text-muted-foreground">{p.id}</TableCell>
+                                            <TableCell className="font-mono text-xs text-slate">{p.id}</TableCell>
                                             <TableCell className="font-medium">{p.service}</TableCell>
                                             <TableCell className="font-medium">₹{p.amount.toLocaleString("en-IN")}</TableCell>
                                             <TableCell><OrderStatusBadge status={p.status} /></TableCell>
                                             <TableCell><PaymentStatusBadge status={p.paymentStatus} /></TableCell>
-                                            <TableCell className="text-muted-foreground text-sm">{p.date}</TableCell>
+                                            <TableCell className="text-slate text-sm">{p.date}</TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex gap-1 justify-end">
                                                     <Link href={`/customer/purchases/${p.id}`}>
@@ -87,3 +87,4 @@ export function CustomerPurchasesPage() {
         </div>
     );
 }
+

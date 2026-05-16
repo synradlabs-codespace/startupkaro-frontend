@@ -16,19 +16,17 @@ export function CustomerDashboard() {
             <div className="flex-1 p-6 space-y-6">
 
                 {/* ── Hero Banner ───────────────────────────── */}
-                <div className="relative overflow-hidden rounded-lg border border-hairline bg-accent-customer p-6">
-                    <div className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full bg-primary-brand/8 blur-3xl" />
-                    <div className="pointer-events-none absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-accent-customer blur-2xl" />
-                    <div className="relative flex items-center justify-between gap-4">
+                <div className="rounded-xl bg-primary-brand p-6">
+                    <div className="flex items-center justify-between gap-4">
                         <div>
-                            <h2 className="text-lg font-semibold text-ink">Hello, Rahul 👋</h2>
-                            <p className="text-sm text-steel mt-0.5">
+                            <h2 className="text-lg font-semibold text-white">Hello, Rahul 👋</h2>
+                            <p className="text-sm text-white/80 mt-0.5">
                                 You have {mockPurchases.length} active purchase{mockPurchases.length !== 1 ? "s" : ""} · {mockServices.length} services available
                             </p>
                         </div>
                         <Link
                             href="/customer/services"
-                            className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-primary-brand text-white hover:bg-primary-brand/90 rounded-lg transition-colors shrink-0"
+                            className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-white text-primary-deep hover:bg-white/90 rounded-lg transition-colors shrink-0"
                         >
                             <Store className="h-3.5 w-3.5" />
                             Browse Services
@@ -63,21 +61,21 @@ export function CustomerDashboard() {
                         <div className="flex items-start justify-between mb-3">
                             <p className="text-xs text-steel font-medium">My Purchases</p>
                             <div className="h-8 w-8 rounded-lg bg-primary-brand/10 flex items-center justify-center">
-                                <ShoppingBag className="h-4 w-4 text-charcoal" />
+                                <ShoppingBag className="h-4 w-4 text-primary-brand" />
                             </div>
                         </div>
-                        <p className="text-2xl font-bold text-ink">{mockPurchases.length}</p>
+                        <p className="text-2xl font-display font-medium text-ink">{mockPurchases.length}</p>
                         <p className="text-xs text-stone mt-1">Total services ordered</p>
                     </div>
 
                     <div className="rounded-lg border border-hairline bg-canvas p-5">
                         <div className="flex items-start justify-between mb-3">
                             <p className="text-xs text-steel font-medium">Services Available</p>
-                            <div className="h-8 w-8 rounded-lg bg-tint-peach flex items-center justify-center">
-                                <Store className="h-4 w-4 text-charcoal" />
+                            <div className="h-8 w-8 rounded-lg bg-primary-brand/10 flex items-center justify-center">
+                                <Store className="h-4 w-4 text-primary-brand" />
                             </div>
                         </div>
-                        <p className="text-2xl font-bold text-ink">{mockServices.length}</p>
+                        <p className="text-2xl font-display font-medium text-ink">{mockServices.length}</p>
                         <p className="text-xs text-stone mt-1">Compliance &amp; legal services</p>
                     </div>
                 </div>
@@ -119,10 +117,10 @@ export function CustomerDashboard() {
                 </div>
 
                 {/* ── Browse CTA ───────────────────────────── */}
-                <div className="rounded-lg border-2 border-dashed border-hairline-strong bg-primary-brand/4 p-5 flex items-center justify-between gap-4">
+                <div className="rounded-lg border border-primary-brand/20 bg-primary-brand/10 p-5 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
-                        <div className="h-9 w-9 rounded-lg bg-primary-brand/10 flex items-center justify-center shrink-0">
-                            <Sparkles className="h-4 w-4 text-charcoal" />
+                        <div className="h-9 w-9 rounded-lg bg-primary-brand/15 flex items-center justify-center shrink-0">
+                            <Sparkles className="h-4 w-4 text-primary-brand" />
                         </div>
                         <div>
                             <p className="text-sm font-medium text-charcoal">Need another service?</p>

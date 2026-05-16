@@ -4,6 +4,7 @@
 
 import { useState, FormEvent } from "react";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 interface LoginFormProps {
     title: string;
@@ -40,7 +41,8 @@ export function LoginForm({
                     href="/"
                     className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-graphite hover:text-ink transition-colors mb-8"
                 >
-                    ← Back
+                    <ArrowLeft className="h-3.5 w-3.5" />
+                    Back
                 </Link>
 
                 <div className="bg-canvas rounded-[22px] p-8 md:p-10 border border-hairline">
@@ -110,7 +112,7 @@ export function LoginForm({
                             disabled={loading}
                             className="w-full mt-2 py-3.5 rounded-full bg-ink text-white text-sm font-medium transition-opacity duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90"
                         >
-                            {loading ? "Signing in..." : "Sign in →"}
+                            {loading ? "Signing in..." : "Sign in"}
                         </button>
                     </form>
 

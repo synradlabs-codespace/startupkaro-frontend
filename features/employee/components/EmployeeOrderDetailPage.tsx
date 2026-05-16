@@ -1,4 +1,4 @@
-// features/employee/components/EmployeeOrderDetailPage.tsx
+﻿// features/employee/components/EmployeeOrderDetailPage.tsx
 
 import Link from "next/link";
 import { PageHeader } from "@/components/custom/PageHeader";
@@ -41,16 +41,16 @@ export function EmployeeOrderDetailPage({ id }: { id: string }) {
                             { label: "Date", value: order.date },
                         ].map(({ label, value, mono }) => (
                             <div key={label} className="flex justify-between">
-                                <span className="text-muted-foreground">{label}</span>
+                                <span className="text-slate">{label}</span>
                                 <span className={mono ? "font-mono text-xs" : "font-medium"}>{value}</span>
                             </div>
                         ))}
                         <div className="flex justify-between items-center pt-1 border-t">
-                            <span className="text-muted-foreground">Order Status</span>
+                            <span className="text-slate">Order Status</span>
                             <OrderStatusBadge status={order.status} />
                         </div>
                         <div className="flex justify-between items-center">
-                            <span className="text-muted-foreground">Payment Status</span>
+                            <span className="text-slate">Payment Status</span>
                             <PaymentStatusBadge status={order.paymentStatus} />
                         </div>
                     </CardContent>
@@ -64,27 +64,27 @@ export function EmployeeOrderDetailPage({ id }: { id: string }) {
                             { label: "Mobile", value: "+91 98765 43210" },
                         ].map(({ label, value }) => (
                             <div key={label} className="flex justify-between">
-                                <span className="text-muted-foreground">{label}</span>
+                                <span className="text-slate">{label}</span>
                                 <span className="font-medium">{value}</span>
                             </div>
                         ))}
                     </CardContent>
                 </Card>
             </div>
-            <div className="px-6 pb-6 max-w-2xl">
+            <div className="px-6 pb-6">
                 <Card>
                     <CardHeader>
                         <CardTitle className="text-base flex items-center gap-2">
-                            <StickyNote className="h-4 w-4 text-muted-foreground" />
+                            <StickyNote className="h-4 w-4 text-slate" />
                             Notes
                             {notes.length > 0 && (
-                                <span className="text-xs font-normal text-muted-foreground">({notes.length})</span>
+                                <span className="text-xs font-normal text-slate">({notes.length})</span>
                             )}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         {notes.length === 0 ? (
-                            <p className="text-sm text-muted-foreground text-center py-4">No notes added yet.</p>
+                            <p className="text-sm text-slate text-center py-4">No notes added yet.</p>
                         ) : (
                             <ul className="space-y-2">
                                 {notes.map((note, i) => (
@@ -100,3 +100,4 @@ export function EmployeeOrderDetailPage({ id }: { id: string }) {
         </div>
     );
 }
+

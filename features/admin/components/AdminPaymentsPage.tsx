@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -49,7 +49,7 @@ export function AdminPaymentsPage() {
             <div className="p-6 space-y-4">
                 <div className="flex gap-3 flex-wrap">
                     <div className="relative flex-1 min-w-[200px]">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate" />
                         <Input
                             placeholder="Search by payment ID, order ID, or customer..."
                             value={search}
@@ -88,19 +88,19 @@ export function AdminPaymentsPage() {
                             <TableBody>
                                 {paginated.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={8} className="text-center text-muted-foreground py-12">
+                                        <TableCell colSpan={8} className="text-center text-slate py-12">
                                             No payments found
                                         </TableCell>
                                     </TableRow>
                                 ) : (
                                     paginated.map((payment) => (
                                         <TableRow key={payment.id} className="hover:bg-muted/30">
-                                            <TableCell className="font-mono text-xs text-muted-foreground">{payment.id}</TableCell>
-                                            <TableCell className="font-mono text-xs text-muted-foreground">{payment.orderId}</TableCell>
+                                            <TableCell className="font-mono text-xs text-slate">{payment.id}</TableCell>
+                                            <TableCell className="font-mono text-xs text-slate">{payment.orderId}</TableCell>
                                             <TableCell className="font-medium">{payment.customer}</TableCell>
                                             <TableCell className="font-medium">₹{payment.amount.toLocaleString("en-IN")}</TableCell>
                                             <TableCell><PaymentStatusBadge status={payment.status} /></TableCell>
-                                            <TableCell className="text-muted-foreground text-sm">{payment.date}</TableCell>
+                                            <TableCell className="text-slate text-sm">{payment.date}</TableCell>
                                             <TableCell className="text-right">
                                                 <Link href={`/admin/payments/${payment.id}`}>
                                                     <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-brand/10 hover:text-charcoal">
@@ -126,3 +126,4 @@ export function AdminPaymentsPage() {
         </div>
     );
 }
+

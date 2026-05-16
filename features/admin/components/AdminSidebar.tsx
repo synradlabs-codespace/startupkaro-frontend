@@ -45,8 +45,8 @@ const navItems = [
     { title: "Analytics", href: "/admin/analytics", icon: BarChart3 },
 ];
 
-const ACCENT_BG_CLASS = "bg-accent-admin";
-const ACCENT_TEXT_CLASS = "text-charcoal";
+const ACCENT_BG_CLASS = "bg-primary-brand";
+const ACCENT_TEXT_CLASS = "text-white";
 
 export function AdminSidebar() {
     const pathname = usePathname();
@@ -84,7 +84,7 @@ export function AdminSidebar() {
                 <div className={`flex items-center gap-3 overflow-hidden ${collapsed ? "w-auto" : "w-full"}`}>
                     {collapsed ? (
                         <div
-                            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg font-bold text-xs text-charcoal ${ACCENT_BG_CLASS}`}
+                            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg font-semibold text-xs text-charcoal ${ACCENT_BG_CLASS}`}
                         >
                             SK
                         </div>
@@ -192,7 +192,7 @@ export function AdminSidebar() {
                         </div>
                         <Link
                             href="/admin/login"
-                            className="p-1.5 rounded-md text-stone hover:text-error-brand hover:bg-red-50 transition-all duration-150 block"
+                            className="p-1.5 rounded-md text-stone hover:text-error-brand hover:bg-error-brand/10 transition-all duration-150 block"
                             title="Sign out"
                         >
                             <LogOut className="h-[15px] w-[15px]" />

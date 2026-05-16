@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -26,7 +26,7 @@ export function AdminCustomersPage() {
             <PageHeader title="Customers" description={`${mockCustomers.length} registered customers`} />
             <div className="p-6 space-y-4">
                 <div className="relative max-w-sm">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate" />
                     <Input placeholder="Search customers..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
                 </div>
 
@@ -49,17 +49,17 @@ export function AdminCustomersPage() {
                                         <TableCell>
                                             <div className="flex items-center gap-3">
                                                 <Avatar className="h-8 w-8">
-                                                    <AvatarFallback className="text-xs bg-primary-brand/10 text-charcoal">
+                                                    <AvatarFallback className="text-xs bg-primary-brand/10 text-primary-brand">
                                                         {customer.name.split(" ").map(n => n[0]).join("")}
                                                     </AvatarFallback>
                                                 </Avatar>
                                                 <span className="font-medium">{customer.name}</span>
                                             </div>
                                         </TableCell>
-                                        <TableCell className="text-muted-foreground">{customer.email}</TableCell>
-                                        <TableCell className="text-muted-foreground">{customer.mobile}</TableCell>
+                                        <TableCell className="text-slate">{customer.email}</TableCell>
+                                        <TableCell className="text-slate">{customer.mobile}</TableCell>
                                         <TableCell>{customer.orders}</TableCell>
-                                        <TableCell className="text-muted-foreground text-sm">{customer.joined}</TableCell>
+                                        <TableCell className="text-slate text-sm">{customer.joined}</TableCell>
                                         <TableCell className="text-right">
                                             <Link href={`/admin/customers/${customer.id}`}>
                                                 <Button variant="ghost" size="icon">

@@ -24,28 +24,29 @@ export function AdminDashboard() {
             label: "Total Revenue",
             value: `₹${mockAnalytics.totalRevenue.toLocaleString("en-IN")}`,
             icon: IndianRupee,
-            accent: "bg-primary-brand/10 text-charcoal",
+            accent: "bg-primary-brand text-white",
             sub: `Avg ₹${avgOrderValue.toLocaleString("en-IN")} / order`,
+            hero: true,
         },
         {
             label: "Total Orders",
             value: mockAnalytics.totalOrders,
             icon: ShoppingCart,
-            accent: "bg-tint-sky text-charcoal",
+            accent: "bg-primary-brand/10 text-primary-brand",
             sub: `${mockAnalytics.activeOrders} currently active`,
         },
         {
             label: "Customers",
             value: mockAnalytics.totalCustomers,
             icon: Users,
-            accent: "bg-tint-lavender text-charcoal",
+            accent: "bg-tint-sky text-primary-brand",
             sub: "Registered accounts",
         },
         {
             label: "Completion Rate",
             value: `${completionRate}%`,
             icon: CheckCircle2,
-            accent: "bg-tint-mint text-charcoal",
+            accent: "bg-primary-brand/10 text-primary-brand",
             sub: `${completedCount} of ${mockOrders.length} orders done`,
         },
     ];
@@ -57,19 +58,17 @@ export function AdminDashboard() {
             <div className="flex-1 p-6 space-y-6">
 
                 {/* ── Hero Banner ───────────────────────────── */}
-                <div className="relative overflow-hidden rounded-lg border border-hairline bg-accent-admin p-6">
-                    <div className="pointer-events-none absolute -top-12 -right-12 h-40 w-40 rounded-full bg-primary-brand/8 blur-3xl" />
-                    <div className="pointer-events-none absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-accent-admin blur-2xl" />
-                    <div className="relative flex items-center justify-between gap-4">
+                <div className="rounded-xl bg-primary-brand p-6">
+                    <div className="flex items-center justify-between gap-4">
                         <div>
-                            <h2 className="text-lg font-semibold text-ink">Admin Overview</h2>
-                            <p className="text-sm text-steel mt-0.5">
+                            <h2 className="text-lg font-semibold text-white">Admin Overview</h2>
+                            <p className="text-sm text-white/80 mt-0.5">
                                 {collectionRate}% collected · {completionRate}% completion · ₹{avgOrderValue.toLocaleString("en-IN")} avg order
                             </p>
                         </div>
                         <Link
                             href="/admin/analytics"
-                            className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-primary-brand text-white hover:bg-primary-brand/90 rounded-lg transition-colors shrink-0"
+                            className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-white text-primary-deep hover:bg-white/90 rounded-lg transition-colors shrink-0"
                         >
                             <BarChart3 className="h-3.5 w-3.5" />
                             Analytics
@@ -82,16 +81,16 @@ export function AdminDashboard() {
                     {stats.map((stat) => (
                         <div
                             key={stat.label}
-                            className="rounded-lg border border-hairline bg-canvas p-5"
+                            className={`rounded-lg p-5 ${"hero" in stat && stat.hero ? "bg-ink" : "border border-hairline bg-canvas"}`}
                         >
                             <div className="flex items-start justify-between mb-3">
-                                <p className="text-xs text-steel font-medium">{stat.label}</p>
+                                <p className={`text-xs font-medium ${"hero" in stat && stat.hero ? "text-white/70" : "text-steel"}`}>{stat.label}</p>
                                 <div className={`h-8 w-8 rounded-lg flex items-center justify-center ${stat.accent}`}>
                                     <stat.icon className="h-4 w-4" />
                                 </div>
                             </div>
-                            <p className="text-2xl font-bold text-ink">{stat.value}</p>
-                            <p className="text-xs text-stone mt-1">{stat.sub}</p>
+                            <p className={`text-2xl font-display font-medium ${"hero" in stat && stat.hero ? "text-white" : "text-ink"}`}>{stat.value}</p>
+                            <p className={`text-xs mt-1 ${"hero" in stat && stat.hero ? "text-white/60" : "text-stone"}`}>{stat.sub}</p>
                         </div>
                     ))}
                 </div>
@@ -129,7 +128,7 @@ export function AdminDashboard() {
                                 <p className="text-xs text-steel font-medium">{kpi.label}</p>
                                 <kpi.icon className="h-4 w-4 text-stone" />
                             </div>
-                            <p className="text-xl font-bold text-ink">{kpi.value}</p>
+                            <p className="text-xl font-display font-medium text-ink">{kpi.value}</p>
                             <div className="space-y-1">
                                 <div className="h-1.5 bg-surface rounded-full overflow-hidden">
                                     <div className={`h-full rounded-full ${kpi.barColor} transition-all`} style={{ width: `${kpi.bar}%` }} />

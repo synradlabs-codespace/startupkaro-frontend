@@ -32,8 +32,8 @@ const navItems: NavItem[] = [
   { title: "Profile", href: "/employee/profile", icon: User },
 ];
 
-const ACCENT_BG_CLASS = "bg-accent-employee";
-const ACCENT_TEXT_CLASS = "text-charcoal";
+const ACCENT_BG_CLASS = "bg-primary-brand";
+const ACCENT_TEXT_CLASS = "text-white";
 
 export function EmployeeSidebar() {
   const pathname = usePathname();
@@ -60,7 +60,7 @@ export function EmployeeSidebar() {
         <div className={`flex items-center gap-3 overflow-hidden ${collapsed ? "w-auto" : "w-full"}`}>
           {collapsed ? (
             <div
-              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg font-bold text-xs text-charcoal ${ACCENT_BG_CLASS}`}
+              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg font-semibold text-xs text-white ${ACCENT_BG_CLASS}`}
             >
               SK
             </div>
@@ -120,7 +120,7 @@ export function EmployeeSidebar() {
       <div className="px-3 py-4 border-t border-hairline">
         <div className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
           <Avatar className="h-8 w-8 shrink-0">
-            <AvatarFallback className={`text-charcoal text-[11px] font-semibold ${ACCENT_BG_CLASS}`}>EM</AvatarFallback>
+            <AvatarFallback className={`text-white text-[11px] font-semibold ${ACCENT_BG_CLASS}`}>EM</AvatarFallback>
           </Avatar>
           {!collapsed && (
             <>
@@ -128,7 +128,7 @@ export function EmployeeSidebar() {
                 <p className="text-[13px] font-medium text-ink truncate leading-none">Employee</p>
                 <p className="text-[11px] text-steel truncate mt-0.5">employee@startupkaro.com</p>
               </div>
-              <Link href="/employee/login" className="p-1.5 rounded-md text-stone hover:text-error-brand hover:bg-red-50" title="Sign out">
+              <Link href="/employee/login" className="p-1.5 rounded-md text-stone hover:text-error-brand hover:bg-error-brand/10" title="Sign out">
                 <LogOut className="h-[15px] w-[15px]" />
               </Link>
             </>

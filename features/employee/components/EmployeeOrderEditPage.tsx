@@ -1,4 +1,4 @@
-// features/employee/components/EmployeeOrderEditPage.tsx
+﻿// features/employee/components/EmployeeOrderEditPage.tsx
 "use client";
 
 import { useState } from "react";
@@ -44,10 +44,10 @@ export function EmployeeOrderEditPage({ id }: { id: string }) {
             <div className="p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-5xl">
 
-                    {/* Left — Status */}
-                    <Card>
+                    {/* Left Status */}
+                    <Card className="flex flex-col">
                         <CardHeader><CardTitle className="text-base">Order Status</CardTitle></CardHeader>
-                        <CardContent className="space-y-5 text-sm">
+                        <CardContent className="flex flex-col flex-1 space-y-5 text-sm">
                             {/* Read-only summary */}
                             {[
                                 { label: "Order ID", value: order.id, mono: true },
@@ -56,13 +56,13 @@ export function EmployeeOrderEditPage({ id }: { id: string }) {
                                 { label: "Customer", value: order.customer },
                             ].map(({ label, value, mono }) => (
                                 <div key={label} className="flex justify-between">
-                                    <span className="text-muted-foreground">{label}</span>
+                                    <span className="text-slate">{label}</span>
                                     <span className={mono ? "font-mono text-xs" : "font-medium"}>{value}</span>
                                 </div>
                             ))}
 
-                            <div className="pt-2 border-t space-y-1.5">
-                                <Label className="text-xs text-muted-foreground">Update Status</Label>
+                            <div className="mt-auto pt-2 border-t space-y-1.5">
+                                <Label className="text-xs text-slate">Update Status</Label>
                                 <Select value={status} onValueChange={(v) => setStatus(v ?? status)}>
                                     <SelectTrigger className="h-8 text-sm">
                                         <SelectValue />
@@ -88,33 +88,33 @@ export function EmployeeOrderEditPage({ id }: { id: string }) {
                                         "Save Status"
                                     )}
                                 </Button>
-                                <Button variant="outline" onClick={() => router.back()}>
+                                <Button variant="secondary" onClick={() => router.back()}>
                                     Cancel
                                 </Button>
                             </div>
                         </CardContent>
                     </Card>
 
-                    {/* Right — Notes */}
+                    {/* Right Notes */}
                     <Card className="flex flex-col">
                         <CardHeader>
                             <CardTitle className="text-base flex items-center gap-2">
-                                <StickyNote className="h-4 w-4 text-muted-foreground" />
+                                <StickyNote className="h-4 w-4 text-slate" />
                                 Notes
                                 {notes.length > 0 && (
-                                    <span className="text-xs font-normal text-muted-foreground">({notes.length})</span>
+                                    <span className="text-xs font-normal text-slate">({notes.length})</span>
                                 )}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="flex flex-col flex-1 space-y-3">
-                            <div className="flex-1 min-h-[160px]">
+                            <div className="flex-1">
                                 {notes.length === 0 ? (
-                                    <p className="text-sm text-muted-foreground text-center py-8">No notes yet. Add the first note below.</p>
+                                    <p className="text-sm text-slate text-center py-8">No notes yet. Add the first note below.</p>
                                 ) : (
                                     <ul className="space-y-2">
                                         {notes.map((note, i) => (
                                             <li key={i} className="bg-muted/40 rounded-lg px-3 py-2 text-sm">
-                                                <span className="leading-relaxed">{note}</span>
+                                                <span className="whitespace-pre-wrap leading-relaxed">{note}</span>
                                             </li>
                                         ))}
                                     </ul>
@@ -127,7 +127,7 @@ export function EmployeeOrderEditPage({ id }: { id: string }) {
                                     onChange={(e) => setNewNote(e.target.value)}
                                     className="resize-none text-sm min-h-[60px]"
                                     onKeyDown={(e) => {
-                                        if (e.key === "Enter" && !e.shiftKey) {
+                                        if (e.key === "Enter" && e.shiftKey) {
                                             e.preventDefault();
                                             handleAddNote();
                                         }
@@ -142,7 +142,7 @@ export function EmployeeOrderEditPage({ id }: { id: string }) {
                                     <Send className="h-4 w-4" />
                                 </Button>
                             </div>
-                            <p className="text-xs text-muted-foreground">Press Enter to add, Shift+Enter for new line.</p>
+                            <p className="text-xs text-slate">Press Enter for a new line. Shift+Enter adds the note.</p>
                         </CardContent>
                     </Card>
                 </div>

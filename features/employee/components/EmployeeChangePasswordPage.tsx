@@ -92,7 +92,7 @@ export function EmployeeChangePasswordPage() {
 
                     {/* ── Success state ─────────────────────────── */}
                     {submitted && (
-                        <div className="rounded-lg border border-hairline bg-accent-employee p-6 flex items-center gap-4">
+                        <div className="rounded-lg border border-primary-brand/20 bg-primary-brand/10 p-6 flex items-center gap-4">
                             <div className="h-10 w-10 rounded-full bg-primary-brand flex items-center justify-center shrink-0 ">
                                 <Check className="h-5 w-5 text-white" />
                             </div>
@@ -107,9 +107,9 @@ export function EmployeeChangePasswordPage() {
                     {!submitted && (
                         <div className="rounded-lg border border-hairline bg-canvas overflow-hidden">
                             {/* Card header */}
-                            <div className="px-6 py-4 border-b border-hairline bg-accent-employee flex items-center gap-3">
-                                <div className="h-8 w-8 rounded-lg bg-tint-sky flex items-center justify-center">
-                                    <KeyRound className="h-4 w-4 text-charcoal" />
+                            <div className="px-6 py-4 border-b border-hairline bg-surface flex items-center gap-3">
+                                <div className="h-8 w-8 rounded-lg bg-primary-brand/10 flex items-center justify-center">
+                                    <KeyRound className="h-4 w-4 text-primary-brand" />
                                 </div>
                                 <div>
                                     <p className="text-sm font-semibold text-charcoal">Update Password</p>
@@ -244,7 +244,7 @@ export function EmployeeChangePasswordPage() {
                                     </Button>
                                     <Button
                                         type="button"
-                                        variant="outline"
+                                        variant="secondary"
                                         onClick={() => router.push("/employee/profile")}
                                         className="rounded-lg"
                                     >
@@ -268,7 +268,7 @@ export function EmployeeChangePasswordPage() {
                                 "Don't reuse passwords from other sites",
                             ].map((tip) => (
                                 <li key={tip} className="flex items-center gap-2 text-xs text-steel">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-accent-employee0 shrink-0" />
+                                    <span className="h-1.5 w-1.5 rounded-full bg-primary-brand shrink-0" />
                                     {tip}
                                 </li>
                             ))}

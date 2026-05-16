@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 // features/customers/components/CustomerPurchaseDetailPage.tsx
 
@@ -96,23 +96,23 @@ export function CustomerPurchaseDetailPage({ id }: { id: string }) {
                             { label: "Date", value: purchase.date },
                         ].map(({ label, value, mono }) => (
                             <div key={label} className="flex justify-between">
-                                <span className="text-muted-foreground">{label}</span>
+                                <span className="text-slate">{label}</span>
                                 <span className={mono ? "font-mono text-xs" : "font-medium"}>{value}</span>
                             </div>
                         ))}
                         <div className="flex justify-between">
-                            <span className="text-muted-foreground">Service Status</span>
+                            <span className="text-slate">Service Status</span>
                             <OrderStatusBadge status={purchase.status} />
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-muted-foreground">Payment</span>
+                            <span className="text-slate">Payment</span>
                             <PaymentStatusBadge status={purchase.paymentStatus} />
                         </div>
                     </CardContent>
                 </Card>
                 <Card>
                     <CardHeader><CardTitle className="text-base">Next Steps</CardTitle></CardHeader>
-                    <CardContent className="space-y-3 text-sm text-muted-foreground">
+                    <CardContent className="space-y-3 text-sm text-slate">
                         <p>
                             StartupKaro will coordinate required documents through our official email. There is no document upload step inside the customer dashboard.
                         </p>
@@ -132,3 +132,4 @@ export function CustomerPurchaseDetailPage({ id }: { id: string }) {
         </div>
     );
 }
+

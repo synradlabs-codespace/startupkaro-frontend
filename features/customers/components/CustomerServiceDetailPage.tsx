@@ -18,10 +18,10 @@ import {
 } from "lucide-react";
 
 const categoryMeta: Record<string, { icon: React.ElementType; color: string; bg: string; badge: string }> = {
-    Tax: { icon: FileText, color: "text-violet-600", bg: "bg-violet-50", badge: "bg-violet-100 text-violet-700" },
-    Business: { icon: Building2, color: "text-blue-600", bg: "bg-blue-50", badge: "bg-blue-100 text-blue-700" },
-    Legal: { icon: Scale, color: "text-rose-600", bg: "bg-rose-50", badge: "bg-rose-100 text-rose-700" },
-    License: { icon: FileCheck, color: "text-teal-600", bg: "bg-teal-50", badge: "bg-teal-100 text-teal-700" },
+    Tax: { icon: FileText, color: "text-primary-brand", bg: "bg-tint-sky", badge: "bg-tint-sky text-primary-brand" },
+    Business: { icon: Building2, color: "text-orange-600", bg: "bg-orange-50", badge: "bg-orange-100 text-orange-700" },
+    Legal: { icon: Scale, color: "text-charcoal", bg: "bg-fog", badge: "bg-fog text-charcoal" },
+    License: { icon: FileCheck, color: "text-charcoal", bg: "bg-surface", badge: "bg-surface text-charcoal" },
 };
 const fallbackMeta = { icon: LayoutGrid, color: "text-slate", bg: "bg-surface", badge: "bg-surface text-slate" };
 
@@ -57,20 +57,19 @@ export function CustomerServiceDetailPage({ id }: { id: string }) {
                     <div className="md:col-span-2 space-y-5">
 
                         {/* Hero banner */}
-                        <div className="relative overflow-hidden rounded-lg border border-hairline bg-accent-customer p-6">
-                            <div className="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full bg-primary-brand/8 blur-3xl" />
+                        <div className="rounded-xl bg-primary-brand p-6">
                             <div className="flex items-start gap-4">
-                                <div className={`h-12 w-12 rounded-lg ${meta.bg} flex items-center justify-center shrink-0`}>
-                                    <Icon className={`h-6 w-6 ${meta.color}`} />
+                                <div className="h-12 w-12 rounded-lg bg-white/15 flex items-center justify-center shrink-0">
+                                    <Icon className="h-6 w-6 text-white" />
                                 </div>
                                 <div className="flex-1">
                                     <div className="flex items-center gap-2 mb-1">
-                                        <h2 className="text-lg font-semibold text-ink">{service.name}</h2>
-                                        <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${meta.badge}`}>
+                                        <h2 className="text-lg font-semibold text-white">{service.name}</h2>
+                                        <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-white/20 text-white">
                                             {service.category}
                                         </span>
                                     </div>
-                                    <p className="text-sm text-steel leading-relaxed">{service.description}</p>
+                                    <p className="text-sm text-white/80 leading-relaxed">{service.description}</p>
                                 </div>
                             </div>
                         </div>
@@ -78,14 +77,14 @@ export function CustomerServiceDetailPage({ id }: { id: string }) {
                         {/* What's included */}
                         <div className="rounded-lg border border-hairline bg-canvas p-6">
                             <h3 className="text-sm font-semibold text-charcoal mb-4 flex items-center gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-charcoal" />
+                                <CheckCircle2 className="h-4 w-4 text-primary-brand" />
                                 What is Included
                             </h3>
                             <ul className="space-y-3">
                                 {highlights.map((item) => (
                                     <li key={item} className="flex items-start gap-3">
                                         <div className="h-5 w-5 rounded-full bg-primary-brand/10 flex items-center justify-center shrink-0 mt-0.5">
-                                            <ShieldCheck className="h-3 w-3 text-charcoal" />
+                                            <ShieldCheck className="h-3 w-3 text-primary-brand" />
                                         </div>
                                         <span className="text-sm text-slate">{item}</span>
                                     </li>
@@ -97,13 +96,13 @@ export function CustomerServiceDetailPage({ id }: { id: string }) {
                     {/* ── Right: Pricing card ─────────────── */}
                     <div className="rounded-lg border border-hairline bg-canvas overflow-hidden">
                         {/* Card header accent */}
-                        <div className="h-1.5 bg-gradient-to-r from-primary-brand to-accent-customer" />
+                        <div className="h-1.5 bg-primary-brand" />
 
                         <div className="p-6 space-y-5">
                             {/* Price */}
                             <div>
                                 <p className="text-xs text-stone uppercase tracking-wide font-medium mb-1">Service Fee</p>
-                                <p className="text-3xl font-bold text-ink">
+                                <p className="text-3xl font-display font-medium text-ink">
                                     ₹{service.price.toLocaleString("en-IN")}
                                 </p>
                                 <p className="text-xs text-stone flex items-center gap-1 mt-1.5">
@@ -144,7 +143,7 @@ export function CustomerServiceDetailPage({ id }: { id: string }) {
 
                             {/* Trust note */}
                             <p className="text-[11px] text-center text-stone flex items-center justify-center gap-1.5">
-                                <ShieldCheck className="h-3 w-3 text-charcoal" />
+                                <ShieldCheck className="h-3 w-3 text-primary-brand" />
                                 Secured by Razorpay
                             </p>
                         </div>

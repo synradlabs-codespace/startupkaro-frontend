@@ -1,4 +1,4 @@
-// features/admin/components/AdminOrdersPage.tsx
+﻿// features/admin/components/AdminOrdersPage.tsx
 "use client";
 
 import { useState } from "react";
@@ -59,7 +59,7 @@ export function AdminOrdersPage() {
             <div className="p-6 space-y-4">
                 <div className="flex gap-3 flex-wrap">
                     <div className="relative flex-1 min-w-[200px]">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate" />
                         <Input
                             placeholder="Search by order ID, customer, or service..."
                             value={search}
@@ -99,20 +99,20 @@ export function AdminOrdersPage() {
                             <TableBody>
                                 {paginated.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={8} className="text-center text-muted-foreground py-12">
+                                        <TableCell colSpan={8} className="text-center text-slate py-12">
                                             No orders found
                                         </TableCell>
                                     </TableRow>
                                 ) : (
                                     paginated.map((order) => (
                                         <TableRow key={order.id} className="hover:bg-muted/30">
-                                            <TableCell className="font-mono text-xs text-muted-foreground">{order.id}</TableCell>
+                                            <TableCell className="font-mono text-xs text-slate">{order.id}</TableCell>
                                             <TableCell className="font-medium">{order.customer}</TableCell>
-                                            <TableCell className="text-muted-foreground text-sm">{order.service}</TableCell>
+                                            <TableCell className="text-slate text-sm">{order.service}</TableCell>
                                             <TableCell className="font-medium">₹{order.amount.toLocaleString("en-IN")}</TableCell>
                                             <TableCell><OrderStatusBadge status={order.status} /></TableCell>
                                             <TableCell><PaymentStatusBadge status={order.paymentStatus} /></TableCell>
-                                            <TableCell className="text-muted-foreground text-sm">{order.date}</TableCell>
+                                            <TableCell className="text-slate text-sm">{order.date}</TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex gap-1 justify-end">
                                                     <Link href={`/admin/orders/${order.id}`}>
@@ -145,3 +145,4 @@ export function AdminOrdersPage() {
         </div>
     );
 }
+

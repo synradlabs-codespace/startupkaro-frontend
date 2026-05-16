@@ -1,4 +1,4 @@
-// features/admin/components/AdminCustomerDetailPage.tsx
+﻿// features/admin/components/AdminCustomerDetailPage.tsx
 
 import Link from "next/link";
 import { PageHeader } from "@/components/custom/PageHeader";
@@ -22,17 +22,17 @@ export function AdminCustomerDetailPage({ id }: { id: string }) {
                     <CardContent className="pt-6">
                         <div className="flex items-center gap-4">
                             <Avatar className="h-14 w-14">
-                                <AvatarFallback className="text-base bg-primary-brand/10 text-charcoal">
+                                <AvatarFallback className="text-base bg-primary-brand/10 text-primary-brand">
                                     {customer.name.split(" ").map(n => n[0]).join("")}
                                 </AvatarFallback>
                             </Avatar>
                             <div className="flex-1">
                                 <p className="font-semibold text-base">{customer.name}</p>
-                                <div className="flex gap-4 mt-1 text-sm text-muted-foreground flex-wrap">
+                                <div className="flex gap-4 mt-1 text-sm text-slate flex-wrap">
                                     <span className="flex items-center gap-1"><Mail className="h-3.5 w-3.5" />{customer.email}</span>
                                     <span className="flex items-center gap-1"><Phone className="h-3.5 w-3.5" />{customer.mobile}</span>
                                 </div>
-                                <p className="text-xs text-muted-foreground mt-1">Joined {customer.joined} · {customer.orders} orders</p>
+                                <p className="text-xs text-slate mt-1">Joined {customer.joined} &middot; {customer.orders} orders</p>
                             </div>
                         </div>
                     </CardContent>
@@ -56,7 +56,7 @@ export function AdminCustomerDetailPage({ id }: { id: string }) {
                             <TableBody>
                                 {orders.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
+                                        <TableCell colSpan={7} className="text-center text-slate py-8">
                                             No orders yet
                                         </TableCell>
                                     </TableRow>
@@ -68,7 +68,7 @@ export function AdminCustomerDetailPage({ id }: { id: string }) {
                                             <TableCell>₹{order.amount.toLocaleString("en-IN")}</TableCell>
                                             <TableCell><OrderStatusBadge status={order.status} /></TableCell>
                                             <TableCell><PaymentStatusBadge status={order.paymentStatus} /></TableCell>
-                                            <TableCell className="text-muted-foreground text-sm">{order.date}</TableCell>
+                                            <TableCell className="text-slate text-sm">{order.date}</TableCell>
                                             <TableCell className="text-right">
                                                 <Link href={`/admin/orders/${order.id}`}>
                                                     <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-brand/10 hover:text-charcoal">
@@ -87,3 +87,4 @@ export function AdminCustomerDetailPage({ id }: { id: string }) {
         </div>
     );
 }
+

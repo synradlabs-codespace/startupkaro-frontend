@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from "react";
 import Link from "next/link";
+import { ArrowLeft, CheckCircle2, FileCheck, Mail } from "lucide-react";
 import { useCustomerResetPassword } from "../hooks/useCustomerAuth";
 
 export function CustomerResetPasswordForm() {
@@ -14,66 +15,97 @@ export function CustomerResetPasswordForm() {
   };
 
   return (
-    <main className="min-h-screen bg-canvas flex items-center justify-center px-6">
-      <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none opacity-60" />
+    <main className="min-h-screen bg-cloud px-4 py-4 sm:px-6 lg:px-8 lg:py-8">
+      <div className="mx-auto flex min-h-[calc(100vh-2rem)] w-full max-w-md items-center lg:min-h-[calc(100vh-4rem)] lg:max-w-6xl">
+        <div className="grid w-full overflow-hidden rounded-xl border border-hairline bg-canvas lg:grid-cols-[1.05fr_0.95fr]">
+          <section className="p-5 sm:p-6 md:p-10">
+            <Link href="/customer/login" className="mb-5 inline-flex w-fit items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-link-blue hover:text-primary-deep md:mb-8">
+              <ArrowLeft className="h-3.5 w-3.5" />
+              Back to sign in
+            </Link>
 
-      <div className="absolute top-0 left-0 right-0 flex h-1">
-        <div className="flex-1 bg-bloom-coral" />
-        <div className="flex-1 bg-canvas border-t border-hairline" />
-        <div className="flex-1 bg-storm-deep" />
-      </div>
-
-      <div className="relative w-full max-w-md">
-        <Link href="/customer/login" className="inline-flex items-center gap-2 text-xs text-stone hover:text-slate transition-colors mb-10 font-mono tracking-widest uppercase">
-          ← Back to login
-        </Link>
-
-        <div className="border border-hairline rounded-2xl p-10 bg-canvas shadow-sm">
-          <div className="mb-8">
-            <p className="text-xs tracking-[0.3em] uppercase font-mono mb-2 font-medium text-storm-deep">
-              StartupKaro
-            </p>
-            <h1 className="text-4xl text-ink font-serif font-normal">Reset password</h1>
-            <p className="mt-2 text-sm text-graphite font-sans">
-              Enter your email and we&apos;ll send you a reset link.
-            </p>
-          </div>
-
-          {sent ? (
-            <div className="px-4 py-5 rounded-xl bg-tint-sky border border-primary-soft text-sm text-primary-brand font-sans leading-relaxed">
-              ✓ Reset link sent. Check your inbox and follow the instructions.
+            <div className="mb-6 md:mb-8">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.7px] text-primary-brand">StartupKaro</p>
+              <h1 className="font-display text-4xl font-medium leading-none text-ink md:text-5xl">Reset password</h1>
+              <p className="mt-4 max-w-md text-sm leading-relaxed text-graphite">
+                Enter the email linked to your customer account. We will send a secure reset link if the account exists.
+              </p>
             </div>
-          ) : (
-            <>
-              {error && (
-                <div className="mb-6 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-600 font-sans">
-                  {error}
+
+            {sent ? (
+              <div className="space-y-5">
+                <div className="rounded-lg border border-primary-soft bg-tint-sky px-4 py-4 text-sm leading-relaxed text-primary-deep">
+                  <div className="mb-2 flex items-center gap-2 font-semibold">
+                    <CheckCircle2 className="h-4 w-4" />
+                    Reset link sent
+                  </div>
+                  Check your inbox for the next step. If it does not arrive soon, check spam or try again with the email used at checkout.
                 </div>
-              )}
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div>
-                  <label className="block text-xs text-graphite mb-2 font-mono tracking-widest uppercase">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    placeholder="you@example.com"
-                    className="w-full bg-surface border border-hairline rounded-xl px-4 py-3 text-ink text-sm placeholder-gray-400 focus:outline-none focus:border-hairline-strong transition-colors font-sans"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full py-3.5 rounded-xl text-sm font-mono tracking-widest uppercase transition-all duration-200 disabled:opacity-50 text-white bg-storm-deep"
+                <Link
+                  href="/customer/login"
+                  className="flex h-11 w-full items-center justify-center rounded-md bg-primary-brand px-6 text-sm font-semibold uppercase tracking-[0.7px] text-white transition-colors hover:bg-primary-deep"
                 >
-                  {loading ? "Sending..." : "Send reset link →"}
-                </button>
-              </form>
-            </>
-          )}
+                  Return to sign in
+                </Link>
+              </div>
+            ) : (
+              <>
+                {error && (
+                  <div className="mb-6 rounded-lg border border-bloom-deep bg-bloom-rose px-4 py-3 text-sm text-bloom-deep">
+                    {error}
+                  </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
+                      <Mail className="h-3.5 w-3.5" />
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      autoComplete="email"
+                      placeholder="you@example.com"
+                      className="h-11 w-full rounded-md border border-hairline-strong bg-canvas px-4 text-sm text-ink placeholder:text-graphite outline-none transition-colors focus:border-ink"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="h-11 w-full rounded-md bg-primary-brand px-6 text-sm font-semibold uppercase tracking-[0.7px] text-white transition-colors hover:bg-primary-deep disabled:cursor-not-allowed disabled:bg-hairline-strong"
+                  >
+                    {loading ? "Sending..." : "Send reset link"}
+                  </button>
+                </form>
+              </>
+            )}
+          </section>
+
+          <section className="hidden min-h-[360px] flex-col justify-between bg-surface p-8 md:p-10 lg:flex">
+            <div className="space-y-6">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-primary-soft bg-canvas">
+                <FileCheck className="h-6 w-6 text-primary-brand" />
+              </div>
+              <div>
+                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.7px] text-primary-brand">Account recovery</p>
+                <h2 className="font-display text-3xl font-medium leading-none text-ink">
+                  Use the email you used for StartupKaro services.
+                </h2>
+                <p className="mt-4 text-sm leading-relaxed text-charcoal">
+                  For most customers, this is the same email used while placing an order or sharing documents with our team.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid gap-3 text-sm text-charcoal">
+              <div className="rounded-lg border border-hairline bg-canvas p-4">Reset links are sent to verified email inboxes</div>
+              <div className="rounded-lg border border-hairline bg-canvas p-4">You can return to sign in once the password is changed</div>
+            </div>
+          </section>
         </div>
       </div>
     </main>

@@ -1,4 +1,4 @@
-// features/admin/components/AdminPaymentsDetailPage.tsx
+﻿// features/admin/components/AdminPaymentsDetailPage.tsx
 "use client";
 
 import { useState } from "react";
@@ -38,24 +38,24 @@ export function AdminPaymentDetailPage({ id }: { id: string }) {
             <div className="flex-1 p-6 max-w-4xl">
                 <div className="rounded-lg border border-hairline bg-canvas overflow-hidden">
                     {/* Header strip */}
-                    <div className="flex items-center gap-4 px-6 py-4 bg-accent-admin border-b border-hairline">
-                        <div className="h-10 w-10 rounded-full bg-gradient-to-br from-accent-admin to-accent-admin border border-hairline flex items-center justify-center shrink-0">
-                            <CreditCard className="h-5 w-5 text-charcoal" />
+                    <div className="flex items-center gap-4 px-6 py-4 bg-primary-brand">
+                        <div className="h-10 w-10 rounded-lg bg-white/15 flex items-center justify-center shrink-0">
+                            <CreditCard className="h-5 w-5 text-white" />
                         </div>
                         <div>
-                            <p className="font-semibold text-ink text-sm">{payment.customer}</p>
-                            <p className="text-xl font-bold text-charcoal">₹{payment.amount.toLocaleString("en-IN")}</p>
+                            <p className="font-semibold text-white text-sm">{payment.customer}</p>
+                            <p className="text-xl font-display font-medium text-white">₹{payment.amount.toLocaleString("en-IN")}</p>
                         </div>
-                        <p className="ml-auto font-mono text-xs text-stone">{payment.id}</p>
+                        <p className="ml-auto font-mono text-xs text-white/70">{payment.id}</p>
                     </div>
 
                     {/* Two-column body */}
                     <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-gray-100">
-                        {/* Left — details */}
+                        {/* Left details */}
                         <div className="p-6 space-y-3">
                             <div className="flex items-center gap-2 pb-2 border-b border-hairline">
                                 <div className="h-6 w-6 rounded-md bg-primary-brand/10 flex items-center justify-center">
-                                    <CreditCard className="h-3 w-3 text-charcoal" />
+                                    <CreditCard className="h-3 w-3 text-primary-brand" />
                                 </div>
                                 <h3 className="text-xs font-semibold text-slate uppercase tracking-wide">Payment Details</h3>
                             </div>
@@ -68,17 +68,17 @@ export function AdminPaymentDetailPage({ id }: { id: string }) {
                             ))}
                         </div>
 
-                        {/* Right — status */}
+                        {/* Right status */}
                         <div className="p-6 space-y-4">
                             <div className="flex items-center gap-2 pb-2 border-b border-hairline">
                                 <div className="h-6 w-6 rounded-md bg-primary-brand/10 flex items-center justify-center">
-                                    <ShieldCheck className="h-3 w-3 text-charcoal" />
+                                    <ShieldCheck className="h-3 w-3 text-primary-brand" />
                                 </div>
                                 <h3 className="text-xs font-semibold text-slate uppercase tracking-wide">Payment Status</h3>
                             </div>
 
                             <div className="space-y-3">
-                                <Label className="text-xs text-muted-foreground">Update Status</Label>
+                                <Label className="text-xs text-slate">Update Status</Label>
                                 <Select value={status} onValueChange={(v) => setStatus(v ?? status)}>
                                     <SelectTrigger className="rounded-lg border-hairline">
                                         <SelectValue />
@@ -108,7 +108,7 @@ export function AdminPaymentDetailPage({ id }: { id: string }) {
 
                                 <Link href={`/admin/orders/${payment.orderId}`}>
                                     <Button variant="outline" size="sm" className="w-full rounded-lg mt-1">
-                                        View Associated Order →
+                                        View Associated Order &rarr;
                                     </Button>
                                 </Link>
                             </div>
@@ -119,3 +119,4 @@ export function AdminPaymentDetailPage({ id }: { id: string }) {
         </div>
     );
 }
+

@@ -38,18 +38,18 @@ const revenueByService = Object.entries(
 ).sort((a, b) => b[1] - a[1]);
 const maxSvcRevenue = revenueByService[0]?.[1] ?? 1;
 
-// Order status chart data
+// Order status chart — using HP palette hex values
 const statusColors: Record<string, string> = {
-    Completed: "#22c55e",
-    Processing: "#3b82f6",
-    Pending: "#f59e0b",
-    Cancelled: "#ef4444",
+    Completed: "#296ef9",   // primary-brand
+    Processing: "#356373",  // storm-deep
+    Pending: "#ff5050",     // bloom-coral
+    Cancelled: "#b3262b",   // error / bloom-deep
 };
 const statusTotal = mockAnalytics.ordersByStatus.reduce((s, r) => s + r.count, 0);
 let cumPct = 0;
 const donutSegments = mockAnalytics.ordersByStatus.map((row) => {
     const pct = (row.count / statusTotal) * 100;
-    const segment = { ...row, pct, start: cumPct, color: statusColors[row.status] ?? "#94a3b8" };
+    const segment = { ...row, pct, start: cumPct, color: statusColors[row.status] ?? "#c2c2c2" };
     cumPct += pct;
     return segment;
 });
@@ -57,11 +57,11 @@ const donutGradient = `conic-gradient(${donutSegments
     .map((s) => `${s.color} ${s.start}% ${s.start + s.pct}%`)
     .join(", ")})`;
 
-// Payment breakdown
+// Payment breakdown — HP palette hex values
 const paymentBreakdown = [
-    { label: "Collected", amount: totalCollected, pct: collectionRate, color: "#22c55e" },
-    { label: "Pending", amount: pendingCollection, pct: Math.round((pendingCollection / mockAnalytics.totalRevenue) * 100), color: "#f59e0b" },
-    { label: "Refunded", amount: mockPayments.filter(p => p.status === "refunded").reduce((s, p) => s + p.amount, 0), pct: 0, color: "#ef4444" },
+    { label: "Collected", amount: totalCollected, pct: collectionRate, color: "#296ef9" },
+    { label: "Pending", amount: pendingCollection, pct: Math.round((pendingCollection / mockAnalytics.totalRevenue) * 100), color: "#ff5050" },
+    { label: "Refunded", amount: mockPayments.filter(p => p.status === "refunded").reduce((s, p) => s + p.amount, 0), pct: 0, color: "#b3262b" },
 ];
 
 export function AdminAnalyticsPage() {
@@ -79,28 +79,28 @@ export function AdminAnalyticsPage() {
                             value: `₹${mockAnalytics.totalRevenue.toLocaleString("en-IN")}`,
                             sub: `+${momGrowth}% vs last month`,
                             icon: IndianRupee,
-                            accent: "bg-primary-brand/10 text-charcoal",
+                            accent: "bg-primary-brand/10 text-primary-brand",
                         },
                         {
                             label: "Avg Order Value",
                             value: `₹${avgOrderValue.toLocaleString("en-IN")}`,
                             sub: `${mockAnalytics.totalOrders} total orders`,
                             icon: ShoppingCart,
-                            accent: "bg-tint-sky text-charcoal",
+                            accent: "bg-tint-sky text-primary-brand",
                         },
                         {
                             label: "Completion Rate",
                             value: `${completionRate}%`,
                             sub: `${completedCount} of ${mockOrders.length} orders`,
                             icon: CheckCircle2,
-                            accent: "bg-tint-mint text-charcoal",
+                            accent: "bg-tint-sky text-primary-brand",
                         },
                         {
                             label: "Collection Rate",
                             value: `${collectionRate}%`,
                             sub: `₹${pendingCollection.toLocaleString("en-IN")} pending`,
                             icon: CreditCard,
-                            accent: "bg-tint-lavender text-charcoal",
+                            accent: "bg-tint-peach text-charcoal",
                         },
                     ].map((kpi) => (
                         <div key={kpi.label} className="rounded-lg border border-hairline bg-canvas p-5">
@@ -110,7 +110,7 @@ export function AdminAnalyticsPage() {
                                     <kpi.icon className="h-3.5 w-3.5" />
                                 </div>
                             </div>
-                            <p className="text-xl font-bold text-ink">{kpi.value}</p>
+                            <p className="text-xl font-display font-medium text-ink">{kpi.value}</p>
                             <p className="text-xs text-stone mt-1">{kpi.sub}</p>
                         </div>
                     ))}
@@ -123,7 +123,7 @@ export function AdminAnalyticsPage() {
                     <div className="rounded-lg border border-hairline bg-canvas p-6">
                         <div className="flex items-center gap-2 mb-5">
                             <div className="h-7 w-7 rounded-lg bg-primary-brand/10 flex items-center justify-center">
-                                <BarChart3 className="h-3.5 w-3.5 text-charcoal" />
+                                <BarChart3 className="h-3.5 w-3.5 text-primary-brand" />
                             </div>
                             <div>
                                 <p className="text-sm font-semibold text-charcoal">Monthly Revenue</p>
@@ -142,7 +142,7 @@ export function AdminAnalyticsPage() {
                                         </span>
                                         <div className="w-full flex-1 flex items-end">
                                             <div
-                                                className="w-full rounded-t-lg bg-gradient-to-t from-primary-brand to-primary-brand/60 transition-all"
+                                                className="w-full rounded-t-lg bg-primary-brand transition-all"
                                                 style={{ height: `${heightPct}%` }}
                                             />
                                         </div>
@@ -162,8 +162,8 @@ export function AdminAnalyticsPage() {
                     {/* Order Status Donut */}
                     <div className="rounded-lg border border-hairline bg-canvas p-6">
                         <div className="flex items-center gap-2 mb-5">
-                            <div className="h-7 w-7 rounded-lg bg-violet-50 flex items-center justify-center">
-                                <PieChart className="h-3.5 w-3.5 text-violet-500" />
+                            <div className="h-7 w-7 rounded-lg bg-tint-sky flex items-center justify-center">
+                                <PieChart className="h-3.5 w-3.5 text-primary-brand" />
                             </div>
                             <div>
                                 <p className="text-sm font-semibold text-charcoal">Order Status</p>
@@ -181,7 +181,7 @@ export function AdminAnalyticsPage() {
                                 {/* Center hole */}
                                 <div className="absolute inset-0 flex items-center justify-center">
                                     <div className="h-20 w-20 rounded-full bg-canvas flex flex-col items-center justify-center">
-                                        <p className="text-lg font-bold text-ink">{statusTotal}</p>
+                                        <p className="text-lg font-display font-medium text-ink">{statusTotal}</p>
                                         <p className="text-[10px] text-stone">orders</p>
                                     </div>
                                 </div>
@@ -214,8 +214,8 @@ export function AdminAnalyticsPage() {
                     {/* Revenue by Service */}
                     <div className="rounded-lg border border-hairline bg-canvas p-6">
                         <div className="flex items-center gap-2 mb-5">
-                            <div className="h-7 w-7 rounded-lg bg-blue-50 flex items-center justify-center">
-                                <IndianRupee className="h-3.5 w-3.5 text-blue-500" />
+                            <div className="h-7 w-7 rounded-lg bg-tint-sky flex items-center justify-center">
+                                <IndianRupee className="h-3.5 w-3.5 text-primary-brand" />
                             </div>
                             <div>
                                 <p className="text-sm font-semibold text-charcoal">Revenue by Service</p>
@@ -234,7 +234,7 @@ export function AdminAnalyticsPage() {
                                         </div>
                                         <div className="h-2 bg-surface rounded-full overflow-hidden">
                                             <div
-                                                className="h-full rounded-full bg-gradient-to-r from-primary-brand to-primary-brand/60 transition-all"
+                                                className="h-full rounded-full bg-primary-brand transition-all"
                                                 style={{ width: `${pct}%` }}
                                             />
                                         </div>
@@ -262,7 +262,7 @@ export function AdminAnalyticsPage() {
                                 <div key={pb.label} className="rounded-lg bg-surface p-3 text-center">
                                     <div className="h-2.5 w-2.5 rounded-full mx-auto mb-1.5" style={{ backgroundColor: pb.color }} />
                                     <p className="text-[11px] text-steel">{pb.label}</p>
-                                    <p className="text-sm font-bold text-ink mt-0.5">₹{pb.amount.toLocaleString("en-IN")}</p>
+                                    <p className="text-sm font-display font-medium text-ink mt-0.5">₹{pb.amount.toLocaleString("en-IN")}</p>
                                 </div>
                             ))}
                         </div>
@@ -274,13 +274,13 @@ export function AdminAnalyticsPage() {
                                 <span className="font-semibold text-charcoal">{collectionRate}%</span>
                             </div>
                             <div className="h-3 rounded-full bg-surface overflow-hidden flex">
-                                <div className="h-full bg-tint-sky0 transition-all" style={{ width: `${collectionRate}%` }} />
-                                <div className="h-full bg-yellow-400 transition-all" style={{ width: `${Math.round((pendingCollection / mockAnalytics.totalRevenue) * 100)}%` }} />
+                                <div className="h-full bg-primary-brand transition-all" style={{ width: `${collectionRate}%` }} />
+                                <div className="h-full bg-bloom-coral transition-all" style={{ width: `${Math.round((pendingCollection / mockAnalytics.totalRevenue) * 100)}%` }} />
                             </div>
                             <div className="flex gap-3 text-[11px] text-stone">
-                                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-tint-sky0 inline-block" /> Collected</span>
-                                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-yellow-400 inline-block" /> Pending</span>
-                                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-red-400 inline-block" /> Refunded</span>
+                                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-primary-brand inline-block" /> Collected</span>
+                                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-bloom-coral inline-block" /> Pending</span>
+                                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-error-brand inline-block" /> Refunded</span>
                             </div>
                         </div>
 
@@ -294,16 +294,16 @@ export function AdminAnalyticsPage() {
                 {/* ── Additional Stats ─────────────────────── */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {[
-                        { label: "Active Orders", value: mockAnalytics.activeOrders, icon: ShoppingCart, color: "text-blue-500" },
-                        { label: "Total Customers", value: mockAnalytics.totalCustomers, icon: Users, color: "text-violet-500" },
+                        { label: "Active Orders", value: mockAnalytics.activeOrders, icon: ShoppingCart, color: "text-primary-brand" },
+                        { label: "Total Customers", value: mockAnalytics.totalCustomers, icon: Users, color: "text-primary-brand" },
                         { label: "Avg Order Value", value: `₹${avgOrderValue.toLocaleString("en-IN")}`, icon: IndianRupee, color: "text-charcoal" },
-                        { label: "MoM Growth", value: `+${momGrowth}%`, icon: TrendingUp, color: "text-emerald-500" },
+                        { label: "MoM Growth", value: `+${momGrowth}%`, icon: TrendingUp, color: "text-storm-deep" },
                     ].map((s) => (
                         <div key={s.label} className="rounded-lg border border-hairline bg-canvas px-5 py-4 flex items-center gap-4">
                             <s.icon className={`h-6 w-6 shrink-0 ${s.color}`} />
                             <div>
                                 <p className="text-[11px] text-stone">{s.label}</p>
-                                <p className="text-base font-bold text-ink">{s.value}</p>
+                                <p className="text-base font-display font-medium text-ink">{s.value}</p>
                             </div>
                         </div>
                     ))}

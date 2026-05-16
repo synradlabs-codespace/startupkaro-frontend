@@ -1,4 +1,4 @@
-// features/employee/components/EmployeeCustomersPage.tsx
+﻿// features/employee/components/EmployeeCustomersPage.tsx
 "use client";
 
 import { useState } from "react";
@@ -38,7 +38,7 @@ export function EmployeeCustomersPage() {
             <PageHeader title="Customers" description={`${mockCustomers.length} registered customers`} />
             <div className="p-6 space-y-4">
                 <div className="relative max-w-sm">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate" />
                     <Input
                         placeholder="Search by name or email..."
                         value={search}
@@ -63,7 +63,7 @@ export function EmployeeCustomersPage() {
                             <TableBody>
                                 {paginated.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={6} className="text-center text-muted-foreground py-12">
+                                        <TableCell colSpan={6} className="text-center text-slate py-12">
                                             No customers found
                                         </TableCell>
                                     </TableRow>
@@ -80,12 +80,12 @@ export function EmployeeCustomersPage() {
                                                     <span className="font-medium">{customer.name}</span>
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="text-muted-foreground text-sm">{customer.email}</TableCell>
-                                            <TableCell className="text-muted-foreground text-sm">{customer.mobile}</TableCell>
+                                            <TableCell className="text-slate text-sm">{customer.email}</TableCell>
+                                            <TableCell className="text-slate text-sm">{customer.mobile}</TableCell>
                                             <TableCell>
                                                 <span className="font-medium">{customer.orders}</span>
                                             </TableCell>
-                                            <TableCell className="text-muted-foreground text-sm">{customer.joined}</TableCell>
+                                            <TableCell className="text-slate text-sm">{customer.joined}</TableCell>
                                             <TableCell className="text-right">
                                                 <Link href={`/employee/customers/${customer.id}`}>
                                                     <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-brand/10 hover:text-charcoal">
@@ -111,3 +111,4 @@ export function EmployeeCustomersPage() {
         </div>
     );
 }
+

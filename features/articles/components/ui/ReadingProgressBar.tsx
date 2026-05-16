@@ -11,25 +11,28 @@ export function ReadingProgressBar({ endElementId }: { endElementId?: string }) 
         function update() {
             const scrollTop = window.scrollY;
             const el = endElementId ? document.getElementById(endElementId) : null;
-            const target = el
+            const documentEnd = document.documentElement.scrollHeight - window.innerHeight;
+            const targetTop = el
                 ? el.getBoundingClientRect().top + window.scrollY
-                : document.documentElement.scrollHeight - window.innerHeight;
+                : documentEnd;
+            const target = el
+                ? Math.max(1, targetTop - window.innerHeight + 1)
+                : documentEnd;
+
             setProgress(target > 0 ? Math.min(100, (scrollTop / target) * 100) : 0);
         }
 
         window.addEventListener("scroll", update, { passive: true });
+        update();
         return () => window.removeEventListener("scroll", update);
     }, [endElementId]);
 
     return (
-        <div className="fixed top-0 left-0 z-60 h-0.75 w-screen pointer-events-none">
+        <div className="pointer-events-none fixed left-0 top-0 z-60 h-1 w-screen bg-hairline">
             <div
-                className="h-full transition-all duration-75 origin-left"
+                className="h-full origin-left bg-primary-brand transition-all duration-75"
                 style={{
                     width: `${progress}%`,
-                    background: "linear-gradient(to right, #296ef9 33.33%, #1a1a1a 33.33%, #1a1a1a 66.66%, #356373 66.66%)",
-                    backgroundSize: "100vw 100%",
-                    backgroundAttachment: "fixed",
                 }}
             />
         </div>

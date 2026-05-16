@@ -57,13 +57,11 @@ export function AdminEmployeeDetailPage({ id }: { id: string }) {
             <div className="p-6 max-w-lg space-y-4">
 
                 {/* Hero Card */}
-                <div className="relative overflow-hidden rounded-lg border border-hairline bg-accent-admin p-8">
-                    <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-primary-brand/8 blur-3xl" />
-                    <div className="pointer-events-none absolute -bottom-10 -left-10 h-36 w-36 rounded-full bg-storm-mist/20 blur-2xl" />
+                <div className="rounded-xl bg-primary-brand p-8">
 
                     <div className="relative flex flex-col items-center text-center gap-4">
-                        <Avatar className="h-20 w-20">
-                            <AvatarFallback className="text-xl font-semibold bg-gradient-to-br from-accent-admin to-accent-admin text-charcoal">
+                        <Avatar className="h-20 w-20 ring-2 ring-white/60 ring-offset-2 ring-offset-primary-brand">
+                            <AvatarFallback className="text-xl font-semibold bg-white text-primary-deep">
                                 {initials}
                             </AvatarFallback>
                         </Avatar>
@@ -73,19 +71,19 @@ export function AdminEmployeeDetailPage({ id }: { id: string }) {
                                 <Input
                                     value={form.name}
                                     onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
-                                    className="text-center font-semibold text-base rounded-lg border-hairline focus-visible:ring-primary-brand/20"
+                                    className="text-center font-semibold text-base rounded-lg bg-white/10 border-white/30 text-white placeholder:text-white/50 focus-visible:ring-white/30"
                                 />
                             ) : (
-                                <p className="font-semibold text-lg text-ink">{name}</p>
+                                <p className="font-semibold text-lg text-white">{name}</p>
                             )}
-                            <p className="text-xs text-muted-foreground font-mono">{emp.id}</p>
+                            <p className="text-xs text-white/70 font-mono">{emp.id}</p>
                         </div>
 
                         <div className="flex gap-2 items-center">
-                            <Badge variant="outline">{emp.role}</Badge>
+                            <Badge variant="outline" className="border-white/40 text-white bg-transparent">{emp.role}</Badge>
                             {editing ? (
                                 <Select value={form.status} onValueChange={(v) => setForm(f => ({ ...f, status: v ?? "" }))}>
-                                    <SelectTrigger className="h-7 text-xs rounded-full px-3 w-auto border-hairline">
+                                    <SelectTrigger className="h-8 w-28 rounded-md border-white bg-white px-3 text-xs text-primary-deep shadow-sm hover:bg-white/95 focus-visible:ring-white/35">
                                         <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -94,7 +92,7 @@ export function AdminEmployeeDetailPage({ id }: { id: string }) {
                                     </SelectContent>
                                 </Select>
                             ) : (
-                                <Badge className={status === "active" ? "bg-tint-sky text-primary-deep hover:bg-tint-sky" : "bg-surface text-slate hover:bg-surface"}>
+                                <Badge className={status === "active" ? "bg-white/20 text-white hover:bg-white/25 border-white/30" : "bg-white/10 text-white/80 hover:bg-white/15 border-white/20"}>
                                     {status}
                                 </Badge>
                             )}
@@ -105,7 +103,7 @@ export function AdminEmployeeDetailPage({ id }: { id: string }) {
                                 <Button
                                     size="sm"
                                     onClick={handleSave}
-                                    className="gap-1.5 bg-primary-brand hover:bg-primary-brand/90 text-white rounded-lg"
+                                    className="gap-1.5 bg-white text-primary-deep hover:bg-white/90 rounded-lg"
                                 >
                                     <Check className="h-3.5 w-3.5" />
                                     Save
@@ -114,7 +112,7 @@ export function AdminEmployeeDetailPage({ id }: { id: string }) {
                                     size="sm"
                                     variant="outline"
                                     onClick={handleCancel}
-                                    className="gap-1.5 rounded-lg"
+                                    className="gap-1.5 rounded-lg bg-transparent border-white/40 text-white hover:bg-white/10 hover:text-white"
                                 >
                                     <X className="h-3.5 w-3.5" />
                                     Cancel
@@ -128,7 +126,7 @@ export function AdminEmployeeDetailPage({ id }: { id: string }) {
                 <div className="rounded-lg border border-hairline bg-canvas p-6 space-y-4">
                     <div className="flex items-center gap-2 pb-1 border-b border-hairline">
                         <div className="h-7 w-7 rounded-lg bg-primary-brand/10 flex items-center justify-center">
-                            <ShieldCheck className="h-3.5 w-3.5 text-charcoal" />
+                            <ShieldCheck className="h-3.5 w-3.5 text-primary-brand" />
                         </div>
                         <h3 className="text-sm font-semibold text-charcoal">Account Details</h3>
                     </div>

@@ -94,8 +94,12 @@ export function ArticleDetailPage({ article, related }: ArticleDetailPageProps) 
                             </span>
                         )}
                     </div>
-                    <div className="w-full md:hidden">
-                        <ArticleShareButton title={article.title} summary={article.summary} />
+                    <div className="w-full pt-2 md:hidden">
+                        <ArticleShareButton
+                            title={article.title}
+                            summary={article.summary}
+                            className="w-full"
+                        />
                     </div>
                 </div>
             </div>
@@ -121,11 +125,22 @@ export function ArticleDetailPage({ article, related }: ArticleDetailPageProps) 
             </div>
 
             {/* Article body */}
-            <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[minmax(0,768px)_220px] lg:px-8 xl:grid-cols-[minmax(0,768px)_260px]">
-                <article className="min-w-0">
-                    <ArticleBody blocks={article.body} headings={headings} />
-                </article>
-                <aside className="hidden lg:block">
+            <div className="relative mx-auto max-w-[1440px] py-10">
+                <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+                    <article className="min-w-0">
+                        <ArticleBody blocks={article.body} headings={headings} />
+                        <div className="mt-10 border-t border-hairline pt-6 lg:hidden">
+                            <p className="mb-3 text-sm font-medium text-ink">Found this useful?</p>
+                            <ArticleShareButton
+                                title={article.title}
+                                summary={article.summary}
+                                className="w-full"
+                            />
+                        </div>
+                    </article>
+                </div>
+
+                <aside className="absolute right-8 top-10 hidden w-[240px] min-w-0 lg:block xl:right-10 xl:w-[260px]">
                     <div className="sticky top-24 space-y-5">
                         <ArticleShareButton title={article.title} summary={article.summary} className="w-full" />
                         <ArticleIndex headings={headings} />

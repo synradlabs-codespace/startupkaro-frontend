@@ -1,4 +1,4 @@
-// features/admin/components/AdminInquiriesPage.tsx
+﻿// features/admin/components/AdminInquiriesPage.tsx
 "use client";
 
 import { useState } from "react";
@@ -54,7 +54,7 @@ export function AdminInquiriesPage() {
             <div className="p-6 space-y-4">
                 <div className="flex gap-3 flex-wrap">
                     <div className="relative flex-1 min-w-[200px]">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate" />
                         <Input
                             placeholder="Search by name, email, or message..."
                             value={search}
@@ -91,7 +91,7 @@ export function AdminInquiriesPage() {
                             <TableBody>
                                 {paginated.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={7} className="text-center text-muted-foreground py-12">
+                                        <TableCell colSpan={7} className="text-center text-slate py-12">
                                             No inquiries found
                                         </TableCell>
                                     </TableRow>
@@ -99,13 +99,13 @@ export function AdminInquiriesPage() {
                                     paginated.map((inq) => (
                                         <TableRow key={inq.id} className="hover:bg-muted/30">
                                             <TableCell className="font-medium">{inq.name}</TableCell>
-                                            <TableCell className="text-muted-foreground text-sm">{inq.email}</TableCell>
-                                            <TableCell className="text-muted-foreground text-sm">{inq.mobile}</TableCell>
+                                            <TableCell className="text-slate text-sm">{inq.email}</TableCell>
+                                            <TableCell className="text-slate text-sm">{inq.mobile}</TableCell>
                                             <TableCell className="max-w-xs">
-                                                <p className="text-sm text-muted-foreground truncate">{inq.message}</p>
+                                                <p className="text-sm text-slate truncate">{inq.message}</p>
                                             </TableCell>
                                             <TableCell><InquiryStatusBadge status={inq.status} /></TableCell>
-                                            <TableCell className="text-muted-foreground text-sm">{inq.date}</TableCell>
+                                            <TableCell className="text-slate text-sm">{inq.date}</TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex gap-1 justify-end">
                                                     <Link href={`/admin/inquiries/${inq.id}`}>
@@ -116,7 +116,7 @@ export function AdminInquiriesPage() {
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
-                                                        className="h-8 w-8 text-error-brand hover:text-red-600 hover:bg-red-50"
+                                                        className="h-8 w-8 text-error-brand hover:text-error-brand hover:bg-error-brand/10"
                                                         onClick={() => handleDelete(inq.id)}
                                                     >
                                                         <Trash2 className="h-4 w-4" />
@@ -141,3 +141,4 @@ export function AdminInquiriesPage() {
         </div>
     );
 }
+

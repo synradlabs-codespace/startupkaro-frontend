@@ -1,4 +1,4 @@
-// features/admin/components/AdminOrderEditPage.tsx
+﻿// features/admin/components/AdminOrderEditPage.tsx
 "use client";
 
 import { useState } from "react";
@@ -48,11 +48,11 @@ export function AdminOrderEditPage({ id }: { id: string }) {
             <div className="p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-5xl">
 
-                    {/* Left — Edit Form */}
-                    <Card>
+                    {/* Left Edit Form */}
+                    <Card className="flex flex-col">
                         <CardHeader><CardTitle className="text-base">Edit Details</CardTitle></CardHeader>
-                        <CardContent>
-                            <form onSubmit={handleSubmit} className="space-y-5">
+                        <CardContent className="flex flex-col flex-1">
+                            <form onSubmit={handleSubmit} className="flex flex-col flex-1 space-y-5">
                                 <div className="space-y-2">
                                     <Label>Service</Label>
                                     <Input value={form.service} onChange={(e) => setForm({ ...form, service: e.target.value })} />
@@ -85,11 +85,11 @@ export function AdminOrderEditPage({ id }: { id: string }) {
                                         </SelectContent>
                                     </Select>
                                 </div>
-                                <div className="flex gap-3 pt-2">
+                                <div className="flex gap-3 mt-auto pt-4">
                                     <Button type="submit" className="bg-primary-brand hover:bg-primary-brand/90 text-white">
                                         Save Changes
                                     </Button>
-                                    <Button type="button" variant="outline" onClick={() => router.back()}>
+                                    <Button type="button" variant="secondary" onClick={() => router.back()}>
                                         Cancel
                                     </Button>
                                 </div>
@@ -97,26 +97,26 @@ export function AdminOrderEditPage({ id }: { id: string }) {
                         </CardContent>
                     </Card>
 
-                    {/* Right — Notes */}
+                    {/* Right Notes */}
                     <Card className="flex flex-col">
                         <CardHeader>
                             <CardTitle className="text-base flex items-center gap-2">
-                                <StickyNote className="h-4 w-4 text-muted-foreground" />
+                                <StickyNote className="h-4 w-4 text-slate" />
                                 Notes
                                 {notes.length > 0 && (
-                                    <span className="text-xs font-normal text-muted-foreground">({notes.length})</span>
+                                    <span className="text-xs font-normal text-slate">({notes.length})</span>
                                 )}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="flex flex-col flex-1 space-y-3">
-                            <div className="flex-1 min-h-[160px]">
+                            <div className="flex-1">
                                 {notes.length === 0 ? (
-                                    <p className="text-sm text-muted-foreground text-center py-8">No notes yet. Add the first note below.</p>
+                                    <p className="text-sm text-slate text-center py-8">No notes yet. Add the first note below.</p>
                                 ) : (
                                     <ul className="space-y-2">
                                         {notes.map((note, i) => (
                                             <li key={i} className="bg-muted/40 rounded-lg px-3 py-2 text-sm">
-                                                <span className="leading-relaxed">{note}</span>
+                                                <span className="whitespace-pre-wrap leading-relaxed">{note}</span>
                                             </li>
                                         ))}
                                     </ul>
@@ -129,7 +129,7 @@ export function AdminOrderEditPage({ id }: { id: string }) {
                                     onChange={(e) => setNewNote(e.target.value)}
                                     className="resize-none text-sm min-h-[60px]"
                                     onKeyDown={(e) => {
-                                        if (e.key === "Enter" && !e.shiftKey) {
+                                        if (e.key === "Enter" && e.shiftKey) {
                                             e.preventDefault();
                                             handleAddNote();
                                         }
@@ -145,7 +145,7 @@ export function AdminOrderEditPage({ id }: { id: string }) {
                                     <Send className="h-4 w-4" />
                                 </Button>
                             </div>
-                            <p className="text-xs text-muted-foreground">Press Enter to add, Shift+Enter for new line.</p>
+                            <p className="text-xs text-slate">Press Enter for a new line. Shift+Enter adds the note.</p>
                         </CardContent>
                     </Card>
                 </div>
