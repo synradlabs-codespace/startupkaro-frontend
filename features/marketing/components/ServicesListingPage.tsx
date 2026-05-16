@@ -2,41 +2,27 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Search, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { ServiceCard } from "./ui/ServiceCard";
+import { ServiceCard } from "@/components/custom/ServiceCard";
 import type { Service } from "@/features/marketing/data/types";
+import { SERVICE_CATEGORIES, categoryPillStyles, type ServiceCategory } from "@/lib/category-pills";
 
-const categories = ["All", "Tax", "Business", "Legal", "License"] as const;
-type CategoryFilter = (typeof categories)[number];
+type CategoryFilter = ServiceCategory;
 
-const categoryPillStyles: Record<CategoryFilter, { idle: string; active: string }> = {
-    All: {
-        idle: "border-hairline bg-canvas text-charcoal hover:border-ink hover:text-ink",
-        active: "border-ink bg-ink text-white",
-    },
-    Tax: {
-        idle: "border-bloom-rose bg-bloom-rose/45 text-bloom-wine hover:border-bloom-deep",
-        active: "border-bloom-deep bg-bloom-deep text-white",
-    },
-    Business: {
-        idle: "border-storm-mist bg-storm-mist/35 text-storm-deep hover:border-storm-deep",
-        active: "border-storm-deep bg-storm-deep text-white",
-    },
-    Legal: {
-        idle: "border-bloom-coral bg-bloom-coral/15 text-bloom-wine hover:border-bloom-coral",
-        active: "border-bloom-coral bg-bloom-coral text-white",
-    },
-    License: {
-        idle: "border-hairline-strong bg-fog text-ink hover:border-ink",
-        active: "border-ink bg-ink text-white",
-    },
-};
+function getInitialCategory(category?: string): CategoryFilter {
+    return SERVICE_CATEGORIES.includes(category as ServiceCategory) ? (category as ServiceCategory) : "All";
+}
 
-export function ServicesListingPage({ services }: { services: Service[] }) {
+export function ServicesListingPage({ services, initialCategory }: { services: Service[]; initialCategory?: string }) {
     const [search, setSearch] = useState("");
-    const [activeCategory, setActiveCategory] = useState<CategoryFilter>("All");
+    const [activeCategory, setActiveCategory] = useState<CategoryFilter>(() => getInitialCategory(initialCategory));
+    const categories = SERVICE_CATEGORIES;
+
+    useEffect(() => {
+        setActiveCategory(getInitialCategory(initialCategory));
+    }, [initialCategory]);
 
     const filtered = services.filter((s) => {
         const matchSearch =
@@ -97,7 +83,15 @@ export function ServicesListingPage({ services }: { services: Service[] }) {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                     {filtered.map((service) => (
-                        <ServiceCard key={service.slug} service={service} />
+                        <ServiceCard
+                            key={service.slug}
+                            name={service.name}
+                            description={service.description}
+                            category={service.category}
+                            price={service.pricing.amount}
+                            duration={service.duration}
+                            href={`/services/${service.slug}`}
+                        />
                     ))}
                 </div>
             )}
