@@ -90,7 +90,7 @@ function MegaMenuPanel({
         height: { duration: 0.28, ease: SPRING },
         opacity: { duration: 0.18, ease: "easeOut" },
       }}
-      className="absolute -left-px -right-px top-[calc(100%-1px)] shadow-lg z-50 overflow-hidden rounded-b-xl border border-t-0 border-hairline bg-canvas"
+      className="absolute -left-px -right-px top-[calc(100%-1px)] shadow-lg z-50 overflow-hidden border border-t-0 border-hairline bg-canvas"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onKeyDown={(event) => {

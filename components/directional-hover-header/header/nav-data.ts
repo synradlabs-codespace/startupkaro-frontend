@@ -6,6 +6,7 @@ export type NavItem = {
 
 export type NavColumn = {
   heading: string;
+  href?: string;
   items: NavItem[];
   accent?: boolean;
 };
@@ -28,7 +29,8 @@ export const NAV_LINKS: NavLink[] = [
       id: "services",
       columns: [
         {
-          heading: "Business Setup",
+          heading: "Business",
+          href: "/services?category=Business",
           items: [
             {
               label: "Company Incorporation",
@@ -36,20 +38,42 @@ export const NAV_LINKS: NavLink[] = [
               href: "/services/company-incorporation",
             },
             {
-              label: "GST Registration",
-              description: "Get your GSTIN in 7 working days",
-              href: "/services/gst-registration",
+              label: "ESI & PF Registration",
+              description: "Employee welfare compliance made easy",
+              href: "/services/esi-pf-registration",
+            },
+            {
+              label: "ROC Annual Filing",
+              description: "Keep your company MCA-compliant",
+              href: "/services/roc-annual-filing",
+            },
+            {
+              label: "Startup India Recognition",
+              description: "Unlock DPIIT benefits & tax exemptions",
+              href: "/services/startup-india-recognition",
             },
           ],
         },
         {
-          heading: "Tax & Licenses",
+          heading: "Tax",
+          href: "/services?category=Tax",
           items: [
+            {
+              label: "GST Registration",
+              description: "Get your GSTIN in 7 working days",
+              href: "/services/gst-registration",
+            },
             {
               label: "Income Tax Filing",
               description: "ITR filing for individuals & firms",
               href: "/services/income-tax-filing",
             },
+          ],
+        },
+        {
+          heading: "License",
+          href: "/services?category=License",
+          items: [
             {
               label: "FSSAI License",
               description: "Food safety registration & renewal",
@@ -60,20 +84,27 @@ export const NAV_LINKS: NavLink[] = [
               description: "Start trading globally",
               href: "/services/import-export-code",
             },
+            {
+              label: "Udyam Registration",
+              description: "MSME certificate & government schemes",
+              href: "/services/udyam-registration",
+            },
+            {
+              label: "Shop & Establishment Registration",
+              description: "State licence for any commercial premises",
+              href: "/services/shop-establishment-registration",
+            },
           ],
         },
         {
           heading: "Legal",
+          href: "/services?category=Legal",
           accent: true,
           items: [
             {
               label: "Trademark Filing",
               description: "Protect your brand legally",
               href: "/services/trademark-filing",
-            },
-            {
-              label: "View all services",
-              href: "/services",
             },
           ],
         },
