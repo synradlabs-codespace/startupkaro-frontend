@@ -38,6 +38,7 @@ interface FlowSecondaryButtonProps {
     text?: string;
     icon?: LucideIcon;
     iconName?: IconName;
+    showIcon?: boolean;
     href?: string;
     onClick?: () => void;
     type?: "button" | "submit" | "reset";
@@ -131,6 +132,7 @@ export function FlowSecondaryButton({
     text = "Learn More",
     icon,
     iconName = "arrow-right",
+    showIcon = true,
     href,
     onClick,
     type = "button",
@@ -149,7 +151,7 @@ export function FlowSecondaryButton({
     const content = (
         <>
             <span className="relative z-[1]">{text}</span>
-            <Icon className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5" />
+            {showIcon && <Icon className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5" />}
         </>
     );
 

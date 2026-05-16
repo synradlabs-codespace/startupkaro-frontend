@@ -61,7 +61,27 @@ body {
   /* Per-panel accents (deferred — panels not yet migrated) */
   --color-accent-admin: #c9e0fc;
   --color-accent-employee: #f7f7f7;
-  --color-accent-customer: #f9d4d2;
+  --color-accent-customer: #f7f7f7;
+
+  /* Semantic status pill palette (operator/customer dashboards only) */
+  --color-status-positive-bg:     #e6f7ee;
+  --color-status-positive-fg:     #0f6b3a;
+  --color-status-positive-border: #bce6cf;
+  --color-status-warning-bg:      #fff4d6;
+  --color-status-warning-fg:      #8a5a00;
+  --color-status-warning-border:  #fce29a;
+  --color-status-info-bg:         #c9e0fc;
+  --color-status-info-fg:         #0e3191;
+  --color-status-info-border:     #a9caf6;
+  --color-status-neutral-bg:      #e0ecf1;
+  --color-status-neutral-fg:      #356373;
+  --color-status-neutral-border:  #bcd6e0;
+  --color-status-danger-bg:       #fde8e8;
+  --color-status-danger-fg:       #b3262b;
+  --color-status-danger-border:   #f5c2c2;
+  --color-status-muted-bg:        #f7f7f7;
+  --color-status-muted-fg:        #636363;
+  --color-status-muted-border:    #e8e8e8;
 
   /* Fonts — Gilroy for headings/display, Quicksand for body and all other text */
   --font-sans: var(--font-quicksand), "Quicksand", ui-sans-serif, system-ui, sans-serif;
@@ -205,6 +225,11 @@ body {
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
   }
 
   html {

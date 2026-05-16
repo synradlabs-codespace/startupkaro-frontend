@@ -4,23 +4,29 @@ type OrderStatus = "pending" | "processing" | "completed" | "cancelled";
 type PaymentStatus = "paid" | "unpaid" | "refunded" | "partial";
 type InquiryStatus = "unresolved" | "resolved";
 
+const positive = "bg-status-positive-bg text-status-positive-fg border-status-positive-border hover:bg-status-positive-bg";
+const warning  = "bg-status-warning-bg text-status-warning-fg border-status-warning-border hover:bg-status-warning-bg";
+const info     = "bg-status-info-bg text-status-info-fg border-status-info-border hover:bg-status-info-bg";
+const neutral  = "bg-status-neutral-bg text-status-neutral-fg border-status-neutral-border hover:bg-status-neutral-bg";
+const danger   = "bg-status-danger-bg text-status-danger-fg border-status-danger-border hover:bg-status-danger-bg";
+
 const orderStatusConfig: Record<OrderStatus, { label: string; className: string }> = {
-  pending:    { label: "Pending",    className: "bg-tint-cream text-charcoal border-hairline hover:bg-tint-cream" },
-  processing: { label: "Processing", className: "bg-tint-sky text-charcoal border-hairline hover:bg-tint-sky" },
-  completed:  { label: "Completed",  className: "bg-tint-mint text-charcoal border-hairline hover:bg-tint-mint" },
-  cancelled:  { label: "Cancelled",  className: "bg-red-50 text-error-brand border-red-100 hover:bg-red-50" },
+  pending:    { label: "Pending",    className: warning },
+  processing: { label: "Processing", className: info },
+  completed:  { label: "Completed",  className: positive },
+  cancelled:  { label: "Cancelled",  className: danger },
 };
 
 const paymentStatusConfig: Record<PaymentStatus, { label: string; className: string }> = {
-  paid:     { label: "Paid",     className: "bg-tint-mint text-charcoal border-hairline hover:bg-tint-mint" },
-  unpaid:   { label: "Unpaid",   className: "bg-red-50 text-error-brand border-red-100 hover:bg-red-50" },
-  refunded: { label: "Refunded", className: "bg-tint-lavender text-charcoal border-hairline hover:bg-tint-lavender" },
-  partial:  { label: "Partial",  className: "bg-tint-peach text-charcoal border-hairline hover:bg-tint-peach" },
+  paid:     { label: "Paid",     className: positive },
+  unpaid:   { label: "Unpaid",   className: danger },
+  refunded: { label: "Refunded", className: neutral },
+  partial:  { label: "Partial",  className: warning },
 };
 
 const inquiryStatusConfig: Record<InquiryStatus, { label: string; className: string }> = {
-  unresolved: { label: "Unresolved", className: "bg-tint-peach text-charcoal border-hairline hover:bg-tint-peach" },
-  resolved:   { label: "Resolved",   className: "bg-tint-mint text-charcoal border-hairline hover:bg-tint-mint" },
+  unresolved: { label: "Unresolved", className: warning },
+  resolved:   { label: "Resolved",   className: positive },
 };
 
 export function OrderStatusBadge({ status }: { status: string }) {
