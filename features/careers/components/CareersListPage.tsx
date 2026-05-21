@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Heart, ShieldCheck, Users, Zap } from "lucide-react";
+import { Heart, Rocket, ShieldCheck, Users, Zap } from "lucide-react";
 import { FlowButton } from "@/components/custom/FlowButton";
 import { JobFilters } from "./ui/JobFilters";
 import { JobsGroupedList } from "./ui/JobsGroupedList";
@@ -38,7 +38,7 @@ export function CareersListPage({ jobs }: CareersListPageProps) {
     return (
         <main className="bg-canvas py-6">
             {/* Hero */}
-            <section className="mx-4 max-w-7xl rounded-2xl border border-hairline bg-canvas px-8 py-20 sm:mx-6 md:py-28 lg:mx-auto">
+            <section className="mx-4 max-w-7xl rounded-2xl border border-hairline bg-canvas px-8 pt-16 pb-10 sm:mx-6 md:pt-20 md:pb-12 lg:mx-auto min-h-[calc(100svh-9rem)]">
                 <div className="max-w-3xl">
                     <p className="mb-4 text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                         Join our team
@@ -68,14 +68,14 @@ export function CareersListPage({ jobs }: CareersListPageProps) {
                     <FlowButton
                         href="#open-positions"
                         text="View Open Roles"
-                        iconName="briefcase"
+                        iconName="zap"
                         colorVariant="primary"
                     />
                 </div>
             </section>
 
             {/* Culture pillars */}
-            <section className="bg-cloud px-4 py-16 sm:px-6 md:py-20 lg:px-8">
+            <section className="bg-cloud mt-6 px-4 py-16 sm:px-6 md:py-20 lg:px-8">
                 <div className="mb-10 text-center">
                     <p className="mb-2 text-xs font-medium uppercase tracking-[0.28px] text-graphite">How we work</p>
                     <h2 className="font-display text-3xl font-medium leading-snug text-ink md:text-4xl">

@@ -8,7 +8,7 @@ interface JobBannerProps {
 export function JobBanner({ job }: JobBannerProps) {
     return (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6">
-            <div className="bg-tint-sky rounded-2xl px-8 py-14 md:py-20">
+            <div className="bg-cloud rounded-2xl px-8 py-14 md:py-20">
                 <p className="text-xs font-medium uppercase tracking-[0.28px] text-steel mb-3">
                     {job.department} · {job.workType}
                 </p>

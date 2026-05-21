@@ -15,6 +15,7 @@ export interface ApplicationFormState {
     noticePeriod: NoticePeriod | "";
     linkedinUrl: string;
     summary: string;
+    resume: File | null;
     hasCriminalCase: "Yes" | "No" | "";
     agreeToTerms: boolean;
 }
@@ -29,6 +30,7 @@ export interface ApplicationFormErrors {
     expectedCtc?: string;
     noticePeriod?: string;
     linkedinUrl?: string;
+    resume?: string;
     hasCriminalCase?: string;
     agreeToTerms?: string;
     submit?: string;
@@ -50,5 +52,6 @@ export interface ApplicationPayload {
     noticePeriod: string;
     linkedinUrl: string;
     summary?: string;
+    resume: File;
     hasCriminalCase: boolean;
 }

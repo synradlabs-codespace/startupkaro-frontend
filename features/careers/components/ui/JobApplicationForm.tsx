@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, FormEvent } from "react";
-import { CheckCircle2 } from "lucide-react";
+import { useState, useRef, FormEvent, DragEvent } from "react";
+import { CheckCircle2, FileText, Paperclip, UploadCloud, X } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -71,6 +71,13 @@ function validateIndianPhone(v: string): string | null {
     return null;
 }
 
+const ACCEPTED_TYPES = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+const ACCEPTED_EXT = [".pdf", ".docx"];
+
+function isValidResume(file: File) {
+    return ACCEPTED_TYPES.includes(file.type) || ACCEPTED_EXT.some((ext) => file.name.toLowerCase().endsWith(ext));
+}
+
 const EMPTY_FORM: ApplicationFormState = {
     firstName: "",
     middleName: "",
@@ -84,6 +91,7 @@ const EMPTY_FORM: ApplicationFormState = {
     noticePeriod: "",
     linkedinUrl: "",
     summary: "",
+    resume: null,
     hasCriminalCase: "",
     agreeToTerms: false,
 };
@@ -97,6 +105,24 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
     const [errors, setErrors] = useState<ApplicationFormErrors>({});
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
+    const resumeInputRef = useRef<HTMLInputElement>(null);
+
+    const handleResumeFile = (file: File) => {
+        if (!isValidResume(file)) {
+            setErrors((prev) => ({ ...prev, resume: "Only PDF or DOCX files are accepted" }));
+            return;
+        }
+        set("resume", file);
+        setErrors((prev) => ({ ...prev, resume: undefined }));
+    };
+
+    const handleResumeDrop = (e: DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setIsDragging(false);
+        const file = e.dataTransfer.files[0];
+        if (file) handleResumeFile(file);
+    };
 
     const set = <K extends keyof ApplicationFormState>(field: K, value: ApplicationFormState[K]) => {
         setForm((prev) => ({ ...prev, [field]: value }));
@@ -114,6 +140,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
             expectedCtc: !form.expectedCtc ? "Please select your expected CTC" : undefined,
             noticePeriod: !form.noticePeriod ? "Please select a notice period" : undefined,
             linkedinUrl: validateLinkedin(form.linkedinUrl) ?? undefined,
+            resume: !form.resume ? "Please upload your resume" : undefined,
             hasCriminalCase: !form.hasCriminalCase ? "Please select an answer" : undefined,
             agreeToTerms: !form.agreeToTerms
                 ? "You must confirm the accuracy of information provided"
@@ -146,6 +173,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
             noticePeriod: form.noticePeriod,
             linkedinUrl: form.linkedinUrl.trim(),
             summary: form.summary.trim() || undefined,
+            resume: form.resume!,
             hasCriminalCase: form.hasCriminalCase === "Yes",
         };
 
@@ -429,6 +457,75 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                         />
                         {errors.linkedinUrl && (
                             <p className="mt-1.5 text-xs text-red-500">{errors.linkedinUrl}</p>
+                        )}
+                    </div>
+
+                    {/* Resume upload */}
+                    <div>
+                        <label className={LABEL_CLASS}>Resume</label>
+                        <div
+                            onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                            onDragLeave={() => setIsDragging(false)}
+                            onDrop={handleResumeDrop}
+                            onClick={() => resumeInputRef.current?.click()}
+                            className={`relative flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed px-6 py-8 text-center transition-colors duration-200 ${
+                                isDragging
+                                    ? "border-primary-brand bg-tint-sky/30"
+                                    : errors.resume
+                                    ? "border-red-300 bg-surface"
+                                    : "border-hairline-strong bg-surface hover:border-primary-brand hover:bg-tint-sky/20"
+                            }`}
+                        >
+                            <input
+                                ref={resumeInputRef}
+                                type="file"
+                                accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                className="sr-only"
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) handleResumeFile(file);
+                                    e.target.value = "";
+                                }}
+                            />
+                            {form.resume ? (
+                                <div className="flex w-full items-center justify-between gap-3 rounded-lg border border-hairline bg-canvas px-4 py-3">
+                                    <div className="flex items-center gap-2.5 min-w-0">
+                                        <FileText className="h-5 w-5 shrink-0 text-primary-brand" />
+                                        <span className="truncate text-sm text-ink">{form.resume.name}</span>
+                                        <span className="shrink-0 text-xs text-graphite">
+                                            ({(form.resume.size / 1024).toFixed(0)} KB)
+                                        </span>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        aria-label="Remove resume"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            set("resume", null);
+                                        }}
+                                        className="shrink-0 rounded-md p-1 text-graphite hover:bg-surface hover:text-ink transition-colors"
+                                    >
+                                        <X className="h-4 w-4" />
+                                    </button>
+                                </div>
+                            ) : (
+                                <>
+                                    <UploadCloud className={`h-8 w-8 ${isDragging ? "text-primary-brand" : "text-graphite"}`} />
+                                    <div>
+                                        <p className="text-sm text-ink">
+                                            <span className="font-medium text-primary-brand">Click to upload</span> or drag and drop
+                                        </p>
+                                        <p className="mt-1 text-xs text-graphite">PDF or DOCX only</p>
+                                    </div>
+                                    <span className="inline-flex items-center gap-1.5 rounded-md border border-hairline-strong bg-canvas px-3 py-1.5 text-xs text-charcoal">
+                                        <Paperclip className="h-3.5 w-3.5" />
+                                        Browse files
+                                    </span>
+                                </>
+                            )}
+                        </div>
+                        {errors.resume && (
+                            <p className="mt-1.5 text-xs text-red-500">{errors.resume}</p>
                         )}
                     </div>
 

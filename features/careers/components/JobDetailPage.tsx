@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { PortableText } from "@portabletext/react";
 import { portableTextComponents } from "@/features/articles/lib/portable-text-components";
 import { JobBanner } from "./ui/JobBanner";
@@ -11,6 +13,15 @@ interface JobDetailPageProps {
 export function JobDetailPage({ job }: JobDetailPageProps) {
     return (
         <main className="pb-16">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-2">
+                <Link
+                    href="/careers"
+                    className="inline-flex items-center gap-1.5 text-sm text-graphite hover:text-ink transition-colors"
+                >
+                    <ArrowLeft className="h-4 w-4" />
+                    All open roles
+                </Link>
+            </div>
             <JobBanner job={job} />
 
             <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-14 space-y-14">
