@@ -55,7 +55,7 @@ export const portableTextComponents: PortableTextComponents = {
                 <p className="text-base italic text-slate leading-relaxed">{value.text}</p>
                 {value.cite && (
                     <cite className="text-xs text-stone not-italic mt-2 block">
-                        — {value.cite}
+                        {value.cite}
                     </cite>
                 )}
             </blockquote>

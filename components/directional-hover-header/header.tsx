@@ -60,7 +60,7 @@ function isServiceCategory(heading: string): heading is Exclude<ServiceCategory,
   return heading === "Tax" || heading === "Business" || heading === "Legal" || heading === "License";
 }
 
-function DesktopColumnHeading({ heading, href, serviceMenu }: { heading: string; href?: string; serviceMenu: boolean }) {
+function DesktopColumnHeading({ heading, href, serviceMenu, onClose }: { heading: string; href?: string; serviceMenu: boolean; onClose?: () => void }) {
   if (!serviceMenu || !isServiceCategory(heading)) {
     const content = (
       <p className="mb-5 text-xs font-semibold uppercase tracking-[0.18em] text-graphite">
@@ -69,7 +69,7 @@ function DesktopColumnHeading({ heading, href, serviceMenu }: { heading: string;
     );
 
     return href ? (
-      <Link href={href} className="group inline-block">
+      <Link href={href} onClick={onClose} className="group inline-block">
         {content}
       </Link>
     ) : content;
@@ -94,7 +94,7 @@ function DesktopColumnHeading({ heading, href, serviceMenu }: { heading: string;
   );
 
   return href ? (
-    <Link href={href} className="group mb-5 flex w-fit items-center gap-3">
+    <Link href={href} onClick={onClose} className="group mb-5 flex w-fit items-center gap-3">
       {content}
     </Link>
   ) : (
@@ -102,7 +102,7 @@ function DesktopColumnHeading({ heading, href, serviceMenu }: { heading: string;
   );
 }
 
-function DesktopMenuPanel({ link }: { link: NavLink }) {
+function DesktopMenuPanel({ link, onClose }: { link: NavLink; onClose?: () => void }) {
   if (!link.menu) return null;
 
   const serviceMenu = link.menu.id === "services";
@@ -122,12 +122,13 @@ function DesktopMenuPanel({ link }: { link: NavLink }) {
               column.accent && !serviceMenu && "bg-tint-sky/35",
             )}
           >
-            <DesktopColumnHeading heading={column.heading} href={column.href} serviceMenu={serviceMenu} />
+            <DesktopColumnHeading heading={column.heading} href={column.href} serviceMenu={serviceMenu} onClose={onClose} />
             <div className={cn(serviceMenu ? "space-y-1.5" : "space-y-2")}>
               {column.items.map((item) => (
                 <Link
                   key={item.label}
                   href={item.href ?? "#"}
+                  onClick={onClose}
                   className={cn(
                     "group block rounded-md transition-colors hover:bg-surface",
                     serviceMenu ? "px-3 py-2.5" : "px-3 py-3",
@@ -151,10 +152,11 @@ function DesktopMenuPanel({ link }: { link: NavLink }) {
       {serviceMenu && (
         <Link
           href="/services"
+          onClick={onClose}
           className="group relative flex min-h-14 items-center justify-center border-t border-hairline/60 bg-canvas px-8 text-sm font-semibold text-ink transition-colors hover:bg-surface hover:text-primary-brand"
         >
           <span className="absolute -top-px left-0 h-px w-full origin-center scale-x-0 bg-primary-brand transition-transform duration-300 ease-out group-hover:scale-x-100 motion-reduce:transition-none motion-reduce:group-hover:scale-x-100" />
-          <span>View all services</span>
+          <span>View All Services</span>
         </Link>
       )}
     </div>
@@ -370,7 +372,7 @@ export function Header() {
 
         {activeLink && (
           <div onMouseEnter={clearCloseTimer} onMouseLeave={scheduleDesktopClose}>
-            <DesktopMenuPanel link={activeLink} />
+            <DesktopMenuPanel link={activeLink} onClose={closeDesktopMenu} />
           </div>
         )}
       </header>

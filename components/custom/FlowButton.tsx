@@ -1,11 +1,11 @@
 "use client";
 
-import { ArrowRight, Briefcase, LogIn, MessageCircle, Rocket, type LucideIcon } from "lucide-react";
+import { ArrowRight, Briefcase, LogIn, MessageCircle, Rocket, UserRound, Zap, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 type ColorVariant = "primary" | "ink" | "storm";
-type IconName = "arrow-right" | "briefcase" | "log-in" | "message-circle" | "rocket";
+type IconName = "arrow-right" | "briefcase" | "log-in" | "message-circle" | "rocket" | "user-round" | "zap";
 
 const colorMap: Record<ColorVariant, string> = {
     primary: "#296ef9",
@@ -19,6 +19,8 @@ const iconMap: Record<IconName, LucideIcon> = {
     "log-in": LogIn,
     "message-circle": MessageCircle,
     rocket: Rocket,
+    "user-round": UserRound,
+    zap: Zap,
 };
 
 interface FlowButtonProps {
@@ -73,7 +75,7 @@ export function FlowButton({
         });
                 if (textEl) {
                     textEl.style.color = entering ? hex : "white";
-                    textEl.style.transform = entering ? "translateX(1rem)" : "translateX(0)";
+                    textEl.style.transform = entering ? "translateX(1.5rem)" : "translateX(0)";
                 }
     };
 

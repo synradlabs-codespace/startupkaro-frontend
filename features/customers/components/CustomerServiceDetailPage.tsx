@@ -21,7 +21,7 @@ const categoryMeta: Record<string, { icon: React.ElementType; color: string; bg:
     Tax: { icon: FileText, color: "text-primary-brand", bg: "bg-tint-sky", badge: "bg-tint-sky text-primary-brand" },
     Business: { icon: Building2, color: "text-orange-600", bg: "bg-orange-50", badge: "bg-orange-100 text-orange-700" },
     Legal: { icon: Scale, color: "text-charcoal", bg: "bg-fog", badge: "bg-fog text-charcoal" },
-    License: { icon: FileCheck, color: "text-charcoal", bg: "bg-surface", badge: "bg-surface text-charcoal" },
+    License: { icon: FileCheck, color: "text-license-green", bg: "bg-license-green-light", badge: "bg-license-green-light text-license-green" },
 };
 const fallbackMeta = { icon: LayoutGrid, color: "text-slate", bg: "bg-surface", badge: "bg-surface text-slate" };
 

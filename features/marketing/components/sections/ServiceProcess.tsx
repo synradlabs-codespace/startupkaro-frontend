@@ -6,11 +6,12 @@ export function ServiceProcess({ service }: { service: Service }) {
     return (
         <section className="bg-cloud py-14 md:py-18">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="mb-8 max-w-2xl">
+                <div className="grid gap-10 lg:grid-cols-[1fr_2fr] lg:gap-16 lg:items-start">
+                <div className="lg:pt-2">
                     <p className="mb-2 text-xs font-medium uppercase tracking-[0.28px] text-graphite">Process</p>
                     <h2 className="font-display text-3xl font-medium text-ink md:text-4xl">How we process your request</h2>
                 </div>
-                <div className="max-w-3xl rounded-2xl border border-hairline bg-canvas p-6 md:p-8">
+                <div className="rounded-2xl border border-hairline bg-canvas p-6 md:p-8">
                     {service.process.map((item, idx) => (
                         <div key={item.step} className="flex gap-4">
                             <div className="flex flex-col items-center">
@@ -27,6 +28,7 @@ export function ServiceProcess({ service }: { service: Service }) {
                             </div>
                         </div>
                     ))}
+                </div>
                 </div>
             </div>
         </section>

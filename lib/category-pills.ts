@@ -20,8 +20,8 @@ export const categoryPillStyles: Record<ServiceCategory, { idle: string; active:
         active: "border-rose-600 bg-rose-600 text-white",
     },
     License: {
-        idle: "border-teal-200 bg-teal-50 text-teal-700 hover:border-teal-400",
-        active: "border-teal-600 bg-teal-600 text-white",
+        idle: "border-license-green-border bg-license-green-light text-license-green hover:border-license-green",
+        active: "border-license-green bg-license-green text-white",
     },
 };
 
@@ -50,10 +50,10 @@ export const categoryCardStyles: Record<Exclude<ServiceCategory, "All">, {
         strip: "bg-rose-600",
     },
     License: {
-        iconBg: "bg-teal-50",
-        iconText: "text-teal-600",
-        badge: "border-teal-200 bg-teal-100 text-teal-700",
-        strip: "bg-teal-600",
+        iconBg: "bg-license-green-light",
+        iconText: "text-license-green",
+        badge: "border-license-green-border bg-license-green-light text-license-green",
+        strip: "bg-license-green",
     },
 };
 

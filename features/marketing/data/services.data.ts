@@ -28,10 +28,10 @@ export const MOCK_SERVICES: Service[] = [
             { step: 5, title: "GSTIN delivered", description: "Your GST Identification Number and registration certificate are shared with you within 7 days." },
         ],
         faqs: [
-            { question: "Is GST registration mandatory for all businesses?", answer: "Not all — it is mandatory if your turnover exceeds ₹40 lakhs (₹20 lakhs for service providers), or if you sell on e-commerce platforms or make inter-state supplies." },
+            { question: "Is GST registration mandatory for all businesses?", answer: "Not for all. It is mandatory if your turnover exceeds ₹40 lakhs (₹20 lakhs for service providers), or if you sell on e-commerce platforms or make inter-state supplies." },
             { question: "How long does the process take?", answer: "Typically 7 working days from the date all documents are received over email. Complex cases may take up to 14 days." },
             { question: "What documents are required?", answer: "PAN card, Aadhaar, a recent bank statement, a business address proof (rent agreement or utility bill), and a photograph of the proprietor/partners/directors." },
-            { question: "Can I apply for multiple GSTINs?", answer: "Yes — you need a separate GSTIN for each state where you have a place of business. We can handle multi-state registrations." },
+            { question: "Can I apply for multiple GSTINs?", answer: "Yes, you need a separate GSTIN for each state where you have a place of business. We can handle multi-state registrations." },
         ],
     },
     {
@@ -117,7 +117,7 @@ export const MOCK_SERVICES: Service[] = [
             { step: 1, title: "Share income details", description: "Email your salary slips, Form 16, bank statements, and investment proofs to our team." },
             { step: 2, title: "CA review", description: "Our CA reviews all documents, identifies deductions, and reconciles 26AS/AIS." },
             { step: 3, title: "ITR preparation", description: "The correct ITR form is prepared with accurate income and deduction entries." },
-            { step: 4, title: "Your review & approval", description: "You review the prepared return before it is filed — no surprises." },
+            { step: 4, title: "Your review & approval", description: "You review the prepared return before it is filed, with no surprises." },
             { step: 5, title: "E-filing & acknowledgement", description: "Return is e-filed on the Income Tax portal and ITR-V is sent to you instantly." },
         ],
         faqs: [
@@ -183,8 +183,8 @@ export const MOCK_SERVICES: Service[] = [
             { step: 5, title: "IEC certificate delivered", description: "Your 10-digit IEC is issued and the digital certificate is shared with you." },
         ],
         faqs: [
-            { question: "Is IEC mandatory for every export transaction?", answer: "Yes — for exports of goods, IEC is mandatory. For service exports, IEC is not required if payment is received in foreign exchange and no foreign exchange is being repatriated." },
-            { question: "Can individuals apply for IEC?", answer: "Yes — individuals can obtain an IEC in their personal name. It is not limited to companies and firms." },
+            { question: "Is IEC mandatory for every export transaction?", answer: "Yes, for exports of goods IEC is mandatory. For service exports, IEC is not required if payment is received in foreign exchange and no foreign exchange is being repatriated." },
+            { question: "Can individuals apply for IEC?", answer: "Yes, individuals can obtain an IEC in their personal name. It is not limited to companies and firms." },
             { question: "Is IEC valid for all types of goods?", answer: "Yes, a single IEC covers all goods and all ports. However, some goods require additional licences (e.g., weapons, chemicals, pharmaceutical products)." },
             { question: "What if I need to update my IEC?", answer: "IEC must be updated every year (April–June window) even with no changes. We offer IEC modification and annual update as a separate service." },
         ],
@@ -198,11 +198,11 @@ export const MOCK_SERVICES: Service[] = [
         duration: "1 day",
         pricing: { amount: 999, currency: "INR", note: "No government fee" },
         overview:
-            "Udyam Registration (formerly Udyog Aadhaar) is the official MSME registration issued by the Ministry of Micro, Small and Medium Enterprises. It classifies your business as a Micro, Small, or Medium Enterprise based on annual turnover and investment in plant & machinery. Registered MSMEs gain access to priority sector lending, collateral-free loans, government tenders reserved for MSMEs, subsidies, and protection against delayed payments under the MSMED Act. Registration is completely free on the government portal — you only pay for our expert assistance.",
+            "Udyam Registration (formerly Udyog Aadhaar) is the official MSME registration issued by the Ministry of Micro, Small and Medium Enterprises. It classifies your business as a Micro, Small, or Medium Enterprise based on annual turnover and investment in plant & machinery. Registered MSMEs gain access to priority sector lending, collateral-free loans, government tenders reserved for MSMEs, subsidies, and protection against delayed payments under the MSMED Act. Registration is completely free on the government portal; you only pay for our expert assistance.",
         features: [
             { title: "Same-day Udyam certificate", description: "Registration is processed on the Udyam portal instantly once documents are in order." },
             { title: "Correct MSME category classification", description: "We determine whether your business qualifies as Micro, Small, or Medium based on current thresholds." },
-            { title: "Linked to PAN & GST automatically", description: "Udyam registration pulls data from Income Tax and GST portals — we ensure your records are consistent." },
+            { title: "Linked to PAN & GST automatically", description: "Udyam registration pulls data from Income Tax and GST portals; we ensure your records stay consistent." },
             { title: "Access to 50+ government schemes", description: "Your certificate unlocks subsidies under Credit Guarantee, CGTMSE, TReDS, and state-level MSME schemes." },
             { title: "MSMED Act payment protection", description: "Registered MSMEs can file delayed payment cases against buyers under Section 16 of the MSMED Act." },
         ],
@@ -229,7 +229,7 @@ export const MOCK_SERVICES: Service[] = [
         duration: "7 days",
         pricing: { amount: 3999, currency: "INR", note: "Both ESI and PF covered" },
         overview:
-            "ESI (Employee State Insurance) and EPF (Employees' Provident Fund) registrations are mandatory for businesses meeting employee count thresholds. EPF registration is required for establishments with 20 or more employees, while ESI applies to those with 10 or more employees earning up to ₹21,000/month. Both schemes provide social security to employees — EPF for retirement savings and ESI for medical, maternity, and disability coverage. Non-compliance can attract heavy penalties and criminal liability. We handle both registrations simultaneously to save time.",
+            "ESI (Employee State Insurance) and EPF (Employees' Provident Fund) registrations are mandatory for businesses meeting employee count thresholds. EPF registration is required for establishments with 20 or more employees, while ESI applies to those with 10 or more employees earning up to ₹21,000/month. Both schemes provide social security to employees: EPF for retirement savings and ESI for medical, maternity, and disability coverage. Non-compliance can attract heavy penalties and criminal liability. We handle both registrations simultaneously to save time.",
         features: [
             { title: "Simultaneous ESI and PF registration", description: "Both registrations are applied together, saving you time and reducing administrative effort." },
             { title: "Dedicated compliance expert assigned", description: "A labour law expert manages your application and answers all compliance queries." },
@@ -286,15 +286,15 @@ export const MOCK_SERVICES: Service[] = [
         slug: "shop-establishment-registration",
         name: "Shop & Establishment Registration",
         tagline: "Your local business, officially registered in 3 days",
-        description: "Register your shop, office, or establishment under the state Shops and Establishments Act — mandatory for any commercial premises in India.",
+        description: "Register your shop, office, or establishment under the state Shops and Establishments Act, mandatory for any commercial premises in India.",
         category: "License",
         duration: "3 days",
         pricing: { amount: 1499, currency: "INR", note: "State government fee included" },
         overview:
-            "The Shops and Establishments Act is a state-level legislation that regulates working conditions, hours of operation, employment terms, and employee rights in commercial establishments. Registration is mandatory for every shop, restaurant, hotel, theatre, and commercial office in India, including home-based businesses and work-from-home setups. A Shop & Establishment certificate is also required to open a current bank account and for many government licences. Requirements differ by state — our experts handle registrations across all major states.",
+            "The Shops and Establishments Act is a state-level legislation that regulates working conditions, hours of operation, employment terms, and employee rights in commercial establishments. Registration is mandatory for every shop, restaurant, hotel, theatre, and commercial office in India, including home-based businesses and work-from-home setups. A Shop & Establishment certificate is also required to open a current bank account and for many government licences. Requirements differ by state; our experts handle registrations across all major states.",
         features: [
             { title: "All major states covered", description: "We handle registrations in Maharashtra, Delhi, Karnataka, Tamil Nadu, Telangana, Gujarat, and more." },
-            { title: "State-specific compliance", description: "Each state has different rules and forms — our experts know the nuances of local legislation." },
+            { title: "State-specific compliance", description: "Each state has different rules and forms; our experts know the nuances of local legislation." },
             { title: "Certificate for bank account opening", description: "The registration certificate is accepted by all banks for current account KYC." },
             { title: "Employee register templates", description: "We provide state-compliant employee attendance and wage registers as required under the Act." },
             { title: "Renewal tracking", description: "We remind you of annual renewal due dates so your certificate never lapses." },
@@ -307,7 +307,7 @@ export const MOCK_SERVICES: Service[] = [
             { step: 5, title: "Certificate issuance", description: "Your Shop & Establishment registration certificate is issued and shared with you digitally." },
         ],
         faqs: [
-            { question: "Is registration mandatory for freelancers working from home?", answer: "In most states, yes — any commercial activity from a premises, including home offices, requires registration. Some states have relaxed this for home-based freelancers; we'll advise based on your state." },
+            { question: "Is registration mandatory for freelancers working from home?", answer: "In most states, yes. Any commercial activity from a premises, including home offices, requires registration. Some states have relaxed this for home-based freelancers; we'll advise based on your state." },
             { question: "How soon after starting a business must I register?", answer: "Most states require registration within 30 days of commencing business. Delayed registration can attract fines." },
             { question: "Does the certificate need to be renewed?", answer: "Yes, in most states it must be renewed annually or as specified. Our team tracks expiry and assists with renewal." },
             { question: "Can I use this certificate to open a current account?", answer: "Yes, a Shop & Establishment certificate is one of the accepted documents for business current account KYC at all major banks." },
@@ -339,7 +339,7 @@ export const MOCK_SERVICES: Service[] = [
         ],
         faqs: [
             { question: "Who is eligible for Startup India Recognition?", answer: "Any entity (Pvt Ltd, LLP, or Partnership Firm) incorporated for less than 10 years, with annual turnover not exceeding ₹100 crore, working towards innovation, development, or improvement of a product, process, or service." },
-            { question: "Is the income tax exemption automatic upon recognition?", answer: "No — the 3-year tax exemption under Section 80-IAC requires a separate application to and approval by the Inter-Ministerial Board. Recognition is a prerequisite. We assist with both." },
+            { question: "Is the income tax exemption automatic upon recognition?", answer: "No, the 3-year tax exemption under Section 80-IAC requires a separate application to and approval by the Inter-Ministerial Board. Recognition is a prerequisite. We assist with both." },
             { question: "What is angel tax and how does recognition help?", answer: "Angel tax (Section 56(2)(viib)) is a tax on investments received at a valuation higher than fair market value. DPIIT-recognised startups are fully exempt from this tax, making fundraising much easier." },
             { question: "How long does DPIIT take to process the application?", answer: "Typically 2–7 working days after a complete application is submitted. Our team ensures the application is complete to avoid delays." },
         ],

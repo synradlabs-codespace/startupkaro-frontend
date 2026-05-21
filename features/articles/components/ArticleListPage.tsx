@@ -30,9 +30,9 @@ export function ArticleListPage({
         : null;
 
     return (
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-4 pb-10 space-y-5">
             {/* Page header */}
-            <div className="bg-tint-cream rounded-2xl px-8 py-12">
+            <div className="bg-tint-cream rounded-2xl px-8 py-7">
                 <p className="text-xs font-medium uppercase tracking-[0.28px] text-steel mb-3">
                     Insights &amp; Expertise
                 </p>

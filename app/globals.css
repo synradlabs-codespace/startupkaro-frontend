@@ -54,6 +54,11 @@ body {
   --color-storm-sea: #7fadbe;
   --color-storm-deep: #356373;
 
+  /* Category accents */
+  --color-license-green: #6BAE3A;
+  --color-license-green-light: #eef7e7;
+  --color-license-green-border: #c3e3aa;
+
   /* Links & semantic */
   --color-link-blue: #024ad8;
   --color-error-brand: #b3262b;
