@@ -267,9 +267,10 @@ export function ContactPage() {
                                             placeholder="Tell us about your business and what you need help with..."
                                             rows={4}
                                             style={{ height: messageHeight }}
-                                            className={`${inputBase} resize-none pb-14 ${errors.message ? inputError : inputNormal}`}
+                                            className={`${inputBase} resize-none pb-14 sm:pb-4 ${errors.message ? inputError : inputNormal}`}
                                         />
-                                        <div className="absolute bottom-2 left-1/2 flex h-11 -translate-x-1/2 items-center rounded-md border border-hairline-strong bg-canvas text-graphite shadow-[0_2px_8px_rgba(26,26,26,0.08)]">
+                                        {/* Mobile: +/- buttons (touch users can't drag) */}
+                                        <div className="sm:hidden absolute bottom-2 left-1/2 flex h-11 -translate-x-1/2 items-center rounded-md border border-hairline-strong bg-canvas text-graphite shadow-[0_2px_8px_rgba(26,26,26,0.08)]">
                                             <button
                                                 type="button"
                                                 aria-label="Reduce message box height"
@@ -280,32 +281,33 @@ export function ContactPage() {
                                             </button>
                                             <button
                                                 type="button"
-                                                aria-label="Drag to resize message box"
-                                                title="Drag to resize"
-                                                onPointerDown={handleResizeStart}
-                                                onKeyDown={(event) => {
-                                                    if (event.key === "ArrowUp") {
-                                                        event.preventDefault();
-                                                        adjustMessageHeight(-MESSAGE_RESIZE_STEP);
-                                                    }
-                                                    if (event.key === "ArrowDown") {
-                                                        event.preventDefault();
-                                                        adjustMessageHeight(MESSAGE_RESIZE_STEP);
-                                                    }
-                                                }}
-                                                className="flex h-11 w-14 touch-none items-center justify-center border-x border-hairline-strong transition-colors hover:bg-surface hover:text-primary-brand focus:outline-none focus:ring-2 focus:ring-primary-brand/20"
-                                            >
-                                                <GripHorizontal className="h-4 w-4" />
-                                            </button>
-                                            <button
-                                                type="button"
                                                 aria-label="Increase message box height"
                                                 onClick={() => adjustMessageHeight(MESSAGE_RESIZE_STEP)}
-                                                className="flex h-11 w-11 items-center justify-center rounded-r-md transition-colors hover:bg-surface hover:text-primary-brand focus:outline-none focus:ring-2 focus:ring-primary-brand/20"
+                                                className="flex h-11 w-11 items-center justify-center rounded-r-md border-l border-hairline-strong transition-colors hover:bg-surface hover:text-primary-brand focus:outline-none focus:ring-2 focus:ring-primary-brand/20"
                                             >
                                                 <Plus className="h-4 w-4" />
                                             </button>
                                         </div>
+                                        {/* Desktop: drag handle only */}
+                                        <button
+                                            type="button"
+                                            aria-label="Drag to resize message box"
+                                            title="Drag to resize"
+                                            onPointerDown={handleResizeStart}
+                                            onKeyDown={(event) => {
+                                                if (event.key === "ArrowUp") {
+                                                    event.preventDefault();
+                                                    adjustMessageHeight(-MESSAGE_RESIZE_STEP);
+                                                }
+                                                if (event.key === "ArrowDown") {
+                                                    event.preventDefault();
+                                                    adjustMessageHeight(MESSAGE_RESIZE_STEP);
+                                                }
+                                            }}
+                                            className="hidden sm:flex absolute bottom-2 left-1/2 h-8 w-14 -translate-x-1/2 touch-none items-center justify-center rounded-md border border-hairline-strong bg-canvas text-graphite shadow-[0_2px_8px_rgba(26,26,26,0.08)] transition-colors hover:bg-surface hover:text-primary-brand focus:outline-none focus:ring-2 focus:ring-primary-brand/20"
+                                        >
+                                            <GripHorizontal className="h-4 w-4" />
+                                        </button>
                                     </div>
                                     <div className="flex items-start justify-between mt-1.5">
                                         {errors.message ? (

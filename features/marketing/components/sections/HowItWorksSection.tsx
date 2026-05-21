@@ -9,7 +9,7 @@ const steps = [
         step: "01",
         title: "Choose a service",
         description:
-            "Browse our catalogue and pick what your startup needs. Every service has a fixed, upfront price — no hidden fees, no surprise invoices.",
+            "Browse our catalogue and pick what your startup needs. Every service has a fixed, upfront price: no hidden fees, no surprise invoices.",
         itemClassName: "bg-canvas border border-hairline",
         dark: false,
     },
@@ -64,15 +64,17 @@ function StepCard({ item }: { item: typeof steps[number] }) {
 
 export function HowItWorksSection() {
     return (
-        <section className="bg-canvas py-20 md:py-24">
-            <div className="mx-auto max-w-7xl px-8">
-                <div className="text-center mb-12">
-                    <p className="text-xs uppercase tracking-[0.28px] text-graphite font-medium mb-2">
-                        Simple process
-                    </p>
-                    <h2 className="font-display text-4xl md:text-5xl text-ink font-medium">
-                        How it works
-                    </h2>
+        <section className="bg-canvas pb-8 md:pb-10">
+            <div className="sticky top-0 z-20 bg-canvas pt-14 pb-4 md:pt-18 md:pb-5">
+                <div className="mx-auto max-w-7xl px-8">
+                    <div className="text-center">
+                        <p className="text-xs uppercase tracking-[0.28px] text-graphite font-medium mb-2">
+                            Simple process
+                        </p>
+                        <h2 className="font-display text-4xl md:text-5xl text-ink font-medium">
+                            How it works
+                        </h2>
+                    </div>
                 </div>
             </div>
 
@@ -95,7 +97,7 @@ export function HowItWorksSection() {
                     itemDistance={80}
                     itemScale={0.04}
                     itemStackDistance={20}
-                    stackPosition="15%"
+                    stackPosition="22%"
                     scaleEndPosition="5%"
                     baseScale={0.88}
                     scrollBuffer={240}

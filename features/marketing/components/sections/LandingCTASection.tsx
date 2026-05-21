@@ -3,5 +3,9 @@
 import { MarketingCTASection } from "./MarketingCTASection";
 
 export function LandingCTASection() {
-    return <MarketingCTASection />;
+    return (
+        <div className="py-10 md:py-14">
+            <MarketingCTASection />
+        </div>
+    );
 }

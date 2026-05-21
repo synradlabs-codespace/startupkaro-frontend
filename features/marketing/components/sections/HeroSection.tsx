@@ -1,17 +1,40 @@
 // features/marketing/components/sections/HeroSection.tsx
 
+"use client";
+
 import Image from "next/image";
 import { ShieldCheck, Clock, Star } from "lucide-react";
 import { FlowButton, FlowSecondaryButton } from "@/components/custom/FlowButton";
 import { LetterSwap } from "@/components/fancy/text";
+import { motion, useReducedMotion } from "framer-motion";
+
+const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
 export function HeroSection() {
+    const prefersReducedMotion = useReducedMotion();
+
+    const leftProps = prefersReducedMotion
+        ? {}
+        : {
+              initial: { opacity: 0, x: -40 },
+              animate: { opacity: 1, x: 0 },
+              transition: { duration: 0.7, ease: EASE },
+          };
+
+    const rightProps = prefersReducedMotion
+        ? {}
+        : {
+              initial: { opacity: 0, x: 40 },
+              animate: { opacity: 1, x: 0 },
+              transition: { duration: 0.7, ease: EASE, delay: 0.08 },
+          };
+
     return (
         <section className="relative px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-7xl">
                 <div className="flex flex-col items-stretch gap-8 lg:flex-row lg:gap-12">
                     {/* Left — text content */}
-                    <div className="relative flex-1 min-w-0 overflow-hidden rounded-2xl border border-hairline bg-canvas px-7 py-12 md:px-10 md:py-16">
+                    <motion.div {...leftProps} className="relative flex-1 min-w-0 overflow-hidden rounded-2xl border border-hairline bg-canvas px-7 py-12 md:px-10 md:py-16">
                         <div className="absolute inset-y-8 left-0 w-1.5 rounded-r-full bg-primary-brand" />
 
                         <div className="relative">
@@ -67,10 +90,10 @@ export function HeroSection() {
                                 </span>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
 
                     {/* Right — hero image */}
-                    <div className="hidden w-96 shrink-0 items-end justify-center overflow-hidden rounded-2xl border border-hairline bg-cloud lg:flex xl:w-108">
+                    <motion.div {...rightProps} className="hidden w-96 shrink-0 items-end justify-center overflow-hidden rounded-2xl border border-hairline bg-cloud lg:flex xl:w-108">
                         <Image
                             src="/cross_arms_guy.png"
                             alt="Business professional"
@@ -79,7 +102,7 @@ export function HeroSection() {
                             priority
                             className="object-contain drop-shadow-xl"
                         />
-                    </div>
+                    </motion.div>
                 </div>
             </div>
         </section>

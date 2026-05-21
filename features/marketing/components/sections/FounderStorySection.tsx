@@ -1,4 +1,9 @@
+"use client";
+
 import { BriefcaseBusiness, FileCheck2, Scale } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+
+const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
 const founders = [
     {
@@ -24,11 +29,31 @@ const principles = [
 ];
 
 export function FounderStorySection() {
+    const prefersReducedMotion = useReducedMotion();
+
+    const leftProps = prefersReducedMotion
+        ? {}
+        : {
+              initial: { opacity: 0, x: -40 },
+              whileInView: { opacity: 1, x: 0 },
+              viewport: { once: true, amount: 0.2 },
+              transition: { duration: 0.7, ease: EASE },
+          };
+
+    const rightProps = prefersReducedMotion
+        ? {}
+        : {
+              initial: { opacity: 0, x: 40 },
+              whileInView: { opacity: 1, x: 0 },
+              viewport: { once: true, amount: 0.2 },
+              transition: { duration: 0.7, ease: EASE, delay: 0.08 },
+          };
+
     return (
         <section className="bg-canvas py-20 md:py-24">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="grid gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-center">
-                    <div>
+                    <motion.div {...leftProps}>
                         <p className="mb-2 text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                             Founder story
                         </p>
@@ -50,9 +75,9 @@ export function FounderStorySection() {
                                 </div>
                             ))}
                         </div>
-                    </div>
+                    </motion.div>
 
-                    <div className="grid gap-4">
+                    <motion.div {...rightProps} className="grid gap-4">
                         {founders.map(({ name, role, icon: Icon, summary }) => (
                             <article
                                 key={name}
@@ -70,7 +95,7 @@ export function FounderStorySection() {
                                 <p className="text-sm leading-relaxed text-charcoal">{summary}</p>
                             </article>
                         ))}
-                    </div>
+                    </motion.div>
                 </div>
             </div>
         </section>

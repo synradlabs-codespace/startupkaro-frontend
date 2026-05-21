@@ -72,7 +72,7 @@ export function AboutPage() {
             </section>
 
             {/* Stats */}
-            <section className="mx-4 max-w-7xl rounded-2xl border border-hairline bg-cloud px-8 py-12 sm:mx-6 lg:mx-auto">
+            <section className="mt-6 mx-4 max-w-7xl rounded-2xl border border-hairline bg-cloud px-8 py-12 sm:mx-6 lg:mx-auto">
                 <div className="mx-auto max-w-4xl grid grid-cols-2 md:grid-cols-4 gap-8">
                     {stats.map((s) => (
                         <div key={s.label} className="text-center">

@@ -15,6 +15,7 @@ const companyLinks = [
     { href: "/careers", label: "Careers" },
     { href: "/contact", label: "Contact" },
     { href: "/login", label: "Login" },
+    { href: "/employee/login", label: "Employee Login" },
 ];
 
 const legalLinks = [
@@ -26,11 +27,11 @@ const legalLinks = [
 
 export function MarketingFooter() {
     return (
-        <footer className="bg-ink text-white">
+        <footer className="bg-canvas text-ink border-t border-hairline">
             <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
-                <div className="grid gap-10 border-b border-white/10 pb-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.7fr)] lg:gap-16">
+                <div className="grid gap-10 border-b border-hairline pb-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.7fr)] lg:gap-16">
                     <div className="space-y-5">
-                        <Link href="/" className="inline-flex rounded-md bg-canvas px-3 py-2">
+                        <Link href="/" className="inline-flex">
                             <Image
                                 src="/startupkaro-logo.svg"
                                 alt="StartupKaro"
@@ -39,28 +40,28 @@ export function MarketingFooter() {
                                 className="h-8 w-auto"
                             />
                         </Link>
-                        <p className="max-w-sm text-sm leading-relaxed text-white/70">
+                        <p className="max-w-sm text-sm leading-relaxed text-charcoal">
                             End-to-end compliance and legal services for Indian startups, handled by expert CAs and CSs.
                         </p>
                         <div className="flex gap-3 pt-1">
                             <a
                                 href="#"
                                 aria-label="Twitter"
-                                className="flex h-9 w-9 items-center justify-center rounded-md border border-white/15 text-white/65 transition-colors hover:border-primary-soft hover:text-white"
+                                className="flex h-9 w-9 items-center justify-center rounded-md border border-hairline text-graphite transition-colors hover:border-primary-brand hover:text-primary-brand"
                             >
                                 <FaTwitter className="h-3.5 w-3.5" />
                             </a>
                             <a
                                 href="#"
                                 aria-label="LinkedIn"
-                                className="flex h-9 w-9 items-center justify-center rounded-md border border-white/15 text-white/65 transition-colors hover:border-primary-soft hover:text-white"
+                                className="flex h-9 w-9 items-center justify-center rounded-md border border-hairline text-graphite transition-colors hover:border-primary-brand hover:text-primary-brand"
                             >
                                 <FaLinkedinIn className="h-3.5 w-3.5" />
                             </a>
                             <a
                                 href="#"
                                 aria-label="Instagram"
-                                className="flex h-9 w-9 items-center justify-center rounded-md border border-white/15 text-white/65 transition-colors hover:border-primary-soft hover:text-white"
+                                className="flex h-9 w-9 items-center justify-center rounded-md border border-hairline text-graphite transition-colors hover:border-primary-brand hover:text-primary-brand"
                             >
                                 <FaInstagram className="h-3.5 w-3.5" />
                             </a>
@@ -70,18 +71,18 @@ export function MarketingFooter() {
                     <div>
                         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                             <div>
-                                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.7px] text-primary-soft">
+                                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.7px] text-primary-brand">
                                     Services
                                 </p>
-                                <h2 className="font-display text-2xl font-medium leading-none text-white sm:text-3xl">
+                                <h2 className="font-display text-2xl font-medium leading-none text-ink sm:text-3xl">
                                     Business support by category
                                 </h2>
                             </div>
                             <Link
                                 href="/services"
-                                className="group text-sm font-medium text-primary-soft transition-colors hover:text-white"
+                                className="group text-sm font-medium text-primary-brand transition-colors hover:text-primary-deep"
                             >
-                                <UnderlineAnimation lineClassName="bg-primary-soft">View all services</UnderlineAnimation>
+                                <UnderlineAnimation lineClassName="bg-primary-brand">View all services</UnderlineAnimation>
                             </Link>
                         </div>
 
@@ -91,14 +92,14 @@ export function MarketingFooter() {
                                     {column.href ? (
                                         <Link
                                             href={column.href}
-                                            className="group mb-4 block text-xs font-semibold uppercase tracking-[0.7px] text-white transition-colors hover:text-primary-soft"
+                                            className="group mb-4 block text-xs font-semibold uppercase tracking-[0.7px] text-ink transition-colors hover:text-primary-brand"
                                         >
-                                            <UnderlineAnimation lineClassName="bg-primary-soft">
+                                            <UnderlineAnimation lineClassName="bg-primary-brand">
                                                 {column.heading}
                                             </UnderlineAnimation>
                                         </Link>
                                     ) : (
-                                        <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.7px] text-white">
+                                        <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.7px] text-ink">
                                             {column.heading}
                                         </h3>
                                     )}
@@ -108,19 +109,14 @@ export function MarketingFooter() {
                                                 {item.href ? (
                                                     <Link
                                                         href={item.href}
-                                                        className="group block text-sm leading-snug text-white/70 transition-colors hover:text-white"
+                                                        className="group block text-sm leading-snug text-charcoal transition-colors hover:text-ink"
                                                     >
-                                                        <UnderlineAnimation lineClassName="bg-primary-soft">
+                                                        <UnderlineAnimation lineClassName="bg-primary-brand">
                                                             {item.label}
                                                         </UnderlineAnimation>
-                                                        {item.description && (
-                                                            <span className="mt-1 block text-xs leading-snug text-white/45">
-                                                                {item.description}
-                                                            </span>
-                                                        )}
                                                     </Link>
                                                 ) : (
-                                                    <span className="block text-sm leading-snug text-white/70">
+                                                    <span className="block text-sm leading-snug text-charcoal">
                                                         {item.label}
                                                     </span>
                                                 )}
@@ -133,14 +129,14 @@ export function MarketingFooter() {
                     </div>
                 </div>
 
-                <div className="grid gap-10 border-b border-white/10 py-10 md:grid-cols-3">
+                <div className="grid gap-10 border-b border-hairline py-10 md:grid-cols-3">
                     <div>
-                        <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.7px] text-white">Company</h3>
+                        <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.7px] text-ink">Company</h3>
                         <ul className="space-y-2.5">
                             {companyLinks.map((link) => (
                                 <li key={link.href}>
-                                    <Link href={link.href} className="group text-sm text-white/65 transition-colors hover:text-white">
-                                        <UnderlineAnimation lineClassName="bg-primary-soft">{link.label}</UnderlineAnimation>
+                                    <Link href={link.href} className="group text-sm text-charcoal transition-colors hover:text-ink">
+                                        <UnderlineAnimation lineClassName="bg-primary-brand">{link.label}</UnderlineAnimation>
                                     </Link>
                                 </li>
                             ))}
@@ -148,37 +144,37 @@ export function MarketingFooter() {
                     </div>
 
                     <div>
-                        <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.7px] text-white">Contact</h3>
+                        <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.7px] text-ink">Contact</h3>
                         <ul className="space-y-3">
-                            <li className="flex items-start gap-2.5 text-sm text-white/65">
-                                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-primary-soft" />
+                            <li className="flex items-start gap-2.5 text-sm text-charcoal">
+                                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-primary-brand" />
                                 hello@startupkaro.in
                             </li>
-                            <li className="flex items-start gap-2.5 text-sm text-white/65">
-                                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary-soft" />
+                            <li className="flex items-start gap-2.5 text-sm text-charcoal">
+                                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary-brand" />
                                 +91 789 00000 88
                             </li>
-                            <li className="flex items-start gap-2.5 text-sm text-white/65">
-                                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary-soft" />
+                            <li className="flex items-start gap-2.5 text-sm text-charcoal">
+                                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary-brand" />
                                 +91 737 00000 88
                             </li>
-                            <li className="flex items-start gap-2.5 text-sm text-white/65">
-                                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary-soft" />
+                            <li className="flex items-start gap-2.5 text-sm text-charcoal">
+                                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary-brand" />
                                 Mohali, Punjab, India
                             </li>
                         </ul>
                     </div>
 
                     <div>
-                        <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.7px] text-white">Legal</h3>
+                        <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.7px] text-ink">Legal</h3>
                         <div className="grid gap-2.5 sm:grid-cols-2 md:grid-cols-1">
                             {legalLinks.map((link) => (
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className="group text-sm text-white/65 transition-colors hover:text-white"
+                                    className="group text-sm text-charcoal transition-colors hover:text-ink"
                                 >
-                                    <UnderlineAnimation lineClassName="bg-primary-soft">{link.label}</UnderlineAnimation>
+                                    <UnderlineAnimation lineClassName="bg-primary-brand">{link.label}</UnderlineAnimation>
                                 </Link>
                             ))}
                         </div>
@@ -186,10 +182,10 @@ export function MarketingFooter() {
                 </div>
 
                 <div className="flex flex-col items-start justify-between gap-3 pt-6 sm:flex-row sm:items-center">
-                    <p className="text-xs text-white/45">
+                    <p className="text-xs text-graphite">
                         &copy; {new Date().getFullYear()} StartupKaro. All rights reserved.
                     </p>
-                    <p className="text-xs text-white/45">
+                    <p className="text-xs text-graphite">
                         Fixed services at fixed costs, delivered by qualified professionals.
                     </p>
                 </div>

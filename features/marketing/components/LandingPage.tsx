@@ -10,6 +10,7 @@ import { FounderStorySection } from "./sections/FounderStorySection";
 import { TestimonialsSection } from "./sections/TestimonialsSection";
 import { LatestArticlesSection } from "./sections/LatestArticlesSection";
 import { LandingCTASection } from "./sections/LandingCTASection";
+import { LandingFAQSection } from "./sections/LandingFAQSection";
 import { SectionReveal } from "./ui/SectionReveal";
 import { getLatestArticles } from "@/features/articles/api/articles.service";
 
@@ -18,9 +19,7 @@ export async function LandingPage() {
 
     return (
         <div className="bg-canvas py-6">
-            <SectionReveal direction="left" amount={0.2}>
-                <HeroSection />
-            </SectionReveal>
+            <HeroSection />
             <SectionReveal delay={0.04}>
                 <BrandsMarqueeSection />
             </SectionReveal>
@@ -44,6 +43,9 @@ export async function LandingPage() {
             </SectionReveal>
             <SectionReveal delay={0.04}>
                 <LatestArticlesSection articles={articles} />
+            </SectionReveal>
+            <SectionReveal delay={0.04}>
+                <LandingFAQSection />
             </SectionReveal>
             <SectionReveal delay={0.04}>
                 <LandingCTASection />
