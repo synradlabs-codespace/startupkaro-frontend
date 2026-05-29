@@ -37,8 +37,8 @@ export function EmployeeInquiriesPage() {
         setPage(1);
     };
 
-    const handleFilterChange = (value: string) => {
-        setStatusFilter(value);
+    const handleFilterChange = (value: string | null) => {
+        setStatusFilter(value ?? "all");
         setPage(1);
     };
 
