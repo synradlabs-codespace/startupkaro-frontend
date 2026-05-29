@@ -2,36 +2,35 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { ServiceCard } from "@/components/custom/ServiceCard";
-import type { Service } from "@/features/marketing/data/types";
 import { SERVICE_CATEGORIES, categoryPillStyles, type ServiceCategory } from "@/lib/category-pills";
+import type { EnrichedService } from "@/features/services/lib/merge";
 
-type CategoryFilter = ServiceCategory;
-
-function getInitialCategory(category?: string): CategoryFilter {
+function getInitialCategory(category?: string): ServiceCategory {
     return SERVICE_CATEGORIES.includes(category as ServiceCategory) ? (category as ServiceCategory) : "All";
 }
 
-export function ServicesListingPage({ services, initialCategory }: { services: Service[]; initialCategory?: string }) {
+export function ServicesListingPage({ services, initialCategory }: { services: EnrichedService[]; initialCategory?: string }) {
     const [search, setSearch] = useState("");
-    const [activeCategory, setActiveCategory] = useState<CategoryFilter>(() => getInitialCategory(initialCategory));
-    const categories = SERVICE_CATEGORIES;
+    const [activeCategory, setActiveCategory] = useState<ServiceCategory>(() => getInitialCategory(initialCategory));
 
     useEffect(() => {
         setActiveCategory(getInitialCategory(initialCategory));
     }, [initialCategory]);
 
-    const filtered = services.filter((s) => {
-        const matchSearch =
-            s.name.toLowerCase().includes(search.toLowerCase()) ||
-            s.description.toLowerCase().includes(search.toLowerCase()) ||
-            s.category.toLowerCase().includes(search.toLowerCase());
-        const matchCategory = activeCategory === "All" || s.category === activeCategory;
-        return matchSearch && matchCategory;
-    });
+    const filtered = useMemo(() => {
+        return services.filter((s) => {
+            const matchSearch =
+                s.name.toLowerCase().includes(search.toLowerCase()) ||
+                s.description.toLowerCase().includes(search.toLowerCase()) ||
+                (s.cardContent?.shortDescription ?? "").toLowerCase().includes(search.toLowerCase());
+            const matchCategory = activeCategory === "All" || s.category === activeCategory;
+            return matchSearch && matchCategory;
+        });
+    }, [services, search, activeCategory]);
 
     return (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 space-y-8">
@@ -53,7 +52,7 @@ export function ServicesListingPage({ services, initialCategory }: { services: S
                     />
                 </div>
                 <div className="flex gap-2 flex-wrap">
-                    {categories.map((cat) => {
+                    {SERVICE_CATEGORIES.map((cat) => {
                         const styles = categoryPillStyles[cat];
                         return (
                             <button
@@ -86,10 +85,11 @@ export function ServicesListingPage({ services, initialCategory }: { services: S
                         <ServiceCard
                             key={service.slug}
                             name={service.name}
-                            description={service.description}
-                            category={service.category}
-                            price={service.pricing.amount}
-                            duration={service.duration}
+                            description={service.cardContent?.shortDescription ?? service.description}
+                            category={service.category === "Uncategorized" ? "" : service.category}
+                            price={service.pricePaise ?? 0}
+                            priceInPaise
+                            duration={service.duration ?? "—"}
                             href={`/services/${service.slug}`}
                         />
                     ))}

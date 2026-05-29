@@ -8,14 +8,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { useService, useUpdateService } from "@/features/admin/hooks/useAdminServices";
+import { useService, useUpdateService, useServiceContentSlugs } from "@/features/admin/hooks/useAdminServices";
 import { formatDate, getApiErrorMessage } from "@/features/admin/lib/format";
 import { formatINR, toPaise } from "@/lib/currency";
-import { CheckCircle2, Pencil, Save } from "lucide-react";
+import { AlertTriangle, CheckCircle2, ExternalLink, Pencil, Save } from "lucide-react";
+import Link from "next/link";
 
 export function AdminServiceDetailPage({ id }: { id: string }) {
     const serviceQuery = useService(id);
     const updateService = useUpdateService(id);
+    const contentSlugsQuery = useServiceContentSlugs();
     const service = serviceQuery.data?.data;
     const [editing, setEditing] = useState(false);
     const [saved, setSaved] = useState(false);
@@ -88,6 +90,39 @@ export function AdminServiceDetailPage({ id }: { id: string }) {
                 }
             />
             <div className="p-6 max-w-3xl space-y-4">
+                {/* CMS content awareness banner */}
+                {!contentSlugsQuery.isLoading && service && (
+                    contentSlugsQuery.data?.has(service.slug) ? (
+                        <div className="rounded-lg border border-status-positive-border bg-status-positive-bg px-4 py-3 text-sm text-status-positive-fg flex items-center justify-between gap-3">
+                            <span className="flex items-center gap-2">
+                                <CheckCircle2 className="h-4 w-4 shrink-0" />
+                                Sanity CMS content is linked to this service.
+                            </span>
+                            <Link
+                                href="/studio/structure/service"
+                                target="_blank"
+                                className="inline-flex items-center gap-1 text-xs font-medium hover:underline shrink-0"
+                            >
+                                Edit in Studio <ExternalLink className="h-3 w-3" />
+                            </Link>
+                        </div>
+                    ) : (
+                        <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 flex items-center justify-between gap-3">
+                            <span className="flex items-center gap-2">
+                                <AlertTriangle className="h-4 w-4 shrink-0" />
+                                No Sanity CMS content for slug <code className="font-mono text-xs bg-amber-100 px-1 rounded">{service.slug}</code>. Customers and marketing pages will show name and price only.
+                            </span>
+                            <Link
+                                href="/studio/intent/create/type=service/"
+                                target="_blank"
+                                className="inline-flex items-center gap-1 text-xs font-medium hover:underline shrink-0"
+                            >
+                                Create in Studio <ExternalLink className="h-3 w-3" />
+                            </Link>
+                        </div>
+                    )
+                )}
+
                 {saved && (
                     <div className="rounded-lg border border-status-positive-border bg-status-positive-bg px-4 py-3 text-sm text-status-positive-fg flex items-center gap-2">
                         <CheckCircle2 className="h-4 w-4" /> Saved

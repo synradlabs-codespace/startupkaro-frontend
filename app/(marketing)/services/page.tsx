@@ -1,7 +1,10 @@
 // app/(marketing)/services/page.tsx
 
+import { SanityLive } from "@/sanity/live";
+import { getActiveServiceContent } from "@/features/services/api/services.content";
+import { getBackendServices } from "@/features/services/api/services.backend";
+import { mergeForMarketing } from "@/features/services/lib/merge";
 import { ServicesListingPage } from "@/features/marketing/components/ServicesListingPage";
-import { getAllServices } from "@/features/marketing/data/services.service";
 
 export default async function ServicesPage({
     searchParams,
@@ -9,6 +12,17 @@ export default async function ServicesPage({
     searchParams: Promise<{ category?: string }>;
 }) {
     const { category } = await searchParams;
-    const services = await getAllServices();
-    return <ServicesListingPage services={services} initialCategory={category} />;
+
+    const [content, backend] = await Promise.all([
+        getActiveServiceContent(),
+        getBackendServices(),
+    ]);
+    const services = mergeForMarketing(content, backend);
+
+    return (
+        <>
+            <ServicesListingPage services={services} initialCategory={category} />
+            <SanityLive />
+        </>
+    );
 }

@@ -37,6 +37,20 @@ export function useUpdateService(id: string) {
     });
 }
 
+// Returns a Set of slugs that have live Sanity CMS content.
+// Used by admin UI to flag services missing their editorial content.
+export function useServiceContentSlugs() {
+    return useQuery({
+        queryKey: ["admin", "service-content-slugs"],
+        queryFn: async () => {
+            const res = await fetch("/api/sanity/service-slugs");
+            const json: { slugs: string[] } = await res.json();
+            return new Set<string>(json.slugs ?? []);
+        },
+        staleTime: 5 * 60 * 1000, // 5 min — revalidate webhook keeps Sanity side fresh
+    });
+}
+
 export function useDeleteService(id: string) {
     const queryClient = useQueryClient();
     return useMutation({

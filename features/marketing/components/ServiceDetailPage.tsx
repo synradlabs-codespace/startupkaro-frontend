@@ -1,23 +1,20 @@
 // features/marketing/components/ServiceDetailPage.tsx
-// Generic data-driven template — accepts a Service object and renders all sections.
 
 import { ServiceHero } from "./sections/ServiceHero";
-import { ServiceOverview } from "./sections/ServiceOverview";
-import { ServiceFeatures } from "./sections/ServiceFeatures";
-import { ServiceProcess } from "./sections/ServiceProcess";
 import { ServicePricingCTA } from "./sections/ServicePricingCTA";
-import { ServiceFAQ } from "./sections/ServiceFAQ";
-import type { Service } from "@/features/marketing/data/types";
+import { ServiceEditorial } from "@/features/services/components/ServiceEditorial";
+import type { EnrichedService } from "@/features/services/lib/merge";
 
-export function ServiceDetailPage({ service }: { service: Service }) {
+export function ServiceDetailPage({ service }: { service: EnrichedService }) {
     return (
         <main className="bg-canvas">
             <ServiceHero service={service} />
-            <ServiceOverview service={service} />
-            <ServiceFeatures service={service} />
-            <ServiceProcess service={service} />
+            {service.content && (
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+                    <ServiceEditorial content={service.content} />
+                </div>
+            )}
             <ServicePricingCTA service={service} />
-            <ServiceFAQ service={service} />
         </main>
     );
 }

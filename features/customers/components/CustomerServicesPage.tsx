@@ -1,30 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Search, Sparkles } from "lucide-react";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { ServiceCard } from "@/components/custom/ServiceCard";
 import { TablePagination } from "@/components/custom/TablePagination";
 import { Input } from "@/components/ui/input";
-import { useCustomerServiceList } from "@/features/customers/hooks/useCustomerServices";
 import { SERVICE_CATEGORIES, categoryPillStyles, type ServiceCategory } from "@/lib/category-pills";
+import type { EnrichedService } from "@/features/services/lib/merge";
 
 const PAGE_SIZE = 9;
 
-export function CustomerServicesPage() {
+interface CustomerServicesPageProps {
+    services: EnrichedService[];
+}
+
+export function CustomerServicesPage({ services }: CustomerServicesPageProps) {
     const [search, setSearch] = useState("");
     const [activeCategory, setActiveCategory] = useState<ServiceCategory>("All");
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
-    const servicesQuery = useCustomerServiceList({
-        search: search || undefined,
-        category: activeCategory === "All" ? undefined : activeCategory,
-        page,
-        limit: pageSize,
-    });
 
-    const services = servicesQuery.data?.data ?? [];
-    const total = servicesQuery.data?.pagination.total ?? 0;
+    const filtered = useMemo(() => {
+        let result = services;
+        if (activeCategory !== "All") {
+            result = result.filter((s) => s.category === activeCategory);
+        }
+        if (search.trim()) {
+            const q = search.toLowerCase();
+            result = result.filter(
+                (s) =>
+                    s.name.toLowerCase().includes(q) ||
+                    s.description.toLowerCase().includes(q) ||
+                    (s.cardContent?.shortDescription ?? "").toLowerCase().includes(q),
+            );
+        }
+        return result;
+    }, [services, activeCategory, search]);
+
+    const total = filtered.length;
+    const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
 
     const handleSearch = (value: string) => {
         setSearch(value);
@@ -70,11 +85,7 @@ export function CustomerServicesPage() {
                     </div>
                 </div>
 
-                {servicesQuery.isLoading ? (
-                    <div className="py-20 text-center text-sm text-slate">Loading services...</div>
-                ) : servicesQuery.isError ? (
-                    <div className="py-20 text-center text-sm text-error-brand">Failed to load services</div>
-                ) : services.length === 0 ? (
+                {paged.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-20 text-center gap-3">
                         <div className="h-12 w-12 rounded-lg bg-surface border border-hairline flex items-center justify-center">
                             <Search className="h-5 w-5 text-stone" />
@@ -85,16 +96,16 @@ export function CustomerServicesPage() {
                 ) : (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                            {services.map((service) => (
+                            {paged.map((service) => (
                                 <ServiceCard
-                                    key={service.id}
+                                    key={service.slug}
                                     name={service.name}
-                                    description={service.description}
-                                    category={service.category}
-                                    price={service.price}
+                                    description={service.cardContent?.shortDescription ?? service.description}
+                                    category={service.category === "Uncategorized" ? "" : service.category}
+                                    price={service.pricePaise ?? 0}
                                     priceInPaise
-                                    duration={service.duration}
-                                    href={`/customer/services/${service.slug || service.id}`}
+                                    duration={service.duration ?? "—"}
+                                    href={`/customer/services/${service.slug}`}
                                 />
                             ))}
                         </div>

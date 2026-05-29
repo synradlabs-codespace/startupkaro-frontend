@@ -8,9 +8,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ActiveBadge } from "@/components/custom/StatusBadge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useDeleteService, useServiceList } from "@/features/admin/hooks/useAdminServices";
+import { useDeleteService, useServiceList, useServiceContentSlugs } from "@/features/admin/hooks/useAdminServices";
 import { formatINR } from "@/lib/currency";
-import { Eye, Plus, Trash2 } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Eye, ExternalLink, Plus, Trash2 } from "lucide-react";
 
 const PAGE_SIZE = 10;
 
@@ -18,8 +18,10 @@ export function AdminServicesPage() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
     const servicesQuery = useServiceList({ page, limit: pageSize });
+    const contentSlugsQuery = useServiceContentSlugs();
     const services = servicesQuery.data?.data ?? [];
     const total = servicesQuery.data?.pagination.total ?? 0;
+    const contentSlugs = contentSlugsQuery.data ?? new Set<string>();
 
     return (
         <div>
@@ -44,42 +46,71 @@ export function AdminServicesPage() {
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Slug</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Price</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Active</TableHead>
+                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">CMS Content</TableHead>
                                     <TableHead className="text-right font-semibold text-foreground/70 uppercase text-xs tracking-wide">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {servicesQuery.isLoading ? (
                                     <TableRow>
-                                        <TableCell colSpan={5} className="text-center text-slate py-12">
+                                        <TableCell colSpan={6} className="text-center text-slate py-12">
                                             Loading services...
                                         </TableCell>
                                     </TableRow>
                                 ) : servicesQuery.isError ? (
                                     <TableRow>
-                                        <TableCell colSpan={5} className="text-center text-error-brand py-12">
+                                        <TableCell colSpan={6} className="text-center text-error-brand py-12">
                                             Failed to load services
                                         </TableCell>
                                     </TableRow>
                                 ) : services.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={5} className="text-center text-slate py-12">
+                                        <TableCell colSpan={6} className="text-center text-slate py-12">
                                             No services found
                                         </TableCell>
                                     </TableRow>
                                 ) : (
-                                    services.map((service) => (
-                                        <TableRow key={service.id} className="hover:bg-muted/30">
-                                            <TableCell className="font-medium">{service.name}</TableCell>
-                                            <TableCell className="text-slate text-sm">{service.slug}</TableCell>
-                                            <TableCell className="font-medium">{formatINR(service.price)}</TableCell>
-                                            <TableCell>
-                                                <ActiveBadge isActive={service.isActive} />
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <ServiceActions id={service.id} />
-                                            </TableCell>
-                                        </TableRow>
-                                    ))
+                                    services.map((service) => {
+                                        const hasContent = contentSlugs.has(service.slug);
+                                        return (
+                                            <TableRow key={service.id} className="hover:bg-muted/30">
+                                                <TableCell className="font-medium">{service.name}</TableCell>
+                                                <TableCell className="text-slate text-sm font-mono">{service.slug}</TableCell>
+                                                <TableCell className="font-medium">{formatINR(service.price)}</TableCell>
+                                                <TableCell>
+                                                    <ActiveBadge isActive={service.isActive} />
+                                                </TableCell>
+                                                <TableCell>
+                                                    {contentSlugsQuery.isLoading ? (
+                                                        <span className="text-xs text-slate">Checking...</span>
+                                                    ) : hasContent ? (
+                                                        <span className="inline-flex items-center gap-1.5 text-xs font-medium text-status-positive-fg">
+                                                            <CheckCircle2 className="h-3.5 w-3.5" />
+                                                            Linked
+                                                        </span>
+                                                    ) : (
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-600">
+                                                                <AlertTriangle className="h-3.5 w-3.5" />
+                                                                No CMS content
+                                                            </span>
+                                                            <Link
+                                                                href="/studio/intent/create/type=service/"
+                                                                target="_blank"
+                                                                className="inline-flex items-center gap-1 text-xs text-primary-brand hover:underline"
+                                                            >
+                                                                Create in Studio
+                                                                <ExternalLink className="h-3 w-3" />
+                                                            </Link>
+                                                        </div>
+                                                    )}
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    <ServiceActions id={service.id} />
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })
                                 )}
                             </TableBody>
                         </Table>

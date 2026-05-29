@@ -152,3 +152,61 @@ export const JOB_BY_SLUG_QUERY = defineQuery(`
 export const ALL_JOB_SLUGS_QUERY = defineQuery(`
   *[_type == "job" && defined(slug.current) && isActive == true]{ "slug": slug.current }
 `);
+
+// ─── Services ─────────────────────────────────────────────────────────────────
+
+const SERVICE_CARD_PROJECTION = `{
+  _id,
+  name,
+  "slug": slug.current,
+  category,
+  duration,
+  tagline,
+  shortDescription,
+  "heroImage": {
+    "url": heroImage.asset->url,
+    "alt": heroImage.alt,
+    "lqip": heroImage.asset->metadata.lqip,
+    "dimensions": heroImage.asset->metadata.dimensions
+  }
+}`;
+
+export const SERVICES_QUERY = defineQuery(`
+  *[_type == "service" && isActive == true] | order(publishedAt desc) ${SERVICE_CARD_PROJECTION}
+`);
+
+export const SERVICE_BY_SLUG_QUERY = defineQuery(`
+  *[_type == "service" && slug.current == $slug][0] {
+    _id,
+    name,
+    "slug": slug.current,
+    category,
+    duration,
+    tagline,
+    shortDescription,
+    "heroImage": {
+      "url": heroImage.asset->url,
+      "alt": heroImage.alt,
+      "lqip": heroImage.asset->metadata.lqip,
+      "dimensions": heroImage.asset->metadata.dimensions
+    },
+    overview[] {
+      ...,
+      _type == "image" => {
+        "url": asset->url,
+        alt,
+        caption,
+        "lqip": asset->metadata.lqip,
+        "dimensions": asset->metadata.dimensions
+      }
+    },
+    whatsIncluded,
+    process[]{ title, description },
+    faqs[]{ question, answer },
+    publishedAt
+  }
+`);
+
+export const ALL_SERVICE_SLUGS_QUERY = defineQuery(`
+  *[_type == "service" && defined(slug.current) && isActive == true]{ "slug": slug.current }
+`);
