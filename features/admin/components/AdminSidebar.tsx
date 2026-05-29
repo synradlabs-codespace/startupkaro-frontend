@@ -180,7 +180,7 @@ export function AdminSidebar() {
                     {collapsed ? (
                         <div className="group relative flex justify-center cursor-pointer" title="Admin">
                             <Avatar className="h-8 w-8">
-                                <AvatarFallback className={`text-charcoal text-[11px] font-semibold ${ACCENT_BG_CLASS}`}>
+                                <AvatarFallback className={`text-white text-[11px] font-semibold ${ACCENT_BG_CLASS}`}>
                                     AD
                                 </AvatarFallback>
                             </Avatar>
@@ -188,7 +188,7 @@ export function AdminSidebar() {
                     ) : (
                         <div className="flex items-center gap-3">
                             <Avatar className="h-8 w-8 shrink-0">
-                                <AvatarFallback className={`text-charcoal text-[11px] font-semibold ${ACCENT_BG_CLASS}`}>
+                                <AvatarFallback className={`text-white text-[11px] font-semibold ${ACCENT_BG_CLASS}`}>
                                     AD
                                 </AvatarFallback>
                             </Avatar>

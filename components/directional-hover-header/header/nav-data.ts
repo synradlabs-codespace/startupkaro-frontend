@@ -147,6 +147,7 @@ export const NAV_LINKS: NavLink[] = [
             { label: "Privacy Policy", href: "/privacy-policy" },
             { label: "Terms of Service", href: "/terms-of-service" },
             { label: "Refund Policy", href: "/refund-policy" },
+            { label: "Cookies Policy", href: "/cookies-policy" },
           ],
         },
       ],

@@ -85,7 +85,7 @@ export function EmployeeSidebar() {
                   height={26}
                   className="h-7 w-auto object-contain"
                 />
-                <p className="text-[11px] text-steel leading-none pl-0.5">Employee Panel</p>
+                <p className="text-[11px] text-steel leading-tight pl-0.5">Employee Panel</p>
               </div>
             )}
           </div>
