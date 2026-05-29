@@ -2,6 +2,7 @@
 
 import { CustomerPurchaseDetailPage } from "@/features/customers/components/CustomerPurchaseDetailPage";
 
-export default function PurchaseDetailPage({ params }: { params: { id: string } }) {
-    return <CustomerPurchaseDetailPage id={params.id} />;
+export default async function PurchaseDetailPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    return <CustomerPurchaseDetailPage id={id} />;
 }

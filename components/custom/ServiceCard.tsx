@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Clock, ArrowRight, FileText, Building2, Scale, FileCheck, LayoutGrid } from "lucide-react";
 import { categoryCardStyles, fallbackCardStyles } from "@/lib/category-pills";
+import { formatINR } from "@/lib/currency";
 
 const categoryIcons: Record<string, React.ElementType> = {
     Tax: FileText,
@@ -14,13 +15,15 @@ export interface ServiceCardProps {
     description: string;
     category: string;
     price: number;
+    priceInPaise?: boolean;
     duration: string;
     href: string;
 }
 
-export function ServiceCard({ name, description, category, price, duration, href }: ServiceCardProps) {
+export function ServiceCard({ name, description, category, price, priceInPaise = false, duration, href }: ServiceCardProps) {
     const styles = categoryCardStyles[category as keyof typeof categoryCardStyles] ?? fallbackCardStyles;
     const Icon = categoryIcons[category] ?? LayoutGrid;
+    const formattedPrice = priceInPaise ? formatINR(price) : formatINR(price * 100);
 
     return (
         <div className="group relative flex flex-col overflow-hidden rounded-xl border border-hairline bg-canvas transition-all duration-200 hover:-translate-y-0.5 hover:border-hairline-strong">
@@ -44,7 +47,7 @@ export function ServiceCard({ name, description, category, price, duration, href
                 <div className="flex items-center justify-between">
                     <div>
                         <p className="font-display text-2xl font-medium text-ink">
-                            ₹{price.toLocaleString("en-IN")}
+                            {formattedPrice}
                         </p>
                         <p className="mt-0.5 flex items-center gap-1 text-xs text-graphite">
                             <Clock className="h-3 w-3" />

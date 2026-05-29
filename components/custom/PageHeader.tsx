@@ -32,7 +32,7 @@ export function PageHeader({ title, description, action, className }: PageHeader
             {title}
           </h1>
           {description && (
-            <p className="text-[11px] leading-none text-steel font-normal mt-1 truncate">
+            <p className="text-[11px] leading-tight text-steel font-normal mt-1 truncate">
               {description}
             </p>
           )}

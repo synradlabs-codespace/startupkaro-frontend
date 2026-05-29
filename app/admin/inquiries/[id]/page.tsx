@@ -2,6 +2,7 @@
 
 import { AdminInquiryDetailPage } from "@/features/admin/components/AdminInquiryDetailPage";
 
-export default function InquiryDetailPage({ params }: { params: { id: string } }) {
-    return <AdminInquiryDetailPage id={params.id} />;
+export default async function InquiryDetailPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    return <AdminInquiryDetailPage id={id} />;
 }

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -9,8 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { PaymentStatusBadge } from "@/components/custom/StatusBadge";
-import { mockPayments } from "@/lib/mock-data";
+import { PaymentStatusBadge, formatPaymentStatus } from "@/components/custom/StatusBadge";
+import { usePaymentList } from "@/features/admin/hooks/useAdminPayments";
+import { formatDate } from "@/features/admin/lib/format";
+import { formatINR } from "@/lib/currency";
 import { Search, Eye } from "lucide-react";
 
 const PAGE_SIZE = 10;
@@ -20,18 +22,16 @@ export function AdminPaymentsPage() {
     const [statusFilter, setStatusFilter] = useState("all");
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
-
-    const filtered = mockPayments.filter((p) => {
-        const matchSearch =
-            p.customer.toLowerCase().includes(search.toLowerCase()) ||
-            p.id.toLowerCase().includes(search.toLowerCase()) ||
-            p.orderId.toLowerCase().includes(search.toLowerCase());
-        const matchStatus = statusFilter === "all" || p.status === statusFilter;
-        return matchSearch && matchStatus;
+    const paymentsQuery = usePaymentList({
+        search: search || undefined,
+        status: statusFilter === "all" ? undefined : statusFilter,
+        page,
+        limit: pageSize,
     });
 
-    const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
-    const total = mockPayments.filter(p => p.status === "paid").reduce((sum, p) => sum + p.amount, 0);
+    const payments = paymentsQuery.data?.data ?? [];
+    const total = paymentsQuery.data?.pagination.total ?? 0;
+    const capturedTotal = payments.filter((payment) => payment.status === "captured").reduce((sum, payment) => sum + payment.amount, 0);
 
     const handleFilterChange = (value: string | null) => {
         setStatusFilter(value ?? "all");
@@ -45,7 +45,7 @@ export function AdminPaymentsPage() {
 
     return (
         <div>
-            <PageHeader title="Payments" description={`₹${total.toLocaleString("en-IN")} collected`} />
+            <PageHeader title="Payments" description={`${formatINR(capturedTotal)} collected`} />
             <div className="p-6 space-y-4">
                 <div className="flex gap-3 flex-wrap">
                     <div className="relative flex-1 min-w-[200px]">
@@ -59,13 +59,14 @@ export function AdminPaymentsPage() {
                     </div>
                     <Select value={statusFilter} onValueChange={handleFilterChange}>
                         <SelectTrigger className="w-[160px]">
-                            <SelectValue placeholder="All Statuses" />
+                            <SelectValue>{statusFilter === "all" ? "All Statuses" : formatPaymentStatus(statusFilter)}</SelectValue>
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">All Statuses</SelectItem>
-                            <SelectItem value="paid">Paid</SelectItem>
-                            <SelectItem value="unpaid">Unpaid</SelectItem>
-                            <SelectItem value="partial">Partial</SelectItem>
+                            <SelectItem value="created">Created</SelectItem>
+                            <SelectItem value="authorized">Authorized</SelectItem>
+                            <SelectItem value="captured">Captured</SelectItem>
+                            <SelectItem value="failed">Failed</SelectItem>
                             <SelectItem value="refunded">Refunded</SelectItem>
                         </SelectContent>
                     </Select>
@@ -74,8 +75,8 @@ export function AdminPaymentsPage() {
                 <Card className="overflow-hidden">
                     <CardContent className="p-0">
                         <Table>
-                            <TableHeader className="bg-muted/50">
-                                <TableRow className="hover:bg-muted/50">
+                            <TableHeader>
+                                <TableRow className="hover:bg-transparent">
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Payment ID</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Order ID</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Customer</TableHead>
@@ -86,21 +87,33 @@ export function AdminPaymentsPage() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {paginated.length === 0 ? (
+                                {paymentsQuery.isLoading ? (
                                     <TableRow>
-                                        <TableCell colSpan={8} className="text-center text-slate py-12">
+                                        <TableCell colSpan={7} className="text-center text-slate py-12">
+                                            Loading payments...
+                                        </TableCell>
+                                    </TableRow>
+                                ) : paymentsQuery.isError ? (
+                                    <TableRow>
+                                        <TableCell colSpan={7} className="text-center text-error-brand py-12">
+                                            Failed to load payments
+                                        </TableCell>
+                                    </TableRow>
+                                ) : payments.length === 0 ? (
+                                    <TableRow>
+                                        <TableCell colSpan={7} className="text-center text-slate py-12">
                                             No payments found
                                         </TableCell>
                                     </TableRow>
                                 ) : (
-                                    paginated.map((payment) => (
+                                    payments.map((payment) => (
                                         <TableRow key={payment.id} className="hover:bg-muted/30">
                                             <TableCell className="font-mono text-xs text-slate">{payment.id}</TableCell>
-                                            <TableCell className="font-mono text-xs text-slate">{payment.orderId}</TableCell>
-                                            <TableCell className="font-medium">{payment.customer}</TableCell>
-                                            <TableCell className="font-medium">₹{payment.amount.toLocaleString("en-IN")}</TableCell>
+                                            <TableCell className="font-mono text-xs text-slate">{payment.orderNumber || payment.orderId.slice(0, 8)}</TableCell>
+                                            <TableCell className="font-medium">{payment.customerName}</TableCell>
+                                            <TableCell className="font-medium">{formatINR(payment.amount)}</TableCell>
                                             <TableCell><PaymentStatusBadge status={payment.status} /></TableCell>
-                                            <TableCell className="text-slate text-sm">{payment.date}</TableCell>
+                                            <TableCell className="text-slate text-sm">{formatDate(payment.createdAt)}</TableCell>
                                             <TableCell className="text-right">
                                                 <Link href={`/admin/payments/${payment.id}`}>
                                                     <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-brand/10 hover:text-charcoal">
@@ -114,7 +127,7 @@ export function AdminPaymentsPage() {
                             </TableBody>
                         </Table>
                         <TablePagination
-                            total={filtered.length}
+                            total={total}
                             page={page}
                             pageSize={pageSize}
                             onPageChange={setPage}
@@ -126,4 +139,3 @@ export function AdminPaymentsPage() {
         </div>
     );
 }
-

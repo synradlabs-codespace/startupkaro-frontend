@@ -1,4 +1,3 @@
-﻿// features/customers/components/CustomerPurchasesPage.tsx
 "use client";
 
 import { useState } from "react";
@@ -9,7 +8,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { OrderStatusBadge, PaymentStatusBadge } from "@/components/custom/StatusBadge";
-import { mockPurchases } from "@/lib/mock-data";
+import { useCustomerPurchaseList } from "@/features/customers/hooks/useCustomerPurchases";
+import { downloadCustomerInvoice } from "@/features/customers/lib/downloadInvoice";
+import { formatCustomerDate, getPurchaseId, getPurchaseServiceName } from "@/features/customers/lib/format";
+import { formatINR } from "@/lib/currency";
 import { Eye, Download } from "lucide-react";
 
 const PAGE_SIZE = 10;
@@ -17,18 +19,29 @@ const PAGE_SIZE = 10;
 export function CustomerPurchasesPage() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
+    const [downloadingId, setDownloadingId] = useState("");
+    const purchasesQuery = useCustomerPurchaseList({ page, limit: pageSize });
+    const purchases = purchasesQuery.data?.data ?? [];
+    const total = purchasesQuery.data?.pagination.total ?? 0;
 
-    const paginated = mockPurchases.slice((page - 1) * pageSize, page * pageSize);
+    const handleDownload = async (orderId: string) => {
+        setDownloadingId(orderId);
+        try {
+            await downloadCustomerInvoice(orderId);
+        } finally {
+            setDownloadingId("");
+        }
+    };
 
     return (
         <div>
-            <PageHeader title="My Purchases" description={`${mockPurchases.length} purchases`} />
+            <PageHeader title="My Purchases" description={`${total} purchases`} />
             <div className="p-6">
                 <Card className="overflow-hidden">
                     <CardContent className="p-0">
                         <Table>
-                            <TableHeader className="bg-muted/50">
-                                <TableRow className="hover:bg-muted/50">
+                            <TableHeader>
+                                <TableRow className="hover:bg-transparent">
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Purchase ID</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Service</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Amount</TableHead>
@@ -39,7 +52,19 @@ export function CustomerPurchasesPage() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {paginated.length === 0 ? (
+                                {purchasesQuery.isLoading ? (
+                                    <TableRow>
+                                        <TableCell colSpan={7} className="text-center text-slate py-12">
+                                            Loading purchases...
+                                        </TableCell>
+                                    </TableRow>
+                                ) : purchasesQuery.isError ? (
+                                    <TableRow>
+                                        <TableCell colSpan={7} className="text-center text-error-brand py-12">
+                                            Failed to load purchases
+                                        </TableCell>
+                                    </TableRow>
+                                ) : purchases.length === 0 ? (
                                     <TableRow>
                                         <TableCell colSpan={7} className="text-center text-slate py-12">
                                             No purchases yet.{" "}
@@ -49,33 +74,43 @@ export function CustomerPurchasesPage() {
                                         </TableCell>
                                     </TableRow>
                                 ) : (
-                                    paginated.map((p) => (
-                                        <TableRow key={p.id} className="hover:bg-muted/30">
-                                            <TableCell className="font-mono text-xs text-slate">{p.id}</TableCell>
-                                            <TableCell className="font-medium">{p.service}</TableCell>
-                                            <TableCell className="font-medium">₹{p.amount.toLocaleString("en-IN")}</TableCell>
-                                            <TableCell><OrderStatusBadge status={p.status} /></TableCell>
-                                            <TableCell><PaymentStatusBadge status={p.paymentStatus} /></TableCell>
-                                            <TableCell className="text-slate text-sm">{p.date}</TableCell>
-                                            <TableCell className="text-right">
-                                                <div className="flex gap-1 justify-end">
-                                                    <Link href={`/customer/purchases/${p.id}`}>
-                                                        <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-accent-customer hover:text-charcoal">
-                                                            <Eye className="h-4 w-4" />
+                                    purchases.map((purchase) => {
+                                        const purchaseId = getPurchaseId(purchase);
+                                        return (
+                                            <TableRow key={purchaseId} className="hover:bg-muted/30">
+                                                <TableCell className="font-mono text-xs text-slate">{purchase.orderNumber ?? purchaseId}</TableCell>
+                                                <TableCell className="font-medium">{getPurchaseServiceName(purchase)}</TableCell>
+                                                <TableCell className="font-medium">{formatINR(purchase.amount)}</TableCell>
+                                                <TableCell><OrderStatusBadge status={purchase.status} /></TableCell>
+                                                <TableCell><PaymentStatusBadge status={purchase.paymentStatus} /></TableCell>
+                                                <TableCell className="text-slate text-sm">{formatCustomerDate(purchase.createdAt ?? purchase.date)}</TableCell>
+                                                <TableCell className="text-right">
+                                                    <div className="flex gap-1 justify-end">
+                                                        <Link href={`/customer/purchases/${purchaseId}`}>
+                                                            <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-accent-customer hover:text-charcoal">
+                                                                <Eye className="h-4 w-4" />
+                                                            </Button>
+                                                        </Link>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            className="h-8 w-8 hover:bg-muted"
+                                                            title="Download Invoice"
+                                                            onClick={() => handleDownload(purchaseId)}
+                                                            disabled={downloadingId === purchaseId}
+                                                        >
+                                                            <Download className="h-4 w-4" />
                                                         </Button>
-                                                    </Link>
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-muted" title="Download Invoice">
-                                                        <Download className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })
                                 )}
                             </TableBody>
                         </Table>
                         <TablePagination
-                            total={mockPurchases.length}
+                            total={total}
                             page={page}
                             pageSize={pageSize}
                             onPageChange={setPage}
@@ -87,4 +122,3 @@ export function CustomerPurchasesPage() {
         </div>
     );
 }
-

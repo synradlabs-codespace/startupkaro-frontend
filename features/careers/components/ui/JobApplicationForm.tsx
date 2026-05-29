@@ -12,7 +12,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { validators } from "@/lib/validations/common.schema";
+import { validators, formatNameInput, formatPhoneDigits, validatePhoneDigits, buildPhone, PHONE_PREFIX } from "@/lib/validations/common.schema";
 import { submitJobApplication } from "@/features/careers/api/applications.service";
 import type {
     ApplicationFormState,
@@ -60,14 +60,6 @@ function validateLinkedin(v: string): string | null {
     if (!v.trim()) return "LinkedIn URL is required";
     if (!/^https?:\/\/(www\.)?linkedin\.com\/in\//.test(v.trim()))
         return "Enter a valid LinkedIn profile URL (linkedin.com/in/…)";
-    return null;
-}
-
-function validateIndianPhone(v: string): string | null {
-    if (!v.trim()) return "Mobile number is required";
-    const stripped = v.trim().replace(/[\s\-()​]/g, "");
-    if (!/^(\+91)?[6-9]\d{9}$/.test(stripped))
-        return "Enter a valid Indian mobile number (e.g. +91 98765 43210)";
     return null;
 }
 
@@ -134,7 +126,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
             firstName: validators.name(form.firstName) ?? undefined,
             lastName: validators.name(form.lastName) ?? undefined,
             email: validators.email(form.email) ?? undefined,
-            mobile: validateIndianPhone(form.mobile) ?? undefined,
+            mobile: validatePhoneDigits(form.mobile, true) || undefined,
             experienceYears: !form.experienceYears ? "Select years of experience" : undefined,
             currentCtc: !form.currentCtc ? "Please select your current CTC" : undefined,
             expectedCtc: !form.expectedCtc ? "Please select your expected CTC" : undefined,
@@ -165,7 +157,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
             middleName: form.middleName.trim() || undefined,
             lastName: form.lastName.trim(),
             email: form.email.trim(),
-            mobile: form.mobile.trim(),
+            mobile: buildPhone(form.mobile)!,
             experienceYears: Number(form.experienceYears),
             experienceMonths: Number(form.experienceMonths),
             currentCtc: form.currentCtc,
@@ -243,8 +235,8 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                             <input
                                 type="text"
                                 value={form.firstName}
-                                onChange={(e) => set("firstName", e.target.value)}
-                                placeholder="Rahul"
+                                onChange={(e) => set("firstName", formatNameInput(e.target.value))}
+                                placeholder="First Name"
                                 autoComplete="given-name"
                                 className={`${INPUT_BASE} ${errors.firstName ? INPUT_ERROR : INPUT_DEFAULT}`}
                             />
@@ -259,8 +251,8 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                             <input
                                 type="text"
                                 value={form.middleName}
-                                onChange={(e) => set("middleName", e.target.value)}
-                                placeholder="Kumar"
+                                onChange={(e) => set("middleName", formatNameInput(e.target.value))}
+                                placeholder="Middle Name"
                                 autoComplete="additional-name"
                                 className={`${INPUT_BASE} ${INPUT_DEFAULT}`}
                             />
@@ -270,8 +262,8 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                             <input
                                 type="text"
                                 value={form.lastName}
-                                onChange={(e) => set("lastName", e.target.value)}
-                                placeholder="Sharma"
+                                onChange={(e) => set("lastName", formatNameInput(e.target.value))}
+                                placeholder="Last Name"
                                 autoComplete="family-name"
                                 className={`${INPUT_BASE} ${errors.lastName ? INPUT_ERROR : INPUT_DEFAULT}`}
                             />
@@ -289,7 +281,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                                 type="email"
                                 value={form.email}
                                 onChange={(e) => set("email", e.target.value)}
-                                placeholder="rahul@example.com"
+                                placeholder="Email"
                                 autoComplete="email"
                                 className={`${INPUT_BASE} ${errors.email ? INPUT_ERROR : INPUT_DEFAULT}`}
                             />
@@ -299,15 +291,19 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                         </div>
                         <div>
                             <label className={LABEL_CLASS}>Mobile Number</label>
-                            <input
-                                type="tel"
-                                value={form.mobile}
-                                onChange={(e) => set("mobile", e.target.value.replace(/[^\d+]/g, ""))}
-                                placeholder="+91 9876543210"
-                                autoComplete="tel"
-                                inputMode="numeric"
-                                className={`${INPUT_BASE} ${errors.mobile ? INPUT_ERROR : INPUT_DEFAULT}`}
-                            />
+                            <div className={`flex items-center rounded-xl border bg-surface overflow-hidden focus-within:border-hairline-strong ${errors.mobile ? "border-red-300" : "border-hairline"}`}>
+                                <span className="px-3 py-3 text-sm text-ink bg-fog border-r border-hairline select-none shrink-0">{PHONE_PREFIX}</span>
+                                <input
+                                    type="tel"
+                                    inputMode="numeric"
+                                    value={form.mobile}
+                                    onChange={(e) => set("mobile", formatPhoneDigits(e.target.value))}
+                                    placeholder="Number"
+                                    maxLength={10}
+                                    autoComplete="tel"
+                                    className="flex-1 px-3 py-3 text-sm text-ink bg-surface outline-none placeholder-gray-400"
+                                />
+                            </div>
                             {errors.mobile && (
                                 <p className="mt-1.5 text-xs text-red-500">{errors.mobile}</p>
                             )}
@@ -452,7 +448,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                             type="url"
                             value={form.linkedinUrl}
                             onChange={(e) => set("linkedinUrl", e.target.value)}
-                            placeholder="https://linkedin.com/in/rahulsharma"
+                            placeholder="LinkedIn URL"
                             className={`${INPUT_BASE} ${errors.linkedinUrl ? INPUT_ERROR : INPUT_DEFAULT}`}
                         />
                         {errors.linkedinUrl && (

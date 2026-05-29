@@ -1,6 +1,7 @@
 // features/admin/components/AdminAnalyticsPage.tsx
 
 import { PageHeader } from "@/components/custom/PageHeader";
+import { formatOrderStatus } from "@/components/custom/StatusBadge";
 import { mockAnalytics, mockOrders, mockPayments } from "@/lib/mock-data";
 import {
     IndianRupee, TrendingUp, CheckCircle2, CreditCard,
@@ -193,7 +194,7 @@ export function AdminAnalyticsPage() {
                                     <div key={s.status} className="flex items-center justify-between gap-2">
                                         <div className="flex items-center gap-2">
                                             <div className="h-2.5 w-2.5 rounded-full shrink-0" style={{ backgroundColor: s.color }} />
-                                            <span className="text-xs text-slate">{s.status}</span>
+                                            <span className="text-xs text-slate">{formatOrderStatus(s.status)}</span>
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <div className="h-1 w-16 bg-surface rounded-full overflow-hidden">

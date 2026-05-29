@@ -2,6 +2,7 @@
 
 import { AdminOrderDetailPage } from "@/features/admin/components/AdminOrderDetailPage";
 
-export default function OrderDetailPage({ params }: { params: { id: string } }) {
-    return <AdminOrderDetailPage id={params.id} />;
+export default async function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    return <AdminOrderDetailPage id={id} />;
 }

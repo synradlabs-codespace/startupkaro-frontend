@@ -1,4 +1,3 @@
-// features/admin/components/AdminOrderNewPage.tsx
 "use client";
 
 import { useState } from "react";
@@ -8,36 +7,48 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { mockCustomers } from "@/lib/mock-data";
+import { useCustomerList } from "@/features/admin/hooks/useAdminCustomers";
+import { useCreateOrder } from "@/features/admin/hooks/useAdminOrders";
+import { formatOrderStatus } from "@/components/custom/StatusBadge";
+import { useServiceList } from "@/features/admin/hooks/useAdminServices";
+import { getApiErrorMessage } from "@/features/admin/lib/format";
+import { toPaise } from "@/lib/currency";
 import { ShoppingBag, User, Briefcase, IndianRupee, ClipboardList, StickyNote } from "lucide-react";
-
-const services = [
-    "GST Registration",
-    "Company Incorporation",
-    "Trademark Filing",
-    "Income Tax Filing",
-    "FSSAI License",
-    "Import Export Code",
-    "ISO Certification",
-];
 
 export function AdminOrderNewPage() {
     const router = useRouter();
+    const customersQuery = useCustomerList({ page: 1, limit: 100 });
+    const servicesQuery = useServiceList({ page: 1, limit: 100 });
+    const createOrder = useCreateOrder();
     const [form, setForm] = useState({
         customerId: "",
-        service: "",
+        serviceId: "",
         amount: "",
         status: "pending",
         notes: "",
     });
+    const [error, setError] = useState("");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        router.push("/admin/orders");
+        setError("");
+
+        try {
+            await createOrder.mutateAsync({
+                customerId: form.customerId,
+                serviceId: form.serviceId,
+                amount: toPaise(Number(form.amount)),
+                status: form.status,
+                notes: form.notes || undefined,
+            });
+            router.push("/admin/orders");
+        } catch (err: unknown) {
+            setError(getApiErrorMessage(err, "Failed to create order"));
+        }
     };
 
     const set = (key: keyof typeof form) => (value: string | null) => {
-        setForm((f) => ({ ...f, [key]: value ?? "" }));
+        setForm((f) => ({ ...f, [key]: value ?? f[key] }));
     };
 
     return (
@@ -45,8 +56,6 @@ export function AdminOrderNewPage() {
             <PageHeader title="New Order" description="Create a new order for a customer" />
 
             <div className="flex-1 p-6 max-w-2xl space-y-6">
-
-                {/* Hero Banner */}
                 <div className="rounded-xl bg-primary-brand p-8">
                     <div className="flex flex-col items-center text-center gap-3">
                         <div className="h-16 w-16 rounded-lg bg-white/15 flex items-center justify-center">
@@ -59,7 +68,6 @@ export function AdminOrderNewPage() {
                     </div>
                 </div>
 
-                {/* Form Card */}
                 <div className="rounded-lg border border-hairline bg-canvas p-6 space-y-5">
                     <div className="flex items-center gap-2 pb-1 border-b border-hairline">
                         <div className="h-7 w-7 rounded-lg bg-primary-brand/10 flex items-center justify-center">
@@ -76,11 +84,11 @@ export function AdminOrderNewPage() {
                                 </Label>
                                 <Select value={form.customerId} onValueChange={set("customerId")}>
                                     <SelectTrigger className="rounded-lg border-hairline focus:ring-primary-brand/20">
-                                        <SelectValue placeholder="Select a customer" />
+                                        <SelectValue placeholder={customersQuery.isLoading ? "Loading customers..." : "Select a customer"} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {mockCustomers.map((c) => (
-                                            <SelectItem key={c.id} value={c.id}>{c.name} — {c.email}</SelectItem>
+                                        {(customersQuery.data?.data ?? []).map((customer) => (
+                                            <SelectItem key={customer.id} value={customer.id}>{customer.name} - {customer.email}</SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
@@ -90,13 +98,13 @@ export function AdminOrderNewPage() {
                                 <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
                                     <Briefcase className="h-3 w-3" /> Service
                                 </Label>
-                                <Select value={form.service} onValueChange={set("service")}>
+                                <Select value={form.serviceId} onValueChange={set("serviceId")}>
                                     <SelectTrigger className="rounded-lg border-hairline focus:ring-primary-brand/20">
-                                        <SelectValue placeholder="Select a service" />
+                                        <SelectValue placeholder={servicesQuery.isLoading ? "Loading services..." : "Select a service"} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {services.map((s) => (
-                                            <SelectItem key={s} value={s}>{s}</SelectItem>
+                                        {(servicesQuery.data?.data ?? []).map((service) => (
+                                            <SelectItem key={service.id} value={service.id}>{service.name}</SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
@@ -104,11 +112,14 @@ export function AdminOrderNewPage() {
 
                             <div className="space-y-1.5">
                                 <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
-                                    <IndianRupee className="h-3 w-3" /> Amount (₹)
+                                    <IndianRupee className="h-3 w-3" /> Amount (Rs)
                                 </Label>
                                 <Input
+                                    required
                                     type="number"
-                                    placeholder="1499"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="Amount"
                                     value={form.amount}
                                     onChange={(e) => setForm({ ...form, amount: e.target.value })}
                                     className="rounded-lg border-hairline focus-visible:ring-primary-brand/20"
@@ -121,11 +132,12 @@ export function AdminOrderNewPage() {
                                 </Label>
                                 <Select value={form.status} onValueChange={set("status")}>
                                     <SelectTrigger className="rounded-lg border-hairline focus:ring-primary-brand/20">
-                                        <SelectValue />
+                                        <SelectValue>{formatOrderStatus(form.status)}</SelectValue>
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="pending">Pending</SelectItem>
-                                        <SelectItem value="processing">Processing</SelectItem>
+                                        <SelectItem value="confirmed">Confirmed</SelectItem>
+                                        <SelectItem value="in_progress">In Progress</SelectItem>
                                         <SelectItem value="completed">Completed</SelectItem>
                                         <SelectItem value="cancelled">Cancelled</SelectItem>
                                     </SelectContent>
@@ -145,19 +157,22 @@ export function AdminOrderNewPage() {
                             />
                         </div>
 
+                        {error && <p className="text-sm text-error-brand">{error}</p>}
+
                         <div className="flex gap-3 pt-2">
                             <Button
                                 type="submit"
-                                className="bg-primary-brand hover:bg-primary-brand/90 text-white rounded-lg gap-2"
+                                disabled={createOrder.isPending}
+                                className="bg-primary-brand hover:bg-primary-brand/90 text-white rounded-lg gap-2 uppercase tracking-wide"
                             >
                                 <ShoppingBag className="h-4 w-4" />
-                                Create Order
+                                {createOrder.isPending ? "Creating..." : "Create Order"}
                             </Button>
                             <Button
                                 type="button"
                                 variant="secondary"
                                 onClick={() => router.push("/admin/orders")}
-                                className="rounded-lg"
+                                className="rounded-lg uppercase tracking-wide"
                             >
                                 Cancel
                             </Button>

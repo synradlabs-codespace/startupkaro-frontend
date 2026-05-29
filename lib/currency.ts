@@ -1,0 +1,6 @@
+// lib/currency.ts
+
+export const toPaise = (rupees: number): number => Math.round(rupees * 100);
+
+export const formatINR = (paise: number): string =>
+    new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(paise / 100);

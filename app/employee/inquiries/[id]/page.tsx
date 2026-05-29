@@ -1,6 +1,7 @@
 import { EmployeeInquiryDetailPage } from "@/features/employee/components/EmployeeInquiriesDetailPage";
 
 
-export default function EmployeeInquiryDetail({ params }: { params: { id: string } }) {
-  return <EmployeeInquiryDetailPage id={params.id} />;
+export default async function EmployeeInquiryDetail({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return <EmployeeInquiryDetailPage id={id} />;
 }

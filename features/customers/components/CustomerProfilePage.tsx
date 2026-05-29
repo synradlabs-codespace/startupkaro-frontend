@@ -1,5 +1,3 @@
-// features/customers/components/CustomerProfilePage.tsx
-
 "use client";
 
 import { useState } from "react";
@@ -8,13 +6,15 @@ import { PageHeader } from "@/components/custom/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { validators } from "@/lib/validations/common.schema";
+import { useCustomerProfile, useUpdateCustomerProfile } from "@/features/customers/hooks/useCustomerProfile";
+import { formatCustomerDate, getApiErrorMessage, getInitials } from "@/features/customers/lib/format";
+import { validators, formatNameInput } from "@/lib/validations/common.schema";
+import { formatPhoneDigits, validatePhoneDigits, buildPhone, PHONE_PREFIX } from "@/lib/validation";
 import {
     User,
     Mail,
     Phone,
     Calendar,
-    Camera,
     Pencil,
     X,
     Check,
@@ -23,14 +23,6 @@ import {
     BadgeCheck,
     Lock,
 } from "lucide-react";
-
-const mockProfile = {
-    name: "Rahul Sharma",
-    email: "rahul@example.com",
-    phone: "+91 98765 43210",
-    joined: "January 15, 2025",
-    initials: "RS",
-};
 
 interface FormState {
     name: string;
@@ -43,42 +35,84 @@ interface FieldErrors {
 }
 
 export function CustomerProfilePage() {
-    const [profile, setProfile] = useState(mockProfile);
+    const profileQuery = useCustomerProfile();
+    const updateProfile = useUpdateCustomerProfile();
+    const profile = profileQuery.data;
     const [editing, setEditing] = useState(false);
-    const [form, setForm] = useState<FormState>({
-        name: profile.name,
-        phone: profile.phone,
-    });
+    const [draft, setDraft] = useState<FormState | null>(null);
     const [errors, setErrors] = useState<FieldErrors>({});
+    const [apiError, setApiError] = useState("");
+
+    const form = draft ?? {
+        name: profile?.name ?? "",
+        phone: profile?.phone ?? profile?.mobile ?? "",
+    };
 
     const validate = (): boolean => {
         const next: FieldErrors = {
             name: validators.name(form.name) ?? undefined,
-            phone: validators.phone(form.phone) ?? undefined,
+            phone: validatePhoneDigits(form.phone, true) || undefined,
         };
         setErrors(next);
         return !Object.values(next).some(Boolean);
     };
 
-    const handleSave = () => {
+    const handleEdit = () => {
+        if (!profile) return;
+        const rawPhone = profile.phone ?? profile.mobile ?? "";
+        const digits = rawPhone.replace(/^\+91/, "").replace(/\D/g, "").slice(0, 10);
+        setDraft({ name: profile.name, phone: digits });
+        setErrors({});
+        setApiError("");
+        setEditing(true);
+    };
+
+    const handleSave = async () => {
         if (!validate()) return;
-        setProfile((prev) => ({ ...prev, ...form }));
-        setEditing(false);
+        setApiError("");
+
+        try {
+            await updateProfile.mutateAsync({ name: form.name, phone: buildPhone(form.phone) ?? "" });
+            setDraft(null);
+            setEditing(false);
+        } catch (err: unknown) {
+            setApiError(getApiErrorMessage(err, "Failed to update profile"));
+        }
     };
 
     const handleCancel = () => {
-        setForm({ name: profile.name, phone: profile.phone });
+        setDraft(null);
         setErrors({});
+        setApiError("");
         setEditing(false);
     };
 
     const field = (key: keyof FormState) => ({
         value: form[key],
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-            setForm((prev) => ({ ...prev, [key]: e.target.value }));
+            const value = key === "name" ? formatNameInput(e.target.value) : e.target.value;
+            setDraft((prev) => ({ ...(prev ?? form), [key]: value }));
             if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
         },
     });
+
+    if (profileQuery.isLoading) {
+        return (
+            <div className="flex flex-col min-h-screen">
+                <PageHeader title="My Profile" description="Manage your personal information and account security" />
+                <div className="p-6 text-sm text-slate">Loading profile...</div>
+            </div>
+        );
+    }
+
+    if (profileQuery.isError || !profile) {
+        return (
+            <div className="flex flex-col min-h-screen">
+                <PageHeader title="My Profile" description="Manage your personal information and account security" />
+                <div className="p-6 text-sm text-error-brand">Failed to load profile</div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -89,8 +123,8 @@ export function CustomerProfilePage() {
                     !editing ? (
                         <Button
                             size="sm"
-                            onClick={() => setEditing(true)}
-                            className="gap-2 bg-primary-brand hover:bg-primary-brand/90 text-white rounded-lg "
+                            onClick={handleEdit}
+                            className="gap-2 bg-primary-brand hover:bg-primary-brand/90 text-white rounded-lg uppercase tracking-wide"
                         >
                             <Pencil className="h-3.5 w-3.5" />
                             Edit Profile
@@ -100,63 +134,37 @@ export function CustomerProfilePage() {
             />
 
             <div className="flex-1 p-6 space-y-6">
-
-                {/* ── Hero Card ───────────────────────────── */}
-                <div className="rounded-xl bg-primary-brand p-8">
-                    <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-                        {/* Avatar */}
-                        <div className="relative shrink-0">
-                            <div className="h-24 w-24 rounded-full ring-2 ring-white/60 ring-offset-2 ring-offset-primary-brand bg-white flex items-center justify-center">
-                                <span className="text-2xl font-semibold text-primary-deep">
-                                    {profile.initials}
-                                </span>
-                            </div>
-                            {editing && (
-                                <button
-                                    type="button"
-                                    title="Upload photo"
-                                    className="absolute bottom-0 right-0 h-7 w-7 rounded-md bg-primary-brand text-white flex items-center justify-center hover:bg-primary-brand/90 transition-colors"
-                                >
-                                    <Camera className="h-3.5 w-3.5" />
-                                </button>
-                            )}
+                <div className="rounded-xl bg-primary-brand px-6 py-5">
+                    <div className="flex items-center gap-4">
+                        <div className="h-14 w-14 rounded-full ring-2 ring-white/60 ring-offset-2 ring-offset-primary-brand bg-white flex items-center justify-center shrink-0">
+                            <span className="text-lg font-semibold text-primary-deep">
+                                {getInitials(profile.name)}
+                            </span>
+                        </div>
+                        <div className="flex-1">
+                            <h2 className="text-lg font-semibold text-white">{profile.name}</h2>
+                            <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2.5 py-0.5 text-[11px] font-medium text-white mt-1">
+                                <BadgeCheck className="h-3 w-3" />
+                                Customer
+                            </span>
                         </div>
 
-                        {/* Name + meta */}
-                        <div className="flex-1 text-center sm:text-left">
-                            <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
-                                <h2 className="text-xl font-semibold text-white">{profile.name}</h2>
-                                <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2.5 py-0.5 text-[11px] font-medium text-white">
-                                    <BadgeCheck className="h-3 w-3" />
-                                    Customer
-                                </span>
-                            </div>
-                            <p className="text-sm text-white/80 flex items-center justify-center sm:justify-start gap-1.5">
-                                <Mail className="h-3.5 w-3.5 shrink-0" />
-                                {profile.email}
-                            </p>
-                            <p className="mt-2 text-xs text-white/70 flex items-center justify-center sm:justify-start gap-1.5">
-                                <Calendar className="h-3.5 w-3.5 shrink-0" />
-                                Member since {profile.joined}
-                            </p>
-                        </div>
-
-                        {/* Edit actions (desktop) */}
                         {editing && (
                             <div className="flex gap-2 shrink-0">
                                 <Button
                                     size="sm"
                                     onClick={handleSave}
-                                    className="gap-1.5 bg-white text-primary-deep hover:bg-white/90 rounded-lg"
+                                    disabled={updateProfile.isPending}
+                                    className="gap-1.5 bg-white text-primary-deep hover:bg-white/90 rounded-lg uppercase tracking-wide"
                                 >
                                     <Check className="h-3.5 w-3.5" />
-                                    Save
+                                    {updateProfile.isPending ? "Saving..." : "Save"}
                                 </Button>
                                 <Button
                                     size="sm"
                                     variant="outline"
                                     onClick={handleCancel}
-                                    className="gap-1.5 rounded-lg bg-transparent border-white/40 text-white hover:bg-white/10 hover:text-white"
+                                    className="gap-1.5 rounded-lg bg-transparent border-white/40 text-white hover:bg-white/10 hover:text-white uppercase tracking-wide"
                                 >
                                     <X className="h-3.5 w-3.5" />
                                     Cancel
@@ -166,10 +174,7 @@ export function CustomerProfilePage() {
                     </div>
                 </div>
 
-                {/* ── Content Grid ────────────────────────── */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-                    {/* Personal Information */}
                     <div className="rounded-lg border border-hairline bg-canvas p-6 flex flex-col gap-5">
                         <div className="flex items-center gap-2 pb-1 border-b border-hairline">
                             <div className="h-7 w-7 rounded-lg bg-primary-brand/10 flex items-center justify-center">
@@ -178,7 +183,6 @@ export function CustomerProfilePage() {
                             <h3 className="text-sm font-semibold text-charcoal">Personal Information</h3>
                         </div>
 
-                        {/* Name */}
                         <div className="space-y-1.5">
                             <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
                                 <User className="h-3 w-3" /> Full Name
@@ -187,8 +191,8 @@ export function CustomerProfilePage() {
                                 <div className="space-y-1">
                                     <Input
                                         {...field("name")}
-                                        placeholder="Your full name"
-                                        className={`rounded-lg border-hairline focus-visible:ring-primary-brand/20 ${errors.name ? "border-error-brand" : ""}`}
+                                        placeholder="Full Name"
+                                        className={`h-10 rounded-md focus-visible:ring-0 focus:border-ink transition-colors ${errors.name ? "border-error-brand" : "border-hairline-strong"}`}
                                     />
                                     {errors.name
                                         ? <p className="text-xs text-error-brand">{errors.name}</p>
@@ -200,7 +204,6 @@ export function CustomerProfilePage() {
                             )}
                         </div>
 
-                        {/* Email — always read-only */}
                         <div className="space-y-1.5">
                             <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
                                 <Mail className="h-3 w-3" /> Email Address
@@ -218,45 +221,53 @@ export function CustomerProfilePage() {
                             )}
                         </div>
 
-                        {/* Phone */}
-                        <div className="mt-auto space-y-1.5">
+                        <div className="space-y-1.5">
                             <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
                                 <Phone className="h-3 w-3" /> Phone Number
                             </Label>
                             {editing ? (
                                 <div className="space-y-1">
-                                    <Input
-                                        {...field("phone")}
-                                        type="tel"
-                                        placeholder="+91 98765 43210"
-                                        className={`rounded-lg border-hairline focus-visible:ring-primary-brand/20 ${errors.phone ? "border-error-brand" : ""}`}
-                                    />
-                                    {errors.phone
-                                        ? <p className="text-xs text-error-brand">{errors.phone}</p>
-                                        : <p className="text-xs text-stone">Include country code (e.g. +91)</p>
-                                    }
+                                    <div className={`flex items-center rounded-md border bg-canvas overflow-hidden focus-within:border-ink transition-colors ${errors.phone ? "border-error-brand" : "border-hairline-strong"}`}>
+                                        <span className="px-3 h-10 flex items-center text-sm text-ink bg-surface border-r border-hairline select-none shrink-0">{PHONE_PREFIX}</span>
+                                        <input
+                                            type="tel"
+                                            inputMode="numeric"
+                                            value={form.phone}
+                                            onChange={(e) => {
+                                                const digits = formatPhoneDigits(e.target.value);
+                                                setDraft((prev) => ({ ...(prev ?? form), phone: digits }));
+                                                if (errors.phone) setErrors((prev) => ({ ...prev, phone: undefined }));
+                                            }}
+                                            placeholder="10-digit number"
+                                            maxLength={10}
+                                            className="flex-1 px-3 h-10 text-sm text-ink bg-canvas outline-none placeholder:text-graphite"
+                                        />
+                                    </div>
+                                    {errors.phone && <p className="text-xs text-error-brand">{errors.phone}</p>}
                                 </div>
                             ) : (
-                                <p className="text-sm text-slate">{profile.phone}</p>
+                                <p className="text-sm text-slate">{profile.phone ?? profile.mobile ?? "-"}</p>
                             )}
                         </div>
 
-                        {/* Save / Cancel — mobile */}
+                        {apiError && <p className="text-sm text-error-brand">{apiError}</p>}
+
                         {editing && (
                             <div className="flex gap-2 pt-2 lg:hidden">
                                 <Button
                                     size="sm"
                                     onClick={handleSave}
-                                    className="gap-1.5 bg-primary-brand hover:bg-primary-brand/90 text-white rounded-lg flex-1"
+                                    disabled={updateProfile.isPending}
+                                    className="gap-1.5 bg-primary-brand hover:bg-primary-brand/90 text-white rounded-lg flex-1 uppercase tracking-wide"
                                 >
                                     <Check className="h-3.5 w-3.5" />
-                                    Save Changes
+                                    {updateProfile.isPending ? "Saving..." : "Save Changes"}
                                 </Button>
                                 <Button
                                     size="sm"
                                     variant="secondary"
                                     onClick={handleCancel}
-                                    className="gap-1.5 rounded-lg"
+                                    className="gap-1.5 rounded-lg uppercase tracking-wide"
                                 >
                                     <X className="h-3.5 w-3.5" />
                                     Cancel
@@ -265,7 +276,6 @@ export function CustomerProfilePage() {
                         )}
                     </div>
 
-                    {/* Account & Security */}
                     <div className="rounded-lg border border-hairline bg-canvas p-6 flex flex-col gap-5">
                         <div className="flex items-center gap-2 pb-1 border-b border-hairline">
                             <div className="h-7 w-7 rounded-lg bg-primary-brand/10 flex items-center justify-center">
@@ -274,16 +284,14 @@ export function CustomerProfilePage() {
                             <h3 className="text-sm font-semibold text-charcoal">Account &amp; Security</h3>
                         </div>
 
-                        {/* Joined */}
                         <div className="flex items-start gap-3 p-3 rounded-lg bg-surface">
                             <Calendar className="h-4 w-4 text-stone mt-0.5 shrink-0" />
                             <div>
                                 <p className="text-xs text-steel font-medium">Member Since</p>
-                                <p className="text-sm text-charcoal font-medium">{profile.joined}</p>
+                                <p className="text-sm text-charcoal font-medium">{formatCustomerDate(profile.createdAt)}</p>
                             </div>
                         </div>
 
-                        {/* Password */}
                         <div className="flex items-center gap-4 p-4 rounded-lg border border-hairline bg-surface">
                             <div className="h-9 w-9 rounded-lg bg-primary-brand/10 flex items-center justify-center shrink-0">
                                 <KeyRound className="h-4 w-4 text-primary-brand" />
@@ -300,13 +308,6 @@ export function CustomerProfilePage() {
                             </Link>
                         </div>
 
-                        {/* Security tip */}
-                        <div className="mt-auto rounded-lg bg-primary-brand/10 border border-primary-brand/20 p-3 flex gap-2.5">
-                            <ShieldCheck className="h-4 w-4 text-primary-brand shrink-0 mt-0.5" />
-                            <p className="text-xs text-slate leading-relaxed">
-                                Use a strong, unique password and never share it. We will never ask for your password via email or phone.
-                            </p>
-                        </div>
                     </div>
                 </div>
             </div>

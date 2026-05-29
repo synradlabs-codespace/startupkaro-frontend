@@ -26,7 +26,6 @@ export function AdminDashboard() {
             icon: IndianRupee,
             accent: "bg-primary-brand text-white",
             sub: `Avg ₹${avgOrderValue.toLocaleString("en-IN")} / order`,
-            hero: true,
         },
         {
             label: "Total Orders",
@@ -81,16 +80,16 @@ export function AdminDashboard() {
                     {stats.map((stat) => (
                         <div
                             key={stat.label}
-                            className={`rounded-lg p-5 ${"hero" in stat && stat.hero ? "bg-ink" : "border border-hairline bg-canvas"}`}
+                            className="rounded-lg border border-hairline bg-canvas p-5"
                         >
                             <div className="flex items-start justify-between mb-3">
-                                <p className={`text-xs font-medium ${"hero" in stat && stat.hero ? "text-white/70" : "text-steel"}`}>{stat.label}</p>
+                                <p className="text-xs font-medium text-steel">{stat.label}</p>
                                 <div className={`h-8 w-8 rounded-lg flex items-center justify-center ${stat.accent}`}>
                                     <stat.icon className="h-4 w-4" />
                                 </div>
                             </div>
-                            <p className={`text-2xl font-display font-medium ${"hero" in stat && stat.hero ? "text-white" : "text-ink"}`}>{stat.value}</p>
-                            <p className={`text-xs mt-1 ${"hero" in stat && stat.hero ? "text-white/60" : "text-stone"}`}>{stat.sub}</p>
+                            <p className="text-2xl font-display font-medium text-ink">{stat.value}</p>
+                            <p className="mt-1 text-xs text-stone">{stat.sub}</p>
                         </div>
                     ))}
                 </div>

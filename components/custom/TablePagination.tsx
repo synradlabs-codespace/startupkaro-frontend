@@ -19,7 +19,7 @@ export function TablePagination({ total, page, pageSize, onPageChange, onPageSiz
     const to = Math.min(page * pageSize, total);
 
     return (
-        <div className="flex items-center justify-between px-4 py-3 border-t bg-muted/20">
+        <div className="flex items-center justify-between px-4 py-3 border-t">
             <p className="text-sm text-muted-foreground">
                 {total === 0 ? "No results" : (
                     <>Showing <span className="font-medium text-foreground">{from}–{to}</span> of <span className="font-medium text-foreground">{total}</span></>

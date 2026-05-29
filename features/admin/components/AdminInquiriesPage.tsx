@@ -1,4 +1,3 @@
-﻿// features/admin/components/AdminInquiriesPage.tsx
 "use client";
 
 import { useState } from "react";
@@ -10,8 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { InquiryStatusBadge } from "@/components/custom/StatusBadge";
-import { mockInquiries } from "@/lib/mock-data";
+import { InquiryStatusBadge, formatInquiryStatus } from "@/components/custom/StatusBadge";
+import { useDeleteInquiry, useInquiryList } from "@/features/admin/hooks/useAdminInquiries";
+import { formatDate } from "@/features/admin/lib/format";
 import { Search, Eye, Trash2 } from "lucide-react";
 
 const PAGE_SIZE = 10;
@@ -21,22 +21,15 @@ export function AdminInquiriesPage() {
     const [statusFilter, setStatusFilter] = useState("all");
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
-    const [inquiries, setInquiries] = useState(mockInquiries);
-
-    const filtered = inquiries.filter((i) => {
-        const matchSearch =
-            i.name.toLowerCase().includes(search.toLowerCase()) ||
-            i.email.toLowerCase().includes(search.toLowerCase()) ||
-            i.message.toLowerCase().includes(search.toLowerCase());
-        const matchStatus = statusFilter === "all" || i.status === statusFilter;
-        return matchSearch && matchStatus;
+    const inquiriesQuery = useInquiryList({
+        search: search || undefined,
+        status: statusFilter === "all" ? undefined : statusFilter,
+        page,
+        limit: pageSize,
     });
 
-    const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
-
-    const handleDelete = (id: string) => {
-        setInquiries((prev) => prev.filter((i) => i.id !== id));
-    };
+    const inquiries = inquiriesQuery.data?.data ?? [];
+    const total = inquiriesQuery.data?.pagination.total ?? 0;
 
     const handleFilterChange = (value: string | null) => {
         setStatusFilter(value ?? "all");
@@ -50,7 +43,7 @@ export function AdminInquiriesPage() {
 
     return (
         <div>
-            <PageHeader title="Inquiries" description={`${inquiries.length} inquiries received`} />
+            <PageHeader title="Inquiries" description={`${total} inquiries received`} />
             <div className="p-6 space-y-4">
                 <div className="flex gap-3 flex-wrap">
                     <div className="relative flex-1 min-w-[200px]">
@@ -64,7 +57,7 @@ export function AdminInquiriesPage() {
                     </div>
                     <Select value={statusFilter} onValueChange={handleFilterChange}>
                         <SelectTrigger className="w-[160px]">
-                            <SelectValue placeholder="All Statuses" />
+                            <SelectValue>{statusFilter === "all" ? "All Statuses" : formatInquiryStatus(statusFilter)}</SelectValue>
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">All Statuses</SelectItem>
@@ -77,35 +70,47 @@ export function AdminInquiriesPage() {
                 <Card className="overflow-hidden">
                     <CardContent className="p-0">
                         <Table>
-                            <TableHeader className="bg-muted/50">
-                                <TableRow className="hover:bg-muted/50">
+                            <TableHeader>
+                                <TableRow className="hover:bg-transparent">
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Name</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Email</TableHead>
-                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Mobile</TableHead>
-                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Message</TableHead>
+                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Phone</TableHead>
+                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Subject</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Status</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Date</TableHead>
                                     <TableHead className="text-right font-semibold text-foreground/70 uppercase text-xs tracking-wide">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {paginated.length === 0 ? (
+                                {inquiriesQuery.isLoading ? (
+                                    <TableRow>
+                                        <TableCell colSpan={7} className="text-center text-slate py-12">
+                                            Loading inquiries...
+                                        </TableCell>
+                                    </TableRow>
+                                ) : inquiriesQuery.isError ? (
+                                    <TableRow>
+                                        <TableCell colSpan={7} className="text-center text-error-brand py-12">
+                                            Failed to load inquiries
+                                        </TableCell>
+                                    </TableRow>
+                                ) : inquiries.length === 0 ? (
                                     <TableRow>
                                         <TableCell colSpan={7} className="text-center text-slate py-12">
                                             No inquiries found
                                         </TableCell>
                                     </TableRow>
                                 ) : (
-                                    paginated.map((inq) => (
+                                    inquiries.map((inq) => (
                                         <TableRow key={inq.id} className="hover:bg-muted/30">
                                             <TableCell className="font-medium">{inq.name}</TableCell>
                                             <TableCell className="text-slate text-sm">{inq.email}</TableCell>
-                                            <TableCell className="text-slate text-sm">{inq.mobile}</TableCell>
+                                            <TableCell className="text-slate text-sm">{inq.phone ?? "—"}</TableCell>
                                             <TableCell className="max-w-xs">
-                                                <p className="text-sm text-slate truncate">{inq.message}</p>
+                                                <p className="text-sm text-slate truncate">{inq.subject}</p>
                                             </TableCell>
-                                            <TableCell><InquiryStatusBadge status={inq.status} /></TableCell>
-                                            <TableCell className="text-slate text-sm">{inq.date}</TableCell>
+                                            <TableCell><InquiryStatusBadge status={inq.status ?? "unresolved"} /></TableCell>
+                                            <TableCell className="text-slate text-sm">{formatDate(inq.createdAt)}</TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex gap-1 justify-end">
                                                     <Link href={`/admin/inquiries/${inq.id}`}>
@@ -113,14 +118,7 @@ export function AdminInquiriesPage() {
                                                             <Eye className="h-4 w-4" />
                                                         </Button>
                                                     </Link>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        className="h-8 w-8 text-error-brand hover:text-error-brand hover:bg-error-brand/10"
-                                                        onClick={() => handleDelete(inq.id)}
-                                                    >
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
+                                                    <DeleteInquiryButton id={inq.id} />
                                                 </div>
                                             </TableCell>
                                         </TableRow>
@@ -129,7 +127,7 @@ export function AdminInquiriesPage() {
                             </TableBody>
                         </Table>
                         <TablePagination
-                            total={filtered.length}
+                            total={total}
                             page={page}
                             pageSize={pageSize}
                             onPageChange={setPage}
@@ -142,3 +140,23 @@ export function AdminInquiriesPage() {
     );
 }
 
+function DeleteInquiryButton({ id }: { id: string }) {
+    const deleteInquiry = useDeleteInquiry(id);
+
+    const handleDelete = async () => {
+        if (!window.confirm("Delete this inquiry?")) return;
+        await deleteInquiry.mutateAsync();
+    };
+
+    return (
+        <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-error-brand hover:text-error-brand hover:bg-error-brand/10"
+            onClick={handleDelete}
+            disabled={deleteInquiry.isPending}
+        >
+            <Trash2 className="h-4 w-4" />
+        </Button>
+    );
+}

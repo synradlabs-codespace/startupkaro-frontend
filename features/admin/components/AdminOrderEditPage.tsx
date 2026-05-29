@@ -1,4 +1,3 @@
-﻿// features/admin/components/AdminOrderEditPage.tsx
 "use client";
 
 import { useState } from "react";
@@ -8,147 +7,105 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { mockOrders } from "@/lib/mock-data";
-import { StickyNote, Send } from "lucide-react";
+import { PaymentStatusBadge, formatOrderStatus } from "@/components/custom/StatusBadge";
+import { useOrder, useUpdateOrder } from "@/features/admin/hooks/useAdminOrders";
+import { getApiErrorMessage } from "@/features/admin/lib/format";
+import { toPaise } from "@/lib/currency";
 
 export function AdminOrderEditPage({ id }: { id: string }) {
     const router = useRouter();
-    const order = mockOrders.find((o) => o.id === id) ?? mockOrders[0];
+    const orderQuery = useOrder(id);
+    const updateOrder = useUpdateOrder(id);
+    const order = orderQuery.data?.data;
 
-    const [form, setForm] = useState({
-        service: order.service,
-        amount: String(order.amount),
-        status: order.status,
-        paymentStatus: order.paymentStatus,
-    });
-    const [notes, setNotes] = useState<string[]>([]);
-    const [newNote, setNewNote] = useState("");
+    const [amount, setAmount] = useState<string | null>(null);
+    const [status, setStatus] = useState<string | null>(null);
+    const [error, setError] = useState("");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        router.push(`/admin/orders/${id}`);
+        setError("");
+
+        try {
+            await updateOrder.mutateAsync({
+                status: currentStatus,
+                amount: toPaise(Number(currentAmount)),
+            });
+            router.push(`/admin/orders/${id}`);
+        } catch (err: unknown) {
+            setError(getApiErrorMessage(err, "Failed to update order"));
+        }
     };
 
-    const set = (key: keyof typeof form) => (value: string | null) => {
-        setForm((f) => ({ ...f, [key]: value ?? "" }));
-    };
+    if (orderQuery.isLoading) {
+        return (
+            <div>
+                <PageHeader title={`Edit Order ${id}`} />
+                <div className="p-6 text-sm text-slate">Loading order...</div>
+            </div>
+        );
+    }
 
-    const handleAddNote = () => {
-        const trimmed = newNote.trim();
-        if (!trimmed) return;
-        setNotes((prev) => [...prev, trimmed]);
-        setNewNote("");
-    };
+    if (orderQuery.isError || !order) {
+        return (
+            <div>
+                <PageHeader title={`Edit Order ${id}`} />
+                <div className="p-6 text-sm text-error-brand">Failed to load order</div>
+            </div>
+        );
+    }
+
+    const currentAmount = amount ?? String(order.amount / 100);
+    const currentStatus = status ?? order.status;
 
     return (
         <div>
-            <PageHeader title={`Edit Order ${id}`} description="Update order details" />
+            <PageHeader title={`Edit Order ${order.orderNumber || id}`} description="Update order details" />
             <div className="p-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-5xl">
-
-                    {/* Left Edit Form */}
-                    <Card className="flex flex-col">
-                        <CardHeader><CardTitle className="text-base">Edit Details</CardTitle></CardHeader>
-                        <CardContent className="flex flex-col flex-1">
-                            <form onSubmit={handleSubmit} className="flex flex-col flex-1 space-y-5">
-                                <div className="space-y-2">
-                                    <Label>Service</Label>
-                                    <Input value={form.service} onChange={(e) => setForm({ ...form, service: e.target.value })} />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label>Amount (₹)</Label>
-                                    <Input type="number" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label>Order Status</Label>
-                                    <Select value={form.status} onValueChange={set("status")}>
-                                        <SelectTrigger><SelectValue /></SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="pending">Pending</SelectItem>
-                                            <SelectItem value="processing">Processing</SelectItem>
-                                            <SelectItem value="completed">Completed</SelectItem>
-                                            <SelectItem value="cancelled">Cancelled</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label>Payment Status</Label>
-                                    <Select value={form.paymentStatus} onValueChange={set("paymentStatus")}>
-                                        <SelectTrigger><SelectValue /></SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="paid">Paid</SelectItem>
-                                            <SelectItem value="unpaid">Unpaid</SelectItem>
-                                            <SelectItem value="partial">Partial</SelectItem>
-                                            <SelectItem value="refunded">Refunded</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className="flex gap-3 mt-auto pt-4">
-                                    <Button type="submit" className="bg-primary-brand hover:bg-primary-brand/90 text-white">
-                                        Save Changes
-                                    </Button>
-                                    <Button type="button" variant="secondary" onClick={() => router.back()}>
-                                        Cancel
-                                    </Button>
-                                </div>
-                            </form>
-                        </CardContent>
-                    </Card>
-
-                    {/* Right Notes */}
-                    <Card className="flex flex-col">
-                        <CardHeader>
-                            <CardTitle className="text-base flex items-center gap-2">
-                                <StickyNote className="h-4 w-4 text-slate" />
-                                Notes
-                                {notes.length > 0 && (
-                                    <span className="text-xs font-normal text-slate">({notes.length})</span>
-                                )}
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex flex-col flex-1 space-y-3">
-                            <div className="flex-1">
-                                {notes.length === 0 ? (
-                                    <p className="text-sm text-slate text-center py-8">No notes yet. Add the first note below.</p>
-                                ) : (
-                                    <ul className="space-y-2">
-                                        {notes.map((note, i) => (
-                                            <li key={i} className="bg-muted/40 rounded-lg px-3 py-2 text-sm">
-                                                <span className="whitespace-pre-wrap leading-relaxed">{note}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
+                <Card className="max-w-lg">
+                    <CardHeader><CardTitle className="text-base">Edit Details</CardTitle></CardHeader>
+                    <CardContent>
+                        <form onSubmit={handleSubmit} className="space-y-5">
+                            <div className="space-y-2">
+                                <Label>Service</Label>
+                                <Input value={order.service.name} readOnly className="bg-surface" />
                             </div>
-                            <div className="flex gap-2 pt-1">
-                                <Textarea
-                                    placeholder="Add a note..."
-                                    value={newNote}
-                                    onChange={(e) => setNewNote(e.target.value)}
-                                    className="resize-none text-sm min-h-[60px]"
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Enter" && e.shiftKey) {
-                                            e.preventDefault();
-                                            handleAddNote();
-                                        }
-                                    }}
-                                />
-                                <Button
-                                    type="button"
-                                    size="icon"
-                                    className="shrink-0 self-end bg-primary-brand hover:bg-primary-brand/90 text-white"
-                                    onClick={handleAddNote}
-                                    disabled={!newNote.trim()}
-                                >
-                                    <Send className="h-4 w-4" />
+                            <div className="space-y-2">
+                                <Label>Amount (Rs)</Label>
+                                <Input type="number" min="0" step="0.01" value={currentAmount} onChange={(e) => setAmount(e.target.value)} />
+                            </div>
+                            <div className="space-y-2">
+                                <Label>Order Status</Label>
+                                <Select value={currentStatus} onValueChange={(value) => setStatus(value ?? currentStatus)}>
+                                    <SelectTrigger><SelectValue>{formatOrderStatus(currentStatus)}</SelectValue></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="pending">Pending</SelectItem>
+                                        <SelectItem value="confirmed">Confirmed</SelectItem>
+                                        <SelectItem value="in_progress">In Progress</SelectItem>
+                                        <SelectItem value="completed">Completed</SelectItem>
+                                        <SelectItem value="cancelled">Cancelled</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="space-y-2">
+                                <Label>Payment Status</Label>
+                                <div className="h-10 flex items-center">
+                                    <PaymentStatusBadge status={order.paymentStatus} />
+                                </div>
+                            </div>
+                            {error && <p className="text-sm text-error-brand">{error}</p>}
+                            <div className="flex gap-3 pt-2">
+                                <Button type="submit" disabled={updateOrder.isPending} className="bg-primary-brand hover:bg-primary-brand/90 text-white uppercase tracking-wide">
+                                    {updateOrder.isPending ? "Saving..." : "Save Changes"}
+                                </Button>
+                                <Button type="button" variant="secondary" onClick={() => router.back()} className="uppercase tracking-wide">
+                                    Cancel
                                 </Button>
                             </div>
-                            <p className="text-xs text-slate">Press Enter for a new line. Shift+Enter adds the note.</p>
-                        </CardContent>
-                    </Card>
-                </div>
+                        </form>
+                    </CardContent>
+                </Card>
             </div>
         </div>
     );

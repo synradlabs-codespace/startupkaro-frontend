@@ -1,4 +1,3 @@
-﻿// features/employee/components/EmployeeOrdersPage.tsx
 "use client";
 
 import { useState } from "react";
@@ -10,9 +9,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { OrderStatusBadge, PaymentStatusBadge } from "@/components/custom/StatusBadge";
-import { mockOrders } from "@/lib/mock-data";
-import { Search, Eye, Download } from "lucide-react";
+import { OrderStatusBadge, PaymentStatusBadge, formatOrderStatus } from "@/components/custom/StatusBadge";
+import { useOrderList } from "@/features/admin/hooks/useAdminOrders";
+import { formatDate } from "@/features/admin/lib/format";
+import { formatINR } from "@/lib/currency";
+import { Search, Eye, Pencil } from "lucide-react";
 
 const PAGE_SIZE = 10;
 
@@ -22,15 +23,15 @@ export function EmployeeOrdersPage() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
 
-    const filtered = mockOrders.filter((o) => {
-        const matchSearch =
-            o.customer.toLowerCase().includes(search.toLowerCase()) ||
-            o.id.toLowerCase().includes(search.toLowerCase());
-        const matchStatus = statusFilter === "all" || o.status === statusFilter;
-        return matchSearch && matchStatus;
+    const ordersQuery = useOrderList({
+        search: search || undefined,
+        status: statusFilter === "all" ? undefined : statusFilter,
+        page,
+        limit: pageSize,
     });
 
-    const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
+    const orders = ordersQuery.data?.data ?? [];
+    const total = ordersQuery.data?.pagination.total ?? 0;
 
     const handleFilterChange = (value: string | null) => {
         setStatusFilter(value ?? "all");
@@ -44,7 +45,7 @@ export function EmployeeOrdersPage() {
 
     return (
         <div>
-            <PageHeader title="Orders" description={`${mockOrders.length} total orders`} />
+            <PageHeader title="Orders" description={`${total} total orders`} />
             <div className="p-6 space-y-4">
                 <div className="flex gap-3 flex-wrap">
                     <div className="relative flex-1 min-w-[200px]">
@@ -58,12 +59,13 @@ export function EmployeeOrdersPage() {
                     </div>
                     <Select value={statusFilter} onValueChange={handleFilterChange}>
                         <SelectTrigger className="w-[160px]">
-                            <SelectValue placeholder="All Statuses" />
+                            <SelectValue>{statusFilter === "all" ? "All Statuses" : formatOrderStatus(statusFilter)}</SelectValue>
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">All Statuses</SelectItem>
                             <SelectItem value="pending">Pending</SelectItem>
-                            <SelectItem value="processing">Processing</SelectItem>
+                            <SelectItem value="confirmed">Confirmed</SelectItem>
+                            <SelectItem value="in_progress">In Progress</SelectItem>
                             <SelectItem value="completed">Completed</SelectItem>
                             <SelectItem value="cancelled">Cancelled</SelectItem>
                         </SelectContent>
@@ -73,8 +75,8 @@ export function EmployeeOrdersPage() {
                 <Card className="overflow-hidden">
                     <CardContent className="p-0">
                         <Table>
-                            <TableHeader className="bg-muted/50">
-                                <TableRow className="hover:bg-muted/50">
+                            <TableHeader>
+                                <TableRow className="hover:bg-transparent">
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Order ID</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Customer</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Service</TableHead>
@@ -86,22 +88,36 @@ export function EmployeeOrdersPage() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {paginated.length === 0 ? (
+                                {ordersQuery.isLoading ? (
+                                    <TableRow>
+                                        <TableCell colSpan={8} className="text-center text-slate py-12">
+                                            Loading orders...
+                                        </TableCell>
+                                    </TableRow>
+                                ) : ordersQuery.isError ? (
+                                    <TableRow>
+                                        <TableCell colSpan={8} className="text-center text-error-brand py-12">
+                                            Failed to load orders
+                                        </TableCell>
+                                    </TableRow>
+                                ) : orders.length === 0 ? (
                                     <TableRow>
                                         <TableCell colSpan={8} className="text-center text-slate py-12">
                                             No orders found
                                         </TableCell>
                                     </TableRow>
                                 ) : (
-                                    paginated.map((order) => (
+                                    orders.map((order) => (
                                         <TableRow key={order.id} className="hover:bg-muted/30">
-                                            <TableCell className="font-mono text-xs text-slate">{order.id}</TableCell>
-                                            <TableCell className="font-medium">{order.customer}</TableCell>
-                                            <TableCell className="text-slate text-sm">{order.service}</TableCell>
-                                            <TableCell className="font-medium">₹{order.amount.toLocaleString("en-IN")}</TableCell>
+                                            <TableCell className="font-mono text-xs text-slate">
+                                                {order.orderNumber || order.id.slice(0, 8)}
+                                            </TableCell>
+                                            <TableCell className="font-medium">{order.customer.name}</TableCell>
+                                            <TableCell className="text-slate text-sm">{order.service.name}</TableCell>
+                                            <TableCell className="font-medium">{formatINR(order.amount)}</TableCell>
                                             <TableCell><OrderStatusBadge status={order.status} /></TableCell>
                                             <TableCell><PaymentStatusBadge status={order.paymentStatus} /></TableCell>
-                                            <TableCell className="text-slate text-sm">{order.date}</TableCell>
+                                            <TableCell className="text-slate text-sm">{formatDate(order.createdAt)}</TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex gap-1 justify-end">
                                                     <Link href={`/employee/orders/${order.id}`}>
@@ -109,9 +125,11 @@ export function EmployeeOrdersPage() {
                                                             <Eye className="h-4 w-4" />
                                                         </Button>
                                                     </Link>
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-muted" title="Download Invoice">
-                                                        <Download className="h-4 w-4" />
-                                                    </Button>
+                                                    <Link href={`/employee/orders/${order.id}/edit`}>
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-brand/10 hover:text-charcoal">
+                                                            <Pencil className="h-4 w-4" />
+                                                        </Button>
+                                                    </Link>
                                                 </div>
                                             </TableCell>
                                         </TableRow>
@@ -120,7 +138,7 @@ export function EmployeeOrdersPage() {
                             </TableBody>
                         </Table>
                         <TablePagination
-                            total={filtered.length}
+                            total={total}
                             page={page}
                             pageSize={pageSize}
                             onPageChange={setPage}
@@ -132,4 +150,3 @@ export function EmployeeOrdersPage() {
         </div>
     );
 }
-

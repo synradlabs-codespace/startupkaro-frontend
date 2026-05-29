@@ -2,6 +2,7 @@
 
 import { AdminOrderEditPage } from "@/features/admin/components/AdminOrderEditPage";
 
-export default function OrderEditPage({ params }: { params: { id: string } }) {
-    return <AdminOrderEditPage id={params.id} />;
+export default async function OrderEditPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    return <AdminOrderEditPage id={id} />;
 }

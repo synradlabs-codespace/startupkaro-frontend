@@ -1,6 +1,7 @@
 import { AdminPaymentDetailPage } from "@/features/admin/components/AdminPaymentsDetailPage";
 
 
-export default function PaymentDetailPage({ params }: { params: { id: string } }) {
-  return <AdminPaymentDetailPage id={params.id} />;
+export default async function PaymentDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return <AdminPaymentDetailPage id={id} />;
 }

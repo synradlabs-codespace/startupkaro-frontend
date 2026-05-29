@@ -1,5 +1,31 @@
 // lib/validations/common.schema.ts
-// Shared client-side validation helpers used across all panels.
+// Shared client-side validation helpers, input formatters, and phone utils used across all panels.
+
+// --- Phone constants & formatters ---
+
+export const PHONE_PREFIX = "+91";
+
+/** Strip everything except letters and spaces (used for name inputs). */
+export function formatNameInput(raw: string): string {
+    return raw.replace(/[^a-zA-Z\s]/g, "");
+}
+
+/** Strip non-digits and cap at 10 for the bare number after +91. */
+export function formatPhoneDigits(raw: string): string {
+    return raw.replace(/\D/g, "").slice(0, 10);
+}
+
+/** Compose the full phone string to send to the API. */
+export function buildPhone(digits: string): string | undefined {
+    return digits ? `${PHONE_PREFIX}${digits}` : undefined;
+}
+
+/** Validates the bare 10-digit number (without +91). Returns error string or "". */
+export function validatePhoneDigits(digits: string, required = false): string {
+    if (!digits) return required ? "Phone number is required" : "";
+    if (digits.length !== 10) return "Phone number must be exactly 10 digits";
+    return "";
+}
 
 /** Returns an error string or null if valid. */
 export const validators = {
@@ -28,8 +54,6 @@ export const validators = {
     password: (v: string): string | null => {
         if (!v) return "Password is required";
         if (v.length < 8) return "Must be at least 8 characters";
-        if (!/[A-Z]/.test(v)) return "Include at least one uppercase letter";
-        if (!/[0-9]/.test(v)) return "Include at least one number";
         return null;
     },
 

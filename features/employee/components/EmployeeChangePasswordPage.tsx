@@ -11,8 +11,6 @@ import { Label } from "@/components/ui/label";
 import { validators, getPasswordStrength } from "@/lib/validations/common.schema";
 import {
     KeyRound,
-    Eye,
-    EyeOff,
     ShieldCheck,
     ArrowLeft,
     Check,
@@ -128,25 +126,23 @@ export function EmployeeChangePasswordPage() {
                                         <Input
                                             {...field("current")}
                                             type={show.current ? "text" : "password"}
-                                            placeholder="Enter your current password"
-                                            className={`rounded-lg pr-10 border-hairline focus-visible:ring-primary-brand/20 ${errors.current ? "border-error-brand" : ""}`}
+                                            placeholder="Current Password"
+                                            className={`h-10 rounded-md pr-12 focus-visible:ring-0 focus:border-ink transition-colors ${errors.current ? "border-error-brand" : "border-hairline-strong"}`}
                                             required
                                         />
                                         <button
                                             type="button"
                                             onClick={() => toggleShow("current")}
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-stone hover:text-slate transition-colors"
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-semibold uppercase tracking-[0.7px] text-link-blue hover:text-primary-deep"
                                             tabIndex={-1}
                                         >
-                                            {show.current ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                            {show.current ? "HIDE" : "SHOW"}
                                         </button>
                                     </div>
                                     {errors.current && (
                                         <p className="text-xs text-error-brand">{errors.current}</p>
                                     )}
                                 </div>
-
-                                <div className="h-px bg-surface" />
 
                                 {/* New password */}
                                 <div className="space-y-1.5">
@@ -157,17 +153,17 @@ export function EmployeeChangePasswordPage() {
                                         <Input
                                             {...field("next")}
                                             type={show.next ? "text" : "password"}
-                                            placeholder="Create a strong new password"
-                                            className={`rounded-lg pr-10 border-hairline focus-visible:ring-primary-brand/20 ${errors.next ? "border-error-brand" : ""}`}
+                                            placeholder="New Password"
+                                            className={`h-10 rounded-md pr-12 focus-visible:ring-0 focus:border-ink transition-colors ${errors.next ? "border-error-brand" : "border-hairline-strong"}`}
                                             required
                                         />
                                         <button
                                             type="button"
                                             onClick={() => toggleShow("next")}
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-stone hover:text-slate transition-colors"
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-semibold uppercase tracking-[0.7px] text-link-blue hover:text-primary-deep"
                                             tabIndex={-1}
                                         >
-                                            {show.next ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                            {show.next ? "HIDE" : "SHOW"}
                                         </button>
                                     </div>
 
@@ -193,7 +189,7 @@ export function EmployeeChangePasswordPage() {
                                         : (
                                             <div className="flex gap-1.5 items-start text-xs text-stone pt-0.5">
                                                 <Info className="h-3 w-3 shrink-0 mt-0.5" />
-                                                <span>Min 8 chars, include one uppercase letter and one number</span>
+                                                <span>Must be at least 8 characters</span>
                                             </div>
                                         )
                                     }
@@ -208,22 +204,22 @@ export function EmployeeChangePasswordPage() {
                                         <Input
                                             {...field("confirm")}
                                             type={show.confirm ? "text" : "password"}
-                                            placeholder="Re-enter your new password"
-                                            className={`rounded-lg pr-10 border-hairline focus-visible:ring-primary-brand/20 ${errors.confirm ? "border-error-brand" : ""}`}
+                                            placeholder="Confirm New Password"
+                                            className={`h-10 rounded-md pr-20 focus-visible:ring-0 focus:border-ink transition-colors ${errors.confirm ? "border-error-brand" : "border-hairline-strong"}`}
                                             required
                                         />
                                         <button
                                             type="button"
                                             onClick={() => toggleShow("confirm")}
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-stone hover:text-slate transition-colors"
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-semibold uppercase tracking-[0.7px] text-link-blue hover:text-primary-deep"
                                             tabIndex={-1}
                                         >
-                                            {show.confirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                            {show.confirm ? "HIDE" : "SHOW"}
                                         </button>
 
                                         {/* Match indicator */}
                                         {form.confirm && form.next && !errors.confirm && (
-                                            <div className="absolute right-9 top-1/2 -translate-y-1/2">
+                                            <div className="absolute right-14 top-1/2 -translate-y-1/2">
                                                 <Check className="h-4 w-4 text-charcoal" />
                                             </div>
                                         )}
@@ -263,12 +259,12 @@ export function EmployeeChangePasswordPage() {
                         <ul className="space-y-1.5">
                             {[
                                 "Use at least 8 characters",
-                                "Mix uppercase letters, numbers, and symbols",
+                                "A mix of uppercase letters, numbers, and symbols makes it stronger",
                                 "Avoid your name, birthday, or common words",
                                 "Don't reuse passwords from other sites",
                             ].map((tip) => (
                                 <li key={tip} className="flex items-center gap-2 text-xs text-steel">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-primary-brand shrink-0" />
+                                    <span className="h-1.5 w-1.5 rounded-full bg-primary-brand/50 shrink-0" />
                                     {tip}
                                 </li>
                             ))}

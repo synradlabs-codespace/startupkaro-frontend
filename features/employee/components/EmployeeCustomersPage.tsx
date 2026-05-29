@@ -1,4 +1,3 @@
-﻿// features/employee/components/EmployeeCustomersPage.tsx
 "use client";
 
 import { useState } from "react";
@@ -10,7 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { mockCustomers } from "@/lib/mock-data";
+import { useCustomerList } from "@/features/admin/hooks/useAdminCustomers";
+import { formatDate } from "@/features/admin/lib/format";
+import { getInitials } from "@/features/admin/lib/format";
 import { Search, Eye } from "lucide-react";
 
 const PAGE_SIZE = 10;
@@ -20,13 +21,10 @@ export function EmployeeCustomersPage() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
 
-    const filtered = mockCustomers.filter(
-        (c) =>
-            c.name.toLowerCase().includes(search.toLowerCase()) ||
-            c.email.toLowerCase().includes(search.toLowerCase())
-    );
+    const customersQuery = useCustomerList({ search: search || undefined, page, limit: pageSize });
 
-    const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
+    const customers = customersQuery.data?.data ?? [];
+    const total = customersQuery.data?.pagination.total ?? 0;
 
     const handleSearch = (value: string) => {
         setSearch(value);
@@ -35,7 +33,7 @@ export function EmployeeCustomersPage() {
 
     return (
         <div>
-            <PageHeader title="Customers" description={`${mockCustomers.length} registered customers`} />
+            <PageHeader title="Customers" description={`${total} registered customers`} />
             <div className="p-6 space-y-4">
                 <div className="relative max-w-sm">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate" />
@@ -50,42 +48,50 @@ export function EmployeeCustomersPage() {
                 <Card className="overflow-hidden">
                     <CardContent className="p-0">
                         <Table>
-                            <TableHeader className="bg-muted/50">
-                                <TableRow className="hover:bg-muted/50">
+                            <TableHeader>
+                                <TableRow className="hover:bg-transparent">
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Customer</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Email</TableHead>
-                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Mobile</TableHead>
-                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Orders</TableHead>
+                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Phone</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Joined</TableHead>
                                     <TableHead className="text-right font-semibold text-foreground/70 uppercase text-xs tracking-wide">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {paginated.length === 0 ? (
+                                {customersQuery.isLoading ? (
                                     <TableRow>
-                                        <TableCell colSpan={6} className="text-center text-slate py-12">
+                                        <TableCell colSpan={5} className="text-center text-slate py-12">
+                                            Loading customers...
+                                        </TableCell>
+                                    </TableRow>
+                                ) : customersQuery.isError ? (
+                                    <TableRow>
+                                        <TableCell colSpan={5} className="text-center text-error-brand py-12">
+                                            Failed to load customers
+                                        </TableCell>
+                                    </TableRow>
+                                ) : customers.length === 0 ? (
+                                    <TableRow>
+                                        <TableCell colSpan={5} className="text-center text-slate py-12">
                                             No customers found
                                         </TableCell>
                                     </TableRow>
                                 ) : (
-                                    paginated.map((customer) => (
+                                    customers.map((customer) => (
                                         <TableRow key={customer.id} className="hover:bg-muted/30">
                                             <TableCell>
                                                 <div className="flex items-center gap-3">
                                                     <Avatar className="h-8 w-8">
-                                                        <AvatarFallback className="text-xs bg-primary-brand/10 text-charcoal font-semibold">
-                                                            {customer.name.split(" ").map(n => n[0]).join("")}
+                                                        <AvatarFallback className="text-xs bg-primary-brand/10 text-primary-brand font-semibold">
+                                                            {getInitials(customer.name)}
                                                         </AvatarFallback>
                                                     </Avatar>
                                                     <span className="font-medium">{customer.name}</span>
                                                 </div>
                                             </TableCell>
                                             <TableCell className="text-slate text-sm">{customer.email}</TableCell>
-                                            <TableCell className="text-slate text-sm">{customer.mobile}</TableCell>
-                                            <TableCell>
-                                                <span className="font-medium">{customer.orders}</span>
-                                            </TableCell>
-                                            <TableCell className="text-slate text-sm">{customer.joined}</TableCell>
+                                            <TableCell className="text-slate text-sm">{customer.phone || "—"}</TableCell>
+                                            <TableCell className="text-slate text-sm">{formatDate(customer.createdAt)}</TableCell>
                                             <TableCell className="text-right">
                                                 <Link href={`/employee/customers/${customer.id}`}>
                                                     <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-brand/10 hover:text-charcoal">
@@ -99,7 +105,7 @@ export function EmployeeCustomersPage() {
                             </TableBody>
                         </Table>
                         <TablePagination
-                            total={filtered.length}
+                            total={total}
                             page={page}
                             pageSize={pageSize}
                             onPageChange={setPage}
@@ -111,4 +117,3 @@ export function EmployeeCustomersPage() {
         </div>
     );
 }
-

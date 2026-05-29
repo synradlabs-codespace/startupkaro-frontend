@@ -3,20 +3,23 @@
 "use client";
 
 import { useRef, useState, FormEvent } from "react";
-import { validators } from "@/lib/validations/common.schema";
+import { validators, formatNameInput, formatPhoneDigits, validatePhoneDigits, buildPhone, PHONE_PREFIX } from "@/lib/validations/common.schema";
+import { publicInquiryService } from "@/services/customer.service";
+import { getApiErrorMessage, isRateLimited } from "@/features/customers/lib/format";
 import { GripHorizontal, Mail, MapPin, Minus, Phone, Plus, Send } from "lucide-react";
 
 interface FormState {
-    fullName: string;
+    name: string;
     email: string;
-    phone: string;
+    subject: string;
     message: string;
 }
 
 interface FormErrors {
-    fullName?: string;
+    name?: string;
     email?: string;
     phone?: string;
+    subject?: string;
     message?: string;
 }
 
@@ -35,29 +38,28 @@ function getTodayDate() {
 export function ContactPage() {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const [form, setForm] = useState<FormState>({
-        fullName: "",
+        name: "",
         email: "",
-        phone: "",
+        subject: "",
         message: "",
     });
+    const [phoneDigits, setPhoneDigits] = useState("");
     const [errors, setErrors] = useState<FormErrors>({});
+    const [apiError, setApiError] = useState("");
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
     const [messageHeight, setMessageHeight] = useState(MESSAGE_MIN_HEIGHT);
 
-    const validateIndianPhone = (v: string): string | null => {
-        if (!v.trim()) return "Phone number is required";
-        const stripped = v.trim().replace(/[\s\-()]/g, "");
-        if (!/^(\+91)?[6-9]\d{9}$/.test(stripped))
-            return "Enter a valid Indian mobile number (e.g. +91 98765 43210)";
-        return null;
-    };
-
     function validate(): FormErrors {
         return {
-            fullName: validators.name(form.fullName) ?? undefined,
+            name: validators.name(form.name) ?? undefined,
             email: validators.email(form.email) ?? undefined,
-            phone: validateIndianPhone(form.phone) ?? undefined,
+            phone: validatePhoneDigits(phoneDigits, true) || undefined,
+            subject: form.subject.trim().length < 4
+                ? "Subject must be at least 4 characters"
+                : form.subject.trim().length > 120
+                    ? "Subject must be under 120 characters"
+                    : undefined,
             message: form.message.trim().length < 10
                 ? "Message must be at least 10 characters"
                 : form.message.trim().length > 1000
@@ -69,12 +71,21 @@ export function ContactPage() {
     const handleChange = (field: keyof FormState) => (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
-        setForm((prev) => ({ ...prev, [field]: e.target.value }));
+        const value = field === "name" ? formatNameInput(e.target.value) : e.target.value;
+        setForm((prev) => ({ ...prev, [field]: value }));
         if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
+        if (apiError) setApiError("");
+    };
+
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPhoneDigits(formatPhoneDigits(e.target.value));
+        if (errors.phone) setErrors((prev) => ({ ...prev, phone: undefined }));
+        if (apiError) setApiError("");
     };
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+        setApiError("");
         const errs = validate();
         const hasErrors = Object.values(errs).some(Boolean);
         if (hasErrors) {
@@ -82,9 +93,23 @@ export function ContactPage() {
             return;
         }
         setLoading(true);
-        await new Promise((r) => setTimeout(r, 800));
-        setLoading(false);
-        setSubmitted(true);
+        try {
+            await publicInquiryService.submit({
+                name: form.name.trim(),
+                email: form.email,
+                phone: buildPhone(phoneDigits)!,
+                subject: form.subject,
+                message: form.message,
+            });
+            setSubmitted(true);
+        } catch (err: unknown) {
+            setApiError(isRateLimited(err)
+                ? "Too many messages were sent recently. Please wait a little and try again."
+                : getApiErrorMessage(err, "We could not send your message. Please try again.")
+            );
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleResizeStart = (event: React.PointerEvent<HTMLButtonElement>) => {
@@ -196,14 +221,14 @@ export function ContactPage() {
                                     </label>
                                     <input
                                         type="text"
-                                        value={form.fullName}
-                                        onChange={handleChange("fullName")}
-                                        placeholder="Rahul Sharma"
+                                        value={form.name}
+                                        onChange={handleChange("name")}
+                                        placeholder="Full Name"
                                         autoComplete="name"
-                                        className={`${inputBase} ${errors.fullName ? inputError : inputNormal}`}
+                                        className={`${inputBase} ${errors.name ? inputError : inputNormal}`}
                                     />
-                                    {errors.fullName && (
-                                        <p className="mt-1.5 text-xs text-error-brand">{errors.fullName}</p>
+                                    {errors.name && (
+                                        <p className="mt-1.5 text-xs text-error-brand">{errors.name}</p>
                                     )}
                                 </div>
 
@@ -215,7 +240,7 @@ export function ContactPage() {
                                         type="email"
                                         value={form.email}
                                         onChange={handleChange("email")}
-                                        placeholder="rahul@company.com"
+                                        placeholder="Email"
                                         autoComplete="email"
                                         className={`${inputBase} ${errors.email ? inputError : inputNormal}`}
                                     />
@@ -229,16 +254,23 @@ export function ContactPage() {
                                         <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                                             Mobile Number
                                         </label>
-                                        <input
-                                            type="tel"
-                                            value={form.phone}
-                                            onChange={handleChange("phone")}
-                                            placeholder="+91 98765 43210"
-                                            autoComplete="tel"
-                                            className={`${inputBase} ${errors.phone ? inputError : inputNormal}`}
-                                        />
-                                        {errors.phone && (
+                                        <div className={`flex items-center rounded-md border bg-canvas overflow-hidden focus-within:ring-2 focus-within:ring-primary-brand/20 transition-colors ${errors.phone ? "border-error-brand" : "border-hairline-strong"}`}>
+                                            <span className="px-3 py-2.5 text-sm text-ink bg-surface border-r border-hairline select-none shrink-0">{PHONE_PREFIX}</span>
+                                            <input
+                                                type="tel"
+                                                inputMode="numeric"
+                                                value={phoneDigits}
+                                                onChange={handlePhoneChange}
+                                                placeholder="Number"
+                                                maxLength={10}
+                                                autoComplete="tel"
+                                                className="flex-1 px-3 py-2.5 text-sm text-ink bg-canvas outline-none placeholder:text-graphite"
+                                            />
+                                        </div>
+                                        {errors.phone ? (
                                             <p className="mt-1.5 text-xs text-error-brand">{errors.phone}</p>
+                                        ) : (
+                                            <p className="mt-1.5 text-xs text-graphite">10-digit number, no spaces</p>
                                         )}
                                     </div>
 
@@ -257,6 +289,22 @@ export function ContactPage() {
 
                                 <div>
                                     <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
+                                        Subject
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={form.subject}
+                                        onChange={handleChange("subject")}
+                                        placeholder="Subject"
+                                        className={`${inputBase} ${errors.subject ? inputError : inputNormal}`}
+                                    />
+                                    {errors.subject && (
+                                        <p className="mt-1.5 text-xs text-error-brand">{errors.subject}</p>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                                         Message
                                     </label>
                                     <div className="relative">
@@ -264,7 +312,7 @@ export function ContactPage() {
                                             ref={textareaRef}
                                             value={form.message}
                                             onChange={handleChange("message")}
-                                            placeholder="Tell us about your business and what you need help with..."
+                                            placeholder="Your message"
                                             rows={4}
                                             style={{ height: messageHeight }}
                                             className={`${inputBase} resize-none pb-14 sm:pb-4 ${errors.message ? inputError : inputNormal}`}
@@ -320,6 +368,10 @@ export function ContactPage() {
                                         </p>
                                     </div>
                                 </div>
+
+                                {apiError && (
+                                    <p className="text-sm text-error-brand">{apiError}</p>
+                                )}
 
                                 <button
                                     type="submit"

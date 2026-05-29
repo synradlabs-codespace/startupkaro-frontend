@@ -2,6 +2,7 @@
 
 import { EmployeeOrderEditPage } from "@/features/employee/components/EmployeeOrderEditPage";
 
-export default function EmployeeOrderEdit({ params }: { params: { id: string } }) {
-    return <EmployeeOrderEditPage id={params.id} />;
+export default async function EmployeeOrderEdit({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    return <EmployeeOrderEditPage id={id} />;
 }

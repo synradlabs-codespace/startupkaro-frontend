@@ -2,6 +2,7 @@
 
 import { EmployeeOrderDetailPage } from "@/features/employee/components/EmployeeOrderDetailPage";
 
-export default function EmployeeOrderDetail({ params }: { params: { id: string } }) {
-    return <EmployeeOrderDetailPage id={params.id} />;
+export default async function EmployeeOrderDetail({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    return <EmployeeOrderDetailPage id={id} />;
 }

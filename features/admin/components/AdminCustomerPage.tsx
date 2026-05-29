@@ -1,76 +1,109 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import { PageHeader } from "@/components/custom/PageHeader";
+import { TablePagination } from "@/components/custom/TablePagination";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { mockCustomers } from "@/lib/mock-data";
+import { useCustomerList } from "@/features/admin/hooks/useAdminCustomers";
+import { formatDate, getInitials } from "@/features/admin/lib/format";
 import { Search, Eye } from "lucide-react";
+
+const PAGE_SIZE = 10;
 
 export function AdminCustomersPage() {
     const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(PAGE_SIZE);
+    const customersQuery = useCustomerList({ search: search || undefined, page, limit: pageSize });
 
-    const filtered = mockCustomers.filter(
-        (c) =>
-            c.name.toLowerCase().includes(search.toLowerCase()) ||
-            c.email.toLowerCase().includes(search.toLowerCase()) ||
-            c.mobile.includes(search)
-    );
+    const customers = customersQuery.data?.data ?? [];
+    const total = customersQuery.data?.pagination.total ?? 0;
+
+    const handleSearch = (value: string) => {
+        setSearch(value);
+        setPage(1);
+    };
 
     return (
         <div>
-            <PageHeader title="Customers" description={`${mockCustomers.length} registered customers`} />
+            <PageHeader title="Customers" description={`${total} registered customers`} />
             <div className="p-6 space-y-4">
                 <div className="relative max-w-sm">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate" />
-                    <Input placeholder="Search customers..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
+                    <Input placeholder="Search by name or email..." value={search} onChange={(e) => handleSearch(e.target.value)} className="pl-9" />
                 </div>
 
-                <Card>
+                <Card className="overflow-hidden">
                     <CardContent className="p-0">
                         <Table>
                             <TableHeader>
-                                <TableRow>
-                                    <TableHead>Customer</TableHead>
-                                    <TableHead>Email</TableHead>
-                                    <TableHead>Mobile</TableHead>
-                                    <TableHead>Orders</TableHead>
-                                    <TableHead>Joined</TableHead>
-                                    <TableHead className="text-right">Actions</TableHead>
+                                <TableRow className="hover:bg-transparent">
+                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Customer</TableHead>
+                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Email</TableHead>
+                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Phone</TableHead>
+                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Joined</TableHead>
+                                    <TableHead className="text-right font-semibold text-foreground/70 uppercase text-xs tracking-wide">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {filtered.map((customer) => (
-                                    <TableRow key={customer.id}>
-                                        <TableCell>
-                                            <div className="flex items-center gap-3">
-                                                <Avatar className="h-8 w-8">
-                                                    <AvatarFallback className="text-xs bg-primary-brand/10 text-primary-brand">
-                                                        {customer.name.split(" ").map(n => n[0]).join("")}
-                                                    </AvatarFallback>
-                                                </Avatar>
-                                                <span className="font-medium">{customer.name}</span>
-                                            </div>
-                                        </TableCell>
-                                        <TableCell className="text-slate">{customer.email}</TableCell>
-                                        <TableCell className="text-slate">{customer.mobile}</TableCell>
-                                        <TableCell>{customer.orders}</TableCell>
-                                        <TableCell className="text-slate text-sm">{customer.joined}</TableCell>
-                                        <TableCell className="text-right">
-                                            <Link href={`/admin/customers/${customer.id}`}>
-                                                <Button variant="ghost" size="icon">
-                                                    <Eye className="h-4 w-4" />
-                                                </Button>
-                                            </Link>
+                                {customersQuery.isLoading ? (
+                                    <TableRow>
+                                        <TableCell colSpan={5} className="text-center text-slate py-12">
+                                            Loading customers...
                                         </TableCell>
                                     </TableRow>
-                                ))}
+                                ) : customersQuery.isError ? (
+                                    <TableRow>
+                                        <TableCell colSpan={5} className="text-center text-error-brand py-12">
+                                            Failed to load customers
+                                        </TableCell>
+                                    </TableRow>
+                                ) : customers.length === 0 ? (
+                                    <TableRow>
+                                        <TableCell colSpan={5} className="text-center text-slate py-12">
+                                            No customers found
+                                        </TableCell>
+                                    </TableRow>
+                                ) : (
+                                    customers.map((customer) => (
+                                        <TableRow key={customer.id} className="hover:bg-muted/30">
+                                            <TableCell>
+                                                <div className="flex items-center gap-3">
+                                                    <Avatar className="h-8 w-8">
+                                                        <AvatarFallback className="text-xs bg-primary-brand/10 text-primary-brand font-semibold">
+                                                            {getInitials(customer.name)}
+                                                        </AvatarFallback>
+                                                    </Avatar>
+                                                    <span className="font-medium">{customer.name}</span>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="text-slate text-sm">{customer.email}</TableCell>
+                                            <TableCell className="text-slate text-sm">{customer.phone || "—"}</TableCell>
+                                            <TableCell className="text-slate text-sm">{formatDate(customer.createdAt)}</TableCell>
+                                            <TableCell className="text-right">
+                                                <Link href={`/admin/customers/${customer.id}`}>
+                                                    <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-brand/10 hover:text-charcoal">
+                                                        <Eye className="h-4 w-4" />
+                                                    </Button>
+                                                </Link>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                )}
                             </TableBody>
                         </Table>
+                        <TablePagination
+                            total={total}
+                            page={page}
+                            pageSize={pageSize}
+                            onPageChange={setPage}
+                            onPageSizeChange={setPageSize}
+                        />
                     </CardContent>
                 </Card>
             </div>

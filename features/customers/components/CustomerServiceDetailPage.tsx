@@ -1,8 +1,9 @@
-// features/customers/components/CustomerServiceDetailPage.tsx
+"use client";
 
 import Link from "next/link";
 import { PageHeader } from "@/components/custom/PageHeader";
-import { mockServices } from "@/lib/mock-data";
+import { useCustomerServiceList } from "@/features/customers/hooks/useCustomerServices";
+import { formatINR } from "@/lib/currency";
 import {
     Clock,
     ShieldCheck,
@@ -33,9 +34,30 @@ const highlights = [
 ];
 
 export function CustomerServiceDetailPage({ id }: { id: string }) {
-    const service = mockServices.find((s) => s.id === id) ?? mockServices[0];
+    const servicesQuery = useCustomerServiceList({ page: 1, limit: 100 });
+    const service = (servicesQuery.data?.data ?? []).find((item) => item.id === id || item.slug === id);
+
+    if (servicesQuery.isLoading) {
+        return (
+            <div className="flex flex-col min-h-screen">
+                <PageHeader title="Service" description="Loading service details" />
+                <div className="p-6 text-sm text-slate">Loading service...</div>
+            </div>
+        );
+    }
+
+    if (servicesQuery.isError || !service) {
+        return (
+            <div className="flex flex-col min-h-screen">
+                <PageHeader title="Service" description="Service details" />
+                <div className="p-6 text-sm text-error-brand">Failed to load service</div>
+            </div>
+        );
+    }
+
     const meta = categoryMeta[service.category] ?? fallbackMeta;
     const Icon = meta.icon;
+    const serviceId = service.id || service.slug;
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -52,11 +74,7 @@ export function CustomerServiceDetailPage({ id }: { id: string }) {
 
             <div className="flex-1 p-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-
-                    {/* ── Left: Service details ───────────── */}
                     <div className="md:col-span-2 space-y-5">
-
-                        {/* Hero banner */}
                         <div className="rounded-xl bg-primary-brand p-6">
                             <div className="flex items-start gap-4">
                                 <div className="h-12 w-12 rounded-lg bg-white/15 flex items-center justify-center shrink-0">
@@ -74,7 +92,6 @@ export function CustomerServiceDetailPage({ id }: { id: string }) {
                             </div>
                         </div>
 
-                        {/* What's included */}
                         <div className="rounded-lg border border-hairline bg-canvas p-6">
                             <h3 className="text-sm font-semibold text-charcoal mb-4 flex items-center gap-2">
                                 <CheckCircle2 className="h-4 w-4 text-primary-brand" />
@@ -93,17 +110,14 @@ export function CustomerServiceDetailPage({ id }: { id: string }) {
                         </div>
                     </div>
 
-                    {/* ── Right: Pricing card ─────────────── */}
                     <div className="rounded-lg border border-hairline bg-canvas overflow-hidden">
-                        {/* Card header accent */}
                         <div className="h-1.5 bg-primary-brand" />
 
                         <div className="p-6 space-y-5">
-                            {/* Price */}
                             <div>
                                 <p className="text-xs text-stone uppercase tracking-wide font-medium mb-1">Service Fee</p>
                                 <p className="text-3xl font-display font-medium text-ink">
-                                    ₹{service.price.toLocaleString("en-IN")}
+                                    {formatINR(service.price)}
                                 </p>
                                 <p className="text-xs text-stone flex items-center gap-1 mt-1.5">
                                     <Clock className="h-3 w-3" /> Delivered in {service.duration}
@@ -112,7 +126,6 @@ export function CustomerServiceDetailPage({ id }: { id: string }) {
 
                             <div className="h-px bg-surface" />
 
-                            {/* Details */}
                             <div className="space-y-2.5">
                                 <div className="flex items-center justify-between text-xs">
                                     <span className="text-steel flex items-center gap-1.5">
@@ -132,16 +145,14 @@ export function CustomerServiceDetailPage({ id }: { id: string }) {
 
                             <div className="h-px bg-surface" />
 
-                            {/* CTA */}
                             <Link
-                                href={`/customer/checkout?service=${service.id}`}
+                                href={`/customer/checkout?service=${serviceId}`}
                                 className="flex items-center justify-center gap-2 w-full h-9 px-4 text-sm font-medium bg-primary-brand text-white hover:bg-primary-brand/90 rounded-lg transition-colors"
                             >
                                 Proceed to Checkout
                                 <ArrowRight className="h-4 w-4" />
                             </Link>
 
-                            {/* Trust note */}
                             <p className="text-[11px] text-center text-stone flex items-center justify-center gap-1.5">
                                 <ShieldCheck className="h-3 w-3 text-primary-brand" />
                                 Secured by Razorpay

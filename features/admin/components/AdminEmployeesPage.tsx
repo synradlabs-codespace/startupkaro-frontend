@@ -1,4 +1,3 @@
-﻿// features/admin/components/AdminEmployeesPage.tsx
 "use client";
 
 import { useState } from "react";
@@ -8,10 +7,11 @@ import { TablePagination } from "@/components/custom/TablePagination";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { RoleBadge, ActiveBadge } from "@/components/custom/StatusBadge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { mockEmployees } from "@/lib/mock-data";
+import { useEmployeeList } from "@/features/admin/hooks/useAdminEmployees";
+import { formatDate, getInitials } from "@/features/admin/lib/format";
 import { Search, Plus, Eye } from "lucide-react";
 
 const PAGE_SIZE = 10;
@@ -20,14 +20,10 @@ export function AdminEmployeesPage() {
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
+    const employeesQuery = useEmployeeList({ search: search || undefined, page, limit: pageSize });
 
-    const filtered = mockEmployees.filter(
-        (e) =>
-            e.name.toLowerCase().includes(search.toLowerCase()) ||
-            e.email.toLowerCase().includes(search.toLowerCase())
-    );
-
-    const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
+    const employees = employeesQuery.data?.data ?? [];
+    const total = employeesQuery.data?.pagination.total ?? 0;
 
     const handleSearch = (value: string) => {
         setSearch(value);
@@ -38,10 +34,10 @@ export function AdminEmployeesPage() {
         <div>
             <PageHeader
                 title="Employees"
-                description={`${mockEmployees.length} team members`}
+                description={`${total} team members`}
                 action={
                     <Link href="/admin/employees/new">
-                        <Button size="sm" className="bg-primary-brand hover:bg-primary-brand/90 text-white">
+                        <Button size="sm" className="bg-primary-brand hover:bg-primary-brand/90 text-white uppercase tracking-wide">
                             <Plus className="h-4 w-4 mr-1" /> Add Employee
                         </Button>
                     </Link>
@@ -61,8 +57,8 @@ export function AdminEmployeesPage() {
                 <Card className="overflow-hidden">
                     <CardContent className="p-0">
                         <Table>
-                            <TableHeader className="bg-muted/50">
-                                <TableRow className="hover:bg-muted/50">
+                            <TableHeader>
+                                <TableRow className="hover:bg-transparent">
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Employee</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Email</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Role</TableHead>
@@ -72,20 +68,32 @@ export function AdminEmployeesPage() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {paginated.length === 0 ? (
+                                {employeesQuery.isLoading ? (
+                                    <TableRow>
+                                        <TableCell colSpan={6} className="text-center text-slate py-12">
+                                            Loading employees...
+                                        </TableCell>
+                                    </TableRow>
+                                ) : employeesQuery.isError ? (
+                                    <TableRow>
+                                        <TableCell colSpan={6} className="text-center text-error-brand py-12">
+                                            Failed to load employees
+                                        </TableCell>
+                                    </TableRow>
+                                ) : employees.length === 0 ? (
                                     <TableRow>
                                         <TableCell colSpan={6} className="text-center text-slate py-12">
                                             No employees found
                                         </TableCell>
                                     </TableRow>
                                 ) : (
-                                    paginated.map((emp) => (
+                                    employees.map((emp) => (
                                         <TableRow key={emp.id} className="hover:bg-muted/30">
                                             <TableCell>
                                                 <div className="flex items-center gap-3">
                                                     <Avatar className="h-8 w-8">
                                                         <AvatarFallback className="text-xs bg-primary-brand/10 text-primary-brand font-semibold">
-                                                            {emp.name.split(" ").map(n => n[0]).join("")}
+                                                            {getInitials(emp.name)}
                                                         </AvatarFallback>
                                                     </Avatar>
                                                     <span className="font-medium">{emp.name}</span>
@@ -93,22 +101,12 @@ export function AdminEmployeesPage() {
                                             </TableCell>
                                             <TableCell className="text-slate text-sm">{emp.email}</TableCell>
                                             <TableCell>
-                                                <Badge variant="outline" className="text-xs bg-primary-brand/10 border-primary-brand/20 text-primary-brand">
-                                                    {emp.role}
-                                                </Badge>
+                                                <RoleBadge role={emp.role} />
                                             </TableCell>
                                             <TableCell>
-                                                <Badge
-                                                    variant="outline"
-                                                    className={emp.status === "active"
-                                                        ? "bg-status-positive-bg text-status-positive-fg border-status-positive-border hover:bg-status-positive-bg"
-                                                        : "bg-status-muted-bg text-status-muted-fg border-status-muted-border hover:bg-status-muted-bg"
-                                                    }
-                                                >
-                                                    {emp.status}
-                                                </Badge>
+                                                <ActiveBadge isActive={emp.isActive} />
                                             </TableCell>
-                                            <TableCell className="text-slate text-sm">{emp.joined}</TableCell>
+                                            <TableCell className="text-slate text-sm">{formatDate(emp.createdAt)}</TableCell>
                                             <TableCell className="text-right">
                                                 <Link href={`/admin/employees/${emp.id}`}>
                                                     <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-brand/10 hover:text-charcoal">
@@ -122,7 +120,7 @@ export function AdminEmployeesPage() {
                             </TableBody>
                         </Table>
                         <TablePagination
-                            total={filtered.length}
+                            total={total}
                             page={page}
                             pageSize={pageSize}
                             onPageChange={setPage}
@@ -134,4 +132,3 @@ export function AdminEmployeesPage() {
         </div>
     );
 }
-

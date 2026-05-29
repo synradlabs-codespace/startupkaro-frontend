@@ -26,9 +26,9 @@ export const mockCustomers = [
 ];
 
 export const mockEmployees = [
-  { id: "EMP-001", name: "Arjun Verma", email: "arjun@startupkaro.com", role: "EMPLOYEE", status: "active", joined: "2024-10-01" },
-  { id: "EMP-002", name: "Kavya Nair", email: "kavya@startupkaro.com", role: "EMPLOYEE", status: "active", joined: "2024-11-15" },
-  { id: "EMP-003", name: "Rohit Das", email: "rohit@startupkaro.com", role: "EMPLOYEE", status: "inactive", joined: "2024-12-01" },
+  { id: "EMP-001", name: "Arjun Verma", email: "arjun@startupkaro.com", role: "employee", status: "active", joined: "2024-10-01" },
+  { id: "EMP-002", name: "Kavya Nair", email: "kavya@startupkaro.com", role: "employee", status: "active", joined: "2024-11-15" },
+  { id: "EMP-003", name: "Rohit Das", email: "rohit@startupkaro.com", role: "employee", status: "inactive", joined: "2024-12-01" },
 ];
 
 export const mockInquiries = [
