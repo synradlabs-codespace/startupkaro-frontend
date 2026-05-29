@@ -4,15 +4,30 @@ import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { ArrowLeft, LockKeyhole, Mail, ShieldCheck } from "lucide-react";
 import { useAdminLogin } from "../hooks/useAdminAuth";
+import { validators } from "@/lib/validations/common.schema";
 
 export function AdminLoginForm() {
   const { login, loading, error } = useAdminLogin();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState({ email: "", password: "" });
+
+  const clearFieldError = (key: keyof typeof fieldErrors) =>
+    setFieldErrors((f) => ({ ...f, [key]: "" }));
+
+  const validate = () => {
+    const errors = {
+      email: validators.email(email) ?? "",
+      password: !password ? "Password is required" : "",
+    };
+    setFieldErrors(errors);
+    return Object.values(errors).every((e) => e === "");
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!validate()) return;
     await login(email, password);
   };
 
@@ -76,12 +91,13 @@ export function AdminLoginForm() {
                 <input
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => { setEmail(e.target.value); clearFieldError("email"); }}
                   required
                   autoComplete="email"
-                  placeholder="admin@startupkaro.com"
-                  className="h-11 w-full rounded-md border border-hairline-strong bg-canvas px-4 text-sm text-ink placeholder:text-graphite outline-none transition-colors focus:border-ink"
+                  placeholder="Email"
+                  className={`h-11 w-full rounded-md border bg-canvas px-4 text-sm text-ink placeholder:text-graphite outline-none transition-colors focus:border-ink ${fieldErrors.email ? "border-error-brand" : "border-hairline-strong"}`}
                 />
+                {fieldErrors.email && <p className="mt-1 text-xs text-error-brand">{fieldErrors.email}</p>}
               </div>
 
               <div className="space-y-2">
@@ -93,11 +109,11 @@ export function AdminLoginForm() {
                   <input
                     type={showPassword ? "text" : "password"}
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => { setPassword(e.target.value); clearFieldError("password"); }}
                     required
                     autoComplete="current-password"
-                    placeholder="Enter password"
-                    className="h-11 w-full rounded-md border border-hairline-strong bg-canvas px-4 pr-16 text-sm text-ink placeholder:text-graphite outline-none transition-colors focus:border-ink"
+                    placeholder="Password"
+                    className={`h-11 w-full rounded-md border bg-canvas px-4 pr-16 text-sm text-ink placeholder:text-graphite outline-none transition-colors focus:border-ink ${fieldErrors.password ? "border-error-brand" : "border-hairline-strong"}`}
                   />
                   <button
                     type="button"
@@ -107,6 +123,7 @@ export function AdminLoginForm() {
                     {showPassword ? "Hide" : "Show"}
                   </button>
                 </div>
+                {fieldErrors.password && <p className="mt-1 text-xs text-error-brand">{fieldErrors.password}</p>}
               </div>
 
               <button

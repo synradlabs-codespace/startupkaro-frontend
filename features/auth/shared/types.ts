@@ -1,6 +1,7 @@
 // features/auth/shared/types.ts
 
-export type Role = "ADMIN" | "EMPLOYEE" | "CUSTOMER";
+import type { Role } from "@/lib/rbac/roles";
+export type { Role } from "@/lib/rbac/roles";
 
 export interface AuthUser {
   id: string;
@@ -14,8 +15,12 @@ export interface LoginCredentials {
   password: string;
 }
 
-export interface AuthResponse {
-  user: AuthUser;
+export interface AuthTokens {
   accessToken: string;
   refreshToken: string;
+}
+
+export interface AuthResponse {
+  user: AuthUser;
+  tokens: AuthTokens;
 }

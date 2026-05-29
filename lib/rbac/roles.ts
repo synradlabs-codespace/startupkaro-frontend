@@ -1,21 +1,21 @@
-// lib/rbax/roles.ts
+// lib/rbac/roles.ts
 
 export const ROLES = {
-    ADMIN: "ADMIN",
-    EMPLOYEE: "EMPLOYEE",
-    CUSTOMER: "CUSTOMER",
+    ADMIN: "admin",
+    EMPLOYEE: "employee",
+    CUSTOMER: "customer",
 } as const;
 
-export type Role = keyof typeof ROLES;
+export type Role = typeof ROLES[keyof typeof ROLES];
 
 export const ROLE_REDIRECTS: Record<Role, string> = {
-    ADMIN: "/admin",
-    EMPLOYEE: "/employee",
-    CUSTOMER: "/customer",
+    admin: "/admin",
+    employee: "/employee",
+    customer: "/customer",
 };
 
 export const ROLE_LOGIN_ROUTES: Record<Role, string> = {
-    ADMIN: "/admin/login",
-    EMPLOYEE: "/employee/login",
-    CUSTOMER: "/customer/login",
+    admin: "/admin/login",
+    employee: "/employee/login",
+    customer: "/customer/login",
 };

@@ -6,6 +6,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authService } from "@/services/auth.service";
 import { useAuth } from "../../shared/hooks/useAuth";
+import { ROLE_REDIRECTS } from "@/lib/rbac/roles";
+
+type AxiosLikeError = { response?: { data?: { message?: string } } };
 
 export function useCustomerLogin() {
     const [loading, setLoading] = useState(false);
@@ -17,11 +20,12 @@ export function useCustomerLogin() {
         setLoading(true);
         setError(null);
         try {
-            // const response = await authService.customerLogin({ email, password });
-            // saveSession(response.user, response.accessToken);
-            router.push("/customer");
-        } catch (err: any) {
-            setError(err?.response?.data?.message ?? "Invalid credentials");
+            const response = await authService.customerLogin({ email, password });
+            saveSession(response.user, response.tokens);
+            router.push(ROLE_REDIRECTS[response.user.role]);
+        } catch (err) {
+            const e = err as AxiosLikeError;
+            setError(e?.response?.data?.message ?? "Invalid credentials");
         } finally {
             setLoading(false);
         }
@@ -45,11 +49,12 @@ export function useCustomerRegister() {
         setLoading(true);
         setError(null);
         try {
-            // const response = await authService.customerRegister(payload);
-            // saveSession(response.user, response.accessToken);
-            router.push("/customer");
-        } catch (err: any) {
-            setError(err?.response?.data?.message ?? "Registration failed");
+            const response = await authService.customerRegister(payload);
+            saveSession(response.user, response.tokens);
+            router.push(ROLE_REDIRECTS[response.user.role]);
+        } catch (err) {
+            const e = err as AxiosLikeError;
+            setError(e?.response?.data?.message ?? "Registration failed");
         } finally {
             setLoading(false);
         }
@@ -69,12 +74,35 @@ export function useCustomerResetPassword() {
         try {
             await authService.customerForgotPassword(email);
             setSent(true);
-        } catch (err: any) {
-            setError(err?.response?.data?.message ?? "Something went wrong");
+        } catch (err) {
+            const e = err as AxiosLikeError;
+            setError(e?.response?.data?.message ?? "Something went wrong");
         } finally {
             setLoading(false);
         }
     };
 
     return { sendResetEmail, loading, error, sent };
+}
+
+export function useCustomerConfirmReset() {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [done, setDone] = useState(false);
+
+    const confirmReset = async (token: string, password: string) => {
+        setLoading(true);
+        setError(null);
+        try {
+            await authService.customerResetPassword({ token, password });
+            setDone(true);
+        } catch (err) {
+            const e = err as AxiosLikeError;
+            setError(e?.response?.data?.message ?? "Something went wrong");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return { confirmReset, loading, error, done };
 }

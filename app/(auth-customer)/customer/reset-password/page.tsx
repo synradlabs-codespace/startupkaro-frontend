@@ -2,6 +2,11 @@
 
 import { CustomerResetPasswordForm } from "@/features/auth/customer/components/CustomerResetPasswordForm";
 
-export default function CustomerResetPasswordPage() {
-    return <CustomerResetPasswordForm />;
+export default async function CustomerResetPasswordPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ token?: string }>;
+}) {
+    const { token } = await searchParams;
+    return <CustomerResetPasswordForm token={token} />;
 }

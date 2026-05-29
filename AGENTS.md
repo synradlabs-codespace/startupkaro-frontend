@@ -4,6 +4,26 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 [@AGENTS.md](./AGENTS.md)
 
+## Test Credentials (staging/dev backend)
+
+| Role | Email | Password | Login route |
+|---|---|---|---|
+| Admin | `admin@startupkaro.com` | `admin123@321` | `/admin/login` |
+| Employee | `daksh.e@startupkaro.com` | `startupkaro123` | `/employee/login` |
+| Customer 0 | `daksh.c@startupkaro.com` | `startupkaro123` | `/customer/login` |
+| Customer 1 | `daksh.c1@startupkaro.com` | `startupkaro123` | `/customer/login` |
+| Customer 2 (real email — use for email flow testing e.g. forgot password) | `mr.codefrost@gmail.com` | `startupkaro123` | `/customer/login` |
+
+API base URL: `https://server.startupkaro.in/api/v1`
+
+## Investigating API issues
+
+When debugging API contract questions or suspected mismatches:
+- **Always verify with `curl` first** against the live staging API (`https://server.startupkaro.in/api/v1`). Use the admin credentials above to get a token.
+- Use the Postman collection (`StartupKaro API.postman_collection.json`) only as a **route reference** — it documents available endpoints and request structure.
+- **Do not trust Postman response examples** — they are often outdated and do not reflect the current backend response shape.
+- Only open `API_MISMATCHES.md` issues after confirming via curl that the backend does not behave as expected.
+
 ## Commands
 
 ```bash
@@ -78,7 +98,7 @@ The site uses the HP-inspired design system defined in `DESIGN.md` at the repo r
 | `bg-storm-deep` | `#356373` | Supporting status/illustration accent |
 
 ### Typography
-- The project uses **Urbanist** (`font-display`) for all headings/display text and **Quicksand** (`font-sans`) for body, captions, buttons, and all other UI text. Both are loaded via `next/font/google`. Do not introduce any other fonts.
+- The project uses **Gilroy** (`font-display`) for all headings/display text and **Quicksand** (`font-sans`) for body, captions, buttons, and all other UI text. Gilroy is a custom font (not available via `next/font/google`). Do not introduce any other fonts.
 - Headline weight should stay lighter and geometric: prefer `font-display font-medium` for new HP-aligned display work.
 - Button labels should be compact uppercase with modest positive tracking.
 

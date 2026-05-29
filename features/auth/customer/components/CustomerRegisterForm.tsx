@@ -4,52 +4,77 @@ import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { ArrowLeft, FileCheck, LockKeyhole, Mail, Phone, User } from "lucide-react";
 import { useCustomerRegister } from "../hooks/useCustomerAuth";
+import {
+    formatNameInput, formatPhoneDigits,
+    validateName, validateEmail, validatePassword, validateConfirmPassword, validatePhoneDigits, buildPhone,
+    PHONE_PREFIX,
+} from "@/lib/validation";
+
+const FIELD_CLASS = "h-10 w-full rounded-md border bg-canvas px-4 text-sm text-ink placeholder:text-graphite outline-none transition-colors focus:border-ink";
 
 export function CustomerRegisterForm() {
   const { register, loading, error } = useCustomerRegister();
-  const [form, setForm] = useState({ name: "", email: "", mobile: "", password: "", confirm: "" });
-  const [validationError, setValidationError] = useState<string | null>(null);
+  const [form, setForm] = useState({ name: "", email: "", password: "", confirm: "" });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [phoneDigits, setPhoneDigits] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({ name: "", email: "", phone: "", password: "", confirm: "" });
+  const [apiError, setApiError] = useState<string | null>(null);
+
+  const clearFieldError = (key: keyof typeof fieldErrors) =>
+    setFieldErrors((f) => ({ ...f, [key]: "" }));
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((f) => ({ ...f, name: formatNameInput(e.target.value) }));
+    if (fieldErrors.name) clearFieldError("name");
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((f) => ({ ...f, email: e.target.value }));
+    if (fieldErrors.email) clearFieldError("email");
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPhoneDigits(formatPhoneDigits(e.target.value));
+    if (fieldErrors.phone) clearFieldError("phone");
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((f) => ({ ...f, password: e.target.value }));
+    if (fieldErrors.password) clearFieldError("password");
+    if (fieldErrors.confirm) clearFieldError("confirm");
+  };
+
+  const handleConfirmChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((f) => ({ ...f, confirm: e.target.value }));
+    if (fieldErrors.confirm) clearFieldError("confirm");
+  };
+
+  const validate = () => {
+    const errors = {
+      name: validateName(form.name),
+      email: validateEmail(form.email),
+      phone: validatePhoneDigits(phoneDigits, true),
+      password: validatePassword(form.password),
+      confirm: validateConfirmPassword(form.password, form.confirm),
+    };
+    setFieldErrors(errors);
+    return Object.values(errors).every((e) => e === "");
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setValidationError(null);
-    if (form.password !== form.confirm) {
-      setValidationError("Passwords do not match");
-      return;
-    }
-    await register({ name: form.name, email: form.email, mobile: form.mobile, password: form.password });
+    setApiError(null);
+    if (!validate()) return;
+    await register({
+      name: form.name.trim(),
+      email: form.email,
+      mobile: buildPhone(phoneDigits)!,
+      password: form.password,
+    });
   };
 
-  const displayError = validationError || error;
-
-  const detailFields = [
-    { key: "name", label: "Full name", type: "text", placeholder: "Rahul Sharma", autoComplete: "name", icon: User },
-    { key: "email", label: "Email", type: "email", placeholder: "you@example.com", autoComplete: "email", icon: Mail },
-    { key: "mobile", label: "Mobile", type: "tel", placeholder: "+91 98765 43210", autoComplete: "tel", icon: Phone },
-  ] as const;
-
-  const passwordFields = [
-    { key: "password", label: "Create password", type: "password", placeholder: "Enter password", autoComplete: "new-password", icon: LockKeyhole },
-    { key: "confirm", label: "Confirm password", type: "password", placeholder: "Re-enter password", autoComplete: "new-password", icon: LockKeyhole },
-  ] as const;
-
-  const renderField = ({ key, label, type, placeholder, autoComplete, icon: Icon }: (typeof detailFields | typeof passwordFields)[number]) => (
-    <div key={key}>
-      <label className="mb-1.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
-        <Icon className="h-3.5 w-3.5" />
-        {label}
-      </label>
-      <input
-        type={type}
-        value={form[key]}
-        onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
-        required
-        autoComplete={autoComplete}
-        placeholder={placeholder}
-        className="h-10 w-full rounded-md border border-hairline-strong bg-canvas px-4 text-sm text-ink placeholder:text-graphite outline-none transition-colors focus:border-ink"
-      />
-    </div>
-  );
+  const displayError = apiError || error;
 
   return (
     <main className="min-h-screen bg-cloud px-4 py-4 sm:px-6 lg:px-8">
@@ -62,7 +87,6 @@ export function CustomerRegisterForm() {
                   <ArrowLeft className="h-3.5 w-3.5" />
                   Back to sign in
                 </Link>
-
                 <p className="mb-2 text-xs font-semibold uppercase tracking-[0.7px] text-primary-brand">StartupKaro</p>
                 <h1 className="font-display text-4xl font-medium leading-none text-ink">Create your account</h1>
                 <p className="mt-2 max-w-xl text-sm leading-relaxed text-graphite">
@@ -81,14 +105,129 @@ export function CustomerRegisterForm() {
               <div className="space-y-3">
                 <p className="text-xs font-semibold uppercase tracking-[0.7px] text-primary-brand">Your details</p>
                 <div className="grid gap-3 md:grid-cols-3">
-                  {detailFields.map(renderField)}
+
+                  {/* Name */}
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
+                      <User className="h-3.5 w-3.5" /> Full name
+                    </label>
+                    <input
+                      type="text"
+                      value={form.name}
+                      onChange={handleNameChange}
+                      required
+                      autoComplete="name"
+                      placeholder="Full Name"
+                      className={`${FIELD_CLASS} ${fieldErrors.name ? "border-error-brand" : "border-hairline-strong"}`}
+                    />
+                    {fieldErrors.name
+                      ? <p className="mt-1 text-xs text-error-brand">{fieldErrors.name}</p>
+                      : <p className="mt-1 text-xs text-graphite">Letters and spaces only</p>
+                    }
+                  </div>
+
+                  {/* Email */}
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
+                      <Mail className="h-3.5 w-3.5" /> Email
+                    </label>
+                    <input
+                      type="email"
+                      value={form.email}
+                      onChange={handleEmailChange}
+                      required
+                      autoComplete="email"
+                      placeholder="Email"
+                      className={`${FIELD_CLASS} ${fieldErrors.email ? "border-error-brand" : "border-hairline-strong"}`}
+                    />
+                    {fieldErrors.email && <p className="mt-1 text-xs text-error-brand">{fieldErrors.email}</p>}
+                  </div>
+
+                  {/* Phone */}
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
+                      <Phone className="h-3.5 w-3.5" /> Mobile
+                    </label>
+                    <div className={`flex items-center rounded-md border bg-canvas overflow-hidden focus-within:border-ink ${fieldErrors.phone ? "border-error-brand" : "border-hairline-strong"}`}>
+                      <span className="px-3 py-2 text-sm text-ink bg-surface border-r border-hairline select-none shrink-0">{PHONE_PREFIX}</span>
+                      <input
+                        type="tel"
+                        inputMode="numeric"
+                        value={phoneDigits}
+                        onChange={handlePhoneChange}
+                        placeholder="Number"
+                        maxLength={10}
+                        className="flex-1 px-3 py-2 text-sm text-ink bg-canvas outline-none placeholder:text-graphite h-10"
+                      />
+                    </div>
+                    {fieldErrors.phone
+                      ? <p className="mt-1 text-xs text-error-brand">{fieldErrors.phone}</p>
+                      : <p className="mt-1 text-xs text-graphite">10-digit number, no spaces</p>
+                    }
+                  </div>
+
                 </div>
               </div>
 
               <div className="space-y-3">
                 <p className="text-xs font-semibold uppercase tracking-[0.7px] text-primary-brand">Account security</p>
                 <div className="grid gap-3 md:grid-cols-2">
-                  {passwordFields.map(renderField)}
+
+                  {/* Password */}
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
+                      <LockKeyhole className="h-3.5 w-3.5" /> Create password
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        value={form.password}
+                        onChange={handlePasswordChange}
+                        required
+                        autoComplete="new-password"
+                        placeholder="Password"
+                        className={`${FIELD_CLASS} pr-12 ${fieldErrors.password ? "border-error-brand" : "border-hairline-strong"}`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((v) => !v)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-semibold uppercase tracking-[0.7px] text-link-blue hover:text-primary-deep"
+                      >
+                        {showPassword ? "HIDE" : "SHOW"}
+                      </button>
+                    </div>
+                    {fieldErrors.password
+                      ? <p className="mt-1 text-xs text-error-brand">{fieldErrors.password}</p>
+                      : <p className="mt-1 text-xs text-graphite">At least 8 characters</p>
+                    }
+                  </div>
+
+                  {/* Confirm password */}
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
+                      <LockKeyhole className="h-3.5 w-3.5" /> Confirm password
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showConfirm ? "text" : "password"}
+                        value={form.confirm}
+                        onChange={handleConfirmChange}
+                        required
+                        autoComplete="new-password"
+                        placeholder="Confirm Password"
+                        className={`${FIELD_CLASS} pr-12 ${fieldErrors.confirm ? "border-error-brand" : "border-hairline-strong"}`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirm((v) => !v)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-semibold uppercase tracking-[0.7px] text-link-blue hover:text-primary-deep"
+                      >
+                        {showConfirm ? "HIDE" : "SHOW"}
+                      </button>
+                    </div>
+                    {fieldErrors.confirm && <p className="mt-1 text-xs text-error-brand">{fieldErrors.confirm}</p>}
+                  </div>
+
                 </div>
               </div>
 
