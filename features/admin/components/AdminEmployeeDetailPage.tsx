@@ -2,15 +2,13 @@
 
 import { useState } from "react";
 import { PageHeader } from "@/components/custom/PageHeader";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useEmployee, useUpdateEmployee } from "@/features/admin/hooks/useAdminEmployees";
 import { formatDate, getApiErrorMessage, getInitials } from "@/features/admin/lib/format";
 import type { AdminRole } from "@/services/admin.service";
-import { Mail, Pencil, Check, X, Calendar, ShieldCheck, Phone } from "lucide-react";
+import { Mail, Pencil, Check, X, Calendar, ShieldCheck, Phone, BadgeCheck } from "lucide-react";
 import { formatRole, formatActiveStatus } from "@/components/custom/StatusBadge";
 
 export function AdminEmployeeDetailPage({ id }: { id: string }) {
@@ -100,81 +98,70 @@ export function AdminEmployeeDetailPage({ id }: { id: string }) {
                 }
             />
             <div className="p-6 max-w-lg space-y-4">
-                <div className="rounded-xl bg-primary-brand p-8">
-                    <div className="relative flex flex-col items-center text-center gap-4">
-                        <Avatar className="h-20 w-20 ring-2 ring-white/60 ring-offset-2 ring-offset-primary-brand">
-                            <AvatarFallback className="text-xl font-semibold bg-white text-primary-deep">
-                                {getInitials(displayName)}
-                            </AvatarFallback>
-                        </Avatar>
+                <div className="rounded-xl bg-primary-brand px-6 py-5">
+                    <div className="flex items-center gap-4">
+                        <div className="h-14 w-14 rounded-full ring-2 ring-white/60 ring-offset-2 ring-offset-primary-brand bg-white flex items-center justify-center shrink-0">
+                            <span className="text-lg font-semibold text-primary-deep">{getInitials(displayName)}</span>
+                        </div>
 
-                        <div className="space-y-1">
+                        <div className="flex-1 min-w-0">
                             {editing ? (
                                 <Input
                                     value={form.name}
                                     onChange={(e) => setDraft((f) => ({ ...(f ?? form), name: e.target.value }))}
-                                    className="text-center font-semibold text-base rounded-lg bg-white/10 border-white/30 text-white placeholder:text-white/50 focus-visible:ring-white/30"
+                                    className="font-semibold text-base rounded-lg bg-white/10 border-white/30 text-white placeholder:text-white/50 focus-visible:ring-white/30"
                                 />
                             ) : (
-                                <p className="font-semibold text-lg text-white">{displayName}</p>
+                                <h2 className="text-lg font-semibold text-white">{displayName}</h2>
                             )}
-                        </div>
 
-                        <div className="flex gap-2 items-center">
-                            {editing ? (
-                                <Select value={form.role} onValueChange={(value) => setDraft((f) => ({ ...(f ?? form), role: (value ?? form.role) as AdminRole }))}>
-                                    <SelectTrigger className="h-8 w-28 rounded-md border-white bg-white px-3 text-xs text-primary-deep shadow-sm hover:bg-white/95 focus-visible:ring-white/35">
-                                        <SelectValue>{formatRole(form.role)}</SelectValue>
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="employee">Employee</SelectItem>
-                                        <SelectItem value="admin">Admin</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            ) : (
-                                <Badge variant="outline" className="border-white/40 text-white bg-transparent">{formatRole(displayRole)}</Badge>
-                            )}
-                            {editing ? (
-                                <Select value={form.status} onValueChange={(value) => setDraft((f) => ({ ...(f ?? form), status: value ?? form.status }))}>
-                                    <SelectTrigger className="h-8 w-28 rounded-md border-white bg-white px-3 text-xs text-primary-deep shadow-sm hover:bg-white/95 focus-visible:ring-white/35">
-                                        <SelectValue>{formatActiveStatus(form.status === "active")}</SelectValue>
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="active">Active</SelectItem>
-                                        <SelectItem value="inactive">Inactive</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            ) : (
-                                <Badge className={displayStatus === "active" ? "bg-white/20 text-white hover:bg-white/25 border-white/30" : "bg-white/10 text-white/80 hover:bg-white/15 border-white/20"}>
-                                    {formatActiveStatus(displayStatus === "active")}
-                                </Badge>
-                            )}
-                        </div>
-
-                        {error && <p className="text-sm text-white">{error}</p>}
-
-                        {editing && (
-                            <div className="flex gap-2">
-                                <Button
-                                    size="sm"
-                                    onClick={handleSave}
-                                    disabled={updateEmployee.isPending}
-                                    className="gap-1.5 bg-white text-primary-deep hover:bg-white/90 rounded-lg uppercase tracking-wide"
-                                >
-                                    <Check className="h-3.5 w-3.5" />
-                                    {updateEmployee.isPending ? "Saving..." : "Save"}
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={handleCancel}
-                                    className="gap-1.5 rounded-lg bg-transparent border-white/40 text-white hover:bg-white/10 hover:text-white uppercase tracking-wide"
-                                >
-                                    <X className="h-3.5 w-3.5" />
-                                    Cancel
-                                </Button>
+                            <div className="flex gap-2 items-center mt-1 flex-wrap">
+                                <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2.5 py-0.5 text-[11px] font-medium text-white">
+                                    <BadgeCheck className="h-3 w-3" />
+                                    {formatRole(displayRole)}
+                                </span>
+                                {editing ? (
+                                    <Select value={form.status} onValueChange={(value) => setDraft((f) => ({ ...(f ?? form), status: value ?? form.status }))}>
+                                        <SelectTrigger className="h-7 w-28 rounded-md border-white bg-white px-3 text-xs text-primary-deep shadow-sm hover:bg-white/95 focus-visible:ring-white/35">
+                                            <SelectValue>{formatActiveStatus(form.status === "active")}</SelectValue>
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="active">Active</SelectItem>
+                                            <SelectItem value="inactive">Inactive</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                ) : (
+                                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-medium ${displayStatus === "active" ? "bg-white/20 text-white" : "bg-white/10 text-white/80"}`}>
+                                        {formatActiveStatus(displayStatus === "active")}
+                                    </span>
+                                )}
                             </div>
-                        )}
+
+                            {error && <p className="text-sm text-white mt-1">{error}</p>}
+
+                            {editing && (
+                                <div className="flex gap-2 mt-3">
+                                    <Button
+                                        size="sm"
+                                        onClick={handleSave}
+                                        disabled={updateEmployee.isPending}
+                                        className="gap-1.5 bg-white text-primary-deep hover:bg-white/90 rounded-lg uppercase tracking-wide"
+                                    >
+                                        <Check className="h-3.5 w-3.5" />
+                                        {updateEmployee.isPending ? "Saving..." : "Save"}
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={handleCancel}
+                                        className="gap-1.5 rounded-lg bg-transparent border-white/40 text-white hover:bg-white/10 hover:text-white uppercase tracking-wide"
+                                    >
+                                        <X className="h-3.5 w-3.5" />
+                                        Cancel
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
