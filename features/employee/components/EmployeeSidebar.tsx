@@ -79,11 +79,12 @@ export function EmployeeSidebar() {
             ) : (
               <div className="flex flex-col whitespace-nowrap gap-0.5">
                 <Image
-                  src="/startupkaro-logo.svg"
+                  src="/assets/startupkaro-logo.png"
                   alt="StartupKaro"
-                  width={140}
-                  height={26}
+                  width={152}
+                  height={28}
                   className="h-7 w-auto object-contain"
+                  style={{ width: "auto" }}
                 />
                 <p className="text-[11px] text-steel leading-tight pl-0.5">Employee Panel</p>
               </div>

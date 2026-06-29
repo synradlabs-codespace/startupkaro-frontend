@@ -14,11 +14,12 @@ function Logo() {
   return (
     <Link href="/" className="flex shrink-0 items-center select-none" aria-label="StartupKaro home">
       <Image
-        src="/startupkaro-logo.svg"
+        src="/assets/startupkaro-logo.png"
         alt="StartupKaro"
-        width={154}
-        height={30}
+        width={174}
+        height={32}
         className="h-8 w-auto"
+        style={{ width: "auto" }}
         priority
       />
     </Link>

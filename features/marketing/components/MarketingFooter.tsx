@@ -33,11 +33,12 @@ export function MarketingFooter() {
                     <div className="space-y-5">
                         <Link href="/" className="inline-flex">
                             <Image
-                                src="/startupkaro-logo.svg"
+                                src="/assets/startupkaro-logo.png"
                                 alt="StartupKaro"
-                                width={160}
-                                height={30}
+                                width={174}
+                                height={32}
                                 className="h-8 w-auto"
+                                style={{ width: "auto" }}
                             />
                         </Link>
                         <p className="max-w-sm text-sm leading-relaxed text-charcoal">

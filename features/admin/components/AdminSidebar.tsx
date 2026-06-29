@@ -106,11 +106,12 @@ export function AdminSidebar() {
                         ) : (
                             <div className="flex flex-col whitespace-nowrap fade-in gap-0.5">
                                 <Image
-                                    src="/startupkaro-logo.svg"
+                                    src="/assets/startupkaro-logo.png"
                                     alt="StartupKaro"
-                                    width={140}
-                                    height={26}
+                                    width={152}
+                                    height={28}
                                     className="h-7 w-auto object-contain"
+                                    style={{ width: "auto" }}
                                 />
                                 <p className="text-[11px] text-steel leading-none pl-0.5">Admin Panel</p>
                             </div>
