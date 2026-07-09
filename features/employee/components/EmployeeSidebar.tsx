@@ -79,7 +79,7 @@ export function EmployeeSidebar() {
             ) : (
               <div className="flex flex-col whitespace-nowrap gap-0.5">
                 <Image
-                  src="/assets/startupkaro-logo.png"
+                  src="/assets/startupkaro-logo-transparent.png"
                   alt="StartupKaro"
                   width={152}
                   height={28}

@@ -1,13 +1,12 @@
 import Link from "next/link";
-import { Clock, ArrowRight, FileText, Building2, Scale, FileCheck, LayoutGrid } from "lucide-react";
+import { Clock, ArrowRight, Rocket, LineChart, ShieldCheck, LayoutGrid, PackageCheck } from "lucide-react";
 import { categoryCardStyles, fallbackCardStyles } from "@/lib/category-pills";
 import { formatINR } from "@/lib/currency";
 
 const categoryIcons: Record<string, React.ElementType> = {
-    Tax: FileText,
-    Business: Building2,
-    Legal: Scale,
-    License: FileCheck,
+    Start: Rocket,
+    Manage: LineChart,
+    Protect: ShieldCheck,
 };
 
 export interface ServiceCardProps {
@@ -18,12 +17,16 @@ export interface ServiceCardProps {
     priceInPaise?: boolean;
     duration: string;
     href: string;
+    isBundle?: boolean;
+    priceLabel?: string | null;
+    actionLabel?: string;
 }
 
-export function ServiceCard({ name, description, category, price, priceInPaise = false, duration, href }: ServiceCardProps) {
-    const styles = categoryCardStyles[category as keyof typeof categoryCardStyles] ?? fallbackCardStyles;
-    const Icon = categoryIcons[category] ?? LayoutGrid;
-    const formattedPrice = priceInPaise ? formatINR(price) : formatINR(price * 100);
+export function ServiceCard({ name, description, category, price, priceInPaise = false, duration, href, isBundle = false, priceLabel, actionLabel = "Learn More" }: ServiceCardProps) {
+    const visualCategory = isBundle ? "Bundles" : category;
+    const styles = categoryCardStyles[visualCategory as keyof typeof categoryCardStyles] ?? fallbackCardStyles;
+    const Icon = isBundle ? PackageCheck : categoryIcons[category] ?? LayoutGrid;
+    const formattedPrice = priceLabel ?? (price > 0 ? (priceInPaise ? formatINR(price) : formatINR(price * 100)) : "On request");
 
     return (
         <div className="group relative flex flex-col overflow-hidden rounded-xl border border-hairline bg-canvas transition-all duration-200 hover:-translate-y-0.5 hover:border-hairline-strong">
@@ -34,9 +37,11 @@ export function ServiceCard({ name, description, category, price, priceInPaise =
                     <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${styles.iconBg}`}>
                         <Icon className={`h-5 w-5 ${styles.iconText}`} />
                     </div>
-                    <span className={`rounded-md border px-2.5 py-1 text-xs font-medium uppercase tracking-[0.28px] ${styles.badge}`}>
-                        {category}
-                    </span>
+                    {category && (
+                        <span className={`rounded-md border px-2.5 py-1 text-xs font-medium uppercase tracking-[0.28px] ${styles.badge}`}>
+                            {isBundle ? "Bundle" : category}
+                        </span>
+                    )}
                 </div>
 
                 <h3 className="mb-1.5 font-display text-xl font-medium leading-snug text-ink">{name}</h3>
@@ -58,7 +63,7 @@ export function ServiceCard({ name, description, category, price, priceInPaise =
                         href={href}
                         className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md bg-primary-brand px-3 text-xs font-medium text-white transition-colors hover:bg-primary-deep"
                     >
-                        Learn More
+                        {actionLabel}
                         <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
                 </div>

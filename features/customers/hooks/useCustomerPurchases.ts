@@ -22,7 +22,7 @@ export function useCustomerPurchase(id: string) {
 
 export function useInitiateCustomerPurchase() {
     return useMutation({
-        mutationFn: (payload: { serviceId: string }) => customerPurchaseService.initiate(payload),
+        mutationFn: (payload: { serviceId: string; quantity?: number; addonIds?: string[] }) => customerPurchaseService.initiate(payload),
     });
 }
 

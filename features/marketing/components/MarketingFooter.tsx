@@ -33,7 +33,7 @@ export function MarketingFooter() {
                     <div className="space-y-5">
                         <Link href="/" className="inline-flex">
                             <Image
-                                src="/assets/startupkaro-logo.png"
+                                src="/assets/startupkaro-logo-transparent.png"
                                 alt="StartupKaro"
                                 width={174}
                                 height={32}
@@ -76,7 +76,7 @@ export function MarketingFooter() {
                                     Services
                                 </p>
                                 <h2 className="font-display text-2xl font-medium leading-none text-ink sm:text-3xl">
-                                    Business support by category
+                                    Business support by stage
                                 </h2>
                             </div>
                             <Link

@@ -5,7 +5,7 @@ import { ArrowRight, Shield, Clock, Users, Award } from "lucide-react";
 import { MarketingCTASection } from "./sections/MarketingCTASection";
 
 const stats = [
-    { value: "500+", label: "Businesses served" },
+    { value: "5000+", label: "Businesses served" },
     { value: "6", label: "Core services" },
     { value: "7 days", label: "Avg. GST turnaround" },
     { value: "100%", label: "Expert CA/CS handled" },
@@ -43,12 +43,12 @@ const values = [
 ];
 
 const services = [
-    { name: "GST Registration", category: "Tax", slug: "gst-registration" },
-    { name: "Company Incorporation", category: "Business", slug: "company-incorporation" },
-    { name: "Trademark Filing", category: "Legal", slug: "trademark-filing" },
-    { name: "Income Tax Filing", category: "Tax", slug: "income-tax-filing" },
-    { name: "FSSAI License", category: "License", slug: "fssai-license" },
-    { name: "Import Export Code", category: "License", slug: "import-export-code" },
+    { name: "GST Registration", category: "Start", slug: "gst-registration" },
+    { name: "Company Incorporation", category: "Start", slug: "private-limited-company" },
+    { name: "Trademark Registration", category: "Protect", slug: "trademark-registration" },
+    { name: "Income Tax Returns", category: "Manage", slug: "income-tax-returns" },
+    { name: "FSSAI Registration", category: "Start", slug: "fssai-registration-basic" },
+    { name: "Import Export Code", category: "Start", slug: "import-export-code" },
 ];
 
 export function AboutPage() {

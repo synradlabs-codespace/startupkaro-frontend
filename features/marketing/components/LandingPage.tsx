@@ -2,6 +2,7 @@
 
 import { HeroSection } from "./sections/HeroSection";
 import { BrandsMarqueeSection } from "./sections/BrandsMarqueeSection";
+import { PromotionsSection } from "./sections/PromotionsSection";
 import { ServicesOverviewSection } from "./sections/ServicesOverviewSection";
 import { ServiceJourneySection } from "./sections/ServiceJourneySection";
 import { HowItWorksSection } from "./sections/HowItWorksSection";
@@ -24,11 +25,12 @@ export async function LandingPage() {
                 <BrandsMarqueeSection />
             </SectionReveal>
             <SectionReveal delay={0.04}>
-                <ServicesOverviewSection />
+                <PromotionsSection />
             </SectionReveal>
             <SectionReveal delay={0.04}>
-                <ServiceJourneySection />
+                <ServicesOverviewSection />
             </SectionReveal>
+            <ServiceJourneySection />
             <SectionReveal delay={0.04}>
                 <WhyChooseUsSection />
             </SectionReveal>

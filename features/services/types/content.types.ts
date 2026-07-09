@@ -1,7 +1,7 @@
 import type { PortableTextBlock } from "@portabletext/types";
-import type { ServiceCategory } from "@/lib/category-pills";
+import type { ServiceStage } from "@/lib/category-pills";
 
-export type ServiceCategoryValue = Exclude<ServiceCategory, "All">;
+export type ServiceCategoryValue = ServiceStage;
 
 export interface SanityImage {
     url: string;
@@ -31,6 +31,9 @@ export interface ServiceCardContent {
     name: string;
     slug: string;
     category: ServiceCategoryValue;
+    stage?: ServiceStage;
+    isBundle?: boolean;
+    bundleInclusions?: string[];
     duration: string;
     tagline: string;
     shortDescription: string;

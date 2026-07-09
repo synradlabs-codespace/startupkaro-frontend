@@ -66,7 +66,7 @@ export function ServiceEditorial({ content }: ServiceEditorialProps) {
 
             {/* Process steps */}
             {content.process?.length > 0 && (
-                <section className="bg-cloud rounded-xl p-6">
+                <section className="mt-6 bg-cloud rounded-xl p-6">
                     <p className="mb-1 text-xs font-medium uppercase tracking-[0.28px] text-graphite">Process</p>
                     <h3 className="mb-6 font-display text-xl font-medium text-ink">How we process your request</h3>
                     <div className="rounded-xl border border-hairline bg-canvas p-5 space-y-0">

@@ -1,47 +1,106 @@
-import type { BackendService } from "@/features/services/api/services.backend";
+import type { BackendBundleItem, BackendService, BackendServiceAddon } from "@/features/services/api/services.backend";
 import type { ServiceCardContent, ServiceContent, ServiceCategoryValue } from "@/features/services/types/content.types";
+import { inferServiceStage, type ServiceStage } from "@/lib/category-pills";
+
+export type ServiceCta = "buy" | "quote";
 
 export interface EnrichedService {
+    id?: string;
     slug: string;
     name: string;
     category: ServiceCategoryValue | "Uncategorized";
+    stage: ServiceStage;
+    backendCategory: { id: string; name: string; slug: string } | null;
     duration: string | null;
-    /** Backend short description — used as fallback when no Sanity content */
     description: string;
-    /** Price in paise. null when no backend service matches (marketing "contact us" case) */
     pricePaise: number | null;
-    /** true only when a backend service exists (i.e. it is purchasable) */
+    priceLabel: string | null;
+    pricingType: string | null;
+    billingCycle: string | null;
+    cta: ServiceCta;
+    isBundle: boolean;
     isPurchasable: boolean;
-    /** Full detail content — null when no Sanity doc authored yet */
+    items: BackendBundleItem[];
+    addons: BackendServiceAddon[];
     content: ServiceContent | null;
-    /** Card-level content — null when no Sanity doc authored yet */
     cardContent: ServiceCardContent | null;
 }
 
-// ─── Customer panel: backend is source of truth ───────────────────────────────
-// Iterate backend services; left-join Sanity editorial by slug.
-// Services with no Sanity doc show backend name/price only (graceful fallback).
+function normalizeCta(service?: BackendService | null): ServiceCta {
+    if (!service) return "quote";
+    if (service.cta === "buy" && service.isPurchasable !== false) return "buy";
+    return "quote";
+}
 
+function stageFor(backend?: BackendService | null, content?: ServiceCardContent | null): ServiceStage {
+    return content?.stage ?? content?.category ?? inferServiceStage({
+        name: backend?.name ?? content?.name,
+        slug: backend?.slug ?? content?.slug,
+        categorySlug: backend?.category?.slug,
+        categoryName: backend?.category?.name,
+        isBundle: backend?.isBundle ?? content?.isBundle,
+    });
+}
+
+function enrichFromBackend(backend: BackendService, content: ServiceCardContent | ServiceContent | null): EnrichedService {
+    const stage = stageFor(backend, content);
+
+    return {
+        id: backend.id,
+        slug: backend.slug,
+        name: backend.name,
+        category: content?.category ?? stage,
+        stage,
+        backendCategory: backend.category ? { id: backend.category.id, name: backend.category.name, slug: backend.category.slug } : null,
+        duration: content?.duration ?? null,
+        description: content?.shortDescription ?? backend.description ?? "",
+        pricePaise: backend.price ?? null,
+        priceLabel: backend.priceLabel ?? null,
+        pricingType: backend.pricingType ?? null,
+        billingCycle: backend.billingCycle ?? null,
+        cta: normalizeCta(backend),
+        isBundle: Boolean(backend.isBundle ?? content?.isBundle),
+        isPurchasable: Boolean(backend.isPurchasable && normalizeCta(backend) === "buy"),
+        items: backend.items ?? [],
+        addons: backend.addons ?? [],
+        content: "overview" in (content ?? {}) ? (content as ServiceContent) : null,
+        cardContent: content,
+    };
+}
+
+function enrichFromContent(content: ServiceCardContent | ServiceContent, backend?: BackendService | null): EnrichedService {
+    if (backend) return enrichFromBackend(backend, content);
+
+    const stage = stageFor(null, content);
+    return {
+        slug: content.slug,
+        name: content.name,
+        category: content.category ?? stage,
+        stage,
+        backendCategory: null,
+        duration: content.duration,
+        description: content.shortDescription,
+        pricePaise: null,
+        priceLabel: null,
+        pricingType: null,
+        billingCycle: null,
+        cta: "quote",
+        isBundle: Boolean(content.isBundle),
+        isPurchasable: false,
+        items: (content.bundleInclusions ?? []).map((label, index) => ({ id: `${content.slug}-${index}`, label, sortOrder: index })),
+        addons: [],
+        content: "overview" in content ? content : null,
+        cardContent: content,
+    };
+}
+
+// Customer panel: backend is source of truth.
 export function mergeForCustomer(
     backend: BackendService[],
     content: ServiceCardContent[],
 ): EnrichedService[] {
     const contentMap = new Map(content.map((c) => [c.slug, c]));
-
-    return backend.map((b) => {
-        const c = contentMap.get(b.slug) ?? null;
-        return {
-            slug: b.slug,
-            name: b.name,
-            category: c?.category ?? "Uncategorized",
-            duration: c?.duration ?? null,
-            description: b.description,
-            pricePaise: b.price,
-            isPurchasable: true,
-            content: null,
-            cardContent: c,
-        };
-    });
+    return backend.map((b) => enrichFromBackend(b, contentMap.get(b.slug) ?? null));
 }
 
 export function mergeOneForCustomer(
@@ -49,62 +108,37 @@ export function mergeOneForCustomer(
     content: ServiceContent | null,
 ): EnrichedService | null {
     if (!backend && !content) return null;
-
-    const slug = backend?.slug ?? content!.slug;
-    return {
-        slug,
-        name: backend?.name ?? content!.name,
-        category: content?.category ?? "Uncategorized",
-        duration: content?.duration ?? null,
-        description: backend?.description ?? "",
-        pricePaise: backend?.price ?? null,
-        isPurchasable: Boolean(backend),
-        content: content,
-        cardContent: content,
-    };
+    return backend ? enrichFromBackend(backend, content) : enrichFromContent(content!);
 }
 
-// ─── Marketing: Sanity is source of truth ─────────────────────────────────────
-// Iterate Sanity content; left-join backend price by slug.
-// Services with no backend match render without a price/checkout CTA.
-
+// Marketing: show authored Sanity services first, then backend-only services.
 export function mergeForMarketing(
     content: ServiceCardContent[],
     backend: BackendService[],
 ): EnrichedService[] {
     const backendMap = new Map(backend.map((b) => [b.slug, b]));
+    const contentSlugs = new Set(content.map((c) => c.slug));
 
-    return content.map((c) => {
-        const b = backendMap.get(c.slug) ?? null;
-        return {
-            slug: c.slug,
-            name: c.name,
-            category: c.category,
-            duration: c.duration,
-            description: c.shortDescription,
-            pricePaise: b?.price ?? null,
-            isPurchasable: Boolean(b),
-            content: null,
-            cardContent: c,
-        };
-    });
+    const authored = content.map((c) => enrichFromContent(c, backendMap.get(c.slug)));
+    const backendOnly = backend
+        .filter((b) => !contentSlugs.has(b.slug))
+        .map((b) => enrichFromBackend(b, null));
+
+    return [...authored, ...backendOnly];
 }
 
 export function mergeOneForMarketing(
     content: ServiceContent | null,
     backend: BackendService | undefined,
 ): EnrichedService | null {
-    if (!content) return null;
+    if (!content && !backend) return null;
+    return backend ? enrichFromBackend(backend, content) : enrichFromContent(content!);
+}
 
-    return {
-        slug: content.slug,
-        name: content.name,
-        category: content.category,
-        duration: content.duration,
-        description: content.shortDescription,
-        pricePaise: backend?.price ?? null,
-        isPurchasable: Boolean(backend),
-        content: content,
-        cardContent: content,
-    };
+export function getBundles(services: EnrichedService[]): EnrichedService[] {
+    return services.filter((service) => service.isBundle);
+}
+
+export function getStandaloneServices(services: EnrichedService[]): EnrichedService[] {
+    return services.filter((service) => !service.isBundle);
 }

@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ArrowRight, ArrowLeft, Clock, ShieldCheck, Tag } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, ShieldCheck, Tag } from "lucide-react";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { ServiceEditorial } from "@/features/services/components/ServiceEditorial";
+import { CustomerQuoteAction } from "@/features/customers/components/CustomerQuoteAction";
 import { formatINR } from "@/lib/currency";
 import { categoryCardStyles, fallbackCardStyles } from "@/lib/category-pills";
 import type { EnrichedService } from "@/features/services/lib/merge";
@@ -11,20 +12,17 @@ interface CustomerServiceDetailPageProps {
 }
 
 export function CustomerServiceDetailPage({ service }: CustomerServiceDetailPageProps) {
-    const meta =
-        service.category !== "Uncategorized"
-            ? (categoryCardStyles[service.category as keyof typeof categoryCardStyles] ?? fallbackCardStyles)
-            : fallbackCardStyles;
+    const meta = categoryCardStyles[service.stage as keyof typeof categoryCardStyles] ?? fallbackCardStyles;
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex min-h-screen flex-col">
             <PageHeader
                 title={service.name}
-                description={service.category !== "Uncategorized" ? service.category : "Service"}
+                description={service.isBundle ? "Bundle" : service.stage}
                 action={
                     <Link
                         href="/customer/services"
-                        className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium text-steel hover:text-charcoal hover:bg-surface rounded-lg transition-colors"
+                        className="inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-steel transition-colors hover:bg-surface hover:text-charcoal"
                     >
                         <ArrowLeft className="h-3.5 w-3.5" />
                         Back
@@ -33,32 +31,31 @@ export function CustomerServiceDetailPage({ service }: CustomerServiceDetailPage
             />
 
             <div className="flex-1 p-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-                    {/* Editorial content */}
-                    <div className="md:col-span-2 space-y-5">
+                <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-3">
+                    <div className="space-y-5 md:col-span-2">
                         {service.content ? (
                             <ServiceEditorial content={service.content} />
                         ) : (
-                            // Fallback when no Sanity content authored yet
                             <div className="rounded-xl bg-primary-brand p-6">
-                                <h2 className="text-lg font-semibold text-white mb-1">{service.name}</h2>
-                                <p className="text-sm text-white/80 leading-relaxed">{service.description}</p>
+                                <h2 className="mb-1 text-lg font-semibold text-white">{service.name}</h2>
+                                <p className="text-sm leading-relaxed text-white/80">{service.description}</p>
                             </div>
                         )}
                     </div>
 
-                    {/* Price + CTA card */}
-                    <div className="rounded-lg border border-hairline bg-canvas overflow-hidden">
+                    <div className="overflow-hidden rounded-lg border border-hairline bg-canvas">
                         <div className="h-1.5 bg-primary-brand" />
 
-                        <div className="p-6 space-y-5">
+                        <div className="space-y-5 p-6">
                             <div>
-                                <p className="text-xs text-stone uppercase tracking-wide font-medium mb-1">Service Fee</p>
-                                <p className="text-3xl font-display font-medium text-ink">
-                                    {service.pricePaise != null ? formatINR(service.pricePaise) : "—"}
+                                <p className="mb-1 text-xs font-medium uppercase tracking-wide text-stone">
+                                    {service.cta === "buy" ? "Service Fee" : "Pricing"}
+                                </p>
+                                <p className="font-display text-3xl font-medium text-ink">
+                                    {service.priceLabel ?? (service.pricePaise != null ? formatINR(service.pricePaise) : "On request")}
                                 </p>
                                 {service.duration && (
-                                    <p className="text-xs text-stone flex items-center gap-1 mt-1.5">
+                                    <p className="mt-1.5 flex items-center gap-1 text-xs text-stone">
                                         <Clock className="h-3 w-3" /> Delivered in {service.duration}
                                     </p>
                                 )}
@@ -67,44 +64,54 @@ export function CustomerServiceDetailPage({ service }: CustomerServiceDetailPage
                             <div className="h-px bg-surface" />
 
                             <div className="space-y-2.5">
-                                {service.category !== "Uncategorized" && (
-                                    <div className="flex items-center justify-between text-xs">
-                                        <span className="text-steel flex items-center gap-1.5">
-                                            <Tag className="h-3 w-3" /> Category
-                                        </span>
-                                        <span className={`font-semibold px-2 py-0.5 rounded-full ${meta.badge}`}>
-                                            {service.category}
-                                        </span>
-                                    </div>
-                                )}
+                                <div className="flex items-center justify-between text-xs">
+                                    <span className="flex items-center gap-1.5 text-steel">
+                                        <Tag className="h-3 w-3" /> Stage
+                                    </span>
+                                    <span className={`rounded-full px-2 py-0.5 font-semibold ${meta.badge}`}>
+                                        {service.isBundle ? "Bundle" : service.stage}
+                                    </span>
+                                </div>
                                 {service.duration && (
                                     <div className="flex items-center justify-between text-xs">
-                                        <span className="text-steel flex items-center gap-1.5">
+                                        <span className="flex items-center gap-1.5 text-steel">
                                             <Clock className="h-3 w-3" /> Processing Time
                                         </span>
                                         <span className="font-medium text-charcoal">{service.duration}</span>
+                                    </div>
+                                )}
+                                {service.items.length > 0 && (
+                                    <div className="space-y-2 pt-1">
+                                        <p className="text-xs font-medium uppercase tracking-[0.28px] text-stone">Included services</p>
+                                        <ul className="space-y-1.5">
+                                            {service.items.map((item) => (
+                                                <li key={item.id} className="text-xs text-charcoal">- {item.label}</li>
+                                            ))}
+                                        </ul>
                                     </div>
                                 )}
                             </div>
 
                             <div className="h-px bg-surface" />
 
-                            {service.isPurchasable ? (
+                            {service.cta === "buy" ? (
                                 <Link
                                     href={`/customer/checkout?service=${service.slug}`}
-                                    className="flex items-center justify-center gap-2 w-full h-9 px-4 text-sm font-medium bg-primary-brand text-white hover:bg-primary-brand/90 rounded-lg transition-colors"
+                                    className="flex h-9 w-full items-center justify-center gap-2 rounded-lg bg-primary-brand px-4 text-sm font-medium text-white transition-colors hover:bg-primary-brand/90"
                                 >
                                     Proceed to Checkout
                                     <ArrowRight className="h-4 w-4" />
                                 </Link>
                             ) : (
-                                <p className="text-xs text-center text-slate">This service is not currently available for purchase.</p>
+                                <CustomerQuoteAction serviceName={service.name} serviceSlug={service.slug} />
                             )}
 
-                            <p className="text-[11px] text-center text-stone flex items-center justify-center gap-1.5">
-                                <ShieldCheck className="h-3 w-3 text-primary-brand" />
-                                Secured by Razorpay
-                            </p>
+                            {service.cta === "buy" && (
+                                <p className="flex items-center justify-center gap-1.5 text-center text-[11px] text-stone">
+                                    <ShieldCheck className="h-3 w-3 text-primary-brand" />
+                                    Secured by Razorpay
+                                </p>
+                            )}
                         </div>
                     </div>
                 </div>

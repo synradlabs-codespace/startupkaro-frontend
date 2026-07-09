@@ -35,9 +35,26 @@ export interface AdminService {
     name: string;
     slug: string;
     description?: string;
-    price: number;
+    categoryId?: string | null;
+    pricingType?: string;
+    billingCycle?: string;
+    price: number | null;
+    taxRatePct?: number;
+    priceInclusiveOfTax?: boolean;
+    isBundle?: boolean;
+    isPurchasable?: boolean;
     isActive: boolean;
+    sortOrder?: number;
     createdAt: string;
+}
+
+export interface AdminCategory {
+    id: string;
+    name: string;
+    slug: string;
+    parentId?: string | null;
+    sortOrder: number;
+    isActive: boolean;
 }
 
 export interface AdminOrder {
@@ -102,12 +119,31 @@ export const adminServiceService = {
         apiClient.get<PaginatedResponse<AdminService>>("/admin/services", { params }),
     get: (id: string) =>
         apiClient.get<ApiResponse<AdminService>>(`/admin/services/${id}`),
-    create: (payload: { name: string; slug?: string; description?: string; price: number; isActive?: boolean }) =>
+    create: (payload: {
+        name: string;
+        slug?: string;
+        description?: string;
+        categoryId?: string;
+        pricingType?: string;
+        billingCycle?: string;
+        price?: number | null;
+        taxRatePct?: number;
+        priceInclusiveOfTax?: boolean;
+        isBundle?: boolean;
+        isPurchasable?: boolean;
+        isActive?: boolean;
+        sortOrder?: number;
+    }) =>
         apiClient.post<ApiResponse<AdminService>>("/admin/services", payload),
-    update: (id: string, payload: Partial<{ name: string; slug: string; description: string; price: number; isActive: boolean }>) =>
+    update: (id: string, payload: Partial<{ name: string; slug: string; description: string; categoryId: string; pricingType: string; billingCycle: string; price: number | null; taxRatePct: number; priceInclusiveOfTax: boolean; isBundle: boolean; isPurchasable: boolean; isActive: boolean; sortOrder: number }>) =>
         apiClient.patch<ApiResponse<AdminService>>(`/admin/services/${id}`, payload),
     remove: (id: string) =>
         apiClient.delete<ApiResponse<null>>(`/admin/services/${id}`),
+};
+
+export const adminCategoryService = {
+    list: () =>
+        apiClient.get<ApiResponse<AdminCategory[]>>("/admin/categories"),
 };
 
 export const adminOrderService = {

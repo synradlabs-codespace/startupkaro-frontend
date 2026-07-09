@@ -45,6 +45,7 @@ export function AdminServicesPage() {
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Name</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Slug</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Price</TableHead>
+                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Type</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Active</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">CMS Content</TableHead>
                                     <TableHead className="text-right font-semibold text-foreground/70 uppercase text-xs tracking-wide">Actions</TableHead>
@@ -53,19 +54,19 @@ export function AdminServicesPage() {
                             <TableBody>
                                 {servicesQuery.isLoading ? (
                                     <TableRow>
-                                        <TableCell colSpan={6} className="text-center text-slate py-12">
+                                        <TableCell colSpan={7} className="text-center text-slate py-12">
                                             Loading services...
                                         </TableCell>
                                     </TableRow>
                                 ) : servicesQuery.isError ? (
                                     <TableRow>
-                                        <TableCell colSpan={6} className="text-center text-error-brand py-12">
+                                        <TableCell colSpan={7} className="text-center text-error-brand py-12">
                                             Failed to load services
                                         </TableCell>
                                     </TableRow>
                                 ) : services.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={6} className="text-center text-slate py-12">
+                                        <TableCell colSpan={7} className="text-center text-slate py-12">
                                             No services found
                                         </TableCell>
                                     </TableRow>
@@ -76,7 +77,8 @@ export function AdminServicesPage() {
                                             <TableRow key={service.id} className="hover:bg-muted/30">
                                                 <TableCell className="font-medium">{service.name}</TableCell>
                                                 <TableCell className="text-slate text-sm font-mono">{service.slug}</TableCell>
-                                                <TableCell className="font-medium">{formatINR(service.price)}</TableCell>
+                                                <TableCell className="font-medium">{service.price != null ? formatINR(service.price) : "On request"}</TableCell>
+                                                <TableCell className="text-slate text-sm">{service.isBundle ? "Bundle" : service.pricingType ?? "Service"}</TableCell>
                                                 <TableCell>
                                                     <ActiveBadge isActive={service.isActive} />
                                                 </TableCell>

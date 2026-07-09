@@ -4,7 +4,7 @@ import { BasicNumberTicker } from "@/components/fancy/text";
 
 const proofStats = [
     { value: 4.9, decimals: 1, suffix: "/5", label: "Average client rating" },
-    { value: 500, decimals: 0, suffix: "+", label: "Businesses supported" },
+    { value: 5000, decimals: 0, suffix: "+", label: "Businesses supported" },
     { value: 100, decimals: 0, suffix: "%", label: "Expert-led filings" },
 ];
 

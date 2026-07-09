@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Search, Sparkles } from "lucide-react";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { ServiceCard } from "@/components/custom/ServiceCard";
 import { TablePagination } from "@/components/custom/TablePagination";
 import { Input } from "@/components/ui/input";
 import { SERVICE_CATEGORIES, categoryPillStyles, type ServiceCategory } from "@/lib/category-pills";
-import type { EnrichedService } from "@/features/services/lib/merge";
+import { getBundles, type EnrichedService } from "@/features/services/lib/merge";
 
 const PAGE_SIZE = 9;
 
@@ -21,10 +21,12 @@ export function CustomerServicesPage({ services }: CustomerServicesPageProps) {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
 
+    const bundles = useMemo(() => getBundles(services), [services]);
+
     const filtered = useMemo(() => {
         let result = services;
         if (activeCategory !== "All") {
-            result = result.filter((s) => s.category === activeCategory);
+            result = result.filter((s) => s.stage === activeCategory);
         }
         if (search.trim()) {
             const q = search.toLowerCase();
@@ -52,21 +54,46 @@ export function CustomerServicesPage({ services }: CustomerServicesPageProps) {
     };
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex min-h-screen flex-col">
             <PageHeader title="Services" description="Browse startup compliance and legal services" />
 
-            <div className="flex-1 p-6 space-y-6">
-                <div className="flex flex-col sm:flex-row gap-3">
-                    <div className="relative flex-1 max-w-sm">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone" />
+            <div className="flex-1 space-y-6 p-6">
+                {bundles.length > 0 && (
+                    <div className="space-y-4 rounded-lg border border-hairline bg-canvas p-5">
+                        <div>
+                            <p className="text-xs font-medium uppercase tracking-[0.28px] text-graphite">Bundles</p>
+                            <h2 className="font-display text-2xl font-medium text-ink">Startup registration bundles</h2>
+                        </div>
+                        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+                            {bundles.slice(0, 4).map((bundle) => (
+                                <ServiceCard
+                                    key={bundle.slug}
+                                    name={bundle.name}
+                                    description={bundle.cardContent?.shortDescription ?? bundle.description}
+                                    category={bundle.stage}
+                                    price={bundle.pricePaise ?? 0}
+                                    priceInPaise
+                                    priceLabel={bundle.priceLabel}
+                                    duration={bundle.duration ?? "Expert assisted"}
+                                    href={`/customer/services/${bundle.slug}`}
+                                    isBundle
+                                />
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                <div className="flex flex-col gap-3 sm:flex-row">
+                    <div className="relative max-w-sm flex-1">
+                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone" />
                         <Input
                             placeholder="Search services..."
                             value={search}
                             onChange={(e) => handleSearch(e.target.value)}
-                            className="pl-9 rounded-lg border-hairline focus-visible:ring-primary-brand/20"
+                            className="rounded-lg border-hairline pl-9 focus-visible:ring-primary-brand/20"
                         />
                     </div>
-                    <div className="flex gap-2 flex-wrap">
+                    <div className="flex flex-wrap gap-2">
                         {SERVICE_CATEGORIES.map((cat) => {
                             const styles = categoryPillStyles[cat];
                             return (
@@ -86,30 +113,33 @@ export function CustomerServicesPage({ services }: CustomerServicesPageProps) {
                 </div>
 
                 {paged.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-20 text-center gap-3">
-                        <div className="h-12 w-12 rounded-lg bg-surface border border-hairline flex items-center justify-center">
+                    <div className="flex flex-col items-center justify-center gap-3 py-20 text-center">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-hairline bg-surface">
                             <Search className="h-5 w-5 text-stone" />
                         </div>
                         <p className="text-base text-ink">No services found</p>
-                        <p className="text-xs uppercase tracking-[0.28px] text-graphite">Try a different search or category</p>
+                        <p className="text-xs uppercase tracking-[0.28px] text-graphite">Try a different search or stage</p>
                     </div>
                 ) : (
                     <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
                             {paged.map((service) => (
                                 <ServiceCard
                                     key={service.slug}
                                     name={service.name}
                                     description={service.cardContent?.shortDescription ?? service.description}
-                                    category={service.category === "Uncategorized" ? "" : service.category}
+                                    category={service.stage}
                                     price={service.pricePaise ?? 0}
                                     priceInPaise
-                                    duration={service.duration ?? "—"}
+                                    priceLabel={service.priceLabel}
+                                    duration={service.duration ?? "Expert assisted"}
                                     href={`/customer/services/${service.slug}`}
+                                    isBundle={service.isBundle}
+                                    actionLabel={service.cta === "quote" ? "Request Quote" : "Learn More"}
                                 />
                             ))}
                         </div>
-                        <div className="rounded-lg border border-hairline bg-canvas overflow-hidden">
+                        <div className="overflow-hidden rounded-lg border border-hairline bg-canvas">
                             <TablePagination
                                 total={total}
                                 page={page}

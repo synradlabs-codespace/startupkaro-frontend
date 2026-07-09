@@ -6,6 +6,8 @@ import { FlowButton } from "@/components/custom/FlowButton";
 import { formatINR } from "@/lib/currency";
 
 export function ServicePricingCTA({ service }: { service: EnrichedService }) {
+    const ctaHref = service.cta === "buy" ? `/customer/checkout?service=${service.slug}` : `/contact?service=${service.slug}`;
+
     return (
         <section className="px-4 py-14 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-7xl">
@@ -13,7 +15,7 @@ export function ServicePricingCTA({ service }: { service: EnrichedService }) {
                     <div>
                         <p className="mb-1 text-xs font-medium uppercase tracking-[0.28px] text-white/70">All-inclusive fee</p>
                         <p className="font-display text-4xl font-medium text-white">
-                            {service.pricePaise != null ? formatINR(service.pricePaise) : "Contact us"}
+                            {service.priceLabel ?? (service.pricePaise != null ? formatINR(service.pricePaise) : "On request")}
                         </p>
                         {service.duration && (
                             <p className="mt-2 flex items-center gap-1.5 text-sm text-white/80">
@@ -24,19 +26,11 @@ export function ServicePricingCTA({ service }: { service: EnrichedService }) {
                     </div>
 
                     <div className="flex flex-col gap-3 sm:items-end">
-                        {service.isPurchasable ? (
-                            <FlowButton
-                                href={`/customer/checkout?service=${service.slug}`}
-                                text="Get Started Now"
-                                colorVariant="primary"
-                            />
-                        ) : (
-                            <FlowButton
-                                href="/contact"
-                                text="Contact Us"
-                                colorVariant="primary"
-                            />
-                        )}
+                        <FlowButton
+                            href={ctaHref}
+                            text={service.cta === "buy" ? "Get Started Now" : "Request Quote"}
+                            colorVariant="primary"
+                        />
                         <p className="flex items-center gap-1.5 text-xs text-white/70">
                             <ShieldCheck className="h-3 w-3 text-white" />
                             Expert CA assigned · Secured payment

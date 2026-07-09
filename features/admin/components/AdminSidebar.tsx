@@ -106,7 +106,7 @@ export function AdminSidebar() {
                         ) : (
                             <div className="flex flex-col whitespace-nowrap fade-in gap-0.5">
                                 <Image
-                                    src="/assets/startupkaro-logo.png"
+                                    src="/assets/startupkaro-logo-transparent.png"
                                     alt="StartupKaro"
                                     width={152}
                                     height={28}

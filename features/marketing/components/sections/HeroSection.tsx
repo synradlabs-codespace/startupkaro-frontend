@@ -38,7 +38,7 @@ export function HeroSection() {
                         <div className="relative">
                             {/* Eyebrow */}
                             <p className="text-xs uppercase tracking-[0.28px] text-graphite font-medium mb-4">
-                                Trusted by 5,000+ startups across India
+                                Trusted by 5000+ startups across India
                             </p>
 
                         {/* Headline */}
@@ -101,7 +101,7 @@ export function HeroSection() {
                         </div>
                         <div className="absolute right-3 top-[25%] z-20 w-36 rounded-2xl border border-hairline bg-canvas p-4 shadow-[0_18px_45px_rgba(26,26,26,0.10)]">
                             <BarChart3 className="mb-2 h-7 w-7 text-primary-brand" />
-                            <p className="font-display text-3xl font-medium leading-none text-ink">500+</p>
+                            <p className="font-display text-3xl font-medium leading-none text-ink">5000+</p>
                             <p className="mt-1 text-xs font-medium text-graphite">Startups served</p>
                         </div>
                         <div className="absolute left-0 top-[49%] z-20 rounded-xl border border-hairline bg-canvas px-4 py-3 shadow-[0_16px_36px_rgba(26,26,26,0.10)]">

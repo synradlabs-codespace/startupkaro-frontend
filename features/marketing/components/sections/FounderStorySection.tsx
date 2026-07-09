@@ -1,6 +1,7 @@
 "use client";
 
-import { BriefcaseBusiness, FileCheck2, Scale } from "lucide-react";
+import Image from "next/image";
+import { BriefcaseBusiness } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
@@ -8,15 +9,15 @@ const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
 const founders = [
     {
         name: "Hardik Singh",
-        role: "Chartered Accountant",
-        icon: FileCheck2,
+        role: "Consultant",
+        image: "/assets/hardik%20photo.jpeg",
         summary:
             "After working with EY and then building his independent CA practice, Hardik saw the same problem repeat for founders: compliance was necessary, but the process felt opaque, fragmented, and difficult to trust.",
     },
     {
         name: "Neelansh Singh",
         role: "Lawyer & business consultant",
-        icon: Scale,
+        image: "/assets/Anmol%20Sir%20photo-1.png",
         summary:
             "Neelansh has worked closely with small businesses at the ground level, where paperwork delays, unclear pricing, and scattered advice often slow down otherwise promising ventures.",
     },
@@ -78,14 +79,20 @@ export function FounderStorySection() {
                     </motion.div>
 
                     <motion.div {...rightProps} className="grid gap-4">
-                        {founders.map(({ name, role, icon: Icon, summary }) => (
+                        {founders.map(({ name, role, image, summary }) => (
                             <article
                                 key={name}
                                 className="group rounded-xl border border-hairline bg-canvas p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-brand hover:shadow-[0_2px_8px_rgba(26,26,26,0.08)]"
                             >
                                 <div className="mb-5 flex items-center gap-4">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-soft">
-                                        <Icon className="h-5 w-5 text-primary-brand" />
+                                    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-hairline bg-primary-soft">
+                                        <Image
+                                            src={image}
+                                            alt={`${name} founder photo`}
+                                            fill
+                                            sizes="56px"
+                                            className="object-cover"
+                                        />
                                     </div>
                                     <div>
                                         <h3 className="font-display text-xl font-medium text-ink">{name}</h3>

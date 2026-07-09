@@ -4,7 +4,7 @@ import { Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { Button } from "@/components/ui/button";
-import { useCustomerServiceList } from "@/features/customers/hooks/useCustomerServices";
+import { useCustomerServiceBySlug } from "@/features/customers/hooks/useCustomerServices";
 import { useInitiateCustomerPurchase, useVerifyCustomerPurchase } from "@/features/customers/hooks/useCustomerPurchases";
 import { useCustomerProfile } from "@/features/customers/hooks/useCustomerProfile";
 import { getApiErrorMessage } from "@/features/customers/lib/format";
@@ -17,20 +17,25 @@ function CheckoutContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const serviceParam = searchParams.get("service") ?? "";
-    const servicesQuery = useCustomerServiceList({ page: 1, limit: 100 });
+    const serviceQuery = useCustomerServiceBySlug(serviceParam);
     const initiatePurchase = useInitiateCustomerPurchase();
     const verifyPurchase = useVerifyCustomerPurchase();
     const profileQuery = useCustomerProfile();
     const profile = profileQuery.data;
     const [error, setError] = useState("");
-    const service = (servicesQuery.data?.data ?? []).find((item) => item.id === serviceParam || item.slug === serviceParam);
+    const service = serviceQuery.data;
 
     const handlePayment = async () => {
         if (!service) return;
         setError("");
 
         try {
-            const initiation = (await initiatePurchase.mutateAsync({ serviceId: service.id || service.slug })).data.data;
+            if (service.cta !== "buy" || service.isPurchasable === false) {
+                router.push(`/contact?service=${service.slug}`);
+                return;
+            }
+
+            const initiation = (await initiatePurchase.mutateAsync({ serviceId: service.id || service.slug, quantity: 1, addonIds: [] })).data.data;
             await loadRazorpayScript();
             const response = await openRazorpayCheckout({
                 key: initiation.razorpayKeyId,
@@ -55,12 +60,26 @@ function CheckoutContent() {
         }
     };
 
-    if (servicesQuery.isLoading) {
+    if (serviceQuery.isLoading) {
         return <div className="p-6 text-sm text-stone">Loading checkout...</div>;
     }
 
-    if (servicesQuery.isError || !service) {
+    if (serviceQuery.isError || !service) {
         return <div className="p-6 text-sm text-error-brand">Failed to load selected service</div>;
+    }
+
+    if (service.cta !== "buy" || service.isPurchasable === false) {
+        return (
+            <div className="p-6">
+                <div className="rounded-lg border border-hairline bg-canvas p-6">
+                    <p className="text-sm font-medium text-ink">This service requires a quote.</p>
+                    <p className="mt-1 text-sm text-slate">Please send an inquiry and our team will get back to you.</p>
+                    <Link href={`/contact?service=${service.slug}`} className="mt-4 inline-flex h-9 items-center rounded-md bg-primary-brand px-4 text-sm font-medium text-white">
+                        Request Quote
+                    </Link>
+                </div>
+            </div>
+        );
     }
 
     const isPaying = initiatePurchase.isPending || verifyPurchase.isPending;
@@ -131,7 +150,7 @@ function CheckoutContent() {
                     <div className="p-6 flex-1 space-y-4">
                         {[
                             { label: "Service", value: service.name, icon: Tag },
-                            { label: "Processing Time", value: service.duration, icon: Clock },
+                            { label: "Processing Time", value: service.billingCycle === "monthly" ? "Monthly" : "Expert assisted", icon: Clock },
                         ].map(({ label, value, icon: Icon }) => (
                             <div key={label} className="flex items-center justify-between py-3 border-b border-hairline last:border-0">
                                 <span className="text-sm text-steel flex items-center gap-2">
@@ -143,11 +162,11 @@ function CheckoutContent() {
                         ))}
                         <div className="flex items-center justify-between py-3 border-b border-hairline">
                             <span className="text-sm text-steel">Subtotal</span>
-                            <span className="text-sm font-medium">{formatINR(service.price)}</span>
+                            <span className="text-sm font-medium">{service.priceLabel ?? formatINR(service.price ?? 0)}</span>
                         </div>
                         <div className="flex items-center justify-between pt-2">
                             <span className="text-base font-semibold text-ink">Total</span>
-                            <span className="text-xl font-display font-medium text-charcoal">{formatINR(service.price)}</span>
+                            <span className="text-xl font-display font-medium text-charcoal">{service.priceLabel ?? formatINR(service.price ?? 0)}</span>
                         </div>
                     </div>
                     <div className="px-6 pb-5">
@@ -163,7 +182,7 @@ function CheckoutContent() {
                     <div className="p-6 flex flex-col flex-1 space-y-5">
                         <div>
                             <p className="text-xs text-stone uppercase tracking-wide font-medium mb-1">Amount Due</p>
-                            <p className="text-3xl font-bold text-ink">{formatINR(service.price)}</p>
+                            <p className="text-3xl font-bold text-ink">{service.priceLabel ?? formatINR(service.price ?? 0)}</p>
                         </div>
 
                         <div className="h-px bg-surface" />

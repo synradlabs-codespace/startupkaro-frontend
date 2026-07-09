@@ -29,83 +29,44 @@ export const NAV_LINKS: NavLink[] = [
       id: "services",
       columns: [
         {
-          heading: "Business",
-          href: "/services?category=Business",
+          heading: "Bundles",
+          href: "/bundles",
           items: [
-            {
-              label: "Company Incorporation",
-              description: "Private Limited company in 10 days",
-              href: "/services/company-incorporation",
-            },
-            {
-              label: "ESI & PF Registration",
-              description: "Employee welfare compliance made easy",
-              href: "/services/esi-pf-registration",
-            },
-            {
-              label: "ROC Annual Filing",
-              description: "Keep your company MCA-compliant",
-              href: "/services/roc-annual-filing",
-            },
-            {
-              label: "Startup India Recognition",
-              description: "Unlock DPIIT benefits & tax exemptions",
-              href: "/services/startup-india-recognition",
-            },
+            { label: "Private Limited Company Bundle", description: "Company setup with GST, MSME, PAN/TAN, and DPIIT", href: "/bundles/private-limited-company-bundle" },
+            { label: "LLP Bundle", description: "LLP setup with GST, MSME, PAN, and Startup India", href: "/bundles/llp-bundle" },
+            { label: "Partnership Firm Bundle", description: "Partnership setup with core registrations", href: "/bundles/partnership-firm-bundle" },
+            { label: "Proprietorship Bundle", description: "Starter pack for solo business owners", href: "/bundles/proprietorship-bundle" },
           ],
         },
         {
-          heading: "Tax",
-          href: "/services?category=Tax",
+          heading: "Start",
+          href: "/services?category=Start",
           items: [
-            {
-              label: "GST Registration",
-              description: "Get your GSTIN in 7 working days",
-              href: "/services/gst-registration",
-            },
-            {
-              label: "Income Tax Filing",
-              description: "ITR filing for individuals & firms",
-              href: "/services/income-tax-filing",
-            },
+            { label: "Private Limited Company", description: "Incorporation and launch registrations", href: "/services/private-limited-company" },
+            { label: "GST Registration", description: "Get GST-ready for sales and invoices", href: "/services/gst-registration" },
+            { label: "FSSAI Registration", description: "Food business licence support", href: "/services/fssai-registration-basic" },
+            { label: "Startup India DPIIT", description: "Recognition for eligible startups", href: "/services/startup-india-dpiit" },
           ],
         },
         {
-          heading: "License",
-          href: "/services?category=License",
+          heading: "Manage",
+          href: "/services?category=Manage",
           items: [
-            {
-              label: "FSSAI License",
-              description: "Food safety registration & renewal",
-              href: "/services/fssai-license",
-            },
-            {
-              label: "Import Export Code",
-              description: "Start trading globally",
-              href: "/services/import-export-code",
-            },
-            {
-              label: "Udyam Registration",
-              description: "MSME certificate & government schemes",
-              href: "/services/udyam-registration",
-            },
-            {
-              label: "Shop & Establishment Registration",
-              description: "State licence for any commercial premises",
-              href: "/services/shop-establishment-registration",
-            },
+            { label: "Bookkeeping", description: "Monthly books and accounting support", href: "/services/bookkeeping" },
+            { label: "GST Compliances", description: "Monthly GST filing and compliance", href: "/services/gst-compliances" },
+            { label: "ROC Compliances", description: "Company and LLP compliance support", href: "/services/pvt-ltd-roc-compliances" },
+            { label: "Virtual CFO Services", description: "Finance leadership for growing teams", href: "/services/virtual-cfo-services" },
           ],
         },
         {
-          heading: "Legal",
-          href: "/services?category=Legal",
+          heading: "Protect",
+          href: "/services?category=Protect",
           accent: true,
           items: [
-            {
-              label: "Trademark Filing",
-              description: "Protect your brand legally",
-              href: "/services/trademark-filing",
-            },
+            { label: "Trademark Registration", description: "Protect your brand identity", href: "/services/trademark-registration" },
+            { label: "Renew Your Trademark", description: "Keep trademark protection active", href: "/services/renew-your-trademark" },
+            { label: "Contracts & Agreements", description: "Legal documents for business needs", href: "/services/contracts-agreements" },
+            { label: "Investor Agreements", description: "Founder and investor documentation", href: "/services/investor-agreements" },
           ],
         },
       ],
@@ -123,21 +84,9 @@ export const NAV_LINKS: NavLink[] = [
         {
           heading: "About Us",
           items: [
-            {
-              label: "About StartupKaro",
-              description: "Our story and mission",
-              href: "/about",
-            },
-            {
-              label: "Careers",
-              description: "Join our growing team",
-              href: "/careers",
-            },
-            {
-              label: "Contact",
-              description: "Talk to our team",
-              href: "/contact",
-            },
+            { label: "About StartupKaro", description: "Our story and mission", href: "/about" },
+            { label: "Careers", description: "Join our growing team", href: "/careers" },
+            { label: "Contact", description: "Talk to our team", href: "/contact" },
           ],
         },
         {

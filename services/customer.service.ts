@@ -1,6 +1,7 @@
 import { apiClient } from "./api-client";
 import type { ApiResponse, PaginatedResponse } from "@/types/api.types";
 import type { RazorpayHandlerResponse } from "@/lib/razorpay";
+import { flattenBackendServices, type BackendService, type BackendServiceCategory } from "@/features/services/api/services.backend";
 
 export type CustomerOrderStatus = "pending" | "confirmed" | "in_progress" | "completed" | "cancelled";
 export type CustomerPaymentStatus = "created" | "authorized" | "captured" | "failed" | "refunded";
@@ -15,15 +16,7 @@ export interface CustomerProfile {
     updatedAt?: string;
 }
 
-export interface CustomerService {
-    id: string;
-    name: string;
-    slug: string;
-    description: string;
-    price: number;
-    category: string;
-    duration: string;
-}
+export type CustomerService = BackendService;
 
 export interface CustomerPurchase {
     id: string;
@@ -57,6 +50,7 @@ export type NormalizedList<T> = {
 };
 
 type ListEnvelope<T> = ApiResponse<T[]> | PaginatedResponse<T>;
+type ServiceCatalogEnvelope = ApiResponse<CustomerService[]> | PaginatedResponse<CustomerService> | ApiResponse<BackendServiceCategory[]>;
 
 export function normalizeList<T>(response: ListEnvelope<T>, page = 1, limit = 20): NormalizedList<T> {
     if ("pagination" in response) {
@@ -74,6 +68,23 @@ export function normalizeList<T>(response: ListEnvelope<T>, page = 1, limit = 20
     };
 }
 
+export function normalizeServiceCatalog(response: ServiceCatalogEnvelope, page = 1, limit = 20): NormalizedList<CustomerService> {
+    if ("pagination" in response) {
+        return { data: flattenBackendServices(response.data), pagination: response.pagination };
+    }
+
+    const data = flattenBackendServices(response.data);
+    return {
+        data,
+        pagination: {
+            total: data.length,
+            page,
+            limit,
+            totalPages: Math.max(1, Math.ceil(data.length / limit)),
+        },
+    };
+}
+
 export const customerProfileService = {
     get: () =>
         apiClient.get<ApiResponse<CustomerProfile>>("/customer/profile"),
@@ -85,11 +96,13 @@ export const customerProfileService = {
 
 export const customerServiceCatalog = {
     list: (params?: { search?: string; category?: string; page?: number; limit?: number }) =>
-        apiClient.get<ListEnvelope<CustomerService>>("/customer/services", { params }),
+        apiClient.get<ServiceCatalogEnvelope>("/customer/services", { params }),
+    getBySlug: (slug: string) =>
+        apiClient.get<ApiResponse<CustomerService>>(`/customer/services/${slug}`),
 };
 
 export const customerPurchaseService = {
-    initiate: (payload: { serviceId: string }) =>
+    initiate: (payload: { serviceId: string; quantity?: number; addonIds?: string[] }) =>
         apiClient.post<ApiResponse<PurchaseInitiation>>("/customer/purchases/initiate", payload),
     verify: (payload: RazorpayHandlerResponse) =>
         apiClient.post<ApiResponse<{ message: string; orderId: string }>>("/customer/purchases/verify", {

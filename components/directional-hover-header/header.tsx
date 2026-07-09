@@ -2,19 +2,19 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ElementType } from "react";
-import { Building2, ChevronDown, FileCheck, FileText, Menu, Scale, X } from "lucide-react";
+import { ChevronDown, LineChart, Menu, PackageCheck, Rocket, ShieldCheck, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { NAV_LINKS, type NavLink } from "./header/nav-data";
 import { FlowButton, FlowSecondaryButton } from "@/components/custom/FlowButton";
-import { categoryCardStyles, type ServiceCategory } from "@/lib/category-pills";
+import { categoryCardStyles, type ServiceVisualCategory } from "@/lib/category-pills";
 import { cn } from "@/lib/utils";
 
 function Logo() {
   return (
     <Link href="/" className="flex shrink-0 items-center select-none" aria-label="StartupKaro home">
       <Image
-        src="/assets/startupkaro-logo.png"
+        src="/assets/startupkaro-logo-transparent.png"
         alt="StartupKaro"
         width={174}
         height={32}
@@ -50,15 +50,15 @@ function HeaderActions({ mobile = false, onAction }: { mobile?: boolean; onActio
   );
 }
 
-const serviceCategoryIcons: Record<Exclude<ServiceCategory, "All">, ElementType> = {
-  Tax: FileText,
-  Business: Building2,
-  Legal: Scale,
-  License: FileCheck,
+const serviceCategoryIcons: Record<ServiceVisualCategory, ElementType> = {
+  Bundles: PackageCheck,
+  Start: Rocket,
+  Manage: LineChart,
+  Protect: ShieldCheck,
 };
 
-function isServiceCategory(heading: string): heading is Exclude<ServiceCategory, "All"> {
-  return heading === "Tax" || heading === "Business" || heading === "Legal" || heading === "License";
+function isServiceCategory(heading: string): heading is ServiceVisualCategory {
+  return heading === "Bundles" || heading === "Start" || heading === "Manage" || heading === "Protect";
 }
 
 function DesktopColumnHeading({ heading, href, serviceMenu, onClose }: { heading: string; href?: string; serviceMenu: boolean; onClose?: () => void }) {
@@ -187,6 +187,8 @@ function MobileNavItem({
     );
   }
 
+  const serviceMenu = link.menu.id === "services";
+
   return (
     <div className="border-b border-hairline">
       <button
@@ -208,7 +210,33 @@ function MobileNavItem({
         <div className="bg-surface px-5 pb-5">
           {link.menu.columns.map((column) => (
             <div key={column.heading} className="pt-5">
-              {column.href ? (
+              {serviceMenu && isServiceCategory(column.heading) ? (
+                (() => {
+                  const Icon = serviceCategoryIcons[column.heading];
+                  const styles = categoryCardStyles[column.heading];
+                  const content = (
+                    <>
+                      <span className={cn("flex size-8 items-center justify-center rounded-lg", styles.iconBg)}>
+                        <Icon className={cn("size-4", styles.iconText)} strokeWidth={2} />
+                      </span>
+                      <span className={cn(
+                        "rounded-md border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.18em]",
+                        styles.badge,
+                      )}>
+                        {column.heading}
+                      </span>
+                    </>
+                  );
+
+                  return column.href ? (
+                    <Link href={column.href} onClick={onNavigate} className="mb-2 flex w-fit items-center gap-2">
+                      {content}
+                    </Link>
+                  ) : (
+                    <div className="mb-2 flex items-center gap-2">{content}</div>
+                  );
+                })()
+              ) : column.href ? (
                 <Link
                   href={column.href}
                   onClick={onNavigate}

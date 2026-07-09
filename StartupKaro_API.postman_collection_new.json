@@ -1,0 +1,3074 @@
+{
+ "info": {
+  "name": "StartupKaro API",
+  "description": "# StartupKaro API\n\nBackend for the StartupKaro services marketplace. Customers browse a catalog of business / legal / tax / licensing services, pay via **Razorpay**, and track their orders; advisors handle quote-based work.\n\n## The three purchase tracks\nEvery service has a `pricingType` and an `isPurchasable` flag. The public catalog derives a **`cta`** field (`buy` / `subscribe` / `quote`) so the frontend knows which path to render:\n\n**1. buy** — one-time checkout for `fixed` / `per_unit` / `starting_from` services that are purchasable (incl. bundles).\n`Customer > Purchases > Initiate Purchase` → open Razorpay Checkout with the returned `razorpayOrderId` + `razorpayKeyId` → `Verify Payment`. The `payment.captured` webhook also confirms the order server-side (source of truth).\n\n**2. subscribe** — `recurring` services (e.g. GST / TDS compliance) billed **monthly** via Razorpay Subscriptions.\n`Customer > Subscriptions > Subscribe` (lazily creates the Razorpay Plan) → checkout with the returned `razorpaySubscriptionId` → `Verify Subscription`. `subscription.*` webhooks keep status + `currentPeriodEnd` in sync. `Cancel Subscription` cancels at cycle end.\n\n**3. quote** — advisor-priced work (query-based, or scope-variable \"starting from\").\nCustomer submits `Customer > Inquiry (Public) > Submit Inquiry` (optionally with `serviceId`) → advisor agrees a price → `Admin > Inquiries > Generate Payment Link` creates a **Razorpay Payment Link** sent by email/SMS → `payment_link.paid` webhook marks it paid. These services are `isPurchasable=false`, so direct checkout is blocked.\n\n## Pricing & GST\nAll money is in **paise** (₹ × 100). GST is 18% (`taxRatePct = 1800`) and computed at checkout. `priceInclusiveOfTax = true` means the listed price already includes GST (the marketed bundles); otherwise GST is added on top. The catalog returns a `pricing` breakdown `{ base, tax, total }` plus a human `priceLabel` (e.g. \"Starting at ₹1,500\", \"₹2,500 / application\", \"On request\").\n\n## Bundles & add-ons\nBundle services (`isBundle = true`) group several services at a flat price and expose their line-items (`GET service/:slug`). Services can carry cross-sell **add-ons** selectable at checkout via `addonIds`. `per_unit` services accept a `quantity`.\n\n## Setup\n1. **Admin > Auth > Login (Root Admin)** — admin tokens auto-populate.\n2. **Customer > Auth > Signup** or **Login** — customer tokens auto-populate.\n3. IDs auto-save from list/create responses into collection variables.\n\n## Auto-populated variables\n- `admin_access_token` / `admin_refresh_token`, `customer_access_token` / `customer_refresh_token`\n- `service_id`, `category_id`, `addon_id`, `bundle_item_id`\n- `order_id` / `order_number`, `razorpay_order_id`, `payment_id`\n- `subscription_id` / `razorpay_subscription_id`\n- `inquiry_id`, `payment_link_id`, `customer_id`, `reset_token`",
+  "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+ },
+ "variable": [
+  {
+   "key": "base_url",
+   "value": "http://localhost:5000/api/v1"
+  },
+  {
+   "key": "admin_access_token",
+   "value": ""
+  },
+  {
+   "key": "admin_refresh_token",
+   "value": ""
+  },
+  {
+   "key": "customer_access_token",
+   "value": ""
+  },
+  {
+   "key": "customer_refresh_token",
+   "value": ""
+  },
+  {
+   "key": "employee_id",
+   "value": ""
+  },
+  {
+   "key": "service_id",
+   "value": ""
+  },
+  {
+   "key": "order_id",
+   "value": ""
+  },
+  {
+   "key": "order_number",
+   "value": ""
+  },
+  {
+   "key": "payment_id",
+   "value": ""
+  },
+  {
+   "key": "customer_id",
+   "value": ""
+  },
+  {
+   "key": "inquiry_id",
+   "value": ""
+  },
+  {
+   "key": "razorpay_order_id",
+   "value": ""
+  },
+  {
+   "key": "reset_token",
+   "value": ""
+  },
+  {
+   "key": "category_id",
+   "value": ""
+  },
+  {
+   "key": "addon_id",
+   "value": ""
+  },
+  {
+   "key": "bundle_item_id",
+   "value": ""
+  },
+  {
+   "key": "subscription_id",
+   "value": ""
+  },
+  {
+   "key": "razorpay_subscription_id",
+   "value": ""
+  },
+  {
+   "key": "payment_link_id",
+   "value": ""
+  }
+ ],
+ "item": [
+  {
+   "name": "Health Check",
+   "request": {
+    "method": "GET",
+    "url": {
+     "raw": "{{base_url}}/health",
+     "host": [
+      "{{base_url}}"
+     ],
+     "path": [
+      "health"
+     ]
+    }
+   },
+   "response": [
+    {
+     "name": "200 OK",
+     "status": "OK",
+     "code": 200,
+     "body": "{\n  \"success\": true,\n  \"message\": \"StartupKaro API is running\"\n}",
+     "header": [
+      {
+       "key": "Content-Type",
+       "value": "application/json"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Admin",
+   "item": [
+    {
+     "name": "Auth",
+     "item": [
+      {
+       "name": "Login (Root Admin)",
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data) {",
+           "  pm.collectionVariables.set('admin_access_token', res.data.tokens.accessToken);",
+           "  pm.collectionVariables.set('admin_refresh_token', res.data.tokens.refreshToken);",
+           "  pm.test('Admin login successful', () => pm.expect(res.success).to.be.true);",
+           "  pm.test('Tokens received', () => {",
+           "    pm.expect(res.data.tokens.accessToken).to.be.a('string');",
+           "    pm.expect(res.data.tokens.refreshToken).to.be.a('string');",
+           "  });",
+           "}"
+          ]
+         }
+        }
+       ],
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/auth/login",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "auth",
+          "login"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"email\": \"admin@startupkaro.com\",\n  \"password\": \"changethispassword\"\n}"
+        }
+       },
+       "response": [
+        {
+         "name": "200 Login Success",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Login successful\",\n  \"data\": {\n    \"tokens\": {\n      \"accessToken\": \"eyJhbGciOiJIUzI1NiIs...\",\n      \"refreshToken\": \"eyJhbGciOiJIUzI1NiIs...\"\n    },\n    \"user\": {\n      \"id\": \"root\",\n      \"name\": \"Root Admin\",\n      \"email\": \"admin@startupkaro.com\",\n      \"role\": \"admin\"\n    }\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        },
+        {
+         "name": "401 Invalid Credentials",
+         "status": "Unauthorized",
+         "code": 401,
+         "body": "{\n  \"success\": false,\n  \"message\": \"Invalid email or password\"\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Login (Employee)",
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data) {",
+           "  pm.collectionVariables.set('admin_access_token', res.data.tokens.accessToken);",
+           "  pm.collectionVariables.set('admin_refresh_token', res.data.tokens.refreshToken);",
+           "}"
+          ]
+         }
+        }
+       ],
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/auth/login",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "auth",
+          "login"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"email\": \"employee@startupkaro.com\",\n  \"password\": \"employee123\"\n}"
+        }
+       },
+       "response": []
+      },
+      {
+       "name": "Refresh Token",
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data) {",
+           "  pm.collectionVariables.set('admin_access_token', res.data.accessToken);",
+           "}"
+          ]
+         }
+        }
+       ],
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/auth/refresh",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "auth",
+          "refresh"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"refreshToken\": \"{{admin_refresh_token}}\"\n}"
+        }
+       },
+       "response": [
+        {
+         "name": "200 Token Refreshed",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Token refreshed\",\n  \"data\": {\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiIs...\"\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Employees",
+     "item": [
+      {
+       "name": "Create Employee",
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data) {",
+           "  pm.collectionVariables.set('employee_id', res.data.id);",
+           "  pm.test('Employee created', () => pm.expect(res.data.email).to.be.a('string'));",
+           "}"
+          ]
+         }
+        }
+       ],
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/employees",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "employees"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"name\": \"John Employee\",\n  \"email\": \"employee@startupkaro.com\",\n  \"password\": \"employee123\",\n  \"role\": \"employee\",\n  \"phone\": \"9876543210\"\n}"
+        }
+       },
+       "response": [
+        {
+         "name": "201 Created",
+         "status": "Created",
+         "code": 201,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Employee created\",\n  \"data\": {\n    \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"name\": \"John Employee\",\n    \"email\": \"employee@startupkaro.com\",\n    \"role\": \"employee\",\n    \"phone\": \"9876543210\",\n    \"isActive\": true,\n    \"createdAt\": \"2026-04-11T10:00:00.000Z\"\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        },
+        {
+         "name": "409 Email Already In Use",
+         "status": "Conflict",
+         "code": 409,
+         "body": "{\n  \"success\": false,\n  \"message\": \"Email already in use\"\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        },
+        {
+         "name": "400 Validation Error",
+         "status": "Bad Request",
+         "code": 400,
+         "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": [\n    { \"field\": \"email\", \"message\": \"Invalid email\" },\n    { \"field\": \"password\", \"message\": \"Password must be at least 8 characters\" }\n  ]\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "List Employees",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/employees?page=1&limit=20&sortOrder=desc",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "employees"
+         ],
+         "query": [
+          {
+           "key": "page",
+           "value": "1"
+          },
+          {
+           "key": "limit",
+           "value": "20"
+          },
+          {
+           "key": "sortOrder",
+           "value": "desc"
+          },
+          {
+           "key": "search",
+           "value": "",
+           "disabled": true
+          },
+          {
+           "key": "role",
+           "value": "employee",
+           "disabled": true
+          }
+         ]
+        }
+       },
+       "response": [
+        {
+         "name": "200 Paginated List",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": [\n    {\n      \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n      \"name\": \"John Employee\",\n      \"email\": \"employee@startupkaro.com\",\n      \"role\": \"employee\",\n      \"phone\": \"9876543210\",\n      \"isActive\": true,\n      \"createdAt\": \"2026-04-11T10:00:00.000Z\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"limit\": 20,\n    \"total\": 1,\n    \"totalPages\": 1\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Get Employee by ID",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/employees/{{employee_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "employees",
+          "{{employee_id}}"
+         ]
+        }
+       },
+       "response": []
+      },
+      {
+       "name": "Update Employee",
+       "request": {
+        "method": "PATCH",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/employees/{{employee_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "employees",
+          "{{employee_id}}"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"name\": \"John Updated\",\n  \"role\": \"admin\"\n}"
+        }
+       },
+       "response": []
+      },
+      {
+       "name": "Delete (Deactivate) Employee",
+       "request": {
+        "method": "DELETE",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/employees/{{employee_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "employees",
+          "{{employee_id}}"
+         ]
+        }
+       },
+       "response": [
+        {
+         "name": "200 Deactivated",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Employee deactivated\",\n  \"data\": null\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Categories",
+     "item": [
+      {
+       "name": "List Categories",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/categories",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "categories"
+         ]
+        }
+       },
+       "response": []
+      },
+      {
+       "name": "Create Category",
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/categories",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "categories"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"name\": \"Business & Finance\",\n  \"slug\": \"business\",\n  \"sortOrder\": 1\n}"
+        },
+        "description": "Creates a category. `slug` must be unique, kebab-case. Optional `parentId` for a sub-category."
+       },
+       "response": [],
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data) {",
+           "  pm.collectionVariables.set('category_id', res.data.id);",
+           "}"
+          ]
+         }
+        }
+       ]
+      },
+      {
+       "name": "Get Category by ID",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/categories/{{category_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "categories",
+          "{{category_id}}"
+         ]
+        }
+       },
+       "response": []
+      },
+      {
+       "name": "Update Category",
+       "request": {
+        "method": "PATCH",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/categories/{{category_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "categories",
+          "{{category_id}}"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"sortOrder\": 2,\n  \"isActive\": true\n}"
+        }
+       },
+       "response": []
+      },
+      {
+       "name": "Delete Category",
+       "request": {
+        "method": "DELETE",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/categories/{{category_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "categories",
+          "{{category_id}}"
+         ]
+        },
+        "description": "Deletes a category. Blocked if it still has services or sub-categories."
+       },
+       "response": []
+      }
+     ],
+     "description": "Manage catalog categories. Categories can nest via `parentId` (e.g. International → Incorporation / Trademark) and order the storefront via `sortOrder`."
+    },
+    {
+     "name": "Services",
+     "item": [
+      {
+       "name": "Create Service",
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data) {",
+           "  pm.collectionVariables.set('service_id', res.data.id);",
+           "}"
+          ]
+         }
+        }
+       ],
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/services",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "services"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"name\": \"LLP Registration\",\n  \"slug\": \"llp-registration\",\n  \"description\": \"Register your Limited Liability Partnership\",\n  \"categoryId\": \"{{category_id}}\",\n  \"pricingType\": \"fixed\",\n  \"billingCycle\": \"one_time\",\n  \"price\": 500000,\n  \"taxRatePct\": 1800,\n  \"priceInclusiveOfTax\": false,\n  \"isBundle\": false,\n  \"isPurchasable\": true,\n  \"sortOrder\": 0\n}"
+        },
+        "description": "Creates a service. `price` is in paise and may be null for `quote` services. Set `isPurchasable=false` to route customers to an inquiry instead of checkout."
+       },
+       "response": [
+        {
+         "name": "201 Created",
+         "status": "Created",
+         "code": 201,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Service created\",\n  \"data\": {\n    \"id\": \"660e8400-e29b-41d4-a716-446655440001\",\n    \"name\": \"LLP Registration\",\n    \"slug\": \"llp-registration\",\n    \"description\": \"Register your Limited Liability Partnership\",\n    \"price\": 799900,\n    \"isActive\": true,\n    \"createdAt\": \"2026-04-11T10:00:00.000Z\",\n    \"updatedAt\": \"2026-04-11T10:00:00.000Z\"\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "List Services",
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data && res.data.length > 0) {",
+           "  pm.collectionVariables.set('service_id', res.data[0].id);",
+           "}"
+          ]
+         }
+        }
+       ],
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/services?page=1&limit=20",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "services"
+         ],
+         "query": [
+          {
+           "key": "page",
+           "value": "1"
+          },
+          {
+           "key": "limit",
+           "value": "20"
+          }
+         ]
+        }
+       },
+       "response": []
+      },
+      {
+       "name": "Get Service by ID",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/services/{{service_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "services",
+          "{{service_id}}"
+         ]
+        }
+       },
+       "response": []
+      },
+      {
+       "name": "Update Service",
+       "request": {
+        "method": "PATCH",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/services/{{service_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "services",
+          "{{service_id}}"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"price\": 899900\n}"
+        }
+       },
+       "response": []
+      },
+      {
+       "name": "Delete (Deactivate) Service",
+       "request": {
+        "method": "DELETE",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/services/{{service_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "services",
+          "{{service_id}}"
+         ]
+        }
+       },
+       "response": []
+      },
+      {
+       "name": "List Service Add-ons",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/services/{{service_id}}/addons",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "services",
+          "{{service_id}}",
+          "addons"
+         ]
+        }
+       },
+       "response": []
+      },
+      {
+       "name": "Add Service Add-on",
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/services/{{service_id}}/addons",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "services",
+          "{{service_id}}",
+          "addons"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"name\": \"FSSAI Registration (Basic)\",\n  \"description\": \"Restaurant add-on\",\n  \"price\": 119900\n}"
+        },
+        "description": "Adds a cross-sell add-on (name, price in paise) that customers can select at checkout via `addonIds`."
+       },
+       "response": [],
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data) {",
+           "  pm.collectionVariables.set('addon_id', res.data.id);",
+           "}"
+          ]
+         }
+        }
+       ]
+      },
+      {
+       "name": "Delete Service Add-on",
+       "request": {
+        "method": "DELETE",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/services/{{service_id}}/addons/{{addon_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "services",
+          "{{service_id}}",
+          "addons",
+          "{{addon_id}}"
+         ]
+        }
+       },
+       "response": []
+      },
+      {
+       "name": "List Bundle Items",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/services/{{service_id}}/items",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "services",
+          "{{service_id}}",
+          "items"
+         ]
+        }
+       },
+       "response": []
+      },
+      {
+       "name": "Add Bundle Item",
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/services/{{service_id}}/items",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "services",
+          "{{service_id}}",
+          "items"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"label\": \"GST Registration\",\n  \"componentServiceId\": null,\n  \"sortOrder\": 0\n}"
+        },
+        "description": "Adds a line-item to a bundle service (`isBundle` must be true). Optional `componentServiceId` links the line to a standalone service."
+       },
+       "response": [],
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data) {",
+           "  pm.collectionVariables.set('bundle_item_id', res.data.id);",
+           "}"
+          ]
+         }
+        }
+       ]
+      },
+      {
+       "name": "Delete Bundle Item",
+       "request": {
+        "method": "DELETE",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/services/{{service_id}}/items/{{bundle_item_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "services",
+          "{{service_id}}",
+          "items",
+          "{{bundle_item_id}}"
+         ]
+        }
+       },
+       "response": []
+      }
+     ],
+     "description": "Manage the catalog. Create/update services with the full pricing model (pricingType, billingCycle, price in paise, taxRatePct, priceInclusiveOfTax, isBundle, isPurchasable, categoryId), plus nested add-ons and bundle line-items."
+    },
+    {
+     "name": "Orders",
+     "item": [
+      {
+       "name": "Create Order",
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data) {",
+           "  pm.collectionVariables.set('order_id', res.data.id);",
+           "  pm.collectionVariables.set('order_number', res.data.orderNumber);",
+           "}"
+          ]
+         }
+        }
+       ],
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/orders",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "orders"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"customerId\": \"{{customer_id}}\",\n  \"serviceId\": \"{{service_id}}\",\n  \"amount\": 999900\n}"
+        }
+       },
+       "response": [
+        {
+         "name": "201 Created",
+         "status": "Created",
+         "code": 201,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Order created\",\n  \"data\": {\n    \"id\": \"770e8400-e29b-41d4-a716-446655440002\",\n    \"orderNumber\": \"SK-20260411-4827\",\n    \"customerId\": \"...\",\n    \"serviceId\": \"...\",\n    \"status\": \"pending\",\n    \"amount\": 999900,\n    \"notes\": [],\n    \"createdAt\": \"2026-04-11T10:00:00.000Z\",\n    \"updatedAt\": \"2026-04-11T10:00:00.000Z\"\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "List Orders",
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data && res.data.length > 0) {",
+           "  pm.collectionVariables.set('order_id', res.data[0].id);",
+           "  pm.collectionVariables.set('order_number', res.data[0].orderNumber);",
+           "  pm.collectionVariables.set('customer_id', res.data[0].customerId);",
+           "}"
+          ]
+         }
+        }
+       ],
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/orders?page=1&limit=20&sortOrder=desc",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "orders"
+         ],
+         "query": [
+          {
+           "key": "page",
+           "value": "1"
+          },
+          {
+           "key": "limit",
+           "value": "20"
+          },
+          {
+           "key": "sortOrder",
+           "value": "desc"
+          },
+          {
+           "key": "status",
+           "value": "pending",
+           "disabled": true
+          },
+          {
+           "key": "customerId",
+           "value": "{{customer_id}}",
+           "disabled": true
+          },
+          {
+           "key": "dateFrom",
+           "value": "2026-01-01",
+           "disabled": true
+          },
+          {
+           "key": "dateTo",
+           "value": "2026-12-31",
+           "disabled": true
+          }
+         ]
+        }
+       },
+       "response": [
+        {
+         "name": "200 Paginated List",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": [\n    {\n      \"id\": \"770e8400-...\",\n      \"orderNumber\": \"SK-20260411-4827\",\n      \"customer\": {\n        \"id\": \"...\",\n        \"name\": \"Jane Doe\",\n        \"email\": \"jane@example.com\"\n      },\n      \"service\": {\n        \"id\": \"...\",\n        \"name\": \"Pvt Ltd Registration\"\n      },\n      \"amount\": 999900,\n      \"status\": \"pending\",\n      \"paymentStatus\": \"captured\",\n      \"notes\": [\n        {\n          \"text\": \"Called customer, awaiting documents\",\n          \"createdAt\": \"2026-04-11T10:30:00.000Z\",\n          \"createdBy\": { \"id\": \"...\", \"name\": \"Daksh Employee\" }\n        }\n      ],\n      \"createdAt\": \"2026-04-11T10:00:00.000Z\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"limit\": 20,\n    \"total\": 1,\n    \"totalPages\": 1\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Get Order by ID",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/orders/{{order_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "orders",
+          "{{order_id}}"
+         ]
+        }
+       },
+       "response": [
+        {
+         "name": "200 Order Detail",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": {\n    \"id\": \"770e8400-...\",\n    \"orderNumber\": \"SK-20260411-4827\",\n    \"customer\": {\n      \"id\": \"...\",\n      \"name\": \"Jane Doe\",\n      \"email\": \"jane@example.com\",\n      \"phone\": \"9876543210\"\n    },\n    \"service\": {\n      \"id\": \"...\",\n      \"name\": \"Pvt Ltd Registration\",\n      \"description\": \"Register your Private Limited company\"\n    },\n    \"amount\": 999900,\n    \"status\": \"pending\",\n    \"paymentStatus\": \"captured\",\n    \"notes\": [\n      {\n        \"text\": \"Called customer, awaiting documents\",\n        \"createdAt\": \"2026-04-11T10:30:00.000Z\",\n        \"createdBy\": { \"id\": \"...\", \"name\": \"Daksh Employee\" }\n      }\n    ],\n    \"createdAt\": \"2026-04-11T10:00:00.000Z\",\n    \"updatedAt\": \"2026-04-11T10:00:00.000Z\"\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Update Order Status",
+       "request": {
+        "method": "PATCH",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/orders/{{order_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "orders",
+          "{{order_id}}"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"status\": \"in_progress\",\n  \"notes\": [{ \"text\": \"Work started on registration\" }]\n}"
+        }
+       },
+       "response": []
+      },
+      {
+       "name": "Delete Order",
+       "request": {
+        "method": "DELETE",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/orders/{{order_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "orders",
+          "{{order_id}}"
+         ]
+        }
+       },
+       "response": []
+      }
+     ]
+    },
+    {
+     "name": "Payments",
+     "item": [
+      {
+       "name": "List Payments",
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data && res.data.length > 0) {",
+           "  pm.collectionVariables.set('payment_id', res.data[0].id);",
+           "}"
+          ]
+         }
+        }
+       ],
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/payments?page=1&limit=20",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "payments"
+         ],
+         "query": [
+          {
+           "key": "page",
+           "value": "1"
+          },
+          {
+           "key": "limit",
+           "value": "20"
+          },
+          {
+           "key": "status",
+           "value": "captured",
+           "disabled": true
+          },
+          {
+           "key": "customerId",
+           "value": "{{customer_id}}",
+           "disabled": true
+          },
+          {
+           "key": "dateFrom",
+           "value": "2026-01-01",
+           "disabled": true
+          },
+          {
+           "key": "dateTo",
+           "value": "2026-12-31",
+           "disabled": true
+          }
+         ]
+        }
+       },
+       "response": [
+        {
+         "name": "200 Paginated List",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": [\n    {\n      \"id\": \"...\",\n      \"order\": {\n        \"id\": \"...\",\n        \"orderNumber\": \"SK-20260411-4827\"\n      },\n      \"customer\": {\n        \"id\": \"...\",\n        \"name\": \"Jane Doe\",\n        \"email\": \"jane@example.com\"\n      },\n      \"razorpayPaymentId\": \"pay_xxxxx\",\n      \"amount\": 999900,\n      \"currency\": \"INR\",\n      \"status\": \"captured\",\n      \"method\": \"upi\",\n      \"paidAt\": \"2026-04-11T10:05:00.000Z\",\n      \"createdAt\": \"2026-04-11T10:00:00.000Z\"\n    }\n  ],\n  \"pagination\": { \"page\": 1, \"limit\": 20, \"total\": 1, \"totalPages\": 1 }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Get Payment by ID",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/payments/{{payment_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "payments",
+          "{{payment_id}}"
+         ]
+        }
+       },
+       "response": []
+      }
+     ]
+    },
+    {
+     "name": "Customers",
+     "item": [
+      {
+       "name": "List Customers",
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data && res.data.length > 0) {",
+           "  pm.collectionVariables.set('customer_id', res.data[0].id);",
+           "}"
+          ]
+         }
+        }
+       ],
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/customers?page=1&limit=20",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "customers"
+         ],
+         "query": [
+          {
+           "key": "page",
+           "value": "1"
+          },
+          {
+           "key": "limit",
+           "value": "20"
+          },
+          {
+           "key": "search",
+           "value": "",
+           "disabled": true
+          }
+         ]
+        }
+       },
+       "response": []
+      },
+      {
+       "name": "Get Customer by ID",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/customers/{{customer_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "customers",
+          "{{customer_id}}"
+         ]
+        }
+       },
+       "response": [
+        {
+         "name": "200 Customer Detail",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": {\n    \"id\": \"...\",\n    \"name\": \"Jane Doe\",\n    \"email\": \"jane@example.com\",\n    \"phone\": \"9876543210\",\n    \"createdAt\": \"2026-04-11T09:00:00.000Z\",\n    \"updatedAt\": \"2026-04-11T09:00:00.000Z\"\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Get Customer Orders",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/customers/{{customer_id}}/orders?page=1&limit=20",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "customers",
+          "{{customer_id}}",
+          "orders"
+         ],
+         "query": [
+          {
+           "key": "page",
+           "value": "1"
+          },
+          {
+           "key": "limit",
+           "value": "20"
+          }
+         ]
+        }
+       },
+       "response": []
+      }
+     ]
+    },
+    {
+     "name": "Invoices",
+     "item": [
+      {
+       "name": "Get Invoice Data (JSON)",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/invoices/order/{{order_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "invoices",
+          "order",
+          "{{order_id}}"
+         ]
+        }
+       },
+       "response": [
+        {
+         "name": "200 Invoice Data",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": {\n    \"id\": \"...\",\n    \"orderNumber\": \"SK-20260411-4827\",\n    \"status\": \"confirmed\",\n    \"amount\": 999900,\n    \"createdAt\": \"2026-04-11T10:00:00.000Z\",\n    \"customerName\": \"Jane Doe\",\n    \"customerEmail\": \"jane@example.com\",\n    \"customerPhone\": \"9876543210\",\n    \"serviceName\": \"Pvt Ltd Registration\",\n    \"serviceDescription\": \"...\",\n    \"payment\": {\n      \"id\": \"...\",\n      \"status\": \"captured\",\n      \"paidAt\": \"2026-04-11T10:05:00.000Z\",\n      \"method\": \"upi\",\n      \"razorpayPaymentId\": \"pay_xxxxx\"\n    }\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Download Invoice (PDF)",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/invoices/order/{{order_id}}/download",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "invoices",
+          "order",
+          "{{order_id}}",
+          "download"
+         ]
+        }
+       },
+       "response": [
+        {
+         "name": "200 PDF File",
+         "status": "OK",
+         "code": 200,
+         "body": "(binary PDF content)",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/pdf"
+          },
+          {
+           "key": "Content-Disposition",
+           "value": "attachment; filename=invoice-SK-20260411-4827.pdf"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Inquiries",
+     "item": [
+      {
+       "name": "List Inquiries",
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data && res.data.length > 0) {",
+           "  pm.collectionVariables.set('inquiry_id', res.data[0].id);",
+           "}"
+          ]
+         }
+        }
+       ],
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/inquiries?page=1&limit=20",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "inquiries"
+         ],
+         "query": [
+          {
+           "key": "page",
+           "value": "1"
+          },
+          {
+           "key": "limit",
+           "value": "20"
+          },
+          {
+           "key": "status",
+           "value": "unresolved",
+           "disabled": true
+          }
+         ]
+        }
+       },
+       "response": [
+        {
+         "name": "200 Paginated List",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": [\n    {\n      \"id\": \"82c80a7b-...\",\n      \"name\": \"Rahul Sharma\",\n      \"email\": \"rahul@example.com\",\n      \"phone\": \"9112233445\",\n      \"subject\": \"Need help with GST registration\",\n      \"message\": \"Hi, I want to register for GST for my new business.\",\n      \"status\": \"unresolved\",\n      \"notes\": [],\n      \"createdAt\": \"2026-05-26T14:27:09.737Z\"\n    }\n  ],\n  \"pagination\": { \"page\": 1, \"limit\": 20, \"total\": 1, \"totalPages\": 1 }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Get Inquiry by ID",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/inquiries/{{inquiry_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "inquiries",
+          "{{inquiry_id}}"
+         ]
+        }
+       },
+       "response": [
+        {
+         "name": "200 Inquiry Detail",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": {\n    \"id\": \"82c80a7b-...\",\n    \"name\": \"Rahul Sharma\",\n    \"email\": \"rahul@example.com\",\n    \"phone\": \"9112233445\",\n    \"subject\": \"Need help with GST registration\",\n    \"message\": \"Hi, I want to register for GST for my new business.\",\n    \"status\": \"unresolved\",\n    \"notes\": [\n      {\n        \"text\": \"Called customer, waiting for documents.\",\n        \"createdAt\": \"2026-05-26T15:00:00.000Z\",\n        \"createdBy\": { \"id\": \"...\", \"name\": \"Daksh Employee\" }\n      }\n    ],\n    \"createdAt\": \"2026-05-26T14:27:09.737Z\"\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Update Inquiry (status / notes)",
+       "request": {
+        "method": "PATCH",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/inquiries/{{inquiry_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "inquiries",
+          "{{inquiry_id}}"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"status\": \"resolved\",\n  \"notes\": [{ \"text\": \"Follow-up scheduled for Monday.\" }]\n}"
+        }
+       },
+       "response": [
+        {
+         "name": "200 Updated",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Inquiry updated\",\n  \"data\": {\n    \"id\": \"82c80a7b-...\",\n    \"name\": \"Rahul Sharma\",\n    \"email\": \"rahul@example.com\",\n    \"phone\": \"9112233445\",\n    \"subject\": \"Need help with GST registration\",\n    \"message\": \"Hi, I want to register for GST for my new business.\",\n    \"status\": \"resolved\",\n    \"notes\": [\n      {\n        \"text\": \"Follow-up scheduled for Monday.\",\n        \"createdAt\": \"2026-05-27T09:00:00.000Z\",\n        \"createdBy\": { \"id\": \"...\", \"name\": \"Daksh Employee\" }\n      }\n    ],\n    \"createdAt\": \"2026-05-26T14:27:09.737Z\"\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Delete Inquiry",
+       "request": {
+        "method": "DELETE",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/inquiries/{{inquiry_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "inquiries",
+          "{{inquiry_id}}"
+         ]
+        }
+       },
+       "response": [
+        {
+         "name": "200 Deleted",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Inquiry deleted\",\n  \"data\": null\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Generate Payment Link",
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/inquiries/{{inquiry_id}}/payment-link",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "inquiries",
+          "{{inquiry_id}}",
+          "payment-link"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"amount\": 500000,\n  \"description\": \"Custom quote for advisory work\"\n}"
+        },
+        "description": "Creates a Razorpay Payment Link for an agreed amount (paise) against this inquiry. Auto-links a matching customer and the inquiry's service. Returns the link record incl. `shortUrl`. Marked paid by the `payment_link.paid` webhook."
+       },
+       "response": [],
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data) {",
+           "  pm.collectionVariables.set('payment_link_id', res.data.id);",
+           "}"
+          ]
+         }
+        }
+       ]
+      },
+      {
+       "name": "List Payment Links",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/inquiries/{{inquiry_id}}/payment-links",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "inquiries",
+          "{{inquiry_id}}",
+          "payment-links"
+         ]
+        },
+        "description": "Lists all payment links generated for this inquiry with their status."
+       },
+       "response": []
+      }
+     ],
+     "description": "Handle inquiries and the quote → payment step. For agreed quotes, generate a Razorpay Payment Link that is emailed/SMSed to the customer."
+    },
+    {
+     "name": "Employee Profile",
+     "item": [
+      {
+       "name": "Get My Profile",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/employee-profile",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "employee-profile"
+         ]
+        }
+       },
+       "response": [
+        {
+         "name": "200 Profile",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": {\n    \"id\": \"fae3dd7c-30c7-4b14-b000-eef709d3679f\",\n    \"name\": \"Daksh Employee\",\n    \"email\": \"daksh.e@startupkaro.com\",\n    \"phone\": \"+919315326868\",\n    \"role\": \"employee\",\n    \"isActive\": true,\n    \"createdAt\": \"2026-05-26T13:23:39.903Z\"\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        },
+        {
+         "name": "401 Unauthorized",
+         "status": "Unauthorized",
+         "code": 401,
+         "body": "{\n  \"success\": false,\n  \"message\": \"Access token required\"\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Change Password",
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/employee-profile/change-password",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "employee-profile",
+          "change-password"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"currentPassword\": \"OldPassword@123\",\n  \"newPassword\": \"NewPassword@456\"\n}"
+        }
+       },
+       "response": [
+        {
+         "name": "200 Password Changed",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": {\n    \"message\": \"Password changed successfully\"\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        },
+        {
+         "name": "400 Wrong Current Password",
+         "status": "Bad Request",
+         "code": 400,
+         "body": "{\n  \"success\": false,\n  \"message\": \"Current password is incorrect\"\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Customer",
+   "item": [
+    {
+     "name": "Auth",
+     "item": [
+      {
+       "name": "Signup",
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data) {",
+           "  pm.collectionVariables.set('customer_access_token', res.data.tokens.accessToken);",
+           "  pm.collectionVariables.set('customer_refresh_token', res.data.tokens.refreshToken);",
+           "  pm.collectionVariables.set('customer_id', res.data.user.id);",
+           "  pm.test('Customer signup successful', () => pm.expect(res.data.user.email).to.be.a('string'));",
+           "}"
+          ]
+         }
+        }
+       ],
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/customer/auth/signup",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "auth",
+          "signup"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane@example.com\",\n  \"password\": \"password123\",\n  \"phone\": \"9876543210\"\n}"
+        }
+       },
+       "response": [
+        {
+         "name": "201 Account Created",
+         "status": "Created",
+         "code": 201,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Account created successfully\",\n  \"data\": {\n    \"tokens\": {\n      \"accessToken\": \"eyJhbGciOiJIUzI1NiIs...\",\n      \"refreshToken\": \"eyJhbGciOiJIUzI1NiIs...\"\n    },\n    \"user\": {\n      \"id\": \"880e8400-e29b-41d4-a716-446655440003\",\n      \"name\": \"Jane Doe\",\n      \"email\": \"jane@example.com\",\n      \"phone\": \"9876543210\",\n      \"createdAt\": \"2026-04-11T09:00:00.000Z\"\n    }\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        },
+        {
+         "name": "409 Email Already Registered",
+         "status": "Conflict",
+         "code": 409,
+         "body": "{\n  \"success\": false,\n  \"message\": \"Email already registered\"\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Login",
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data) {",
+           "  pm.collectionVariables.set('customer_access_token', res.data.tokens.accessToken);",
+           "  pm.collectionVariables.set('customer_refresh_token', res.data.tokens.refreshToken);",
+           "  pm.collectionVariables.set('customer_id', res.data.user.id);",
+           "}"
+          ]
+         }
+        }
+       ],
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/customer/auth/login",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "auth",
+          "login"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"email\": \"jane@example.com\",\n  \"password\": \"password123\"\n}"
+        }
+       },
+       "response": [
+        {
+         "name": "200 Login Success",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Login successful\",\n  \"data\": {\n    \"tokens\": {\n      \"accessToken\": \"eyJhbGciOiJIUzI1NiIs...\",\n      \"refreshToken\": \"eyJhbGciOiJIUzI1NiIs...\"\n    },\n    \"user\": {\n      \"id\": \"...\",\n      \"name\": \"Jane Doe\",\n      \"email\": \"jane@example.com\",\n      \"phone\": \"9876543210\"\n    }\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        },
+        {
+         "name": "401 Invalid Credentials",
+         "status": "Unauthorized",
+         "code": 401,
+         "body": "{\n  \"success\": false,\n  \"message\": \"Invalid email or password\"\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Refresh Token",
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data) {",
+           "  pm.collectionVariables.set('customer_access_token', res.data.accessToken);",
+           "}"
+          ]
+         }
+        }
+       ],
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/customer/auth/refresh",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "auth",
+          "refresh"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"refreshToken\": \"{{customer_refresh_token}}\"\n}"
+        }
+       },
+       "response": []
+      },
+      {
+       "name": "Forgot Password",
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/customer/auth/forgot-password",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "auth",
+          "forgot-password"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"email\": \"jane@example.com\"\n}"
+        }
+       },
+       "response": [
+        {
+         "name": "200 Reset Link Sent",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": {\n    \"message\": \"If the email exists, a reset link has been sent\"\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Reset Password",
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/customer/auth/reset-password",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "auth",
+          "reset-password"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"token\": \"{{reset_token}}\",\n  \"password\": \"newpassword123\"\n}"
+        }
+       },
+       "response": [
+        {
+         "name": "200 Password Reset",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": {\n    \"message\": \"Password reset successfully\"\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Profile",
+     "item": [
+      {
+       "name": "Get Profile",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{customer_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/customer/profile",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "profile"
+         ]
+        }
+       },
+       "response": [
+        {
+         "name": "200 Profile",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": {\n    \"id\": \"...\",\n    \"name\": \"Jane Doe\",\n    \"email\": \"jane@example.com\",\n    \"phone\": \"9876543210\",\n    \"createdAt\": \"2026-04-11T09:00:00.000Z\",\n    \"updatedAt\": \"2026-04-11T09:00:00.000Z\"\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        },
+        {
+         "name": "401 Unauthorized",
+         "status": "Unauthorized",
+         "code": 401,
+         "body": "{\n  \"success\": false,\n  \"message\": \"Access token required\"\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Update Profile",
+       "request": {
+        "method": "PATCH",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{customer_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/customer/profile",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "profile"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"name\": \"Jane Updated\",\n  \"phone\": \"9998887770\"\n}"
+        }
+       },
+       "response": []
+      },
+      {
+       "name": "Change Password",
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{customer_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/customer/profile/change-password",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "profile",
+          "change-password"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"currentPassword\": \"password123\",\n  \"newPassword\": \"newpassword456\"\n}"
+        }
+       },
+       "response": [
+        {
+         "name": "200 Password Changed",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": {\n    \"message\": \"Password changed successfully\"\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        },
+        {
+         "name": "400 Wrong Current Password",
+         "status": "Bad Request",
+         "code": 400,
+         "body": "{\n  \"success\": false,\n  \"message\": \"Current password is incorrect\"\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Services (Public)",
+     "item": [
+      {
+       "name": "List Available Services",
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data && res.data.length > 0) {",
+           "  pm.collectionVariables.set('service_id', res.data[0].id);",
+           "}"
+          ]
+         }
+        }
+       ],
+       "request": {
+        "method": "GET",
+        "url": {
+         "raw": "{{base_url}}/customer/services",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "services"
+         ]
+        },
+        "description": "Returns active services **grouped by category** (ordered by sortOrder). Each service includes `pricingType`, `isPurchasable`, `priceLabel`, `cta`, and `pricing { base, tax, total }`. The frontend keys off `cta` to decide buy vs subscribe vs quote."
+       },
+       "response": [
+        {
+         "name": "200 Services Catalog",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": [\n    {\n      \"id\": \"...\",\n      \"name\": \"Private Limited Company Registration\",\n      \"slug\": \"pvt-ltd-registration\",\n      \"description\": \"Complete registration of a Private Limited Company with MCA\",\n      \"price\": 999900\n    },\n    {\n      \"id\": \"...\",\n      \"name\": \"GST Registration\",\n      \"slug\": \"gst-registration\",\n      \"description\": \"Get your GST number registered for your business\",\n      \"price\": 299900\n    }\n  ]\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Get Service by Slug",
+       "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+         "raw": "{{base_url}}/customer/services/llp-registration",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "services",
+          "llp-registration"
+         ]
+        },
+        "description": "Full service detail: category, GST `pricing`, plus **bundle line-items** (when `isBundle`), selectable **add-ons**, and the **subscription plan** (when `recurring`)."
+       },
+       "response": [
+        {
+         "name": "200 Service",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": {\n    \"id\": \"2a233ccc-facd-4225-8f53-5b3afc0f8815\",\n    \"name\": \"LLP Registration\",\n    \"slug\": \"llp-registration\",\n    \"description\": \"Register your Limited Liability Partnership\",\n    \"price\": 899900\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        },
+        {
+         "name": "404 Not Found",
+         "status": "Not Found",
+         "code": 404,
+         "body": "{\n  \"success\": false,\n  \"message\": \"Service not found\"\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "description": "Public catalog (no auth). Drives the storefront: services grouped by category, each with a `priceLabel`, a `cta` (buy / subscribe / quote), and a GST `pricing` breakdown."
+    },
+    {
+     "name": "Purchases",
+     "item": [
+      {
+       "name": "Initiate Purchase",
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data) {",
+           "  pm.collectionVariables.set('order_id', res.data.orderId);",
+           "  pm.collectionVariables.set('order_number', res.data.orderNumber);",
+           "  pm.collectionVariables.set('razorpay_order_id', res.data.razorpayOrderId);",
+           "  pm.test('Purchase initiated', () => {",
+           "    pm.expect(res.data.razorpayOrderId).to.be.a('string');",
+           "    pm.expect(res.data.razorpayKeyId).to.be.a('string');",
+           "  });",
+           "}"
+          ]
+         }
+        }
+       ],
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{customer_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/customer/purchases/initiate",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "purchases",
+          "initiate"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"serviceId\": \"{{service_id}}\",\n  \"quantity\": 1,\n  \"addonIds\": []\n}"
+        },
+        "description": "Creates a pending order + Razorpay order and returns `razorpayOrderId` + `razorpayKeyId` for Checkout. Body: `serviceId`, optional `quantity` (per-unit services) and `addonIds`. Amount = service price + GST + add-ons. Rejected for recurring / quote / non-purchasable services."
+       },
+       "response": [
+        {
+         "name": "201 Purchase Initiated",
+         "status": "Created",
+         "code": 201,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Purchase initiated\",\n  \"data\": {\n    \"orderId\": \"...\",\n    \"orderNumber\": \"SK-20260411-1234\",\n    \"razorpayOrderId\": \"order_xxxxxxxxxxxxx\",\n    \"razorpayKeyId\": \"rzp_test_xxxx\",\n    \"amount\": 999900,\n    \"currency\": \"INR\",\n    \"serviceName\": \"Private Limited Company Registration\"\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Verify Payment",
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{customer_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/customer/purchases/verify",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "purchases",
+          "verify"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"razorpayOrderId\": \"{{razorpay_order_id}}\",\n  \"razorpayPaymentId\": \"pay_test_xxxxxxxxxxxxx\",\n  \"razorpaySignature\": \"generated_hmac_signature_here\"\n}"
+        },
+        "description": "Verifies the Razorpay signature after Checkout and marks the payment captured + order confirmed. (The `payment.captured` webhook does the same server-side if the client never calls this.)"
+       },
+       "response": [
+        {
+         "name": "200 Payment Verified",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Payment verified\",\n  \"data\": {\n    \"message\": \"Payment verified successfully\",\n    \"orderId\": \"...\"\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        },
+        {
+         "name": "400 Verification Failed",
+         "status": "Bad Request",
+         "code": 400,
+         "body": "{\n  \"success\": false,\n  \"message\": \"Payment verification failed\"\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "List My Purchases",
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data && res.data.length > 0) {",
+           "  pm.collectionVariables.set('order_id', res.data[0].id);",
+           "}"
+          ]
+         }
+        }
+       ],
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{customer_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/customer/purchases?page=1&limit=20",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "purchases"
+         ],
+         "query": [
+          {
+           "key": "page",
+           "value": "1"
+          },
+          {
+           "key": "limit",
+           "value": "20"
+          }
+         ]
+        }
+       },
+       "response": [
+        {
+         "name": "200 Paginated List",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": [\n    {\n      \"id\": \"213c6dab-...\",\n      \"orderNumber\": \"SK-20260527-8984\",\n      \"service\": {\n        \"id\": \"2a233ccc-...\",\n        \"name\": \"LLP Registration\"\n      },\n      \"amount\": 899900,\n      \"status\": \"confirmed\",\n      \"paymentStatus\": \"captured\",\n      \"createdAt\": \"2026-05-27T22:23:51.725Z\"\n    }\n  ],\n  \"pagination\": { \"page\": 1, \"limit\": 20, \"total\": 1, \"totalPages\": 1 }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Get Purchase Detail",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{customer_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/customer/purchases/{{order_id}}",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "purchases",
+          "{{order_id}}"
+         ]
+        }
+       },
+       "response": [
+        {
+         "name": "200 Purchase Detail",
+         "status": "OK",
+         "code": 200,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": {\n    \"id\": \"213c6dab-...\",\n    \"orderNumber\": \"SK-20260527-8984\",\n    \"service\": {\n      \"id\": \"2a233ccc-...\",\n      \"name\": \"LLP Registration\",\n      \"description\": \"Register your Limited Liability Partnership\"\n    },\n    \"amount\": 899900,\n    \"status\": \"confirmed\",\n    \"paymentStatus\": \"captured\",\n    \"notes\": [],\n    \"createdAt\": \"2026-05-27T22:23:51.725Z\"\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "description": "One-time checkout track (`cta = buy`). Flow: Initiate → Razorpay Checkout → Verify. The webhook is the server-side source of truth for confirmation."
+    },
+    {
+     "name": "Subscriptions",
+     "item": [
+      {
+       "name": "Subscribe",
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{customer_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/customer/subscriptions/subscribe",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "subscriptions",
+          "subscribe"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"serviceId\": \"{{service_id}}\"\n}"
+        },
+        "description": "Starts a monthly subscription for a `recurring`, purchasable service. Lazily creates the Razorpay Plan, creates the Subscription, and returns `razorpaySubscriptionId` + `shortUrl` for Checkout."
+       },
+       "response": [],
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data) {",
+           "  pm.collectionVariables.set('subscription_id', res.data.subscriptionId);",
+           "  pm.collectionVariables.set('razorpay_subscription_id', res.data.razorpaySubscriptionId);",
+           "}"
+          ]
+         }
+        }
+       ]
+      },
+      {
+       "name": "Verify Subscription",
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{customer_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/customer/subscriptions/verify",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "subscriptions",
+          "verify"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"razorpayPaymentId\": \"pay_xxxxxxxxxxxxx\",\n  \"razorpaySubscriptionId\": \"{{razorpay_subscription_id}}\",\n  \"razorpaySignature\": \"signature_from_checkout\"\n}"
+        },
+        "description": "Verifies the subscription handshake signature (`payment_id | subscription_id`) after Checkout and marks the subscription active."
+       },
+       "response": []
+      },
+      {
+       "name": "List My Subscriptions",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{customer_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/customer/subscriptions",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "subscriptions"
+         ]
+        },
+        "description": "The authenticated customer's subscriptions with service, status, amount, interval, and current period end."
+       },
+       "response": []
+      },
+      {
+       "name": "Cancel Subscription",
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{customer_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/customer/subscriptions/{{subscription_id}}/cancel",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "subscriptions",
+          "{{subscription_id}}",
+          "cancel"
+         ]
+        },
+        "description": "Cancels the subscription at the end of the current billing cycle."
+       },
+       "response": []
+      }
+     ],
+     "description": "Recurring track (`cta = subscribe`) for monthly services via Razorpay Subscriptions. Flow: Subscribe → Razorpay Checkout → Verify; `subscription.*` webhooks keep status in sync."
+    },
+    {
+     "name": "Invoices",
+     "item": [
+      {
+       "name": "Download My Invoice (PDF)",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{customer_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/customer/invoices/{{order_id}}/download",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "invoices",
+          "{{order_id}}",
+          "download"
+         ]
+        }
+       },
+       "response": [
+        {
+         "name": "200 PDF File",
+         "status": "OK",
+         "code": 200,
+         "body": "(binary PDF content)",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/pdf"
+          },
+          {
+           "key": "Content-Disposition",
+           "value": "attachment; filename=invoice-SK-20260411-4827.pdf"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Inquiry (Public)",
+     "item": [
+      {
+       "name": "Submit Inquiry",
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data) {",
+           "  pm.collectionVariables.set('inquiry_id', res.data.id);",
+           "}"
+          ]
+         }
+        }
+       ],
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/customer/inquiry",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "customer",
+          "inquiry"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"name\": \"Rahul Sharma\",\n  \"email\": \"rahul@example.com\",\n  \"phone\": \"9112233445\",\n  \"subject\": \"Need help with GST registration\",\n  \"message\": \"Hi, I want to register for GST for my new business. Can you help?\"\n}"
+        },
+        "description": "Creates an inquiry. Optional `serviceId` links it to a catalog service so the advisor sees the context. Rate-limited."
+       },
+       "response": [
+        {
+         "name": "201 Inquiry Submitted",
+         "status": "Created",
+         "code": 201,
+         "body": "{\n  \"success\": true,\n  \"message\": \"Inquiry submitted successfully\",\n  \"data\": {\n    \"id\": \"...\",\n    \"name\": \"Rahul Sharma\",\n    \"email\": \"rahul@example.com\",\n    \"phone\": \"9112233445\",\n    \"subject\": \"Need help with GST registration\",\n    \"message\": \"Hi, I want to register for GST for my new business. Can you help?\",\n    \"createdAt\": \"2026-04-11T11:00:00.000Z\"\n  }\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        },
+        {
+         "name": "429 Rate Limited",
+         "status": "Too Many Requests",
+         "code": 429,
+         "body": "{\n  \"success\": false,\n  \"message\": \"Too many inquiries, please try again later\"\n}",
+         "header": [
+          {
+           "key": "Content-Type",
+           "value": "application/json"
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "description": "Entry point for the quote track (`cta = quote`). Customers submit an inquiry, optionally tagged with the `serviceId` they're asking about; an advisor follows up with a payment link."
+    }
+   ]
+  },
+  {
+   "name": "Webhooks",
+   "item": [
+    {
+     "name": "Razorpay Payment Webhook",
+     "request": {
+      "method": "POST",
+      "header": [
+       {
+        "key": "Content-Type",
+        "value": "application/json"
+       },
+       {
+        "key": "X-Razorpay-Signature",
+        "value": "webhook_signature_here"
+       }
+      ],
+      "url": {
+       "raw": "{{base_url}}/webhooks/razorpay",
+       "host": [
+        "{{base_url}}"
+       ],
+       "path": [
+        "webhooks",
+        "razorpay"
+       ]
+      },
+      "body": {
+       "mode": "raw",
+       "raw": "{\n  \"event\": \"payment.captured\",\n  \"payload\": {\n    \"payment\": {\n      \"entity\": {\n        \"id\": \"pay_xxxxx\",\n        \"order_id\": \"order_xxxxx\",\n        \"method\": \"upi\",\n        \"amount\": 999900,\n        \"currency\": \"INR\",\n        \"status\": \"captured\"\n      }\n    }\n  }\n}"
+      },
+      "description": "Single endpoint for all Razorpay events. Routes by event prefix: `subscription.*` → subscription status, `payment_link.*` → quote payment status, `payment.*` → order/payment status."
+     },
+     "response": [
+      {
+       "name": "200 Processed",
+       "status": "OK",
+       "code": 200,
+       "body": "{\n  \"success\": true,\n  \"message\": \"Webhook processed\"\n}",
+       "header": [
+        {
+         "key": "Content-Type",
+         "value": "application/json"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "description": "Razorpay webhook receiver (signature-verified). Handles one-time `payment.*`, `subscription.*`, and `payment_link.*` events — the server-side source of truth for confirming orders, subscriptions, and quote payments."
+  }
+ ]
+}

@@ -1,35 +1,35 @@
 // features/marketing/components/sections/ServicesOverviewSection.tsx
 
 import Link from "next/link";
-import { ArrowRight, FileText, Building2, Scale, FileCheck } from "lucide-react";
+import { ArrowRight, LineChart, PackageCheck, Rocket, ShieldCheck } from "lucide-react";
 import { FlowSecondaryButton } from "@/components/custom/FlowButton";
 import { LetterSwap } from "@/components/fancy/text";
 import { categoryCardStyles } from "@/lib/category-pills";
 
 const categories = [
     {
-        icon: FileText,
-        label: "Tax" as const,
-        description: "GST registration, income tax filing, and tax compliance services.",
-        href: "/services?category=Tax",
+        icon: Rocket,
+        label: "Start" as const,
+        description: "Incorporation, registrations, licences, and launch-ready setup services.",
+        href: "/services?category=Start",
     },
     {
-        icon: Building2,
-        label: "Business" as const,
-        description: "Company incorporation, LLP formation, and startup setup services.",
-        href: "/services?category=Business",
+        icon: LineChart,
+        label: "Manage" as const,
+        description: "Compliance, accounting, tax, finance, and advisory support.",
+        href: "/services?category=Manage",
     },
     {
-        icon: Scale,
-        label: "Legal" as const,
-        description: "Trademark filing, legal agreements, and IP protection services.",
-        href: "/services?category=Legal",
+        icon: ShieldCheck,
+        label: "Protect" as const,
+        description: "Trademark, agreements, notices, and legal protection services.",
+        href: "/services?category=Protect",
     },
     {
-        icon: FileCheck,
-        label: "License" as const,
-        description: "FSSAI, IEC, shop act, and other business licence services.",
-        href: "/services?category=License",
+        icon: PackageCheck,
+        label: "Bundles" as const,
+        description: "Fixed-price service packs for company, LLP, partnership, and proprietorship setup.",
+        href: "/bundles",
     },
 ];
 

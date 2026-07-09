@@ -35,13 +35,23 @@ function getTodayDate() {
     });
 }
 
-export function ContactPage() {
+function humanizeSlug(slug?: string) {
+    if (!slug) return "";
+    return slug
+        .split("-")
+        .filter(Boolean)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ");
+}
+
+export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: string } = {}) {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+    const serviceName = humanizeSlug(initialServiceSlug);
     const [form, setForm] = useState<FormState>({
         name: "",
         email: "",
-        subject: "",
-        message: "",
+        subject: serviceName ? `Quote request: ${serviceName}` : "",
+        message: serviceName ? `I would like a quote for ${serviceName}.` : "",
     });
     const [phoneDigits, setPhoneDigits] = useState("");
     const [errors, setErrors] = useState<FormErrors>({});

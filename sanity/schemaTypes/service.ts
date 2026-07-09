@@ -2,10 +2,9 @@ import { defineField, defineType } from "sanity";
 import { LayoutGrid } from "lucide-react";
 
 const CATEGORY_OPTIONS = [
-    { title: "Tax", value: "Tax" },
-    { title: "Business", value: "Business" },
-    { title: "Legal", value: "Legal" },
-    { title: "License", value: "License" },
+    { title: "Start", value: "Start" },
+    { title: "Manage", value: "Manage" },
+    { title: "Protect", value: "Protect" },
 ];
 
 export const serviceType = defineType({
@@ -32,22 +31,38 @@ export const serviceType = defineType({
             type: "slug",
             group: "overview",
             description:
-                "MUST exactly match the backend service slug (e.g. llp-registration). This is the join key — a mismatch means no price or checkout CTA on the site.",
+                "MUST exactly match the backend service slug (e.g. llp). This is the join key — a mismatch means no price or checkout CTA on the site.",
             options: { source: "name", maxLength: 96 },
             validation: (Rule) =>
                 Rule.required().custom((val: { current?: string } | undefined) => {
                     if (!val?.current) return true;
                     if (/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(val.current)) return true;
-                    return "Must be lowercase kebab-case only (e.g. llp-registration). No spaces, uppercase, or special characters.";
+                    return "Must be lowercase kebab-case only (e.g. llp). No spaces, uppercase, or special characters.";
                 }),
         }),
         defineField({
             name: "category",
-            title: "Category",
+            title: "Stage",
             type: "string",
             group: "overview",
             options: { list: CATEGORY_OPTIONS, layout: "radio" },
             validation: (Rule) => Rule.required(),
+        }),
+        defineField({
+            name: "stage",
+            title: "Stage (explicit)",
+            type: "string",
+            group: "overview",
+            description: "Optional explicit stage. If empty, the Stage field above is used.",
+            options: { list: CATEGORY_OPTIONS, layout: "radio" },
+        }),
+        defineField({
+            name: "isBundle",
+            title: "Bundle",
+            type: "boolean",
+            group: "overview",
+            initialValue: false,
+            description: "Enable for services that represent a bundled package.",
         }),
         defineField({
             name: "duration",
@@ -104,6 +119,14 @@ export const serviceType = defineType({
             of: [{ type: "string" }],
             description: "One deliverable per item.",
             validation: (Rule) => Rule.required().min(1),
+        }),
+        defineField({
+            name: "bundleInclusions",
+            title: "Bundle Inclusions",
+            type: "array",
+            group: "content",
+            of: [{ type: "string" }],
+            description: "Services included in a bundle. Used as an editorial fallback when backend bundle items are unavailable.",
         }),
         defineField({
             name: "process",

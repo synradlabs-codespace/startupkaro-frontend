@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { adminServiceService } from "@/services/admin.service";
+import { adminCategoryService, adminServiceService } from "@/services/admin.service";
 
 export function useServiceList(params: { page?: number; limit?: number } = {}) {
     return useQuery({
@@ -16,10 +16,17 @@ export function useService(id: string) {
     });
 }
 
+export function useAdminCategories() {
+    return useQuery({
+        queryKey: ["admin", "categories"],
+        queryFn: async () => (await adminCategoryService.list()).data.data,
+    });
+}
+
 export function useCreateService() {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (payload: { name: string; slug?: string; description?: string; price: number; isActive?: boolean }) =>
+        mutationFn: (payload: Parameters<typeof adminServiceService.create>[0]) =>
             adminServiceService.create(payload),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin", "services"] }),
     });
@@ -28,7 +35,7 @@ export function useCreateService() {
 export function useUpdateService(id: string) {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (payload: Partial<{ name: string; slug: string; description: string; price: number; isActive: boolean }>) =>
+        mutationFn: (payload: Parameters<typeof adminServiceService.update>[1]) =>
             adminServiceService.update(id, payload),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["admin", "services"] });

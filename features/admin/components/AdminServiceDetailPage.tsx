@@ -34,7 +34,7 @@ export function AdminServiceDetailPage({ id }: { id: string }) {
                 name: form.name,
                 slug: form.slug,
                 description: form.description,
-                price: toPaise(Number(form.price)),
+                price: form.price ? toPaise(Number(form.price)) : null,
                 isActive: form.isActive,
             });
             setEditing(false);
@@ -77,7 +77,7 @@ export function AdminServiceDetailPage({ id }: { id: string }) {
                                     name: service.name,
                                     slug: service.slug,
                                     description: service.description ?? "",
-                                    price: String(service.price / 100),
+                                    price: service.price != null ? String(service.price / 100) : "",
                                     isActive: service.isActive,
                                 });
                                 setEditing(true);
@@ -176,7 +176,8 @@ export function AdminServiceDetailPage({ id }: { id: string }) {
                             <div className="space-y-3 text-sm">
                                 <Row label="Name" value={service.name} />
                                 <Row label="Slug" value={service.slug} />
-                                <Row label="Price" value={formatINR(service.price)} />
+                                <Row label="Price" value={service.price != null ? formatINR(service.price) : "On request"} />
+                                <Row label="Type" value={service.isBundle ? "Bundle" : service.pricingType ?? "Service"} />
                                 <Row label="Status" value={service.isActive ? "Active" : "Inactive"} />
                                 <Row label="Created" value={formatDate(service.createdAt)} />
                                 <div className="pt-3 border-t border-hairline">
