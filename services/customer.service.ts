@@ -102,7 +102,7 @@ export const customerServiceCatalog = {
 };
 
 export const customerPurchaseService = {
-    initiate: (payload: { serviceId: string; quantity?: number; addonIds?: string[] }) =>
+    initiate: (payload: { serviceId: string }) =>
         apiClient.post<ApiResponse<PurchaseInitiation>>("/customer/purchases/initiate", payload),
     verify: (payload: RazorpayHandlerResponse) =>
         apiClient.post<ApiResponse<{ message: string; orderId: string }>>("/customer/purchases/verify", {

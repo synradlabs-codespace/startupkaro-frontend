@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useService, useUpdateService, useServiceContentSlugs } from "@/features/admin/hooks/useAdminServices";
@@ -13,6 +14,12 @@ import { formatDate, getApiErrorMessage } from "@/features/admin/lib/format";
 import { formatINR, toPaise } from "@/lib/currency";
 import { AlertTriangle, CheckCircle2, ExternalLink, Pencil, Save } from "lucide-react";
 import Link from "next/link";
+
+const stageOptions = [
+    { label: "Start", value: "start" },
+    { label: "Manage", value: "manage" },
+    { label: "Protect", value: "protect" },
+] as const;
 
 export function AdminServiceDetailPage({ id }: { id: string }) {
     const serviceQuery = useService(id);
@@ -22,7 +29,16 @@ export function AdminServiceDetailPage({ id }: { id: string }) {
     const [editing, setEditing] = useState(false);
     const [saved, setSaved] = useState(false);
     const [error, setError] = useState("");
-    const [form, setForm] = useState({ name: "", slug: "", description: "", price: "", isActive: true });
+    const [form, setForm] = useState({
+        name: "",
+        slug: "",
+        description: "",
+        category: "start" as "start" | "manage" | "protect",
+        type: "fixed" as "fixed" | "quote",
+        price: "",
+        sortOrder: "0",
+        isActive: true,
+    });
 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -33,8 +49,11 @@ export function AdminServiceDetailPage({ id }: { id: string }) {
             await updateService.mutateAsync({
                 name: form.name,
                 slug: form.slug,
-                description: form.description,
+                description: form.description || null,
+                category: form.category,
+                type: form.type,
                 price: form.price ? toPaise(Number(form.price)) : null,
+                sortOrder: Number(form.sortOrder) || 0,
                 isActive: form.isActive,
             });
             setEditing(false);
@@ -77,7 +96,10 @@ export function AdminServiceDetailPage({ id }: { id: string }) {
                                     name: service.name,
                                     slug: service.slug,
                                     description: service.description ?? "",
+                                    category: (service.category === "manage" || service.category === "protect" ? service.category : "start"),
+                                    type: service.type === "quote" ? "quote" : "fixed",
                                     price: service.price != null ? String(service.price / 100) : "",
+                                    sortOrder: String(service.sortOrder ?? 0),
                                     isActive: service.isActive,
                                 });
                                 setEditing(true);
@@ -147,7 +169,36 @@ export function AdminServiceDetailPage({ id }: { id: string }) {
                                     </div>
                                     <div className="space-y-2">
                                         <Label>Price (Rs)</Label>
-                                        <Input required type="number" min="0" step="0.01" value={form.price} onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))} />
+                                        <Input type="number" min="0" step="0.01" value={form.price} onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))} />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label>Category</Label>
+                                        <Select value={form.category} onValueChange={(value) => setForm((f) => ({ ...f, category: value as typeof form.category }))}>
+                                            <SelectTrigger>
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {stageOptions.map((category) => (
+                                                    <SelectItem key={category.value} value={category.value}>{category.label}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label>Type</Label>
+                                        <Select value={form.type} onValueChange={(value) => setForm((f) => ({ ...f, type: value as typeof form.type }))}>
+                                            <SelectTrigger>
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="fixed">Fixed</SelectItem>
+                                                <SelectItem value="quote">Quote</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label>Sort Order</Label>
+                                        <Input type="number" value={form.sortOrder} onChange={(e) => setForm((f) => ({ ...f, sortOrder: e.target.value }))} />
                                     </div>
                                     <div className="space-y-2">
                                         <Label>Active</Label>
@@ -176,8 +227,10 @@ export function AdminServiceDetailPage({ id }: { id: string }) {
                             <div className="space-y-3 text-sm">
                                 <Row label="Name" value={service.name} />
                                 <Row label="Slug" value={service.slug} />
+                                <Row label="Category" value={formatCategory(service.category)} />
                                 <Row label="Price" value={service.price != null ? formatINR(service.price) : "On request"} />
-                                <Row label="Type" value={service.isBundle ? "Bundle" : service.pricingType ?? "Service"} />
+                                <Row label="Type" value={formatType(service.type)} />
+                                <Row label="Sort Order" value={String(service.sortOrder ?? 0)} />
                                 <Row label="Status" value={service.isActive ? "Active" : "Inactive"} />
                                 <Row label="Created" value={formatDate(service.createdAt)} />
                                 <div className="pt-3 border-t border-hairline">
@@ -200,4 +253,17 @@ function Row({ label, value }: { label: string; value: string }) {
             <span className="font-medium text-charcoal text-right">{value}</span>
         </div>
     );
+}
+
+function formatCategory(category: string) {
+    if (category === "start") return "Start";
+    if (category === "manage") return "Manage";
+    if (category === "protect") return "Protect";
+    return category || "Uncategorized";
+}
+
+function formatType(type: string) {
+    if (type === "fixed") return "Fixed";
+    if (type === "quote") return "Quote";
+    return type || "Service";
 }

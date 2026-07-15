@@ -10,6 +10,7 @@ import { OrderStatusBadge, PaymentStatusBadge } from "@/components/custom/Status
 import { useOrder, useUpdateOrder } from "@/features/admin/hooks/useAdminOrders";
 import { formatDate, formatDateHeader, formatTime, getApiErrorMessage } from "@/features/admin/lib/format";
 import { downloadInvoice } from "@/features/admin/lib/downloadInvoice";
+import { OrderPaymentsPanel } from "@/features/admin/components/OrderPaymentsPanel";
 import type { Note } from "@/services/admin.service";
 import { formatINR } from "@/lib/currency";
 import { Download, StickyNote, Pencil, Send } from "lucide-react";
@@ -129,6 +130,7 @@ export function EmployeeOrderDetailPage({ id }: { id: string }) {
                             </div>
                         </CardContent>
                     </Card>
+                    <OrderPaymentsPanel orderId={order.id} orderAmount={order.amount} />
                 </div>
 
                 {/* Col 2 — Notes */}

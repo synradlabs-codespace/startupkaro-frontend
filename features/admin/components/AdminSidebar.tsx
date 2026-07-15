@@ -38,6 +38,8 @@ const navItems = [
         children: [
             { title: "All Services", href: "/admin/services" },
             { title: "Add Service", href: "/admin/services/new" },
+            { title: "Bundles", href: "/admin/bundles" },
+            { title: "Add Bundle", href: "/admin/bundles/new" },
         ],
     },
     { title: "Payments", href: "/admin/payments", icon: CreditCard },

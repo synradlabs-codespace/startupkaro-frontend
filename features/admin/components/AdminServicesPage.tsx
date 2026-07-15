@@ -44,6 +44,7 @@ export function AdminServicesPage() {
                                 <TableRow className="hover:bg-transparent">
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Name</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Slug</TableHead>
+                                    <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Category</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Price</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Type</TableHead>
                                     <TableHead className="font-semibold text-foreground/70 uppercase text-xs tracking-wide">Active</TableHead>
@@ -54,19 +55,19 @@ export function AdminServicesPage() {
                             <TableBody>
                                 {servicesQuery.isLoading ? (
                                     <TableRow>
-                                        <TableCell colSpan={7} className="text-center text-slate py-12">
+                                        <TableCell colSpan={8} className="text-center text-slate py-12">
                                             Loading services...
                                         </TableCell>
                                     </TableRow>
                                 ) : servicesQuery.isError ? (
                                     <TableRow>
-                                        <TableCell colSpan={7} className="text-center text-error-brand py-12">
+                                        <TableCell colSpan={8} className="text-center text-error-brand py-12">
                                             Failed to load services
                                         </TableCell>
                                     </TableRow>
                                 ) : services.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={7} className="text-center text-slate py-12">
+                                        <TableCell colSpan={8} className="text-center text-slate py-12">
                                             No services found
                                         </TableCell>
                                     </TableRow>
@@ -77,8 +78,9 @@ export function AdminServicesPage() {
                                             <TableRow key={service.id} className="hover:bg-muted/30">
                                                 <TableCell className="font-medium">{service.name}</TableCell>
                                                 <TableCell className="text-slate text-sm font-mono">{service.slug}</TableCell>
+                                                <TableCell className="text-slate text-sm">{formatCategory(service.category)}</TableCell>
                                                 <TableCell className="font-medium">{service.price != null ? formatINR(service.price) : "On request"}</TableCell>
-                                                <TableCell className="text-slate text-sm">{service.isBundle ? "Bundle" : service.pricingType ?? "Service"}</TableCell>
+                                                <TableCell className="text-slate text-sm">{formatType(service.type)}</TableCell>
                                                 <TableCell>
                                                     <ActiveBadge isActive={service.isActive} />
                                                 </TableCell>
@@ -128,6 +130,19 @@ export function AdminServicesPage() {
             </div>
         </div>
     );
+}
+
+function formatCategory(category: string) {
+    if (category === "start") return "Start";
+    if (category === "manage") return "Manage";
+    if (category === "protect") return "Protect";
+    return category || "Uncategorized";
+}
+
+function formatType(type: string) {
+    if (type === "fixed") return "Fixed";
+    if (type === "quote") return "Quote";
+    return type || "Service";
 }
 
 function ServiceActions({ id }: { id: string }) {

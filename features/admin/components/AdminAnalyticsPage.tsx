@@ -1,315 +1,384 @@
-// features/admin/components/AdminAnalyticsPage.tsx
+"use client";
 
+import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { formatOrderStatus } from "@/components/custom/StatusBadge";
-import { mockAnalytics, mockOrders, mockPayments } from "@/lib/mock-data";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
-    IndianRupee, TrendingUp, CheckCircle2, CreditCard,
-    ShoppingCart, Users, BarChart3, PieChart,
-} from "lucide-react";
+    useByServiceAnalytics,
+    useOrdersAnalytics,
+    usePaymentHealthAnalytics,
+    useRevenueAnalytics,
+    type AnalyticsRange,
+} from "@/features/admin/hooks/useAdminAnalytics";
+import { formatINR } from "@/lib/currency";
+import type { AdminRevenueAnalytics, AdminRevenuePoint, AdminServiceAnalyticsRow } from "@/services/admin.service";
+import { AlertTriangle, BarChart3, CheckCircle2, CreditCard, IndianRupee, PieChart, ShoppingCart, TrendingUp } from "lucide-react";
 
-// ── Derived metrics ──────────────────────────────────────────────
-const avgOrderValue = Math.round(mockAnalytics.totalRevenue / mockAnalytics.totalOrders);
+type RangeKey = "30d" | "90d" | "all";
 
-const completedCount = mockOrders.filter((o) => o.status === "completed").length;
-const completionRate = Math.round((completedCount / mockOrders.length) * 100);
-
-const totalCollected = mockPayments
-    .filter((p) => p.status === "paid" || p.status === "partial")
-    .reduce((sum, p) => sum + p.amount, 0);
-const pendingCollection = mockPayments
-    .filter((p) => p.status === "unpaid")
-    .reduce((sum, p) => sum + p.amount, 0);
-const collectionRate = Math.round((totalCollected / mockAnalytics.totalRevenue) * 100);
-
-const months = mockAnalytics.revenueByMonth;
-const maxMonthlyRevenue = Math.max(...months.map((m) => m.revenue));
-const momGrowth = Math.round(
-    ((months[months.length - 1].revenue - months[months.length - 2].revenue) /
-        months[months.length - 2].revenue) *
-    100
-);
-
-// Revenue by service (grouped from orders)
-const revenueByService = Object.entries(
-    mockOrders.reduce<Record<string, number>>((acc, o) => {
-        acc[o.service] = (acc[o.service] || 0) + o.amount;
-        return acc;
-    }, {})
-).sort((a, b) => b[1] - a[1]);
-const maxSvcRevenue = revenueByService[0]?.[1] ?? 1;
-
-// Order status chart — using HP palette hex values
 const statusColors: Record<string, string> = {
-    Completed: "#296ef9",   // primary-brand
-    Processing: "#356373",  // storm-deep
-    Pending: "#ff5050",     // bloom-coral
-    Cancelled: "#b3262b",   // error / bloom-deep
+    pending: "#ff5050",
+    confirmed: "#296ef9",
+    in_progress: "#356373",
+    completed: "#2f855a",
+    cancelled: "#b3262b",
 };
-const statusTotal = mockAnalytics.ordersByStatus.reduce((s, r) => s + r.count, 0);
-let cumPct = 0;
-const donutSegments = mockAnalytics.ordersByStatus.map((row) => {
-    const pct = (row.count / statusTotal) * 100;
-    const segment = { ...row, pct, start: cumPct, color: statusColors[row.status] ?? "#c2c2c2" };
-    cumPct += pct;
-    return segment;
-});
-const donutGradient = `conic-gradient(${donutSegments
-    .map((s) => `${s.color} ${s.start}% ${s.start + s.pct}%`)
-    .join(", ")})`;
 
-// Payment breakdown — HP palette hex values
-const paymentBreakdown = [
-    { label: "Collected", amount: totalCollected, pct: collectionRate, color: "#296ef9" },
-    { label: "Pending", amount: pendingCollection, pct: Math.round((pendingCollection / mockAnalytics.totalRevenue) * 100), color: "#ff5050" },
-    { label: "Refunded", amount: mockPayments.filter(p => p.status === "refunded").reduce((s, p) => s + p.amount, 0), pct: 0, color: "#b3262b" },
-];
+function rangeToParams(range: RangeKey, granularity: "day" | "month"): AnalyticsRange {
+    if (range === "all") {
+        return { from: "2025-01-01T00:00:00.000Z", granularity };
+    }
+
+    const days = range === "90d" ? 90 : 30;
+    const from = new Date();
+    from.setDate(from.getDate() - days);
+    return { from: from.toISOString(), granularity };
+}
+
+function errorMessage(error: unknown) {
+    return error instanceof Error ? error.message : "Analytics data is unavailable";
+}
+
+function normalizeRevenue(data: AdminRevenueAnalytics | undefined) {
+    const points = (data?.series ?? data?.data ?? data?.points ?? []) as AdminRevenuePoint[];
+    const normalized = points.map((point) => ({
+        label: point.period ?? point.date ?? point.month ?? "",
+        amount: point.revenue ?? point.amount ?? point.total ?? 0,
+        count: point.count ?? 0,
+    }));
+    const total = data?.total ?? data?.totalRevenue ?? data?.revenue ?? normalized.reduce((sum, point) => sum + point.amount, 0);
+    return { points: normalized, total };
+}
+
+function normalizeServiceRows(rows: AdminServiceAnalyticsRow[] | undefined) {
+    return (rows ?? []).map((row) => ({
+        id: row.id ?? row.serviceId ?? row.name ?? row.serviceName ?? "service",
+        name: row.name ?? row.serviceName ?? "Unknown service",
+        category: row.category ?? "uncategorized",
+        type: row.type ?? "service",
+        orders: row.orderCount ?? row.orders ?? row.count ?? 0,
+        revenue: row.revenue ?? row.amount ?? 0,
+    }));
+}
 
 export function AdminAnalyticsPage() {
+    const [range, setRange] = useState<RangeKey>("30d");
+    const [granularity, setGranularity] = useState<"day" | "month">("day");
+    const params = useMemo(() => rangeToParams(range, granularity), [range, granularity]);
+    const sharedParams = useMemo(() => ({ from: params.from, to: params.to }), [params.from, params.to]);
+
+    const revenueQuery = useRevenueAnalytics(params);
+    const ordersQuery = useOrdersAnalytics(sharedParams);
+    const byServiceQuery = useByServiceAnalytics(sharedParams);
+    const paymentHealthQuery = usePaymentHealthAnalytics(sharedParams);
+
+    const orders = ordersQuery.data;
+    const paymentHealth = paymentHealthQuery.data;
+    const revenue = normalizeRevenue(revenueQuery.data);
+    const services = normalizeServiceRows(byServiceQuery.data);
+
+    const totalOrders = orders?.totalOrders ?? 0;
+    const totalValue = orders?.totalValue ?? 0;
+    const collected = orders?.collected ?? revenue.total ?? 0;
+    const outstanding = orders?.outstanding ?? Math.max(totalValue - collected, 0);
+    const avgOrderValue = totalOrders > 0 ? Math.round(totalValue / totalOrders) : 0;
+    const collectionRate = totalValue > 0 ? Math.round((collected / totalValue) * 100) : 0;
+    const successRate = paymentHealth?.successRate ?? 0;
+
     return (
-        <div className="flex flex-col min-h-screen">
-            <PageHeader title="Analytics" description="Business performance overview" />
+        <div className="flex min-h-screen flex-col">
+            <PageHeader title="Analytics" description="Live business performance from backend analytics" />
 
-            <div className="flex-1 p-6 space-y-6">
-
-                {/* ── KPI Cards ────────────────────────────── */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                    {[
-                        {
-                            label: "Total Revenue",
-                            value: `₹${mockAnalytics.totalRevenue.toLocaleString("en-IN")}`,
-                            sub: `+${momGrowth}% vs last month`,
-                            icon: IndianRupee,
-                            accent: "bg-primary-brand/10 text-primary-brand",
-                        },
-                        {
-                            label: "Avg Order Value",
-                            value: `₹${avgOrderValue.toLocaleString("en-IN")}`,
-                            sub: `${mockAnalytics.totalOrders} total orders`,
-                            icon: ShoppingCart,
-                            accent: "bg-tint-sky text-primary-brand",
-                        },
-                        {
-                            label: "Completion Rate",
-                            value: `${completionRate}%`,
-                            sub: `${completedCount} of ${mockOrders.length} orders`,
-                            icon: CheckCircle2,
-                            accent: "bg-tint-sky text-primary-brand",
-                        },
-                        {
-                            label: "Collection Rate",
-                            value: `${collectionRate}%`,
-                            sub: `₹${pendingCollection.toLocaleString("en-IN")} pending`,
-                            icon: CreditCard,
-                            accent: "bg-tint-peach text-charcoal",
-                        },
-                    ].map((kpi) => (
-                        <div key={kpi.label} className="rounded-lg border border-hairline bg-canvas p-5">
-                            <div className="flex items-start justify-between mb-3">
-                                <p className="text-xs text-steel font-medium">{kpi.label}</p>
-                                <div className={`h-7 w-7 rounded-lg flex items-center justify-center ${kpi.accent}`}>
-                                    <kpi.icon className="h-3.5 w-3.5" />
-                                </div>
-                            </div>
-                            <p className="text-xl font-display font-medium text-ink">{kpi.value}</p>
-                            <p className="text-xs text-stone mt-1">{kpi.sub}</p>
-                        </div>
-                    ))}
+            <div className="flex-1 space-y-6 p-6">
+                <div className="flex flex-wrap items-center gap-3">
+                    <Select value={range} onValueChange={(value) => setRange((value ?? "30d") as RangeKey)}>
+                        <SelectTrigger className="w-[170px]">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="30d">Last 30 days</SelectItem>
+                            <SelectItem value="90d">Last 90 days</SelectItem>
+                            <SelectItem value="all">All data</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <Select value={granularity} onValueChange={(value) => setGranularity((value ?? "day") as "day" | "month")}>
+                        <SelectTrigger className="w-[150px]">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="day">Daily</SelectItem>
+                            <SelectItem value="month">Monthly</SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
 
-                {/* ── Charts Row 1 ─────────────────────────── */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-                    {/* Revenue Trend (bar chart) */}
-                    <div className="rounded-lg border border-hairline bg-canvas p-6">
-                        <div className="flex items-center gap-2 mb-5">
-                            <div className="h-7 w-7 rounded-lg bg-primary-brand/10 flex items-center justify-center">
-                                <BarChart3 className="h-3.5 w-3.5 text-primary-brand" />
-                            </div>
-                            <div>
-                                <p className="text-sm font-semibold text-charcoal">Monthly Revenue</p>
-                                <p className="text-xs text-stone">2025 year to date</p>
-                            </div>
-                        </div>
-
-                        {/* Bar chart */}
-                        <div className="flex items-end gap-4 h-36 px-2 mb-3">
-                            {months.map((m) => {
-                                const heightPct = (m.revenue / (maxMonthlyRevenue * 1.1)) * 100;
-                                return (
-                                    <div key={m.month} className="flex flex-col items-center gap-1.5 flex-1">
-                                        <span className="text-[10px] text-steel font-medium">
-                                            ₹{(m.revenue / 1000).toFixed(1)}k
-                                        </span>
-                                        <div className="w-full flex-1 flex items-end">
-                                            <div
-                                                className="w-full rounded-t-lg bg-primary-brand transition-all"
-                                                style={{ height: `${heightPct}%` }}
-                                            />
-                                        </div>
-                                        <span className="text-xs text-stone font-medium">{m.month}</span>
-                                    </div>
-                                );
-                            })}
-                        </div>
-
-                        {/* Growth badge */}
-                        <div className="flex items-center justify-end gap-1.5 text-xs text-charcoal font-medium">
-                            <TrendingUp className="h-3.5 w-3.5" />
-                            +{momGrowth}% MoM growth
-                        </div>
-                    </div>
-
-                    {/* Order Status Donut */}
-                    <div className="rounded-lg border border-hairline bg-canvas p-6">
-                        <div className="flex items-center gap-2 mb-5">
-                            <div className="h-7 w-7 rounded-lg bg-tint-sky flex items-center justify-center">
-                                <PieChart className="h-3.5 w-3.5 text-primary-brand" />
-                            </div>
-                            <div>
-                                <p className="text-sm font-semibold text-charcoal">Order Status</p>
-                                <p className="text-xs text-stone">Current breakdown</p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-8">
-                            {/* Donut */}
-                            <div className="relative shrink-0">
-                                <div
-                                    className="h-32 w-32 rounded-full"
-                                    style={{ background: donutGradient }}
-                                />
-                                {/* Center hole */}
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="h-20 w-20 rounded-full bg-canvas flex flex-col items-center justify-center">
-                                        <p className="text-lg font-display font-medium text-ink">{statusTotal}</p>
-                                        <p className="text-[10px] text-stone">orders</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Legend */}
-                            <div className="flex-1 space-y-2.5">
-                                {donutSegments.map((s) => (
-                                    <div key={s.status} className="flex items-center justify-between gap-2">
-                                        <div className="flex items-center gap-2">
-                                            <div className="h-2.5 w-2.5 rounded-full shrink-0" style={{ backgroundColor: s.color }} />
-                                            <span className="text-xs text-slate">{formatOrderStatus(s.status)}</span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <div className="h-1 w-16 bg-surface rounded-full overflow-hidden">
-                                                <div className="h-full rounded-full" style={{ width: `${s.pct}%`, backgroundColor: s.color }} />
-                                            </div>
-                                            <span className="text-xs font-semibold text-slate w-4 text-right">{s.count}</span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
+                <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                    <KpiCard
+                        label="Collected Revenue"
+                        value={formatINR(collected)}
+                        sub={revenueQuery.isError ? "Revenue endpoint unavailable; using orders collected" : "Captured payments"}
+                        icon={IndianRupee}
+                        accent="bg-primary-brand/10 text-primary-brand"
+                        loading={ordersQuery.isLoading && revenueQuery.isLoading}
+                    />
+                    <KpiCard
+                        label="Total Order Value"
+                        value={formatINR(totalValue)}
+                        sub={`${totalOrders} total orders`}
+                        icon={ShoppingCart}
+                        accent="bg-tint-sky text-primary-brand"
+                        loading={ordersQuery.isLoading}
+                    />
+                    <KpiCard
+                        label="Collection Rate"
+                        value={`${collectionRate}%`}
+                        sub={`${formatINR(outstanding)} outstanding`}
+                        icon={CreditCard}
+                        accent="bg-tint-peach text-charcoal"
+                        loading={ordersQuery.isLoading}
+                    />
+                    <KpiCard
+                        label="Payment Success"
+                        value={paymentHealth?.successRate == null ? "N/A" : `${successRate}%`}
+                        sub="Payment health endpoint"
+                        icon={CheckCircle2}
+                        accent="bg-primary-brand/10 text-primary-brand"
+                        loading={paymentHealthQuery.isLoading}
+                    />
                 </div>
 
-                {/* ── Charts Row 2 ─────────────────────────── */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                    <Panel title="Revenue Trend" subtitle="Captured payments over time" icon={BarChart3}>
+                        {revenueQuery.isLoading ? (
+                            <LoadingText label="Loading revenue..." />
+                        ) : revenueQuery.isError ? (
+                            <ErrorText message={errorMessage(revenueQuery.error)} />
+                        ) : (
+                            <RevenueBars points={revenue.points} />
+                        )}
+                    </Panel>
 
-                    {/* Revenue by Service */}
-                    <div className="rounded-lg border border-hairline bg-canvas p-6">
-                        <div className="flex items-center gap-2 mb-5">
-                            <div className="h-7 w-7 rounded-lg bg-tint-sky flex items-center justify-center">
-                                <IndianRupee className="h-3.5 w-3.5 text-primary-brand" />
-                            </div>
-                            <div>
-                                <p className="text-sm font-semibold text-charcoal">Revenue by Service</p>
-                                <p className="text-xs text-stone">Top earners</p>
-                            </div>
-                        </div>
-
-                        <div className="space-y-3.5">
-                            {revenueByService.map(([service, revenue]) => {
-                                const pct = Math.round((revenue / maxSvcRevenue) * 100);
-                                return (
-                                    <div key={service} className="space-y-1.5">
-                                        <div className="flex items-center justify-between text-xs">
-                                            <span className="text-slate font-medium truncate max-w-[60%]">{service}</span>
-                                            <span className="text-charcoal font-semibold">₹{revenue.toLocaleString("en-IN")}</span>
-                                        </div>
-                                        <div className="h-2 bg-surface rounded-full overflow-hidden">
-                                            <div
-                                                className="h-full rounded-full bg-primary-brand transition-all"
-                                                style={{ width: `${pct}%` }}
-                                            />
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    {/* Payment Health */}
-                    <div className="rounded-lg border border-hairline bg-canvas p-6">
-                        <div className="flex items-center gap-2 mb-5">
-                            <div className="h-7 w-7 rounded-lg bg-tint-peach flex items-center justify-center">
-                                <CreditCard className="h-3.5 w-3.5 text-charcoal" />
-                            </div>
-                            <div>
-                                <p className="text-sm font-semibold text-charcoal">Payment Health</p>
-                                <p className="text-xs text-stone">Collection vs outstanding</p>
-                            </div>
-                        </div>
-
-                        {/* Summary row */}
-                        <div className="grid grid-cols-3 gap-3 mb-5">
-                            {paymentBreakdown.map((pb) => (
-                                <div key={pb.label} className="rounded-lg bg-surface p-3 text-center">
-                                    <div className="h-2.5 w-2.5 rounded-full mx-auto mb-1.5" style={{ backgroundColor: pb.color }} />
-                                    <p className="text-[11px] text-steel">{pb.label}</p>
-                                    <p className="text-sm font-display font-medium text-ink mt-0.5">₹{pb.amount.toLocaleString("en-IN")}</p>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* Stacked bar */}
-                        <div className="space-y-2">
-                            <div className="flex items-center justify-between text-xs text-steel">
-                                <span>Collection progress</span>
-                                <span className="font-semibold text-charcoal">{collectionRate}%</span>
-                            </div>
-                            <div className="h-3 rounded-full bg-surface overflow-hidden flex">
-                                <div className="h-full bg-primary-brand transition-all" style={{ width: `${collectionRate}%` }} />
-                                <div className="h-full bg-bloom-coral transition-all" style={{ width: `${Math.round((pendingCollection / mockAnalytics.totalRevenue) * 100)}%` }} />
-                            </div>
-                            <div className="flex gap-3 text-[11px] text-stone">
-                                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-primary-brand inline-block" /> Collected</span>
-                                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-bloom-coral inline-block" /> Pending</span>
-                                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-error-brand inline-block" /> Refunded</span>
-                            </div>
-                        </div>
-
-                        {/* 3rd party placeholder */}
-                        <div className="mt-5 rounded-lg border-2 border-dashed border-hairline p-4 text-center">
-                            <p className="text-xs text-stone">PostHog / Mixpanel embed — configure integration to enable</p>
-                        </div>
-                    </div>
+                    <Panel title="Order Status" subtitle="Counts and value by order stage" icon={PieChart}>
+                        {ordersQuery.isLoading ? (
+                            <LoadingText label="Loading orders..." />
+                        ) : ordersQuery.isError ? (
+                            <ErrorText message={errorMessage(ordersQuery.error)} />
+                        ) : (
+                            <OrderStatusBreakdown rows={orders?.byStatus ?? []} total={totalOrders} />
+                        )}
+                    </Panel>
                 </div>
 
-                {/* ── Additional Stats ─────────────────────── */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                    {[
-                        { label: "Active Orders", value: mockAnalytics.activeOrders, icon: ShoppingCart, color: "text-primary-brand" },
-                        { label: "Total Customers", value: mockAnalytics.totalCustomers, icon: Users, color: "text-primary-brand" },
-                        { label: "Avg Order Value", value: `₹${avgOrderValue.toLocaleString("en-IN")}`, icon: IndianRupee, color: "text-charcoal" },
-                        { label: "MoM Growth", value: `+${momGrowth}%`, icon: TrendingUp, color: "text-storm-deep" },
-                    ].map((s) => (
-                        <div key={s.label} className="rounded-lg border border-hairline bg-canvas px-5 py-4 flex items-center gap-4">
-                            <s.icon className={`h-6 w-6 shrink-0 ${s.color}`} />
-                            <div>
-                                <p className="text-[11px] text-stone">{s.label}</p>
-                                <p className="text-base font-display font-medium text-ink">{s.value}</p>
-                            </div>
-                        </div>
-                    ))}
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                    <Panel title="Revenue by Service" subtitle="Top services by captured revenue" icon={IndianRupee}>
+                        {byServiceQuery.isLoading ? (
+                            <LoadingText label="Loading services..." />
+                        ) : byServiceQuery.isError ? (
+                            <ErrorText message={errorMessage(byServiceQuery.error)} />
+                        ) : (
+                            <ServiceRevenueRows rows={services} />
+                        )}
+                    </Panel>
+
+                    <Panel title="Payment Health" subtitle="Receipts by status and channel" icon={CreditCard}>
+                        {paymentHealthQuery.isLoading ? (
+                            <LoadingText label="Loading payment health..." />
+                        ) : paymentHealthQuery.isError ? (
+                            <ErrorText message={errorMessage(paymentHealthQuery.error)} />
+                        ) : (
+                            <PaymentHealth data={paymentHealth} />
+                        )}
+                    </Panel>
                 </div>
 
+                <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                    <MiniStat label="Average Order Value" value={formatINR(avgOrderValue)} icon={IndianRupee} />
+                    <MiniStat label="Outstanding" value={formatINR(outstanding)} icon={CreditCard} />
+                    <MiniStat label="Payment Channels" value={String(paymentHealth?.paymentsByChannel?.length ?? 0)} icon={BarChart3} />
+                    <MiniStat label="Services With Revenue" value={String(services.length)} icon={TrendingUp} />
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function KpiCard({
+    label,
+    value,
+    sub,
+    icon: Icon,
+    accent,
+    loading,
+}: {
+    label: string;
+    value: string;
+    sub: string;
+    icon: typeof IndianRupee;
+    accent: string;
+    loading?: boolean;
+}) {
+    return (
+        <div className="rounded-lg border border-hairline bg-canvas p-5">
+            <div className="mb-3 flex items-start justify-between">
+                <p className="text-xs font-medium text-steel">{label}</p>
+                <div className={`flex h-7 w-7 items-center justify-center rounded-lg ${accent}`}>
+                    <Icon className="h-3.5 w-3.5" />
+                </div>
+            </div>
+            <p className="font-display text-xl font-medium text-ink">{loading ? "..." : value}</p>
+            <p className="mt-1 text-xs text-stone">{sub}</p>
+        </div>
+    );
+}
+
+function Panel({ title, subtitle, icon: Icon, children }: { title: string; subtitle: string; icon: typeof BarChart3; children: React.ReactNode }) {
+    return (
+        <div className="rounded-lg border border-hairline bg-canvas p-6">
+            <div className="mb-5 flex items-center gap-2">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-brand/10">
+                    <Icon className="h-3.5 w-3.5 text-primary-brand" />
+                </div>
+                <div>
+                    <p className="text-sm font-semibold text-charcoal">{title}</p>
+                    <p className="text-xs text-stone">{subtitle}</p>
+                </div>
+            </div>
+            {children}
+        </div>
+    );
+}
+
+function LoadingText({ label }: { label: string }) {
+    return <p className="rounded-lg border border-hairline bg-surface p-4 text-sm text-slate">{label}</p>;
+}
+
+function ErrorText({ message }: { message: string }) {
+    return (
+        <div className="rounded-lg border border-status-warning-border bg-status-warning-bg p-4 text-sm text-status-warning-fg">
+            <div className="mb-1 flex items-center gap-2 font-medium">
+                <AlertTriangle className="h-4 w-4" />
+                Analytics endpoint unavailable
+            </div>
+            <p className="break-words text-xs leading-relaxed">{message}</p>
+        </div>
+    );
+}
+
+function RevenueBars({ points }: { points: { label: string; amount: number; count: number }[] }) {
+    if (points.length === 0) return <EmptyText label="No captured revenue in this period." />;
+    const max = Math.max(...points.map((point) => point.amount), 1);
+    return (
+        <div className="flex h-44 items-end gap-2 overflow-x-auto px-1 pb-1">
+            {points.slice(-24).map((point, index) => {
+                const height = Math.max((point.amount / max) * 100, point.amount > 0 ? 8 : 2);
+                return (
+                    <div key={`${point.label}-${index}`} className="flex min-w-10 flex-1 flex-col items-center gap-1.5">
+                        <span className="text-[10px] font-medium text-steel">{point.amount ? formatINR(point.amount).replace(".00", "") : "-"}</span>
+                        <div className="flex h-28 w-full items-end rounded-t-md bg-surface">
+                            <div className="w-full rounded-t-md bg-primary-brand" style={{ height: `${height}%` }} />
+                        </div>
+                        <span className="max-w-12 truncate text-[10px] text-stone">{point.label}</span>
+                    </div>
+                );
+            })}
+        </div>
+    );
+}
+
+function OrderStatusBreakdown({ rows, total }: { rows: { status: string; count: number; value: number }[]; total: number }) {
+    if (rows.length === 0) return <EmptyText label="No orders in this period." />;
+    return (
+        <div className="space-y-3">
+            {rows.map((row) => {
+                const pct = total > 0 ? Math.round((row.count / total) * 100) : 0;
+                const color = statusColors[row.status] ?? "#c2c2c2";
+                return (
+                    <div key={row.status} className="space-y-1.5">
+                        <div className="flex items-center justify-between gap-3 text-xs">
+                            <span className="font-medium text-slate">{formatOrderStatus(row.status)}</span>
+                            <span className="text-charcoal">{row.count} orders · {formatINR(row.value)}</span>
+                        </div>
+                        <div className="h-2 overflow-hidden rounded-full bg-surface">
+                            <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: color }} />
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+    );
+}
+
+function ServiceRevenueRows({ rows }: { rows: ReturnType<typeof normalizeServiceRows> }) {
+    if (rows.length === 0) return <EmptyText label="No service revenue in this period." />;
+    const max = Math.max(...rows.map((row) => row.revenue), 1);
+    return (
+        <div className="space-y-3.5">
+            {rows.map((row) => {
+                const pct = Math.round((row.revenue / max) * 100);
+                return (
+                    <div key={row.id} className="space-y-1.5">
+                        <div className="flex items-center justify-between gap-3 text-xs">
+                            <span className="max-w-[62%] truncate font-medium text-slate">{row.name}</span>
+                            <span className="font-semibold text-charcoal">{formatINR(row.revenue)}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface">
+                                <div className="h-full rounded-full bg-primary-brand" style={{ width: `${pct}%` }} />
+                            </div>
+                            <span className="w-16 text-right text-[11px] text-stone">{row.orders} orders</span>
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+    );
+}
+
+function PaymentHealth({ data }: { data: ReturnType<typeof usePaymentHealthAnalytics>["data"] }) {
+    if (!data) return <EmptyText label="No payment health data in this period." />;
+    const channelMax = Math.max(...(data.paymentsByChannel ?? []).map((row) => row.amount), 1);
+    return (
+        <div className="space-y-5">
+            <div className="grid grid-cols-2 gap-3">
+                {(data.paymentsByStatus ?? []).map((row) => (
+                    <div key={row.status} className="rounded-lg bg-surface p-3">
+                        <p className="text-xs text-steel">{row.status}</p>
+                        <p className="mt-1 font-display text-xl font-medium text-ink">{row.count}</p>
+                    </div>
+                ))}
+                {(data.paymentsByStatus ?? []).length === 0 && <EmptyText label="No payment statuses." />}
+            </div>
+            <div className="space-y-3">
+                <p className="text-xs font-medium uppercase tracking-[0.28px] text-graphite">Channels</p>
+                {(data.paymentsByChannel ?? []).map((row) => (
+                    <div key={row.channel} className="space-y-1.5">
+                        <div className="flex items-center justify-between text-xs">
+                            <span className="font-medium text-slate">{row.channel.replace(/_/g, " ")}</span>
+                            <span className="font-semibold text-charcoal">{formatINR(row.amount)}</span>
+                        </div>
+                        <div className="h-2 overflow-hidden rounded-full bg-surface">
+                            <div className="h-full rounded-full bg-primary-brand" style={{ width: `${Math.round((row.amount / channelMax) * 100)}%` }} />
+                        </div>
+                    </div>
+                ))}
+                {(data.paymentsByChannel ?? []).length === 0 && <EmptyText label="No payment channels." />}
+            </div>
+        </div>
+    );
+}
+
+function EmptyText({ label }: { label: string }) {
+    return <p className="rounded-lg border border-hairline bg-surface p-4 text-sm text-slate">{label}</p>;
+}
+
+function MiniStat({ label, value, icon: Icon }: { label: string; value: string; icon: typeof IndianRupee }) {
+    return (
+        <div className="flex items-center gap-4 rounded-lg border border-hairline bg-canvas px-5 py-4">
+            <Icon className="h-6 w-6 shrink-0 text-primary-brand" />
+            <div>
+                <p className="text-[11px] text-stone">{label}</p>
+                <p className="font-display text-base font-medium text-ink">{value}</p>
             </div>
         </div>
     );

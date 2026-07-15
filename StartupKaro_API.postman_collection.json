@@ -1,7 +1,7 @@
 {
  "info": {
   "name": "StartupKaro API",
-  "description": "# StartupKaro API\n\nBackend for the StartupKaro services marketplace. Customers browse a catalog of business / legal / tax / licensing services, pay via **Razorpay**, and track their orders; advisors handle quote-based work.\n\n## The three purchase tracks\nEvery service has a `pricingType` and an `isPurchasable` flag. The public catalog derives a **`cta`** field (`buy` / `subscribe` / `quote`) so the frontend knows which path to render:\n\n**1. buy** — one-time checkout for `fixed` / `per_unit` / `starting_from` services that are purchasable (incl. bundles).\n`Customer > Purchases > Initiate Purchase` → open Razorpay Checkout with the returned `razorpayOrderId` + `razorpayKeyId` → `Verify Payment`. The `payment.captured` webhook also confirms the order server-side (source of truth).\n\n**2. subscribe** — `recurring` services (e.g. GST / TDS compliance) billed **monthly** via Razorpay Subscriptions.\n`Customer > Subscriptions > Subscribe` (lazily creates the Razorpay Plan) → checkout with the returned `razorpaySubscriptionId` → `Verify Subscription`. `subscription.*` webhooks keep status + `currentPeriodEnd` in sync. `Cancel Subscription` cancels at cycle end.\n\n**3. quote** — advisor-priced work (query-based, or scope-variable \"starting from\").\nCustomer submits `Customer > Inquiry (Public) > Submit Inquiry` (optionally with `serviceId`) → advisor agrees a price → `Admin > Inquiries > Generate Payment Link` creates a **Razorpay Payment Link** sent by email/SMS → `payment_link.paid` webhook marks it paid. These services are `isPurchasable=false`, so direct checkout is blocked.\n\n## Pricing & GST\nAll money is in **paise** (₹ × 100). GST is 18% (`taxRatePct = 1800`) and computed at checkout. `priceInclusiveOfTax = true` means the listed price already includes GST (the marketed bundles); otherwise GST is added on top. The catalog returns a `pricing` breakdown `{ base, tax, total }` plus a human `priceLabel` (e.g. \"Starting at ₹1,500\", \"₹2,500 / application\", \"On request\").\n\n## Bundles & add-ons\nBundle services (`isBundle = true`) group several services at a flat price and expose their line-items (`GET service/:slug`). Services can carry cross-sell **add-ons** selectable at checkout via `addonIds`. `per_unit` services accept a `quantity`.\n\n## Setup\n1. **Admin > Auth > Login (Root Admin)** — admin tokens auto-populate.\n2. **Customer > Auth > Signup** or **Login** — customer tokens auto-populate.\n3. IDs auto-save from list/create responses into collection variables.\n\n## Auto-populated variables\n- `admin_access_token` / `admin_refresh_token`, `customer_access_token` / `customer_refresh_token`\n- `service_id`, `category_id`, `addon_id`, `bundle_item_id`\n- `order_id` / `order_number`, `razorpay_order_id`, `payment_id`\n- `subscription_id` / `razorpay_subscription_id`\n- `inquiry_id`, `payment_link_id`, `customer_id`, `reset_token`",
+  "description": "# StartupKaro API\n\nServices marketplace backend. Customers browse a catalog (categories: **Bundles / Start / Manage / Protect**), pay via **Razorpay**, and track orders; advisors handle quote-based work.\n\n## Two service types → two CTAs\nEach service has a `type` (`fixed | bundle | quote`); the catalog exposes a `cta`:\n\n**fixed / bundle → `cta: fixed`** — self-serve checkout. Customer `Purchases > Initiate` → Razorpay Checkout → `Verify` (webhook `payment.captured` is the source of truth). Price is tax-exclusive; **18% GST added at checkout**.\n\n**quote → `cta: quote`** — no self-serve payment. Customer submits an `Inquiry` → an employee negotiates → creates a customer (if needed) → creates an **admin order** at the agreed amount → settles it.\n\n## Orders, part payments & settlement\nAn order holds the agreed **total**; `payments` is a ledger of receipts. `amountPaid` / `amountDue` / `paymentState` (`unpaid|partially_paid|paid`) are derived. **Part payments** are supported (common in India): via a Razorpay **Payment Link** with `acceptPartial` (single or milestone links) or **offline** receipts logged by an admin. The order confirms on the **first** payment. Payment links have a default **7-day expiry**; webhooks (`payment_link.paid` / `payment_link.partially_paid` / `payment_link.expired`) keep records in sync.\n\n## Bundles\nManaged via **Admin > Bundles** (create/update/get/delete): a bundle is a service (type=bundle) plus its line-items, edited in one payload. They surface in the public catalog under the Bundles category.\n\n## Analytics\n**Admin > Analytics**: revenue, orders, by-service, payment health.\n\n## Setup\n1. **Admin > Auth > Login** — admin tokens auto-populate.\n2. **Customer > Auth > Signup/Login** — customer tokens auto-populate.\n3. IDs (service, bundle, order, customer, inquiry, payment link) auto-save from responses.",
   "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
  },
  "variable": [
@@ -62,27 +62,11 @@
    "value": ""
   },
   {
-   "key": "category_id",
-   "value": ""
-  },
-  {
-   "key": "addon_id",
-   "value": ""
-  },
-  {
-   "key": "bundle_item_id",
-   "value": ""
-  },
-  {
-   "key": "subscription_id",
-   "value": ""
-  },
-  {
-   "key": "razorpay_subscription_id",
-   "value": ""
-  },
-  {
    "key": "payment_link_id",
+   "value": ""
+  },
+  {
+   "key": "bundle_id",
    "value": ""
   }
  ],
@@ -165,8 +149,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"email\": \"admin@startupkaro.com\",\n  \"password\": \"changethispassword\"\n}"
-        }
+         "raw": "{\n  \"email\": \"admin@startupkaro.in\",\n  \"password\": \"YourAdminPassword123\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `email` — required, email — admin/root email\n- `password` — required, string"
        },
        "response": [
         {
@@ -233,8 +223,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"email\": \"employee@startupkaro.com\",\n  \"password\": \"employee123\"\n}"
-        }
+         "raw": "{\n  \"email\": \"employee@startupkaro.in\",\n  \"password\": \"EmployeePass123\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `email` — required, email\n- `password` — required, string"
        },
        "response": []
       },
@@ -275,8 +271,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"refreshToken\": \"{{admin_refresh_token}}\"\n}"
-        }
+         "raw": "{\n  \"refreshToken\": \"{{admin_refresh_token}}\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `refreshToken` — required, string — a valid admin refresh token"
        },
        "response": [
         {
@@ -339,8 +341,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"name\": \"John Employee\",\n  \"email\": \"employee@startupkaro.com\",\n  \"password\": \"employee123\",\n  \"role\": \"employee\",\n  \"phone\": \"9876543210\"\n}"
-        }
+         "raw": "{\n  \"name\": \"Priya Nair\",\n  \"email\": \"priya@startupkaro.in\",\n  \"password\": \"StrongPass123\",\n  \"role\": \"employee\",\n  \"phone\": \"9876543210\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `name` — required, 1–255\n- `email` — required, email — unique\n- `password` — required, min 8\n- `role` — optional, enum: admin | employee (default employee)\n- `phone` — optional, max 20"
        },
        "response": [
         {
@@ -392,7 +400,7 @@
          }
         ],
         "url": {
-         "raw": "{{base_url}}/admin/employees?page=1&limit=20&sortOrder=desc",
+         "raw": "{{base_url}}/admin/employees",
          "host": [
           "{{base_url}}"
          ],
@@ -403,24 +411,38 @@
          "query": [
           {
            "key": "page",
-           "value": "1"
+           "value": "1",
+           "description": "optional, integer ≥1 (default 1)",
+           "disabled": true
           },
           {
            "key": "limit",
-           "value": "20"
+           "value": "20",
+           "description": "optional, integer 1–100 (default 20)",
+           "disabled": true
+          },
+          {
+           "key": "sortBy",
+           "value": "createdAt",
+           "description": "optional, string field name",
+           "disabled": true
           },
           {
            "key": "sortOrder",
-           "value": "desc"
+           "value": "desc",
+           "description": "optional, enum: asc | desc (default desc)",
+           "disabled": true
           },
           {
            "key": "search",
            "value": "",
+           "description": "optional, string — name/email",
            "disabled": true
           },
           {
            "key": "role",
-           "value": "employee",
+           "value": "",
+           "description": "optional, enum: admin | employee",
            "disabled": true
           }
          ]
@@ -492,8 +514,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"name\": \"John Updated\",\n  \"role\": \"admin\"\n}"
-        }
+         "raw": "{\n  \"name\": \"Priya Nair\",\n  \"email\": \"priya@startupkaro.in\",\n  \"password\": \"NewStrongPass123\",\n  \"role\": \"admin\",\n  \"phone\": \"9876543210\",\n  \"isActive\": true\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `name` — optional, 1–255\n- `email` — optional, email\n- `password` — optional, min 8\n- `role` — optional, enum: admin | employee\n- `phone` — optional, max 20\n- `isActive` — optional, boolean"
        },
        "response": []
       },
@@ -535,162 +563,6 @@
        ]
       }
      ]
-    },
-    {
-     "name": "Categories",
-     "item": [
-      {
-       "name": "List Categories",
-       "request": {
-        "method": "GET",
-        "header": [
-         {
-          "key": "Authorization",
-          "value": "Bearer {{admin_access_token}}"
-         }
-        ],
-        "url": {
-         "raw": "{{base_url}}/admin/categories",
-         "host": [
-          "{{base_url}}"
-         ],
-         "path": [
-          "admin",
-          "categories"
-         ]
-        }
-       },
-       "response": []
-      },
-      {
-       "name": "Create Category",
-       "request": {
-        "method": "POST",
-        "header": [
-         {
-          "key": "Content-Type",
-          "value": "application/json"
-         },
-         {
-          "key": "Authorization",
-          "value": "Bearer {{admin_access_token}}"
-         }
-        ],
-        "url": {
-         "raw": "{{base_url}}/admin/categories",
-         "host": [
-          "{{base_url}}"
-         ],
-         "path": [
-          "admin",
-          "categories"
-         ]
-        },
-        "body": {
-         "mode": "raw",
-         "raw": "{\n  \"name\": \"Business & Finance\",\n  \"slug\": \"business\",\n  \"sortOrder\": 1\n}"
-        },
-        "description": "Creates a category. `slug` must be unique, kebab-case. Optional `parentId` for a sub-category."
-       },
-       "response": [],
-       "event": [
-        {
-         "listen": "test",
-         "script": {
-          "type": "text/javascript",
-          "exec": [
-           "const res = pm.response.json();",
-           "if (res.success && res.data) {",
-           "  pm.collectionVariables.set('category_id', res.data.id);",
-           "}"
-          ]
-         }
-        }
-       ]
-      },
-      {
-       "name": "Get Category by ID",
-       "request": {
-        "method": "GET",
-        "header": [
-         {
-          "key": "Authorization",
-          "value": "Bearer {{admin_access_token}}"
-         }
-        ],
-        "url": {
-         "raw": "{{base_url}}/admin/categories/{{category_id}}",
-         "host": [
-          "{{base_url}}"
-         ],
-         "path": [
-          "admin",
-          "categories",
-          "{{category_id}}"
-         ]
-        }
-       },
-       "response": []
-      },
-      {
-       "name": "Update Category",
-       "request": {
-        "method": "PATCH",
-        "header": [
-         {
-          "key": "Content-Type",
-          "value": "application/json"
-         },
-         {
-          "key": "Authorization",
-          "value": "Bearer {{admin_access_token}}"
-         }
-        ],
-        "url": {
-         "raw": "{{base_url}}/admin/categories/{{category_id}}",
-         "host": [
-          "{{base_url}}"
-         ],
-         "path": [
-          "admin",
-          "categories",
-          "{{category_id}}"
-         ]
-        },
-        "body": {
-         "mode": "raw",
-         "raw": "{\n  \"sortOrder\": 2,\n  \"isActive\": true\n}"
-        }
-       },
-       "response": []
-      },
-      {
-       "name": "Delete Category",
-       "request": {
-        "method": "DELETE",
-        "header": [
-         {
-          "key": "Authorization",
-          "value": "Bearer {{admin_access_token}}"
-         }
-        ],
-        "url": {
-         "raw": "{{base_url}}/admin/categories/{{category_id}}",
-         "host": [
-          "{{base_url}}"
-         ],
-         "path": [
-          "admin",
-          "categories",
-          "{{category_id}}"
-         ]
-        },
-        "description": "Deletes a category. Blocked if it still has services or sub-categories."
-       },
-       "response": []
-      }
-     ],
-     "description": "Manage catalog categories. Categories can nest via `parentId` (e.g. International → Incorporation / Trademark) and order the storefront via `sortOrder`."
     },
     {
      "name": "Services",
@@ -735,9 +607,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"name\": \"LLP Registration\",\n  \"slug\": \"llp-registration\",\n  \"description\": \"Register your Limited Liability Partnership\",\n  \"categoryId\": \"{{category_id}}\",\n  \"pricingType\": \"fixed\",\n  \"billingCycle\": \"one_time\",\n  \"price\": 500000,\n  \"taxRatePct\": 1800,\n  \"priceInclusiveOfTax\": false,\n  \"isBundle\": false,\n  \"isPurchasable\": true,\n  \"sortOrder\": 0\n}"
+         "raw": "{\n  \"name\": \"LLP Registration\",\n  \"slug\": \"llp-registration\",\n  \"description\": \"Register your Limited Liability Partnership\",\n  \"category\": \"start\",\n  \"type\": \"fixed\",\n  \"price\": 500000,\n  \"sortOrder\": 0\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
         },
-        "description": "Creates a service. `price` is in paise and may be null for `quote` services. Set `isPurchasable=false` to route customers to an inquiry instead of checkout."
+        "description": "**Body fields**\n- `name` — required, 1–255\n- `slug` — required, unique, lowercase-hyphenated\n- `description` — optional, string\n- `category` — required, enum: bundles | start | manage | protect\n- `type` — optional, enum: fixed | bundle | quote (default fixed)\n- `price` — optional, integer paise, tax-exclusive; null for quote\n- `sortOrder` — optional, integer"
        },
        "response": [
         {
@@ -779,7 +656,7 @@
          }
         ],
         "url": {
-         "raw": "{{base_url}}/admin/services?page=1&limit=20",
+         "raw": "{{base_url}}/admin/services",
          "host": [
           "{{base_url}}"
          ],
@@ -790,11 +667,27 @@
          "query": [
           {
            "key": "page",
-           "value": "1"
+           "value": "1",
+           "description": "optional, integer ≥1 (default 1)",
+           "disabled": true
           },
           {
            "key": "limit",
-           "value": "20"
+           "value": "20",
+           "description": "optional, integer 1–100 (default 20)",
+           "disabled": true
+          },
+          {
+           "key": "sortBy",
+           "value": "createdAt",
+           "description": "optional, string field name",
+           "disabled": true
+          },
+          {
+           "key": "sortOrder",
+           "value": "desc",
+           "description": "optional, enum: asc | desc (default desc)",
+           "disabled": true
           }
          ]
         }
@@ -852,8 +745,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"price\": 899900\n}"
-        }
+         "raw": "{\n  \"name\": \"LLP Registration\",\n  \"slug\": \"llp-registration\",\n  \"description\": \"Updated description\",\n  \"category\": \"start\",\n  \"type\": \"fixed\",\n  \"price\": 550000,\n  \"sortOrder\": 1,\n  \"isActive\": true\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `name` — optional, 1–255\n- `slug` — optional, unique, lowercase-hyphenated\n- `description` — optional, string or null\n- `category` — optional, enum: bundles | start | manage | protect\n- `type` — optional, enum: fixed | bundle | quote\n- `price` — optional, integer paise or null\n- `sortOrder` — optional, integer\n- `isActive` — optional, boolean"
        },
        "response": []
       },
@@ -880,9 +779,16 @@
         }
        },
        "response": []
-      },
+      }
+     ],
+     "description": "Manage individual (non-bundle) services. Bundles have their own folder."
+    },
+    {
+     "name": "Bundles",
+     "description": "Dedicated bundle CRUD. A bundle is a service (type=bundle, category=bundles) plus its line-items, created/updated in one payload.",
+     "item": [
       {
-       "name": "List Service Add-ons",
+       "name": "List Bundles",
        "request": {
         "method": "GET",
         "header": [
@@ -892,22 +798,20 @@
          }
         ],
         "url": {
-         "raw": "{{base_url}}/admin/services/{{service_id}}/addons",
+         "raw": "{{base_url}}/admin/bundles",
          "host": [
           "{{base_url}}"
          ],
          "path": [
           "admin",
-          "services",
-          "{{service_id}}",
-          "addons"
+          "bundles"
          ]
         }
        },
        "response": []
       },
       {
-       "name": "Add Service Add-on",
+       "name": "Create Bundle",
        "request": {
         "method": "POST",
         "header": [
@@ -921,22 +825,25 @@
          }
         ],
         "url": {
-         "raw": "{{base_url}}/admin/services/{{service_id}}/addons",
+         "raw": "{{base_url}}/admin/bundles",
          "host": [
           "{{base_url}}"
          ],
          "path": [
           "admin",
-          "services",
-          "{{service_id}}",
-          "addons"
+          "bundles"
          ]
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"name\": \"FSSAI Registration (Basic)\",\n  \"description\": \"Restaurant add-on\",\n  \"price\": 119900\n}"
+         "raw": "{\n  \"name\": \"Private Limited Company Bundle\",\n  \"slug\": \"private-limited-company-bundle\",\n  \"description\": \"Incorporation + PAN/TAN + GST + MSME + DPIIT\",\n  \"price\": 999900,\n  \"sortOrder\": 0,\n  \"items\": [\n    {\n      \"label\": \"Company Incorporation\",\n      \"componentServiceId\": null\n    },\n    {\n      \"label\": \"GST Registration\",\n      \"componentServiceId\": \"{{service_id}}\"\n    }\n  ]\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
         },
-        "description": "Adds a cross-sell add-on (name, price in paise) that customers can select at checkout via `addonIds`."
+        "description": "**Body fields**\n- `name` — required, 1–255\n- `slug` — required, unique, lowercase-hyphenated\n- `description` — optional, string\n- `price` — required, integer paise (tax-exclusive)\n- `sortOrder` — optional, integer\n- `items` — optional, array (default []) of { label, componentServiceId }\n- `items[].label` — required, 1–255 — display text of the line\n- `items[].componentServiceId` — optional, uuid or null — links the line to a standalone service"
        },
        "response": [],
        "event": [
@@ -947,7 +854,7 @@
           "exec": [
            "const res = pm.response.json();",
            "if (res.success && res.data) {",
-           "  pm.collectionVariables.set('addon_id', res.data.id);",
+           "  pm.collectionVariables.set('bundle_id', res.data.id);",
            "}"
           ]
          }
@@ -955,33 +862,7 @@
        ]
       },
       {
-       "name": "Delete Service Add-on",
-       "request": {
-        "method": "DELETE",
-        "header": [
-         {
-          "key": "Authorization",
-          "value": "Bearer {{admin_access_token}}"
-         }
-        ],
-        "url": {
-         "raw": "{{base_url}}/admin/services/{{service_id}}/addons/{{addon_id}}",
-         "host": [
-          "{{base_url}}"
-         ],
-         "path": [
-          "admin",
-          "services",
-          "{{service_id}}",
-          "addons",
-          "{{addon_id}}"
-         ]
-        }
-       },
-       "response": []
-      },
-      {
-       "name": "List Bundle Items",
+       "name": "Get Bundle",
        "request": {
         "method": "GET",
         "header": [
@@ -991,24 +872,23 @@
          }
         ],
         "url": {
-         "raw": "{{base_url}}/admin/services/{{service_id}}/items",
+         "raw": "{{base_url}}/admin/bundles/{{bundle_id}}",
          "host": [
           "{{base_url}}"
          ],
          "path": [
           "admin",
-          "services",
-          "{{service_id}}",
-          "items"
+          "bundles",
+          "{{bundle_id}}"
          ]
         }
        },
        "response": []
       },
       {
-       "name": "Add Bundle Item",
+       "name": "Update Bundle",
        "request": {
-        "method": "POST",
+        "method": "PATCH",
         "header": [
          {
           "key": "Content-Type",
@@ -1020,41 +900,31 @@
          }
         ],
         "url": {
-         "raw": "{{base_url}}/admin/services/{{service_id}}/items",
+         "raw": "{{base_url}}/admin/bundles/{{bundle_id}}",
          "host": [
           "{{base_url}}"
          ],
          "path": [
           "admin",
-          "services",
-          "{{service_id}}",
-          "items"
+          "bundles",
+          "{{bundle_id}}"
          ]
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"label\": \"GST Registration\",\n  \"componentServiceId\": null,\n  \"sortOrder\": 0\n}"
-        },
-        "description": "Adds a line-item to a bundle service (`isBundle` must be true). Optional `componentServiceId` links the line to a standalone service."
-       },
-       "response": [],
-       "event": [
-        {
-         "listen": "test",
-         "script": {
-          "type": "text/javascript",
-          "exec": [
-           "const res = pm.response.json();",
-           "if (res.success && res.data) {",
-           "  pm.collectionVariables.set('bundle_item_id', res.data.id);",
-           "}"
-          ]
+         "raw": "{\n  \"name\": \"Private Limited Company Bundle\",\n  \"slug\": \"private-limited-company-bundle\",\n  \"description\": \"Updated bundle description\",\n  \"price\": 1099900,\n  \"sortOrder\": 0,\n  \"isActive\": true,\n  \"items\": [\n    {\n      \"label\": \"Company Incorporation\",\n      \"componentServiceId\": null\n    },\n    {\n      \"label\": \"GST Registration\",\n      \"componentServiceId\": \"{{service_id}}\"\n    }\n  ]\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
          }
-        }
-       ]
+        },
+        "description": "**Body fields**\n- `name` — optional, 1–255\n- `slug` — optional, unique\n- `description` — optional, string or null\n- `price` — optional, integer paise\n- `sortOrder` — optional, integer\n- `isActive` — optional, boolean\n- `items` — optional array — when provided, REPLACES the full line-item set\n- `items[].label` — required within items, 1–255\n- `items[].componentServiceId` — optional, uuid or null"
+       },
+       "response": []
       },
       {
-       "name": "Delete Bundle Item",
+       "name": "Delete Bundle",
        "request": {
         "method": "DELETE",
         "header": [
@@ -1064,23 +934,20 @@
          }
         ],
         "url": {
-         "raw": "{{base_url}}/admin/services/{{service_id}}/items/{{bundle_item_id}}",
+         "raw": "{{base_url}}/admin/bundles/{{bundle_id}}",
          "host": [
           "{{base_url}}"
          ],
          "path": [
           "admin",
-          "services",
-          "{{service_id}}",
-          "items",
-          "{{bundle_item_id}}"
+          "bundles",
+          "{{bundle_id}}"
          ]
         }
        },
        "response": []
       }
-     ],
-     "description": "Manage the catalog. Create/update services with the full pricing model (pricingType, billingCycle, price in paise, taxRatePct, priceInclusiveOfTax, isBundle, isPurchasable, categoryId), plus nested add-ons and bundle line-items."
+     ]
     },
     {
      "name": "Orders",
@@ -1126,8 +993,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"customerId\": \"{{customer_id}}\",\n  \"serviceId\": \"{{service_id}}\",\n  \"amount\": 999900\n}"
-        }
+         "raw": "{\n  \"customerId\": \"{{customer_id}}\",\n  \"serviceId\": \"{{service_id}}\",\n  \"amount\": 500000,\n  \"inquiryId\": \"{{inquiry_id}}\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `customerId` — required, uuid — must exist (create the customer first)\n- `serviceId` — required, uuid\n- `amount` — required, integer paise — the negotiated total\n- `inquiryId` — optional, uuid — links the order to the originating inquiry"
        },
        "response": [
         {
@@ -1171,7 +1044,7 @@
          }
         ],
         "url": {
-         "raw": "{{base_url}}/admin/orders?page=1&limit=20&sortOrder=desc",
+         "raw": "{{base_url}}/admin/orders",
          "host": [
           "{{base_url}}"
          ],
@@ -1182,34 +1055,50 @@
          "query": [
           {
            "key": "page",
-           "value": "1"
+           "value": "1",
+           "description": "optional, integer ≥1 (default 1)",
+           "disabled": true
           },
           {
            "key": "limit",
-           "value": "20"
+           "value": "20",
+           "description": "optional, integer 1–100 (default 20)",
+           "disabled": true
+          },
+          {
+           "key": "sortBy",
+           "value": "createdAt",
+           "description": "optional, string field name",
+           "disabled": true
           },
           {
            "key": "sortOrder",
-           "value": "desc"
+           "value": "desc",
+           "description": "optional, enum: asc | desc (default desc)",
+           "disabled": true
           },
           {
            "key": "status",
-           "value": "pending",
+           "value": "",
+           "description": "optional, enum: pending|confirmed|in_progress|completed|cancelled",
            "disabled": true
           },
           {
            "key": "customerId",
-           "value": "{{customer_id}}",
+           "value": "",
+           "description": "optional, uuid",
            "disabled": true
           },
           {
            "key": "dateFrom",
-           "value": "2026-01-01",
+           "value": "",
+           "description": "optional, ISO date",
            "disabled": true
           },
           {
            "key": "dateTo",
-           "value": "2026-12-31",
+           "value": "",
+           "description": "optional, ISO date",
            "disabled": true
           }
          ]
@@ -1294,8 +1183,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"status\": \"in_progress\",\n  \"notes\": [{ \"text\": \"Work started on registration\" }]\n}"
-        }
+         "raw": "{\n  \"status\": \"in_progress\",\n  \"notes\": [\n    {\n      \"text\": \"Documents received, work started.\"\n    }\n  ]\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `status` — optional, enum: pending | confirmed | in_progress | completed | cancelled\n- `notes` — optional, array of { text } — appended; backend stamps author/time\n- `_note` — at least one of status or notes is required"
        },
        "response": []
       },
@@ -1322,6 +1217,124 @@
         }
        },
        "response": []
+      },
+      {
+       "name": "List Order Payments",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/orders/{{order_id}}/payments",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "orders",
+          "{{order_id}}",
+          "payments"
+         ]
+        },
+        "description": "Payment ledger + summary (amount, amountPaid, amountDue, paymentState) for the order."
+       },
+       "response": []
+      },
+      {
+       "name": "Record Offline Payment",
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/orders/{{order_id}}/payments",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "orders",
+          "{{order_id}}",
+          "payments"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"amount\": 200000,\n  \"reference\": \"UTR1234567890\",\n  \"paidAt\": \"2026-07-10T10:00:00.000Z\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `amount` — required, integer paise — must not exceed the outstanding balance\n- `reference` — optional, max 255 — bank UTR / cheque no / txn id\n- `paidAt` — optional, ISO datetime — defaults to now"
+       },
+       "response": []
+      },
+      {
+       "name": "Generate Payment Link",
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/orders/{{order_id}}/payment-link",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "orders",
+          "{{order_id}}",
+          "payment-link"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"amount\": 300000,\n  \"acceptPartial\": true,\n  \"firstMinPartialAmount\": 100000,\n  \"expiresAt\": \"2026-07-17T10:00:00.000Z\",\n  \"description\": \"Balance for order SK-...\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `amount` — optional, integer paise — defaults to the order's outstanding balance\n- `acceptPartial` — optional, boolean — allow the customer to pay in installments\n- `firstMinPartialAmount` — optional, integer paise — minimum first installment (only with acceptPartial)\n- `expiresAt` — optional, ISO datetime — default 7 days from now\n- `description` — optional, max 500"
+       },
+       "response": [],
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data) {",
+           "  pm.collectionVariables.set('payment_link_id', res.data.id);",
+           "}"
+          ]
+         }
+        }
+       ]
       }
      ]
     },
@@ -1353,7 +1366,7 @@
          }
         ],
         "url": {
-         "raw": "{{base_url}}/admin/payments?page=1&limit=20",
+         "raw": "{{base_url}}/admin/payments",
          "host": [
           "{{base_url}}"
          ],
@@ -1364,30 +1377,50 @@
          "query": [
           {
            "key": "page",
-           "value": "1"
+           "value": "1",
+           "description": "optional, integer ≥1 (default 1)",
+           "disabled": true
           },
           {
            "key": "limit",
-           "value": "20"
+           "value": "20",
+           "description": "optional, integer 1–100 (default 20)",
+           "disabled": true
+          },
+          {
+           "key": "sortBy",
+           "value": "createdAt",
+           "description": "optional, string field name",
+           "disabled": true
+          },
+          {
+           "key": "sortOrder",
+           "value": "desc",
+           "description": "optional, enum: asc | desc (default desc)",
+           "disabled": true
           },
           {
            "key": "status",
-           "value": "captured",
+           "value": "",
+           "description": "optional, enum: created|authorized|captured|failed|refunded",
            "disabled": true
           },
           {
            "key": "customerId",
-           "value": "{{customer_id}}",
+           "value": "",
+           "description": "optional, uuid",
            "disabled": true
           },
           {
            "key": "dateFrom",
-           "value": "2026-01-01",
+           "value": "",
+           "description": "optional, ISO date",
            "disabled": true
           },
           {
            "key": "dateTo",
-           "value": "2026-12-31",
+           "value": "",
+           "description": "optional, ISO date",
            "disabled": true
           }
          ]
@@ -1435,8 +1468,226 @@
      ]
     },
     {
+     "name": "Analytics",
+     "description": "Admin dashboards: revenue, orders, by-service, payment health. All accept optional ?from&to (ISO); revenue also ?granularity=day|month.",
+     "item": [
+      {
+       "name": "Revenue",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/analytics/revenue?granularity=day",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "analytics",
+          "revenue"
+         ],
+         "query": [
+          {
+           "key": "from",
+           "value": "",
+           "description": "optional, ISO datetime (default: 30 days ago)",
+           "disabled": true
+          },
+          {
+           "key": "to",
+           "value": "",
+           "description": "optional, ISO datetime (default: now)",
+           "disabled": true
+          },
+          {
+           "key": "granularity",
+           "value": "day",
+           "description": "optional, enum: day | month (default day)"
+          }
+         ]
+        },
+        "description": "Captured revenue time-series from the payments ledger + total."
+       },
+       "response": []
+      },
+      {
+       "name": "Orders Summary",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/analytics/orders",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "analytics",
+          "orders"
+         ],
+         "query": [
+          {
+           "key": "from",
+           "value": "",
+           "description": "optional, ISO datetime (default: 30 days ago)",
+           "disabled": true
+          },
+          {
+           "key": "to",
+           "value": "",
+           "description": "optional, ISO datetime (default: now)",
+           "disabled": true
+          }
+         ]
+        },
+        "description": "Order counts by status, total value, collected, and outstanding."
+       },
+       "response": []
+      },
+      {
+       "name": "By Service",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/analytics/by-service",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "analytics",
+          "by-service"
+         ],
+         "query": [
+          {
+           "key": "from",
+           "value": "",
+           "description": "optional, ISO datetime (default: 30 days ago)",
+           "disabled": true
+          },
+          {
+           "key": "to",
+           "value": "",
+           "description": "optional, ISO datetime (default: now)",
+           "disabled": true
+          }
+         ]
+        },
+        "description": "Top services by captured revenue with order counts."
+       },
+       "response": []
+      },
+      {
+       "name": "Payment Health",
+       "request": {
+        "method": "GET",
+        "header": [
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/analytics/payment-health",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "analytics",
+          "payment-health"
+         ],
+         "query": [
+          {
+           "key": "from",
+           "value": "",
+           "description": "optional, ISO datetime (default: 30 days ago)",
+           "disabled": true
+          },
+          {
+           "key": "to",
+           "value": "",
+           "description": "optional, ISO datetime (default: now)",
+           "disabled": true
+          }
+         ]
+        },
+        "description": "Receipts by status/channel, link statuses, and success rate."
+       },
+       "response": []
+      }
+     ]
+    },
+    {
      "name": "Customers",
      "item": [
+      {
+       "name": "Create Customer",
+       "request": {
+        "method": "POST",
+        "header": [
+         {
+          "key": "Content-Type",
+          "value": "application/json"
+         },
+         {
+          "key": "Authorization",
+          "value": "Bearer {{admin_access_token}}"
+         }
+        ],
+        "url": {
+         "raw": "{{base_url}}/admin/customers",
+         "host": [
+          "{{base_url}}"
+         ],
+         "path": [
+          "admin",
+          "customers"
+         ]
+        },
+        "body": {
+         "mode": "raw",
+         "raw": "{\n  \"name\": \"Rahul Sharma\",\n  \"email\": \"rahul@example.com\",\n  \"phone\": \"9112233445\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `name` — required, 1–255\n- `email` — required, email — unique (409 if exists)\n- `phone` — optional, max 20"
+       },
+       "response": [],
+       "event": [
+        {
+         "listen": "test",
+         "script": {
+          "type": "text/javascript",
+          "exec": [
+           "const res = pm.response.json();",
+           "if (res.success && res.data) {",
+           "  pm.collectionVariables.set('customer_id', res.data.id);",
+           "}"
+          ]
+         }
+        }
+       ]
+      },
       {
        "name": "List Customers",
        "event": [
@@ -1462,7 +1713,7 @@
          }
         ],
         "url": {
-         "raw": "{{base_url}}/admin/customers?page=1&limit=20",
+         "raw": "{{base_url}}/admin/customers",
          "host": [
           "{{base_url}}"
          ],
@@ -1473,15 +1724,32 @@
          "query": [
           {
            "key": "page",
-           "value": "1"
+           "value": "1",
+           "description": "optional, integer ≥1 (default 1)",
+           "disabled": true
           },
           {
            "key": "limit",
-           "value": "20"
+           "value": "20",
+           "description": "optional, integer 1–100 (default 20)",
+           "disabled": true
+          },
+          {
+           "key": "sortBy",
+           "value": "createdAt",
+           "description": "optional, string field name",
+           "disabled": true
+          },
+          {
+           "key": "sortOrder",
+           "value": "desc",
+           "description": "optional, enum: asc | desc (default desc)",
+           "disabled": true
           },
           {
            "key": "search",
            "value": "",
+           "description": "optional, string — name/email",
            "disabled": true
           }
          ]
@@ -1537,7 +1805,7 @@
          }
         ],
         "url": {
-         "raw": "{{base_url}}/admin/customers/{{customer_id}}/orders?page=1&limit=20",
+         "raw": "{{base_url}}/admin/customers/{{customer_id}}/orders",
          "host": [
           "{{base_url}}"
          ],
@@ -1550,11 +1818,27 @@
          "query": [
           {
            "key": "page",
-           "value": "1"
+           "value": "1",
+           "description": "optional, integer ≥1 (default 1)",
+           "disabled": true
           },
           {
            "key": "limit",
-           "value": "20"
+           "value": "20",
+           "description": "optional, integer 1–100 (default 20)",
+           "disabled": true
+          },
+          {
+           "key": "sortBy",
+           "value": "createdAt",
+           "description": "optional, string field name",
+           "disabled": true
+          },
+          {
+           "key": "sortOrder",
+           "value": "desc",
+           "description": "optional, enum: asc | desc (default desc)",
+           "disabled": true
           }
          ]
         }
@@ -1677,7 +1961,7 @@
          }
         ],
         "url": {
-         "raw": "{{base_url}}/admin/inquiries?page=1&limit=20",
+         "raw": "{{base_url}}/admin/inquiries",
          "host": [
           "{{base_url}}"
          ],
@@ -1688,15 +1972,32 @@
          "query": [
           {
            "key": "page",
-           "value": "1"
+           "value": "1",
+           "description": "optional, integer ≥1 (default 1)",
+           "disabled": true
           },
           {
            "key": "limit",
-           "value": "20"
+           "value": "20",
+           "description": "optional, integer 1–100 (default 20)",
+           "disabled": true
+          },
+          {
+           "key": "sortBy",
+           "value": "createdAt",
+           "description": "optional, string field name",
+           "disabled": true
+          },
+          {
+           "key": "sortOrder",
+           "value": "desc",
+           "description": "optional, enum: asc | desc (default desc)",
+           "disabled": true
           },
           {
            "key": "status",
-           "value": "unresolved",
+           "value": "",
+           "description": "optional, enum: unresolved | resolved",
            "disabled": true
           }
          ]
@@ -1781,8 +2082,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"status\": \"resolved\",\n  \"notes\": [{ \"text\": \"Follow-up scheduled for Monday.\" }]\n}"
-        }
+         "raw": "{\n  \"status\": \"resolved\",\n  \"notes\": [\n    {\n      \"text\": \"Called customer, quote agreed at 5000.\"\n    }\n  ]\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `status` — optional, enum: unresolved | resolved\n- `notes` — optional, array of { text } — appended\n- `_note` — at least one of status or notes is required"
        },
        "response": [
         {
@@ -1835,80 +2142,6 @@
          ]
         }
        ]
-      },
-      {
-       "name": "Generate Payment Link",
-       "request": {
-        "method": "POST",
-        "header": [
-         {
-          "key": "Content-Type",
-          "value": "application/json"
-         },
-         {
-          "key": "Authorization",
-          "value": "Bearer {{admin_access_token}}"
-         }
-        ],
-        "url": {
-         "raw": "{{base_url}}/admin/inquiries/{{inquiry_id}}/payment-link",
-         "host": [
-          "{{base_url}}"
-         ],
-         "path": [
-          "admin",
-          "inquiries",
-          "{{inquiry_id}}",
-          "payment-link"
-         ]
-        },
-        "body": {
-         "mode": "raw",
-         "raw": "{\n  \"amount\": 500000,\n  \"description\": \"Custom quote for advisory work\"\n}"
-        },
-        "description": "Creates a Razorpay Payment Link for an agreed amount (paise) against this inquiry. Auto-links a matching customer and the inquiry's service. Returns the link record incl. `shortUrl`. Marked paid by the `payment_link.paid` webhook."
-       },
-       "response": [],
-       "event": [
-        {
-         "listen": "test",
-         "script": {
-          "type": "text/javascript",
-          "exec": [
-           "const res = pm.response.json();",
-           "if (res.success && res.data) {",
-           "  pm.collectionVariables.set('payment_link_id', res.data.id);",
-           "}"
-          ]
-         }
-        }
-       ]
-      },
-      {
-       "name": "List Payment Links",
-       "request": {
-        "method": "GET",
-        "header": [
-         {
-          "key": "Authorization",
-          "value": "Bearer {{admin_access_token}}"
-         }
-        ],
-        "url": {
-         "raw": "{{base_url}}/admin/inquiries/{{inquiry_id}}/payment-links",
-         "host": [
-          "{{base_url}}"
-         ],
-         "path": [
-          "admin",
-          "inquiries",
-          "{{inquiry_id}}",
-          "payment-links"
-         ]
-        },
-        "description": "Lists all payment links generated for this inquiry with their status."
-       },
-       "response": []
       }
      ],
      "description": "Handle inquiries and the quote → payment step. For agreed quotes, generate a Razorpay Payment Link that is emailed/SMSed to the customer."
@@ -1991,8 +2224,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"currentPassword\": \"OldPassword@123\",\n  \"newPassword\": \"NewPassword@456\"\n}"
-        }
+         "raw": "{\n  \"currentPassword\": \"OldPass123\",\n  \"newPassword\": \"NewStrongPass123\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `currentPassword` — required, string\n- `newPassword` — required, min 8"
        },
        "response": [
         {
@@ -2071,8 +2310,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane@example.com\",\n  \"password\": \"password123\",\n  \"phone\": \"9876543210\"\n}"
-        }
+         "raw": "{\n  \"name\": \"Rahul Sharma\",\n  \"email\": \"rahul@example.com\",\n  \"password\": \"CustomerPass123\",\n  \"phone\": \"9112233445\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `name` — required, 1–255\n- `email` — required, email — unique\n- `password` — required, min 8\n- `phone` — optional, max 20"
        },
        "response": [
         {
@@ -2140,8 +2385,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"email\": \"jane@example.com\",\n  \"password\": \"password123\"\n}"
-        }
+         "raw": "{\n  \"email\": \"rahul@example.com\",\n  \"password\": \"CustomerPass123\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `email` — required, email\n- `password` — required, string"
        },
        "response": [
         {
@@ -2207,8 +2458,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"refreshToken\": \"{{customer_refresh_token}}\"\n}"
-        }
+         "raw": "{\n  \"refreshToken\": \"{{customer_refresh_token}}\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `refreshToken` — required, string"
        },
        "response": []
       },
@@ -2235,8 +2492,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"email\": \"jane@example.com\"\n}"
-        }
+         "raw": "{\n  \"email\": \"rahul@example.com\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `email` — required, email"
        },
        "response": [
         {
@@ -2276,8 +2539,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"token\": \"{{reset_token}}\",\n  \"password\": \"newpassword123\"\n}"
-        }
+         "raw": "{\n  \"token\": \"{{reset_token}}\",\n  \"password\": \"NewCustomerPass123\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `token` — required, string — from the reset email\n- `password` — required, min 8"
        },
        "response": [
         {
@@ -2373,8 +2642,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"name\": \"Jane Updated\",\n  \"phone\": \"9998887770\"\n}"
-        }
+         "raw": "{\n  \"name\": \"Rahul Sharma\",\n  \"phone\": \"9112233445\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `name` — optional, 1–255\n- `phone` — optional, max 20"
        },
        "response": []
       },
@@ -2405,8 +2680,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"currentPassword\": \"password123\",\n  \"newPassword\": \"newpassword456\"\n}"
-        }
+         "raw": "{\n  \"currentPassword\": \"CustomerPass123\",\n  \"newPassword\": \"NewCustomerPass123\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
+        },
+        "description": "**Body fields**\n- `currentPassword` — required, string\n- `newPassword` — required, min 8"
        },
        "response": [
         {
@@ -2583,9 +2864,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"serviceId\": \"{{service_id}}\",\n  \"quantity\": 1,\n  \"addonIds\": []\n}"
+         "raw": "{\n  \"serviceId\": \"{{service_id}}\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
         },
-        "description": "Creates a pending order + Razorpay order and returns `razorpayOrderId` + `razorpayKeyId` for Checkout. Body: `serviceId`, optional `quantity` (per-unit services) and `addonIds`. Amount = service price + GST + add-ons. Rejected for recurring / quote / non-purchasable services."
+        "description": "**Body fields**\n- `serviceId` — required, uuid — must be a fixed/bundle service; quote services are rejected. Charged price + 18% GST."
        },
        "response": [
         {
@@ -2629,9 +2915,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"razorpayOrderId\": \"{{razorpay_order_id}}\",\n  \"razorpayPaymentId\": \"pay_test_xxxxxxxxxxxxx\",\n  \"razorpaySignature\": \"generated_hmac_signature_here\"\n}"
+         "raw": "{\n  \"razorpayOrderId\": \"order_xxxxxxxxxxxxx\",\n  \"razorpayPaymentId\": \"pay_xxxxxxxxxxxxx\",\n  \"razorpaySignature\": \"generated_signature_hex\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
         },
-        "description": "Verifies the Razorpay signature after Checkout and marks the payment captured + order confirmed. (The `payment.captured` webhook does the same server-side if the client never calls this.)"
+        "description": "**Body fields**\n- `razorpayOrderId` — required, string — from Initiate response\n- `razorpayPaymentId` — required, string — from Razorpay Checkout\n- `razorpaySignature` — required, string — from Razorpay Checkout"
        },
        "response": [
         {
@@ -2685,7 +2976,7 @@
          }
         ],
         "url": {
-         "raw": "{{base_url}}/customer/purchases?page=1&limit=20",
+         "raw": "{{base_url}}/customer/purchases",
          "host": [
           "{{base_url}}"
          ],
@@ -2696,11 +2987,27 @@
          "query": [
           {
            "key": "page",
-           "value": "1"
+           "value": "1",
+           "description": "optional, integer ≥1 (default 1)",
+           "disabled": true
           },
           {
            "key": "limit",
-           "value": "20"
+           "value": "20",
+           "description": "optional, integer 1–100 (default 20)",
+           "disabled": true
+          },
+          {
+           "key": "sortBy",
+           "value": "createdAt",
+           "description": "optional, string field name",
+           "disabled": true
+          },
+          {
+           "key": "sortOrder",
+           "value": "desc",
+           "description": "optional, enum: asc | desc (default desc)",
+           "disabled": true
           }
          ]
         }
@@ -2759,143 +3066,6 @@
       }
      ],
      "description": "One-time checkout track (`cta = buy`). Flow: Initiate → Razorpay Checkout → Verify. The webhook is the server-side source of truth for confirmation."
-    },
-    {
-     "name": "Subscriptions",
-     "item": [
-      {
-       "name": "Subscribe",
-       "request": {
-        "method": "POST",
-        "header": [
-         {
-          "key": "Content-Type",
-          "value": "application/json"
-         },
-         {
-          "key": "Authorization",
-          "value": "Bearer {{customer_access_token}}"
-         }
-        ],
-        "url": {
-         "raw": "{{base_url}}/customer/subscriptions/subscribe",
-         "host": [
-          "{{base_url}}"
-         ],
-         "path": [
-          "customer",
-          "subscriptions",
-          "subscribe"
-         ]
-        },
-        "body": {
-         "mode": "raw",
-         "raw": "{\n  \"serviceId\": \"{{service_id}}\"\n}"
-        },
-        "description": "Starts a monthly subscription for a `recurring`, purchasable service. Lazily creates the Razorpay Plan, creates the Subscription, and returns `razorpaySubscriptionId` + `shortUrl` for Checkout."
-       },
-       "response": [],
-       "event": [
-        {
-         "listen": "test",
-         "script": {
-          "type": "text/javascript",
-          "exec": [
-           "const res = pm.response.json();",
-           "if (res.success && res.data) {",
-           "  pm.collectionVariables.set('subscription_id', res.data.subscriptionId);",
-           "  pm.collectionVariables.set('razorpay_subscription_id', res.data.razorpaySubscriptionId);",
-           "}"
-          ]
-         }
-        }
-       ]
-      },
-      {
-       "name": "Verify Subscription",
-       "request": {
-        "method": "POST",
-        "header": [
-         {
-          "key": "Content-Type",
-          "value": "application/json"
-         },
-         {
-          "key": "Authorization",
-          "value": "Bearer {{customer_access_token}}"
-         }
-        ],
-        "url": {
-         "raw": "{{base_url}}/customer/subscriptions/verify",
-         "host": [
-          "{{base_url}}"
-         ],
-         "path": [
-          "customer",
-          "subscriptions",
-          "verify"
-         ]
-        },
-        "body": {
-         "mode": "raw",
-         "raw": "{\n  \"razorpayPaymentId\": \"pay_xxxxxxxxxxxxx\",\n  \"razorpaySubscriptionId\": \"{{razorpay_subscription_id}}\",\n  \"razorpaySignature\": \"signature_from_checkout\"\n}"
-        },
-        "description": "Verifies the subscription handshake signature (`payment_id | subscription_id`) after Checkout and marks the subscription active."
-       },
-       "response": []
-      },
-      {
-       "name": "List My Subscriptions",
-       "request": {
-        "method": "GET",
-        "header": [
-         {
-          "key": "Authorization",
-          "value": "Bearer {{customer_access_token}}"
-         }
-        ],
-        "url": {
-         "raw": "{{base_url}}/customer/subscriptions",
-         "host": [
-          "{{base_url}}"
-         ],
-         "path": [
-          "customer",
-          "subscriptions"
-         ]
-        },
-        "description": "The authenticated customer's subscriptions with service, status, amount, interval, and current period end."
-       },
-       "response": []
-      },
-      {
-       "name": "Cancel Subscription",
-       "request": {
-        "method": "POST",
-        "header": [
-         {
-          "key": "Authorization",
-          "value": "Bearer {{customer_access_token}}"
-         }
-        ],
-        "url": {
-         "raw": "{{base_url}}/customer/subscriptions/{{subscription_id}}/cancel",
-         "host": [
-          "{{base_url}}"
-         ],
-         "path": [
-          "customer",
-          "subscriptions",
-          "{{subscription_id}}",
-          "cancel"
-         ]
-        },
-        "description": "Cancels the subscription at the end of the current billing cycle."
-       },
-       "response": []
-      }
-     ],
-     "description": "Recurring track (`cta = subscribe`) for monthly services via Razorpay Subscriptions. Flow: Subscribe → Razorpay Checkout → Verify; `subscription.*` webhooks keep status in sync."
     },
     {
      "name": "Invoices",
@@ -2983,9 +3153,14 @@
         },
         "body": {
          "mode": "raw",
-         "raw": "{\n  \"name\": \"Rahul Sharma\",\n  \"email\": \"rahul@example.com\",\n  \"phone\": \"9112233445\",\n  \"subject\": \"Need help with GST registration\",\n  \"message\": \"Hi, I want to register for GST for my new business. Can you help?\"\n}"
+         "raw": "{\n  \"name\": \"Rahul Sharma\",\n  \"email\": \"rahul@example.com\",\n  \"phone\": \"9112233445\",\n  \"subject\": \"Need help with Virtual CFO\",\n  \"serviceId\": \"{{service_id}}\",\n  \"message\": \"Hi, I'd like a quote for Virtual CFO services for my startup.\"\n}",
+         "options": {
+          "raw": {
+           "language": "json"
+          }
+         }
         },
-        "description": "Creates an inquiry. Optional `serviceId` links it to a catalog service so the advisor sees the context. Rate-limited."
+        "description": "**Body fields**\n- `name` — required, 1–255\n- `email` — required, email\n- `phone` — optional, max 20\n- `subject` — optional, max 500\n- `serviceId` — optional, uuid — the service being asked about\n- `message` — required, 1–5000"
        },
        "response": [
         {

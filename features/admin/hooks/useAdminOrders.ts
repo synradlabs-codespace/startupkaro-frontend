@@ -27,7 +27,7 @@ export function useOrder(id: string) {
 export function useCreateOrder() {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (payload: { customerId: string; serviceId: string; amount: number; status?: string; notes?: string }) =>
+        mutationFn: (payload: { customerId: string; serviceId: string; amount: number; status?: string; notes?: string; inquiryId?: string }) =>
             adminOrderService.create(payload),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin", "orders"] }),
     });
@@ -41,6 +41,28 @@ export function useUpdateOrder(id: string) {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["admin", "orders"] });
             queryClient.invalidateQueries({ queryKey: ["admin", "orders", id] });
+        },
+    });
+}
+
+export function useOrderPayments(id: string) {
+    return useQuery({
+        queryKey: ["admin", "orders", id, "payments"],
+        queryFn: async () => (await adminOrderService.listPayments(id)).data.data,
+        enabled: Boolean(id),
+    });
+}
+
+export function useRecordOfflinePayment(id: string) {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (payload: { amount: number; reference?: string; paidAt?: string }) =>
+            adminOrderService.recordOfflinePayment(id, payload),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["admin", "orders"] });
+            queryClient.invalidateQueries({ queryKey: ["admin", "orders", id] });
+            queryClient.invalidateQueries({ queryKey: ["admin", "orders", id, "payments"] });
+            queryClient.invalidateQueries({ queryKey: ["admin", "payments"] });
         },
     });
 }

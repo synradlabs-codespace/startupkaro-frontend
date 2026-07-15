@@ -17,6 +17,14 @@ import { Search, Eye } from "lucide-react";
 
 const PAGE_SIZE = 10;
 
+function getPaymentOrderLabel(payment: { order?: { id: string; orderNumber?: string }; orderId?: string; orderNumber?: string }) {
+    return payment.order?.orderNumber || payment.orderNumber || payment.order?.id?.slice(0, 8) || payment.orderId?.slice(0, 8) || "-";
+}
+
+function getPaymentCustomerName(payment: { customer?: { name: string }; customerName?: string }) {
+    return payment.customer?.name || payment.customerName || "-";
+}
+
 export function AdminPaymentsPage() {
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
@@ -109,8 +117,8 @@ export function AdminPaymentsPage() {
                                     payments.map((payment) => (
                                         <TableRow key={payment.id} className="hover:bg-muted/30">
                                             <TableCell className="font-mono text-xs text-slate">{payment.id}</TableCell>
-                                            <TableCell className="font-mono text-xs text-slate">{payment.orderNumber || payment.orderId.slice(0, 8)}</TableCell>
-                                            <TableCell className="font-medium">{payment.customerName}</TableCell>
+                                            <TableCell className="font-mono text-xs text-slate">{getPaymentOrderLabel(payment)}</TableCell>
+                                            <TableCell className="font-medium">{getPaymentCustomerName(payment)}</TableCell>
                                             <TableCell className="font-medium">{formatINR(payment.amount)}</TableCell>
                                             <TableCell><PaymentStatusBadge status={payment.status} /></TableCell>
                                             <TableCell className="text-slate text-sm">{formatDate(payment.createdAt)}</TableCell>

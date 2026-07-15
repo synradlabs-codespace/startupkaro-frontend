@@ -3,15 +3,13 @@ export interface BackendService {
     name: string;
     slug: string;
     description: string | null;
-    categoryId?: string | null;
-    category?: BackendServiceCategory | null;
-    pricingType?: "fixed" | "quote" | "starting_from" | "recurring" | "per_unit" | string;
-    billingCycle?: "one_time" | "monthly" | "hourly" | "per_application" | string;
+    category?: "bundles" | "start" | "manage" | "protect" | BackendServiceCategory | string | null;
+    type?: "fixed" | "bundle" | "quote" | string;
     isBundle?: boolean;
     isPurchasable?: boolean;
     price: number | null; // paise
     priceLabel?: string | null;
-    cta?: "buy" | "quote" | "subscribe" | string | null;
+    cta?: "fixed" | "buy" | "quote" | string | null;
     pricing?: {
         base: number;
         tax: number;
@@ -49,14 +47,18 @@ export interface BackendServiceAddon {
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
 
 function normalizeService(raw: BackendService, category?: BackendServiceCategory): BackendService {
+    const categoryValue = typeof raw.category === "string" ? raw.category : raw.category?.slug ?? category?.slug ?? null;
+    const typeValue = raw.type ?? (raw.isBundle ? "bundle" : undefined);
+    const isBundle = Boolean(raw.isBundle) || categoryValue === "bundles" || typeValue === "bundle";
+    const cta = raw.cta === "buy" ? "fixed" : raw.cta;
     return {
         ...raw,
         description: raw.description ?? "",
-        categoryId: raw.categoryId ?? category?.id ?? raw.category?.id ?? null,
-        category: raw.category ?? (category ? { id: category.id, name: category.name, slug: category.slug, parentId: category.parentId } : null),
-        cta: raw.cta === "subscribe" ? "quote" : raw.cta,
-        isBundle: Boolean(raw.isBundle),
-        isPurchasable: raw.isPurchasable ?? Boolean(raw.price != null && raw.cta !== "quote" && raw.cta !== "subscribe"),
+        category: categoryValue,
+        type: typeValue,
+        cta,
+        isBundle: Boolean(isBundle),
+        isPurchasable: raw.isPurchasable ?? Boolean(raw.price != null && (cta === "fixed" || typeValue === "fixed" || typeValue === "bundle")),
         items: raw.items ?? [],
         addons: raw.addons ?? [],
     };

@@ -2,7 +2,6 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, Clock, ShieldCheck, Tag } from "lucide-react";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { ServiceEditorial } from "@/features/services/components/ServiceEditorial";
-import { CustomerQuoteAction } from "@/features/customers/components/CustomerQuoteAction";
 import { formatINR } from "@/lib/currency";
 import { categoryCardStyles, fallbackCardStyles } from "@/lib/category-pills";
 import type { EnrichedService } from "@/features/services/lib/merge";
@@ -103,7 +102,13 @@ export function CustomerServiceDetailPage({ service }: CustomerServiceDetailPage
                                     <ArrowRight className="h-4 w-4" />
                                 </Link>
                             ) : (
-                                <CustomerQuoteAction serviceName={service.name} serviceSlug={service.slug} />
+                                <Link
+                                    href={`/contact?service=${service.slug}`}
+                                    className="flex h-9 w-full items-center justify-center gap-2 rounded-lg bg-primary-brand px-4 text-sm font-medium text-white transition-colors hover:bg-primary-brand/90"
+                                >
+                                    Request Quote
+                                    <ArrowRight className="h-4 w-4" />
+                                </Link>
                             )}
 
                             {service.cta === "buy" && (

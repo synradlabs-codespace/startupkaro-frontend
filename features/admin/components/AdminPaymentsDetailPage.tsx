@@ -32,10 +32,13 @@ export function AdminPaymentDetailPage({ id }: { id: string }) {
     }
 
     const paymentId = payment.razorpayPaymentId ?? payment.id;
+    const orderId = payment.order?.id ?? payment.orderId;
+    const orderLabel = payment.order?.orderNumber || payment.orderNumber || orderId?.slice(0, 8) || "-";
+    const customerName = payment.customer?.name || payment.customerName || "-";
     const details = [
         { label: "Payment ID", value: paymentId, icon: Hash, mono: true },
-        { label: "Order ID", value: payment.orderNumber || payment.orderId.slice(0, 8), icon: CreditCard, mono: true },
-        { label: "Customer", value: payment.customerName, icon: User, mono: false },
+        { label: "Order ID", value: orderLabel, icon: CreditCard, mono: true },
+        { label: "Customer", value: customerName, icon: User, mono: false },
         { label: "Amount", value: formatINR(payment.amount), icon: IndianRupee, mono: false },
         { label: "Method", value: payment.method ?? "-", icon: Smartphone, mono: false },
         { label: "Date", value: formatDate(payment.createdAt), icon: Calendar, mono: false },
@@ -52,7 +55,7 @@ export function AdminPaymentDetailPage({ id }: { id: string }) {
                             <CreditCard className="h-5 w-5 text-white" />
                         </div>
                         <div>
-                            <p className="font-semibold text-white text-sm">{payment.customerName}</p>
+                            <p className="font-semibold text-white text-sm">{customerName}</p>
                             <p className="text-xl font-display font-medium text-white">{formatINR(payment.amount)}</p>
                         </div>
                         <p className="ml-auto font-mono text-xs text-white/70">{paymentId}</p>
@@ -89,11 +92,13 @@ export function AdminPaymentDetailPage({ id }: { id: string }) {
                                     <PaymentStatusBadge status={payment.status} />
                                 </div>
 
-                                <Link href={`/admin/orders/${payment.orderId}`}>
-                                    <Button variant="outline" size="sm" className="w-full rounded-lg mt-1 uppercase tracking-wide">
-                                        View Associated Order
-                                    </Button>
-                                </Link>
+                                {orderId ? (
+                                    <Link href={`/admin/orders/${orderId}`}>
+                                        <Button variant="outline" size="sm" className="w-full rounded-lg mt-1 uppercase tracking-wide">
+                                            View Associated Order
+                                        </Button>
+                                    </Link>
+                                ) : null}
                             </div>
                         </div>
                     </div>

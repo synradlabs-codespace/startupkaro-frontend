@@ -28,22 +28,25 @@ export interface EnrichedService {
 
 function normalizeCta(service?: BackendService | null): ServiceCta {
     if (!service) return "quote";
-    if (service.cta === "buy" && service.isPurchasable !== false) return "buy";
+    if ((service.cta === "fixed" || service.cta === "buy" || service.type === "fixed" || service.type === "bundle") && service.isPurchasable !== false) return "buy";
     return "quote";
 }
 
 function stageFor(backend?: BackendService | null, content?: ServiceCardContent | null): ServiceStage {
+    const backendCategory = typeof backend?.category === "string" ? backend.category : backend?.category?.slug;
     return content?.stage ?? content?.category ?? inferServiceStage({
         name: backend?.name ?? content?.name,
         slug: backend?.slug ?? content?.slug,
-        categorySlug: backend?.category?.slug,
-        categoryName: backend?.category?.name,
-        isBundle: backend?.isBundle ?? content?.isBundle,
+        categorySlug: backendCategory,
+        categoryName: backendCategory,
+        isBundle: Boolean(backend?.isBundle || backend?.type === "bundle" || backendCategory === "bundles" || content?.isBundle),
     });
 }
 
 function enrichFromBackend(backend: BackendService, content: ServiceCardContent | ServiceContent | null): EnrichedService {
     const stage = stageFor(backend, content);
+    const backendCategory = typeof backend.category === "string" ? backend.category : backend.category?.slug;
+    const cta = normalizeCta(backend);
 
     return {
         id: backend.id,
@@ -51,16 +54,16 @@ function enrichFromBackend(backend: BackendService, content: ServiceCardContent 
         name: backend.name,
         category: content?.category ?? stage,
         stage,
-        backendCategory: backend.category ? { id: backend.category.id, name: backend.category.name, slug: backend.category.slug } : null,
+        backendCategory: null,
         duration: content?.duration ?? null,
         description: content?.shortDescription ?? backend.description ?? "",
         pricePaise: backend.price ?? null,
         priceLabel: backend.priceLabel ?? null,
-        pricingType: backend.pricingType ?? null,
-        billingCycle: backend.billingCycle ?? null,
-        cta: normalizeCta(backend),
-        isBundle: Boolean(backend.isBundle ?? content?.isBundle),
-        isPurchasable: Boolean(backend.isPurchasable && normalizeCta(backend) === "buy"),
+        pricingType: backend.type ?? null,
+        billingCycle: null,
+        cta,
+        isBundle: Boolean(backend.isBundle || backend.type === "bundle" || backendCategory === "bundles" || content?.isBundle),
+        isPurchasable: backend.isPurchasable ?? (cta === "buy"),
         items: backend.items ?? [],
         addons: backend.addons ?? [],
         content: "overview" in (content ?? {}) ? (content as ServiceContent) : null,

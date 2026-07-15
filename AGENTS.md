@@ -20,7 +20,7 @@ API base URL: `https://server.startupkaro.in/api/v1`
 
 When debugging API contract questions or suspected mismatches:
 - **Always verify with `curl` first** against the live staging API (`https://server.startupkaro.in/api/v1`). Use the admin credentials above to get a token.
-- Use the Postman collection (`StartupKaro_API.postman_collection_new.json`) only as a **route reference** — it documents available endpoints and request structure.
+- Use the Postman collection (`StartupKaro_API.postman_collection.json`) only as a **route reference** — it documents available endpoints and request structure.
 - **Do not trust Postman response examples** — they are often outdated and do not reflect the current backend response shape.
 - Only open `API_MISMATCHES.md` issues after confirming via curl that the backend does not behave as expected.
 

@@ -50,12 +50,16 @@ export function AdminOrderNewPage() {
     const set = (key: keyof typeof form) => (value: string | null) => {
         setForm((f) => ({ ...f, [key]: value ?? f[key] }));
     };
+    const customers = customersQuery.data?.data ?? [];
+    const services = servicesQuery.data?.data ?? [];
+    const selectedCustomer = customers.find((customer) => customer.id === form.customerId);
+    const selectedService = services.find((service) => service.id === form.serviceId);
 
     return (
         <div className="flex flex-col min-h-screen">
             <PageHeader title="New Order" description="Create a new order for a customer" />
 
-            <div className="flex-1 p-6 max-w-2xl space-y-6">
+            <div className="flex-1 p-6 max-w-4xl space-y-6">
                 <div className="rounded-xl bg-primary-brand p-8">
                     <div className="flex flex-col items-center text-center gap-3">
                         <div className="h-16 w-16 rounded-lg bg-white/15 flex items-center justify-center">
@@ -83,12 +87,19 @@ export function AdminOrderNewPage() {
                                     <User className="h-3 w-3" /> Customer
                                 </Label>
                                 <Select value={form.customerId} onValueChange={set("customerId")}>
-                                    <SelectTrigger className="rounded-lg border-hairline focus:ring-primary-brand/20">
-                                        <SelectValue placeholder={customersQuery.isLoading ? "Loading customers..." : "Select a customer"} />
+                                    <SelectTrigger className="h-11 w-full rounded-lg border-hairline px-3 focus:ring-primary-brand/20">
+                                        <SelectValue placeholder={customersQuery.isLoading ? "Loading customers..." : "Select a customer"}>
+                                            {selectedCustomer ? `${selectedCustomer.name} - ${selectedCustomer.email}` : undefined}
+                                        </SelectValue>
                                     </SelectTrigger>
-                                    <SelectContent>
-                                        {(customersQuery.data?.data ?? []).map((customer) => (
-                                            <SelectItem key={customer.id} value={customer.id}>{customer.name} - {customer.email}</SelectItem>
+                                    <SelectContent align="start" className="w-[min(640px,calc(100vw-2rem))]">
+                                        {customers.map((customer) => (
+                                            <SelectItem key={customer.id} value={customer.id} className="py-2.5">
+                                                <span className="flex min-w-0 flex-col items-start">
+                                                    <span className="max-w-full truncate font-medium text-ink">{customer.name}</span>
+                                                    <span className="max-w-full truncate text-xs text-slate">{customer.email}</span>
+                                                </span>
+                                            </SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
@@ -99,12 +110,21 @@ export function AdminOrderNewPage() {
                                     <Briefcase className="h-3 w-3" /> Service
                                 </Label>
                                 <Select value={form.serviceId} onValueChange={set("serviceId")}>
-                                    <SelectTrigger className="rounded-lg border-hairline focus:ring-primary-brand/20">
-                                        <SelectValue placeholder={servicesQuery.isLoading ? "Loading services..." : "Select a service"} />
+                                    <SelectTrigger className="h-11 w-full rounded-lg border-hairline px-3 focus:ring-primary-brand/20">
+                                        <SelectValue placeholder={servicesQuery.isLoading ? "Loading services..." : "Select a service"}>
+                                            {selectedService ? selectedService.name : undefined}
+                                        </SelectValue>
                                     </SelectTrigger>
-                                    <SelectContent>
-                                        {(servicesQuery.data?.data ?? []).map((service) => (
-                                            <SelectItem key={service.id} value={service.id}>{service.name}</SelectItem>
+                                    <SelectContent align="start" className="w-[min(640px,calc(100vw-2rem))]">
+                                        {services.map((service) => (
+                                            <SelectItem key={service.id} value={service.id} className="py-2.5">
+                                                <span className="flex min-w-0 flex-col items-start">
+                                                    <span className="max-w-full truncate font-medium text-ink">{service.name}</span>
+                                                    <span className="max-w-full truncate text-xs capitalize text-slate">
+                                                        {service.category} · {service.type}
+                                                    </span>
+                                                </span>
+                                            </SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>

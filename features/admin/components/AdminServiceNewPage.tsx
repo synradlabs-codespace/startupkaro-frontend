@@ -7,12 +7,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { useAdminCategories, useCreateService } from "@/features/admin/hooks/useAdminServices";
+import { useCreateService } from "@/features/admin/hooks/useAdminServices";
 import { getApiErrorMessage } from "@/features/admin/lib/format";
 import { toPaise } from "@/lib/currency";
-import { Briefcase, IndianRupee, LinkIcon, ToggleRight } from "lucide-react";
+import { Briefcase, IndianRupee, LinkIcon } from "lucide-react";
+
+const stageOptions = [
+    { label: "Start", value: "start" },
+    { label: "Manage", value: "manage" },
+    { label: "Protect", value: "protect" },
+] as const;
 
 function slugify(value: string) {
     return value
@@ -26,20 +31,13 @@ function slugify(value: string) {
 export function AdminServiceNewPage() {
     const router = useRouter();
     const createService = useCreateService();
-    const categoriesQuery = useAdminCategories();
     const [form, setForm] = useState({
         name: "",
         slug: "",
         description: "",
-        categoryId: "",
-        pricingType: "fixed",
-        billingCycle: "one_time",
+        category: "start" as "start" | "manage" | "protect",
+        type: "fixed" as "fixed" | "quote",
         price: "",
-        taxRatePct: "18",
-        priceInclusiveOfTax: false,
-        isBundle: false,
-        isPurchasable: true,
-        isActive: true,
         sortOrder: "0",
     });
     const [error, setError] = useState("");
@@ -53,15 +51,9 @@ export function AdminServiceNewPage() {
                 name: form.name,
                 slug: form.slug,
                 description: form.description || undefined,
-                categoryId: form.categoryId || undefined,
-                pricingType: form.pricingType,
-                billingCycle: form.billingCycle,
+                category: form.category,
+                type: form.type,
                 price: form.price ? toPaise(Number(form.price)) : null,
-                taxRatePct: Math.round(Number(form.taxRatePct) * 100),
-                priceInclusiveOfTax: form.priceInclusiveOfTax,
-                isBundle: form.isBundle,
-                isPurchasable: form.isPurchasable,
-                isActive: form.isActive,
                 sortOrder: Number(form.sortOrder) || 0,
             });
             router.push("/admin/services");
@@ -113,13 +105,13 @@ export function AdminServiceNewPage() {
 
                             <div className="space-y-1.5">
                                 <Label className="text-xs font-medium text-steel uppercase tracking-wide">Category</Label>
-                                <Select value={form.categoryId} onValueChange={(value) => setForm((f) => ({ ...f, categoryId: value ?? "" }))}>
+                                <Select value={form.category} onValueChange={(value) => setForm((f) => ({ ...f, category: value as typeof form.category }))}>
                                     <SelectTrigger className="rounded-lg border-hairline">
-                                        <SelectValue placeholder={categoriesQuery.isLoading ? "Loading categories..." : "Select category"} />
+                                        <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {(categoriesQuery.data ?? []).map((category) => (
-                                            <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
+                                        {stageOptions.map((category) => (
+                                            <SelectItem key={category.value} value={category.value}>{category.label}</SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
@@ -141,46 +133,16 @@ export function AdminServiceNewPage() {
                             </div>
 
                             <div className="space-y-1.5">
-                                <Label className="text-xs font-medium text-steel uppercase tracking-wide">Pricing Type</Label>
-                                <Select value={form.pricingType} onValueChange={(value) => setForm((f) => ({ ...f, pricingType: value ?? "fixed", isPurchasable: value === "quote" ? false : f.isPurchasable }))}>
+                                <Label className="text-xs font-medium text-steel uppercase tracking-wide">Type</Label>
+                                <Select value={form.type} onValueChange={(value) => setForm((f) => ({ ...f, type: value as typeof form.type }))}>
                                     <SelectTrigger className="rounded-lg border-hairline">
                                         <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="fixed">Fixed</SelectItem>
-                                        <SelectItem value="starting_from">Starting from</SelectItem>
-                                        <SelectItem value="per_unit">Per unit</SelectItem>
-                                        <SelectItem value="recurring">Recurring</SelectItem>
                                         <SelectItem value="quote">Quote</SelectItem>
                                     </SelectContent>
                                 </Select>
-                            </div>
-
-                            <div className="space-y-1.5">
-                                <Label className="text-xs font-medium text-steel uppercase tracking-wide">Billing Cycle</Label>
-                                <Select value={form.billingCycle} onValueChange={(value) => setForm((f) => ({ ...f, billingCycle: value ?? "one_time" }))}>
-                                    <SelectTrigger className="rounded-lg border-hairline">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="one_time">One time</SelectItem>
-                                        <SelectItem value="monthly">Monthly</SelectItem>
-                                        <SelectItem value="hourly">Hourly</SelectItem>
-                                        <SelectItem value="per_application">Per application</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-
-                            <div className="space-y-1.5">
-                                <Label className="text-xs font-medium text-steel uppercase tracking-wide">Tax Rate (%)</Label>
-                                <Input
-                                    type="number"
-                                    min="0"
-                                    step="0.01"
-                                    value={form.taxRatePct}
-                                    onChange={(e) => setForm((f) => ({ ...f, taxRatePct: e.target.value }))}
-                                    className="rounded-lg border-hairline focus-visible:ring-primary-brand/20"
-                                />
                             </div>
 
                             <div className="space-y-1.5">
@@ -192,26 +154,6 @@ export function AdminServiceNewPage() {
                                     className="rounded-lg border-hairline focus-visible:ring-primary-brand/20"
                                 />
                             </div>
-
-                            {[
-                                ["Active", "isActive"],
-                                ["Purchasable", "isPurchasable"],
-                                ["Bundle", "isBundle"],
-                                ["Price Includes Tax", "priceInclusiveOfTax"],
-                            ].map(([label, key]) => (
-                                <div key={key} className="space-y-1.5">
-                                    <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
-                                        <ToggleRight className="h-3 w-3" /> {label}
-                                    </Label>
-                                    <div className="h-10 flex items-center gap-3">
-                                        <Switch
-                                            checked={Boolean(form[key as keyof typeof form])}
-                                            onCheckedChange={(checked) => setForm((f) => ({ ...f, [key]: checked }))}
-                                        />
-                                        <span className="text-sm text-charcoal">{Boolean(form[key as keyof typeof form]) ? "Yes" : "No"}</span>
-                                    </div>
-                                </div>
-                            ))}
                         </div>
 
                         <div className="space-y-1.5">

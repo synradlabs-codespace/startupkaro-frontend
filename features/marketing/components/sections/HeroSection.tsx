@@ -3,7 +3,7 @@
 "use client";
 
 import Image from "next/image";
-import { BarChart3, Clock, Rocket, ShieldCheck, Star, TrendingUp } from "lucide-react";
+import { Clock, Rocket, ShieldCheck, Star, TrendingUp } from "lucide-react";
 import { FlowButton, FlowSecondaryButton } from "@/components/custom/FlowButton";
 import { LetterSwap } from "@/components/fancy/text";
 import { motion, useReducedMotion } from "framer-motion";
@@ -43,14 +43,13 @@ export function HeroSection() {
 
                         {/* Headline */}
                         <h1 className="font-display text-4xl md:text-6xl font-medium text-ink leading-none mb-4">
-                            Start your business{" "}
-                            <span className="text-primary-brand">without</span>{" "}
-                            the paperwork
+                            Your Trusted Partner for{" "}
+                            <span className="text-primary-brand">Business Growth</span>
                         </h1>
 
                         {/* Sub-headline */}
                         <p className="text-base md:text-lg text-charcoal leading-relaxed mb-6 max-w-xl">
-                            <span className="text-charcoal font-medium">Expert CAs and CSs</span> handle your GST, company registration, trademarks, and compliance, end to end. Fixed pricing, document coordination by email, and clear updates by email and call.
+                            We bring together experienced Chartered Accountants, Company Secretaries, Lawyers, and Compliance Experts to help businesses incorporate, remain compliant, protect their brand, and achieve sustainable growth. One team. Complete business solutions.
                         </p>
 
                         {/* CTAs */}
@@ -98,19 +97,6 @@ export function HeroSection() {
                         <div className="absolute bottom-[116px] left-1/2 z-0 h-10 w-[62%] -translate-x-1/2 rounded-[999px] bg-tint-sky shadow-[0_18px_35px_rgba(41,110,249,0.16)]" />
                         <div className="absolute left-[18%] top-[18%] flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-brand text-white shadow-[0_18px_40px_rgba(41,110,249,0.22)]">
                             <Rocket className="h-7 w-7" />
-                        </div>
-                        <div className="absolute right-3 top-[25%] z-20 w-36 rounded-2xl border border-hairline bg-canvas p-4 shadow-[0_18px_45px_rgba(26,26,26,0.10)]">
-                            <BarChart3 className="mb-2 h-7 w-7 text-primary-brand" />
-                            <p className="font-display text-3xl font-medium leading-none text-ink">5000+</p>
-                            <p className="mt-1 text-xs font-medium text-graphite">Startups served</p>
-                        </div>
-                        <div className="absolute left-0 top-[49%] z-20 rounded-xl border border-hairline bg-canvas px-4 py-3 shadow-[0_16px_36px_rgba(26,26,26,0.10)]">
-                            <div className="flex gap-1 text-[#f5bd00]">
-                                {Array.from({ length: 5 }).map((_, index) => (
-                                    <Star key={index} className="h-4 w-4 fill-current" />
-                                ))}
-                            </div>
-                            <p className="mt-1 text-xs font-medium text-graphite">4.9 rating</p>
                         </div>
                         <div className="absolute bottom-7 left-[11%] z-30 flex w-[calc(70%-30px)] items-center gap-3 rounded-2xl border border-hairline bg-canvas px-5 py-4 shadow-[0_18px_45px_rgba(26,26,26,0.12)]">
                             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-brand/10 text-primary-brand">

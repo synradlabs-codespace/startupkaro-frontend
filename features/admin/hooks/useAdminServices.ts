@@ -1,10 +1,33 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { adminCategoryService, adminServiceService } from "@/services/admin.service";
+import { adminBundleService, adminServiceService } from "@/services/admin.service";
+import type { AdminService } from "@/services/admin.service";
+
+function isBundleService(service: AdminService) {
+    return service.category === "bundles" || service.type === "bundle";
+}
 
 export function useServiceList(params: { page?: number; limit?: number } = {}) {
     return useQuery({
         queryKey: ["admin", "services", params.page ?? 1, params.limit ?? 10],
-        queryFn: async () => (await adminServiceService.list(params)).data,
+        queryFn: async () => {
+            const page = params.page ?? 1;
+            const limit = params.limit ?? 10;
+            const payload = (await adminServiceService.list({ page: 1, limit: 100 })).data;
+            const allStandalone = payload.data.filter((service) => !isBundleService(service));
+            const start = (page - 1) * limit;
+            const data = allStandalone.slice(start, start + limit);
+            return {
+                ...payload,
+                data,
+                pagination: {
+                    ...payload.pagination,
+                    page,
+                    limit,
+                    total: allStandalone.length,
+                    totalPages: Math.ceil(allStandalone.length / limit),
+                },
+            };
+        },
     });
 }
 
@@ -13,13 +36,6 @@ export function useService(id: string) {
         queryKey: ["admin", "services", id],
         queryFn: async () => (await adminServiceService.get(id)).data,
         enabled: Boolean(id),
-    });
-}
-
-export function useAdminCategories() {
-    return useQuery({
-        queryKey: ["admin", "categories"],
-        queryFn: async () => (await adminCategoryService.list()).data.data,
     });
 }
 
@@ -63,5 +79,69 @@ export function useDeleteService(id: string) {
     return useMutation({
         mutationFn: () => adminServiceService.remove(id),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin", "services"] }),
+    });
+}
+
+export function useBundleList() {
+    return useQuery({
+        queryKey: ["admin", "bundles"],
+        queryFn: async () => {
+            const res = await adminBundleService.list();
+            const payload = res.data;
+            const bundles = Array.isArray(payload.data) ? payload.data : [];
+            return Promise.all(
+                bundles.map(async (bundle) => {
+                    try {
+                        return (await adminBundleService.get(bundle.id)).data.data;
+                    } catch {
+                        return bundle;
+                    }
+                }),
+            );
+        },
+    });
+}
+
+export function useBundle(id: string) {
+    return useQuery({
+        queryKey: ["admin", "bundles", id],
+        queryFn: async () => (await adminBundleService.get(id)).data,
+        enabled: Boolean(id),
+    });
+}
+
+export function useCreateBundle() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (payload: Parameters<typeof adminBundleService.create>[0]) =>
+            adminBundleService.create(payload),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["admin", "bundles"] });
+            queryClient.invalidateQueries({ queryKey: ["admin", "services"] });
+        },
+    });
+}
+
+export function useUpdateBundle(id: string) {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (payload: Parameters<typeof adminBundleService.update>[1]) =>
+            adminBundleService.update(id, payload),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["admin", "bundles"] });
+            queryClient.invalidateQueries({ queryKey: ["admin", "bundles", id] });
+            queryClient.invalidateQueries({ queryKey: ["admin", "services"] });
+        },
+    });
+}
+
+export function useDeleteBundle(id: string) {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: () => adminBundleService.remove(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["admin", "bundles"] });
+            queryClient.invalidateQueries({ queryKey: ["admin", "services"] });
+        },
     });
 }

@@ -13,6 +13,15 @@ import { loadRazorpayScript, openRazorpayCheckout } from "@/lib/razorpay";
 import { ShieldCheck, CreditCard, ArrowLeft, Clock, Tag, Receipt } from "lucide-react";
 import Link from "next/link";
 
+const GST_RATE = 0.18;
+
+function isCheckoutEligible(service: NonNullable<ReturnType<typeof useCustomerServiceBySlug>["data"]>) {
+    return (
+        service.isPurchasable !== false &&
+        (service.cta === "fixed" || service.cta === "buy" || service.type === "fixed" || service.type === "bundle")
+    );
+}
+
 function CheckoutContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -24,18 +33,21 @@ function CheckoutContent() {
     const profile = profileQuery.data;
     const [error, setError] = useState("");
     const service = serviceQuery.data;
+    const baseAmount = service?.pricing?.base ?? service?.price ?? 0;
+    const taxAmount = service?.pricing?.tax ?? Math.round(baseAmount * GST_RATE);
+    const totalAmount = service?.pricing?.total ?? baseAmount + taxAmount;
 
     const handlePayment = async () => {
         if (!service) return;
         setError("");
 
         try {
-            if (service.cta !== "buy" || service.isPurchasable === false) {
+            if (!isCheckoutEligible(service)) {
                 router.push(`/contact?service=${service.slug}`);
                 return;
             }
 
-            const initiation = (await initiatePurchase.mutateAsync({ serviceId: service.id || service.slug, quantity: 1, addonIds: [] })).data.data;
+            const initiation = (await initiatePurchase.mutateAsync({ serviceId: service.id || service.slug })).data.data;
             await loadRazorpayScript();
             const response = await openRazorpayCheckout({
                 key: initiation.razorpayKeyId,
@@ -68,7 +80,7 @@ function CheckoutContent() {
         return <div className="p-6 text-sm text-error-brand">Failed to load selected service</div>;
     }
 
-    if (service.cta !== "buy" || service.isPurchasable === false) {
+    if (!isCheckoutEligible(service)) {
         return (
             <div className="p-6">
                 <div className="rounded-lg border border-hairline bg-canvas p-6">
@@ -150,7 +162,7 @@ function CheckoutContent() {
                     <div className="p-6 flex-1 space-y-4">
                         {[
                             { label: "Service", value: service.name, icon: Tag },
-                            { label: "Processing Time", value: service.billingCycle === "monthly" ? "Monthly" : "Expert assisted", icon: Clock },
+                            { label: "Processing Time", value: "Expert assisted", icon: Clock },
                         ].map(({ label, value, icon: Icon }) => (
                             <div key={label} className="flex items-center justify-between py-3 border-b border-hairline last:border-0">
                                 <span className="text-sm text-steel flex items-center gap-2">
@@ -162,11 +174,15 @@ function CheckoutContent() {
                         ))}
                         <div className="flex items-center justify-between py-3 border-b border-hairline">
                             <span className="text-sm text-steel">Subtotal</span>
-                            <span className="text-sm font-medium">{service.priceLabel ?? formatINR(service.price ?? 0)}</span>
+                            <span className="text-sm font-medium">{formatINR(baseAmount)}</span>
+                        </div>
+                        <div className="flex items-center justify-between py-3 border-b border-hairline">
+                            <span className="text-sm text-steel">GST (18%)</span>
+                            <span className="text-sm font-medium">{formatINR(taxAmount)}</span>
                         </div>
                         <div className="flex items-center justify-between pt-2">
                             <span className="text-base font-semibold text-ink">Total</span>
-                            <span className="text-xl font-display font-medium text-charcoal">{service.priceLabel ?? formatINR(service.price ?? 0)}</span>
+                            <span className="text-xl font-display font-medium text-charcoal">{formatINR(totalAmount)}</span>
                         </div>
                     </div>
                     <div className="px-6 pb-5">
@@ -182,7 +198,8 @@ function CheckoutContent() {
                     <div className="p-6 flex flex-col flex-1 space-y-5">
                         <div>
                             <p className="text-xs text-stone uppercase tracking-wide font-medium mb-1">Amount Due</p>
-                            <p className="text-3xl font-bold text-ink">{service.priceLabel ?? formatINR(service.price ?? 0)}</p>
+                            <p className="text-3xl font-bold text-ink">{formatINR(totalAmount)}</p>
+                            <p className="mt-1 text-xs text-stone">Includes 18% GST</p>
                         </div>
 
                         <div className="h-px bg-surface" />
