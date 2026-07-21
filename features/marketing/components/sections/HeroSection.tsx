@@ -3,12 +3,33 @@
 "use client";
 
 import Image from "next/image";
-import { Clock, Rocket, ShieldCheck, Star, TrendingUp } from "lucide-react";
+import { Clock, ShieldCheck, Star } from "lucide-react";
 import { FlowButton, FlowSecondaryButton } from "@/components/custom/FlowButton";
 import { LetterSwap } from "@/components/fancy/text";
 import { motion, useReducedMotion } from "framer-motion";
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
+const heroHighlights = [
+    {
+        title: "Fast & Reliable",
+        description: "Quick turn around and accuracy you can trust",
+        icon: "/assets/fast and reliable.png",
+        className: "-left-20 top-[22%] xl:-left-28",
+    },
+    {
+        title: "Expert Team",
+        description: "CA, CS, Lawyers & Compliance experts under one roof",
+        icon: "/assets/expert team.png",
+        className: "-right-20 top-[42%] xl:-right-28",
+    },
+    {
+        title: "Compliant & Secure",
+        description: "100% legal compliance and data protection",
+        icon: "/assets/compliant and secure.png",
+        className: "-left-20 bottom-[160px] xl:-left-28",
+    },
+];
 
 export function HeroSection() {
     const prefersReducedMotion = useReducedMotion();
@@ -95,18 +116,6 @@ export function HeroSection() {
                         <div className="absolute left-1/2 top-[49%] h-[350px] w-[380px] -translate-x-1/2 -translate-y-1/2 rotate-[-10deg] rounded-full bg-primary-brand/15 shadow-[18px_24px_60px_rgba(41,110,249,0.18)] xl:h-[390px] xl:w-[430px]" />
                         <div className="absolute left-1/2 top-[47%] h-[330px] w-[360px] -translate-x-1/2 -translate-y-1/2 rotate-[-10deg] rounded-full bg-tint-sky shadow-[inset_-24px_-18px_46px_rgba(41,110,249,0.18),inset_18px_16px_34px_rgba(255,255,255,0.58)] xl:h-[370px] xl:w-[410px]" />
                         <div className="absolute bottom-[116px] left-1/2 z-0 h-10 w-[62%] -translate-x-1/2 rounded-[999px] bg-tint-sky shadow-[0_18px_35px_rgba(41,110,249,0.16)]" />
-                        <div className="absolute left-[18%] top-[18%] flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-brand text-white shadow-[0_18px_40px_rgba(41,110,249,0.22)]">
-                            <Rocket className="h-7 w-7" />
-                        </div>
-                        <div className="absolute bottom-7 left-[11%] z-30 flex w-[calc(70%-30px)] items-center gap-3 rounded-2xl border border-hairline bg-canvas px-5 py-4 shadow-[0_18px_45px_rgba(26,26,26,0.12)]">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-brand/10 text-primary-brand">
-                                <TrendingUp className="h-5 w-5" />
-                            </div>
-                            <div>
-                                <p className="text-lg font-semibold text-ink">Fast growth</p>
-                                <p className="text-xs font-medium text-graphite">Compliance-ready setup</p>
-                            </div>
-                        </div>
                         <div className="relative z-10 max-h-[500px] overflow-hidden [clip-path:ellipse(50%_45%_at_50%_48%)]">
                             <Image
                                 src="/cross_arms_guy.png"
@@ -116,6 +125,36 @@ export function HeroSection() {
                                 priority
                                 className="object-contain drop-shadow-xl"
                             />
+                        </div>
+                        {heroHighlights.map((item) => (
+                            <div
+                                key={item.title}
+                                className={`absolute z-30 grid w-[232px] grid-cols-[44px_1fr] items-center gap-4 rounded-xl border border-hairline bg-canvas/95 px-3 py-3 shadow-[0_18px_42px_rgba(26,26,26,0.12)] backdrop-blur ${item.className}`}
+                            >
+                                <Image
+                                    src={item.icon}
+                                    alt=""
+                                    width={44}
+                                    height={44}
+                                    className="h-11 w-11 object-contain"
+                                />
+                                <div className="min-w-0">
+                                    <p className="text-sm font-bold leading-tight text-ink">{item.title}</p>
+                                    <p className="mt-1 text-[11px] font-medium leading-snug text-graphite">{item.description}</p>
+                                </div>
+                            </div>
+                        ))}
+                        <div className="absolute bottom-4 right-0 z-30 grid w-[300px] grid-cols-[206px_1fr] items-center gap-1 overflow-hidden rounded-xl border border-hairline bg-canvas px-3 py-1.5 shadow-[0_18px_45px_rgba(26,26,26,0.12)] xl:-right-3">
+                            <Image
+                                src="/assets/circle avatars.png"
+                                alt=""
+                                width={206}
+                                height={82}
+                                className="h-[82px] w-[206px] object-contain"
+                            />
+                            <p className="text-sm font-bold leading-tight text-primary-brand">
+                                5000+ Happy clients
+                            </p>
                         </div>
                     </motion.div>
                 </div>

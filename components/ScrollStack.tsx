@@ -73,6 +73,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const cardTopsRef = useRef<number[]>([]);
   const lastTransformsRef = useRef(new Map<number, { translateY: number; scale: number; rotation: number; blur: number }>());
   const isUpdatingRef = useRef(false);
+  const scrollUpdateFrameRef = useRef<number | null>(null);
 
   const calculateProgress = useCallback((scrollTop: number, start: number, end: number) => {
     if (scrollTop < start) return 0;
@@ -224,10 +225,25 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   ]);
 
   const handleScroll = useCallback(() => {
-    updateCardTransforms();
+    if (scrollUpdateFrameRef.current !== null) return;
+
+    scrollUpdateFrameRef.current = requestAnimationFrame(() => {
+      scrollUpdateFrameRef.current = null;
+      updateCardTransforms();
+    });
   }, [updateCardTransforms]);
 
   const setupLenis = useCallback(() => {
+    const prefersNativeTouchScroll =
+      typeof window !== 'undefined' &&
+      (window.matchMedia('(hover: none), (pointer: coarse)').matches || navigator.maxTouchPoints > 0);
+
+    if (prefersNativeTouchScroll) {
+      const target = useWindowScroll ? window : scrollerRef.current;
+      target?.addEventListener('scroll', handleScroll, { passive: true });
+      return undefined;
+    }
+
     if (useWindowScroll) {
       const lenis = new Lenis({
         duration: 1.2,
@@ -312,21 +328,29 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     // but before Lenis starts mutating transforms on scroll.
     cardTopsRef.current = cards.map(card => getElementOffset(card));
 
-    setupLenis();
+    const lenis = setupLenis();
     updateCardTransforms();
 
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
+      if (scrollUpdateFrameRef.current !== null) {
+        cancelAnimationFrame(scrollUpdateFrameRef.current);
+      }
       if (lenisRef.current) {
         lenisRef.current.destroy();
+      }
+      if (!lenis) {
+        const target = useWindowScroll ? window : scrollerRef.current;
+        target?.removeEventListener('scroll', handleScroll);
       }
       stackCompletedRef.current = false;
       cardsRef.current = [];
       cardTopsRef.current = [];
       transformsCache.clear();
       isUpdatingRef.current = false;
+      scrollUpdateFrameRef.current = null;
     };
   }, [
     itemDistance,
@@ -343,6 +367,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     setupLenis,
     updateCardTransforms,
     getElementOffset,
+    handleScroll,
   ]);
 
   return (

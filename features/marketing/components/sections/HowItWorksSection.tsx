@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Mail, MousePointerClick, FileCheck2, CheckCircle2 } from "lucide-react";
 import ScrollStack, { ScrollStackItem } from "@/components/ScrollStack";
 
@@ -62,7 +63,25 @@ function StepCard({ item }: { item: typeof steps[number] }) {
     );
 }
 
+function useDesktopStack() {
+    const [isDesktopStack, setIsDesktopStack] = useState(false);
+
+    useEffect(() => {
+        const query = window.matchMedia("(min-width: 768px) and (hover: hover) and (pointer: fine)");
+        const update = () => setIsDesktopStack(query.matches);
+
+        update();
+        query.addEventListener("change", update);
+
+        return () => query.removeEventListener("change", update);
+    }, []);
+
+    return isDesktopStack;
+}
+
 export function HowItWorksSection() {
+    const isDesktopStack = useDesktopStack();
+
     return (
         <section className="bg-canvas pb-8 md:pb-10">
             <div className="sticky top-0 z-20 bg-canvas pt-14 pb-4 md:pt-18 md:pb-5">
@@ -91,6 +110,7 @@ export function HowItWorksSection() {
             </div>
 
             {/* Desktop — animated ScrollStack */}
+            {isDesktopStack && (
             <div className="hidden md:block">
                 <ScrollStack
                     useWindowScroll
@@ -113,6 +133,7 @@ export function HowItWorksSection() {
                     ))}
                 </ScrollStack>
             </div>
+            )}
         </section>
     );
 }
