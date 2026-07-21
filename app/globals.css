@@ -2,8 +2,10 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+html,
 body {
-  overflow-x: clip;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* Limit Tailwind v4 class scanning to source files only.

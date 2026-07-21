@@ -149,7 +149,7 @@ export function MarketingFooter() {
                         <ul className="space-y-3">
                             <li className="flex items-start gap-2.5 text-sm text-charcoal">
                                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-primary-brand" />
-                                hello@startupkaro.in
+                                contact@startupkaro.in
                             </li>
                             <li className="flex items-start gap-2.5 text-sm text-charcoal">
                                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary-brand" />
@@ -184,7 +184,7 @@ export function MarketingFooter() {
 
                 <div className="flex flex-col items-start justify-between gap-3 pt-6 sm:flex-row sm:items-center">
                     <p className="text-xs text-graphite">
-                        &copy; {new Date().getFullYear()} StartupKaro. All rights reserved.
+                        &copy; {new Date().getFullYear()} STARTUPKARO PRIVATE LIMITED. ALL RIGHTS RESERVED.
                     </p>
                     <p className="text-xs text-graphite">
                         Fixed services at fixed costs, delivered by qualified professionals.

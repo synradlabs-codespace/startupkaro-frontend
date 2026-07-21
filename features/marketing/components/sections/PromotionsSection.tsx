@@ -97,7 +97,7 @@ export function PromotionsSection() {
 
                         <div className="mt-7">
                             <FlowButton
-                                href="/services/income-tax-filing"
+                                href="/services/income-tax-returns"
                                 text="File Your ITR Now"
                                 iconName="arrow-right"
                                 wrapperClassName="w-full sm:w-auto sm:min-w-[220px]"

@@ -40,7 +40,7 @@ export function ConsultantCTASection() {
                                 Need clarity before choosing?
                             </div>
                             <h2 className="font-display text-3xl font-medium leading-tight md:text-5xl">
-                                Talk privately with a consultant at Rs. 400/hour
+                                Talk privately with a consultant at Rs. 399 per session
                             </h2>
                             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/78 md:text-base">
                                 For founders who want peace of mind before filing, registering, or fixing compliance, book a focused 1:1 session and leave with a clear next step.
@@ -62,8 +62,8 @@ export function ConsultantCTASection() {
                             <div className="flex items-end gap-2">
                                 <BadgeIndianRupee className="mb-2 h-7 w-7 text-primary-soft" />
                                 <div>
-                                    <p className="font-display text-5xl font-medium leading-none">400</p>
-                                    <p className="mt-1 text-xs font-semibold uppercase tracking-[0.28px] text-white/68">per hour</p>
+                                    <p className="font-display text-5xl font-medium leading-none">399</p>
+                                    <p className="mt-1 text-xs font-semibold uppercase tracking-[0.28px] text-white/68">per session</p>
                                 </div>
                             </div>
                             <Link

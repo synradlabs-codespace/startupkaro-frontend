@@ -196,7 +196,7 @@ export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: strin
                                 </div>
                                 <div>
                                     <p className="mb-0.5 text-xs font-medium uppercase tracking-[0.28px] text-graphite">Email</p>
-                                    <p className="text-sm text-ink">hello@startupkaro.in</p>
+                                    <p className="text-sm text-ink">contact@startupkaro.in</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3 rounded-xl border border-hairline bg-canvas p-3.5 transition-colors duration-200 hover:border-primary-brand">

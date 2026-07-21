@@ -96,8 +96,8 @@ export function RefundPolicyPage() {
 
                 <Section title="How to Request a Refund">
                     <p>To submit a refund request, email us at{" "}
-                        <a href="mailto:hello@startupkaro.in" className="text-link-blue hover:underline">
-                            hello@startupkaro.in
+                        <a href="mailto:contact@startupkaro.in" className="text-link-blue hover:underline">
+                            contact@startupkaro.in
                         </a>{" "}
                         with:
                     </p>
@@ -141,8 +141,8 @@ export function RefundPolicyPage() {
                         <p className="font-medium text-ink">StartupKaro, Refund Requests</p>
                         <p className="text-slate mt-1">
                             Email:{" "}
-                            <a href="mailto:hello@startupkaro.in" className="text-link-blue hover:underline">
-                                hello@startupkaro.in
+                            <a href="mailto:contact@startupkaro.in" className="text-link-blue hover:underline">
+                                contact@startupkaro.in
                             </a>
                         </p>
                         <p className="text-slate">Phone: +91 789 00000 88</p>

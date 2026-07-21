@@ -16,9 +16,9 @@ function Logo() {
       <Image
         src="/assets/startupkaro-logo-transparent.png"
         alt="StartupKaro"
-        width={174}
-        height={32}
-        className="h-8 w-auto"
+        width={164}
+        height={30}
+        className="h-[27px] w-auto sm:h-[30px]"
         style={{ width: "auto" }}
         priority
       />
@@ -327,10 +327,10 @@ export function Header() {
   return (
     <>
       <header
-        className="fixed inset-x-0 top-0 z-50 h-18 border-b border-hairline bg-canvas/95 shadow-sm backdrop-blur-xl"
+        className="fixed inset-x-0 top-0 z-50 h-18 max-w-full overflow-x-clip border-b border-hairline bg-canvas/95 shadow-sm backdrop-blur-xl"
         onMouseLeave={scheduleDesktopClose}
       >
-        <div className="grid h-full w-full grid-cols-[auto_1fr_auto] items-center gap-4 px-4 sm:px-6 lg:px-8">
+        <div className="grid h-full w-full max-w-full grid-cols-[minmax(0,auto)_1fr_auto] items-center gap-3 px-4 sm:gap-4 sm:px-6 lg:px-8">
           <Logo />
 
           <nav className="hidden h-full items-center justify-center gap-1 lg:flex" aria-label="Main navigation">

@@ -28,12 +28,12 @@ export function WhatsAppButton() {
     if (!visible) return null;
 
     return (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
+        <div className="fixed right-4 bottom-[calc(env(safe-area-inset-bottom)+5rem)] z-50 flex max-w-[calc(100vw-2rem)] flex-col items-end gap-2 sm:right-6 sm:bottom-6">
             {toastOpen && (
                 <div className="flex items-start gap-2 rounded-xl border border-hairline bg-canvas p-3 shadow-[0_4px_20px_rgba(26,26,26,0.12)] max-w-[210px] animate-in fade-in slide-in-from-bottom-2 duration-300">
                     <div className="min-w-0">
                         <p className="text-xs font-semibold text-ink leading-snug">Chat with us on WhatsApp</p>
-                        <p className="mt-0.5 text-xs text-charcoal leading-snug">We're online. Ask us anything!</p>
+                        <p className="mt-0.5 text-xs text-charcoal leading-snug">We&apos;re online. Ask us anything!</p>
                     </div>
                     <button
                         type="button"
@@ -52,9 +52,9 @@ export function WhatsAppButton() {
                 rel="noopener noreferrer"
                 aria-label="Chat on WhatsApp"
                 onClick={() => setToastOpen(false)}
-                className="flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-[0_4px_16px_rgba(37,211,102,0.35)] transition-transform duration-200 hover:scale-110 active:scale-95"
+                className="flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] shadow-[0_4px_16px_rgba(37,211,102,0.35)] transition-transform duration-200 hover:scale-110 active:scale-95 sm:h-14 sm:w-14"
             >
-                <FaWhatsapp className="h-7 w-7 text-white" />
+                <FaWhatsapp className="h-6 w-6 text-white sm:h-7 sm:w-7" />
             </a>
         </div>
     );

@@ -9,7 +9,7 @@ const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
 const founders = [
     {
         name: "Hardik Singh",
-        role: "Consultant",
+        role: "Chartered Accountant",
         image: "/assets/hardik%20photo.jpeg",
         summary:
             "After working with EY and then building his independent CA practice, Hardik saw the same problem repeat for founders: compliance was necessary, but the process felt opaque, fragmented, and difficult to trust.",

@@ -147,8 +147,8 @@ export function TermsOfServicePage() {
                         <p className="text-slate mt-1">Mohali, Punjab, India</p>
                         <p className="text-slate">
                             Email:{" "}
-                            <a href="mailto:hello@startupkaro.in" className="text-link-blue hover:underline">
-                                hello@startupkaro.in
+                            <a href="mailto:contact@startupkaro.in" className="text-link-blue hover:underline">
+                                contact@startupkaro.in
                             </a>
                         </p>
                     </div>

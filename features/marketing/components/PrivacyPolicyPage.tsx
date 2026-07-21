@@ -99,7 +99,7 @@ export function PrivacyPolicyPage() {
                         We retain your personal and business data for as long as necessary to fulfil the service and meet our legal obligations.
                         For most compliance and registration documents, Indian law requires records to be maintained for a minimum of 8 years.
                         You may request deletion of your account data by contacting us at{" "}
-                        <a href="mailto:hello@startupkaro.in" className="text-link-blue hover:underline">hello@startupkaro.in</a>.
+                        <a href="mailto:contact@startupkaro.in" className="text-link-blue hover:underline">contact@startupkaro.in</a>.
                         Note that data submitted to government portals on your behalf cannot be deleted by us.
                     </p>
                 </Section>
@@ -122,7 +122,7 @@ export function PrivacyPolicyPage() {
                         <li>Withdraw consent for analytics tracking via cookie preferences</li>
                     </ul>
                     <p>To exercise any of these rights, email us at{" "}
-                        <a href="mailto:hello@startupkaro.in" className="text-link-blue hover:underline">hello@startupkaro.in</a>.
+                        <a href="mailto:contact@startupkaro.in" className="text-link-blue hover:underline">contact@startupkaro.in</a>.
                     </p>
                 </Section>
 
@@ -156,8 +156,8 @@ export function PrivacyPolicyPage() {
                         <p className="text-slate mt-1">Mohali, Punjab, India</p>
                         <p className="text-slate">
                             Email:{" "}
-                            <a href="mailto:hello@startupkaro.in" className="text-link-blue hover:underline">
-                                hello@startupkaro.in
+                            <a href="mailto:contact@startupkaro.in" className="text-link-blue hover:underline">
+                                contact@startupkaro.in
                             </a>
                         </p>
                         <p className="text-slate">Phone: +91 789 00000 88</p>

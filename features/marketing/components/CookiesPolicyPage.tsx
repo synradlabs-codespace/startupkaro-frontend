@@ -158,8 +158,8 @@ export function CookiesPolicyPage() {
                 <Section title="Contact">
                     <p>
                         Questions about our use of cookies? Email us at{" "}
-                        <a href="mailto:hello@startupkaro.in" className="text-link-blue hover:underline">
-                            hello@startupkaro.in
+                        <a href="mailto:contact@startupkaro.in" className="text-link-blue hover:underline">
+                            contact@startupkaro.in
                         </a>.
                     </p>
                 </Section>
