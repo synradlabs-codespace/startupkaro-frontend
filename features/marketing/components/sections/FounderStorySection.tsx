@@ -1,110 +1,99 @@
 "use client";
 
 import Image from "next/image";
-import { BriefcaseBusiness } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
-const founders = [
+const team = [
+    {
+        name: "Neelansh Singh",
+        role: "Founder & CEO",
+        focus: "Legal strategy & business advisory",
+        image: "/assets/Anmol%20Sir%20photo-1.png",
+    },
     {
         name: "Hardik Singh",
         role: "Chartered Accountant",
+        focus: "Tax, finance & compliance",
         image: "/assets/hardik%20photo.jpeg",
-        summary:
-            "After working with EY and then building his independent CA practice, Hardik saw the same problem repeat for founders: compliance was necessary, but the process felt opaque, fragmented, and difficult to trust.",
     },
     {
-        name: "Neelansh Singh",
-        role: "Lawyer & business consultant",
-        image: "/assets/Anmol%20Sir%20photo-1.png",
-        summary:
-            "Neelansh has worked closely with small businesses at the ground level, where paperwork delays, unclear pricing, and scattered advice often slow down otherwise promising ventures.",
+        name: "Gurvinder Singh",
+        role: "Business Management Advisor",
+        focus: "Operations & distribution networks",
+        image: "/assets/gurvinder%20singh.jpeg",
     },
-];
-
-const principles = [
-    "Fixed pricing before you start",
-    "Clear deliverables for every service",
-    "Online-first workflow with expert support",
+    {
+        name: "Bismanjeet Singh",
+        role: "Company Secretary",
+        focus: "Governance & statutory filings",
+        image: "/assets/bismanjeet%20singh.webp",
+    },
+    {
+        name: "Daksh Nauni",
+        role: "CTO",
+        focus: "Web & Mobile Software",
+        image: "/assets/daksh%20nauni.jpeg",
+    },
 ];
 
 export function FounderStorySection() {
     const prefersReducedMotion = useReducedMotion();
 
-    const leftProps = prefersReducedMotion
+    const sectionProps = prefersReducedMotion
         ? {}
         : {
-              initial: { opacity: 0, x: -40 },
-              whileInView: { opacity: 1, x: 0 },
-              viewport: { once: true, amount: 0.2 },
+              initial: { opacity: 0, y: 32 },
+              whileInView: { opacity: 1, y: 0 },
+              viewport: { once: true, amount: 0.18 },
               transition: { duration: 0.7, ease: EASE },
           };
 
-    const rightProps = prefersReducedMotion
-        ? {}
-        : {
-              initial: { opacity: 0, x: 40 },
-              whileInView: { opacity: 1, x: 0 },
-              viewport: { once: true, amount: 0.2 },
-              transition: { duration: 0.7, ease: EASE, delay: 0.08 },
-          };
-
     return (
-        <section className="bg-canvas py-20 md:py-24">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="grid gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-center">
-                    <motion.div {...leftProps}>
+        <section className="bg-cloud py-20 md:py-24">
+            <motion.div {...sectionProps} className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div className="mx-auto mb-10 max-w-3xl text-center md:mb-12">
+                    <div className="max-w-3xl">
                         <p className="mb-2 text-xs font-medium uppercase tracking-[0.28px] text-graphite">
-                            Founder story
+                            Leadership team
                         </p>
                         <h2 className="font-display text-4xl font-medium leading-none text-ink md:text-5xl">
-                            Built by people who have seen the paperwork problem up close
+                            The people behind StartupKaro
                         </h2>
-                        <p className="mt-5 max-w-2xl text-base leading-relaxed text-charcoal">
-                            StartupKaro began with a simple belief: India&apos;s new-age founders should not lose momentum to unclear compliance, hidden fees, or endless offline follow-ups.
-                        </p>
-                        <p className="mt-4 max-w-2xl text-base leading-relaxed text-charcoal">
-                            With startup culture accelerating across India, founders need a system that makes legal, tax, and compliance work predictable. StartupKaro brings fixed pricing, fixed deliverables, and expert-led execution into one online flow, so businesses can stay compliant without uncertainty.
-                        </p>
-
-                        <div className="mt-7 grid gap-3 sm:grid-cols-3">
-                            {principles.map((principle) => (
-                                <div key={principle} className="rounded-xl border border-hairline bg-cloud p-4">
-                                    <BriefcaseBusiness className="mb-3 h-4 w-4 text-primary-brand" />
-                                    <p className="text-sm font-medium leading-snug text-ink">{principle}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </motion.div>
-
-                    <motion.div {...rightProps} className="grid gap-4">
-                        {founders.map(({ name, role, image, summary }) => (
-                            <article
-                                key={name}
-                                className="group rounded-xl border border-hairline bg-canvas p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-brand hover:shadow-[0_2px_8px_rgba(26,26,26,0.08)]"
-                            >
-                                <div className="mb-5 flex items-center gap-4">
-                                    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-hairline bg-primary-soft">
-                                        <Image
-                                            src={image}
-                                            alt={`${name} founder photo`}
-                                            fill
-                                            sizes="56px"
-                                            className="object-cover"
-                                        />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-display text-xl font-medium text-ink">{name}</h3>
-                                        <p className="text-sm text-graphite">{role}</p>
-                                    </div>
-                                </div>
-                                <p className="text-sm leading-relaxed text-charcoal">{summary}</p>
-                            </article>
-                        ))}
-                    </motion.div>
+                    </div>
+                    <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-charcoal">
+                        Finance, legal, compliance, operations, and technology leadership working as one execution team.
+                    </p>
                 </div>
-            </div>
+
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+                    {team.map((member) => (
+                        <article
+                            key={member.name}
+                            className="group relative overflow-hidden rounded-xl border border-hairline bg-canvas p-4 text-center transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-brand hover:shadow-[0_2px_8px_rgba(26,26,26,0.08)]"
+                        >
+                            <div className="absolute inset-x-0 top-0 h-1 bg-primary-brand opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+                            <div
+                                className="relative mx-auto mb-4 h-24 w-24 overflow-hidden rounded-full border border-hairline bg-primary-soft"
+                            >
+                                <Image
+                                    src={member.image}
+                                    alt={`${member.name} portrait`}
+                                    fill
+                                    sizes="96px"
+                                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                                />
+                            </div>
+                            <h3 className="font-display text-xl font-medium leading-tight text-ink">
+                                {member.name}
+                            </h3>
+                            <p className="mt-1 min-h-10 text-sm font-semibold leading-snug text-primary-brand">{member.role}</p>
+                            <p className="mt-3 border-t border-hairline pt-3 text-xs leading-relaxed text-graphite">{member.focus}</p>
+                        </article>
+                    ))}
+                </div>
+            </motion.div>
         </section>
     );
 }

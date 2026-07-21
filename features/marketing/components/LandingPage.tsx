@@ -20,7 +20,7 @@ export async function LandingPage() {
     const articles = await getLatestArticles(3);
 
     return (
-        <div className="overflow-x-clip bg-canvas py-6">
+        <div className="bg-canvas py-6">
             <HeroSection />
             <SectionReveal delay={0.04}>
                 <BrandsMarqueeSection />

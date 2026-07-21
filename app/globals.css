@@ -2,12 +2,6 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-html,
-body {
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
 /* Limit Tailwind v4 class scanning to source files only.
    Without this, Tailwind scans the entire project directory on every
    CSS recompile, accumulating state in the PostCSS worker pool. */
