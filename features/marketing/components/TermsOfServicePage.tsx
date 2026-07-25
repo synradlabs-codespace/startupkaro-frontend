@@ -29,11 +29,11 @@ export function TermsOfServicePage() {
 
                 <Section title="Acceptance of Terms">
                     <p>
-                        By accessing or using the StartupKaro website (startupkaro.in) or any of our services, you agree to be
+                        By accessing or using the Startupkaro private limited website (startupkaro.in) or any of our services, you agree to be
                         bound by these Terms of Service (&quot;Terms&quot;). If you do not agree, please do not use our services.
                     </p>
                     <p>
-                        These Terms apply to all visitors, customers, and registered users of StartupKaro. We reserve the right
+                        These Terms apply to all visitors, customers, and registered users of Startupkaro private limited. We reserve the right
                         to update these Terms at any time. Continued use of our services after an update constitutes acceptance
                         of the revised Terms.
                     </p>
@@ -41,7 +41,7 @@ export function TermsOfServicePage() {
 
                 <Section title="Services">
                     <p>
-                        StartupKaro provides business compliance and registration services including, but not limited to: GST registration,
+                        Startupkaro private limited provides business compliance and registration services including, but not limited to: GST registration,
                         company incorporation, trademark filing, income tax return filing, FSSAI licensing, and import-export code registration.
                     </p>
                     <p>
@@ -80,22 +80,22 @@ export function TermsOfServicePage() {
 
                 <Section title="Refunds">
                     <p>
-                        Refund eligibility and amounts are determined solely at the discretion of StartupKaro. Please review our{" "}
+                        Refund eligibility and amounts are determined solely at the discretion of Startupkaro private limited. Please review our{" "}
                         <Link href="/refund-policy" className="text-link-blue hover:underline">Refund Policy</Link> for details.
                     </p>
                 </Section>
 
                 <Section title="Intellectual Property">
                     <p>
-                        All content on the StartupKaro website, including text, graphics, logos, service descriptions, and
-                        software, is the property of StartupKaro and is protected under applicable intellectual property laws.
+                        All content on the Startupkaro private limited website, including text, graphics, logos, service descriptions, and
+                        software, is the property of Startupkaro private limited and is protected under applicable intellectual property laws.
                         You may not reproduce, distribute, or use our content without prior written consent.
                     </p>
                 </Section>
 
                 <Section title="Limitation of Liability">
                     <p>
-                        To the maximum extent permitted by law, StartupKaro shall not be liable for any indirect, incidental,
+                        To the maximum extent permitted by law, Startupkaro private limited shall not be liable for any indirect, incidental,
                         special, or consequential damages arising from the use or inability to use our services.
                     </p>
                     <p>
@@ -128,7 +128,7 @@ export function TermsOfServicePage() {
                     <p>
                         We reserve the right to suspend or terminate your access to our services at any time if you violate
                         these Terms, provide fraudulent information, or engage in any conduct that we determine to be harmful
-                        to StartupKaro or other users.
+                        to Startupkaro private limited or other users.
                     </p>
                 </Section>
 
@@ -143,7 +143,7 @@ export function TermsOfServicePage() {
                 <Section title="Contact">
                     <p>For questions about these Terms, contact us:</p>
                     <div className="mt-3 p-4 bg-surface rounded-xl border border-hairline text-sm">
-                        <p className="font-medium text-ink">StartupKaro</p>
+                        <p className="font-medium text-ink">Startupkaro private limited</p>
                         <p className="text-slate mt-1">Mohali, Punjab, India</p>
                         <p className="text-slate">
                             Email:{" "}

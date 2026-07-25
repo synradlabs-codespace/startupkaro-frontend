@@ -68,7 +68,7 @@ function LiveSeasonBadge() {
 
 export function PromotionsSection() {
     return (
-        <section className="bg-surface py-14 md:py-18">
+        <section className="overflow-x-clip bg-surface py-14 md:py-18">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="grid items-center gap-8 overflow-hidden rounded-2xl border border-hairline bg-canvas p-5 md:grid-cols-[1.02fr_0.98fr] md:p-8 lg:p-10">
                     <div className="max-w-2xl">
@@ -106,10 +106,10 @@ export function PromotionsSection() {
                         </div>
                     </div>
 
-                    <div className="relative min-h-[390px] md:min-h-[470px]">
+                    <div className="relative min-h-[390px] overflow-hidden md:min-h-[470px]">
                         <div className="absolute left-1/2 top-[54%] h-[72%] w-[76%] -translate-x-1/2 -translate-y-1/2 rounded-[999px] bg-tint-sky/70 blur-3xl" />
                         <div className="absolute bottom-3 left-1/2 h-10 w-[58%] -translate-x-1/2 rounded-[999px] bg-ink/15 blur-xl" />
-                        <div className="absolute -bottom-6 left-1/2 top-0 w-full max-w-[620px] -translate-x-1/2 overflow-visible md:-bottom-10 md:-top-8 md:w-[120%] lg:-right-10 lg:left-auto lg:translate-x-0">
+                        <div className="absolute -bottom-6 left-1/2 top-0 w-full max-w-[620px] -translate-x-1/2 md:-bottom-10 md:-top-8 md:w-[120%] lg:-right-10 lg:left-auto lg:translate-x-0">
                             <Image
                                 src="/assets/itr-refund-promo-cutout.png"
                                 alt="Professional woman holding a phone showing an ITR refund"

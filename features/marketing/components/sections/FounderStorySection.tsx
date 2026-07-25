@@ -9,32 +9,38 @@ const team = [
     {
         name: "Neelansh Singh",
         role: "Founder & CEO",
-        focus: "Legal strategy & business advisory",
-        image: "/assets/Anmol%20Sir%20photo-1.png",
+        description: "Leads company vision, client advisory, and service strategy across registration, compliance, and business support.",
+        image: "/assets/team-neelansh-singh.png",
     },
     {
         name: "Hardik Singh",
         role: "Chartered Accountant",
-        focus: "Tax, finance & compliance",
-        image: "/assets/hardik%20photo.jpeg",
+        description: "Handles tax planning, accounting, financial reporting, and compliance reviews for startups and SMEs.",
+        image: "/assets/team-hardik-singh.jpeg",
     },
     {
         name: "Gurvinder Singh",
         role: "Business Management Advisor",
-        focus: "Operations & distribution networks",
-        image: "/assets/gurvinder%20singh.jpeg",
+        description: "Guides operational planning, business processes, and growth decisions for founder-led companies.",
+        image: "/assets/team-gurvinder-singh.jpeg",
     },
     {
         name: "Bismanjeet Singh",
         role: "Company Secretary",
-        focus: "Governance & statutory filings",
-        image: "/assets/bismanjeet%20singh.webp",
+        description: "Manages company law, ROC filings, board documentation, and governance responsibilities.",
+        image: "/assets/team-bismanjeet-singh.webp",
     },
     {
         name: "Daksh Nauni",
         role: "CTO",
-        focus: "Web & Mobile Software",
-        image: "/assets/daksh%20nauni.jpeg",
+        description: "Oversees technology, product innovation, and client software development for scalable digital solutions.",
+        image: "/assets/team-daksh-nauni.jpeg",
+    },
+    {
+        name: "Adv. Jasmeet Singh",
+        role: "IP, Trademarks, IPR Attorney",
+        description: "Advises on trademark filing, intellectual property protection, brand ownership, and related legal matters.",
+        image: "/assets/team-jasmeet-singh.jpeg",
     },
 ];
 
@@ -67,7 +73,7 @@ export function FounderStorySection() {
                     </p>
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {team.map((member) => (
                         <article
                             key={member.name}
@@ -89,7 +95,7 @@ export function FounderStorySection() {
                                 {member.name}
                             </h3>
                             <p className="mt-1 min-h-10 text-sm font-semibold leading-snug text-primary-brand">{member.role}</p>
-                            <p className="mt-3 border-t border-hairline pt-3 text-xs leading-relaxed text-graphite">{member.focus}</p>
+                            <p className="mt-3 min-h-12 border-t border-hairline pt-3 text-sm leading-relaxed text-graphite">{member.description}</p>
                         </article>
                     ))}
                 </div>

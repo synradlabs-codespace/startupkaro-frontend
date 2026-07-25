@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, MapPin, Phone } from "lucide-react";
-import { FaInstagram, FaLinkedinIn, FaTwitter } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
 import { NAV_LINKS } from "@/components/directional-hover-header/header/nav-data";
 import { UnderlineAnimation } from "@/components/fancy/text";
 
@@ -14,7 +14,7 @@ const companyLinks = [
     { href: "/services", label: "All Services" },
     { href: "/careers", label: "Careers" },
     { href: "/contact", label: "Contact" },
-    { href: "/login", label: "Login" },
+    { href: "/customer/login", label: "Customer Login" },
     { href: "/employee/login", label: "Employee Login" },
 ];
 
@@ -31,34 +31,25 @@ export function MarketingFooter() {
             <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
                 <div className="grid gap-10 border-b border-hairline pb-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.7fr)] lg:gap-16">
                     <div className="space-y-5">
-                        <Link href="/" className="inline-flex">
-                            <Image
-                                src="/assets/startupkaro-logo-transparent.png"
-                                alt="StartupKaro"
-                                width={174}
-                                height={32}
-                                className="h-8 w-auto"
-                                style={{ width: "auto" }}
-                            />
+                        <Link href="/" className="inline-flex flex-col items-center">
+                            <span className="inline-flex">
+                                <Image
+                                    src="/assets/startupkaro-logo-transparent.png"
+                                    alt="StartupKaro"
+                                    width={174}
+                                    height={32}
+                                    className="h-8 w-auto"
+                                    style={{ width: "auto" }}
+                                />
+                            </span>
+                            <span className="mt-1 text-center text-[10px] font-semibold uppercase tracking-[1.5px] text-graphite">
+                                Private Limited
+                            </span>
                         </Link>
                         <p className="max-w-sm text-sm leading-relaxed text-charcoal">
                             End-to-end compliance and legal services for Indian startups, handled by expert CAs and CSs.
                         </p>
                         <div className="flex gap-3 pt-1">
-                            <a
-                                href="#"
-                                aria-label="Twitter"
-                                className="flex h-9 w-9 items-center justify-center rounded-md border border-hairline text-graphite transition-colors hover:border-primary-brand hover:text-primary-brand"
-                            >
-                                <FaTwitter className="h-3.5 w-3.5" />
-                            </a>
-                            <a
-                                href="#"
-                                aria-label="LinkedIn"
-                                className="flex h-9 w-9 items-center justify-center rounded-md border border-hairline text-graphite transition-colors hover:border-primary-brand hover:text-primary-brand"
-                            >
-                                <FaLinkedinIn className="h-3.5 w-3.5" />
-                            </a>
                             <a
                                 href="#"
                                 aria-label="Instagram"

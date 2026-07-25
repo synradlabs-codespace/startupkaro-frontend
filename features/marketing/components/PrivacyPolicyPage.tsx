@@ -29,7 +29,7 @@ export function PrivacyPolicyPage() {
 
                 <Section title="Overview">
                     <p>
-                        StartupKaro (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) operates the website startupkaro.in and provides business
+                        Startupkaro private limited (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) operates the website startupkaro.in and provides business
                         compliance and registration services. This Privacy Policy explains how we collect, use, store, and share
                         information when you visit our website or use our services.
                     </p>
@@ -152,7 +152,7 @@ export function PrivacyPolicyPage() {
                         If you have any questions about this Privacy Policy, please contact us at:
                     </p>
                     <div className="mt-3 p-4 bg-surface rounded-xl border border-hairline text-sm">
-                        <p className="font-medium text-ink">StartupKaro</p>
+                        <p className="font-medium text-ink">Startupkaro private limited</p>
                         <p className="text-slate mt-1">Mohali, Punjab, India</p>
                         <p className="text-slate">
                             Email:{" "}

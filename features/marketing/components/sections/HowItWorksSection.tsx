@@ -98,16 +98,18 @@ export function HowItWorksSection() {
             </div>
 
             {/* Mobile — plain visible stack */}
-            <div className="md:hidden max-w-3xl mx-auto px-4 flex flex-col gap-4">
-                {steps.map((item) => (
-                    <div
-                        key={item.step}
-                        className={`${item.itemClassName} rounded-2xl min-h-72 p-6 shadow-[0_2px_8px_rgba(26,26,26,0.08)]`}
-                    >
-                        <StepCard item={item} />
-                    </div>
-                ))}
-            </div>
+            {!isDesktopStack && (
+                <div className="mx-auto flex max-w-3xl flex-col gap-4 px-4">
+                    {steps.map((item) => (
+                        <div
+                            key={item.step}
+                            className={`${item.itemClassName} rounded-2xl min-h-72 p-6 shadow-[0_2px_8px_rgba(26,26,26,0.08)]`}
+                        >
+                            <StepCard item={item} />
+                        </div>
+                    ))}
+                </div>
+            )}
 
             {/* Desktop — animated ScrollStack */}
             {isDesktopStack && (

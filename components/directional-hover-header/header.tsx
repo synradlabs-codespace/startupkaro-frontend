@@ -30,7 +30,7 @@ function HeaderActions({ mobile = false, onAction }: { mobile?: boolean; onActio
   return (
     <div className={cn("flex items-center gap-3", mobile && "grid w-full grid-cols-1 sm:grid-cols-2")}>
       <FlowSecondaryButton
-        href="/login"
+        href="/customer/login"
         onClick={onAction}
         text="Login"
         iconName="log-in"

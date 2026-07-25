@@ -21,14 +21,14 @@ const cookieTable = [
     },
     {
         name: "sidebar:state",
-        provider: "StartupKaro",
+        provider: "Startupkaro private limited",
         purpose: "Remembers whether your sidebar is expanded or collapsed in the app panels",
         type: "Functional",
         duration: "7 days",
     },
     {
         name: "auth_token",
-        provider: "StartupKaro",
+        provider: "Startupkaro private limited",
         purpose: "Stores your authentication session token to keep you logged in",
         type: "Strictly necessary",
         duration: "Session / configurable",
@@ -59,7 +59,7 @@ export function CookiesPolicyPage() {
                 </Section>
 
                 <Section title="How We Use Cookies">
-                    <p>StartupKaro uses cookies for the following purposes:</p>
+                    <p>Startupkaro private limited uses cookies for the following purposes:</p>
                     <ul className="list-disc pl-5 space-y-1.5">
                         <li>
                             <strong className="text-ink">Strictly necessary:</strong> Cookies required for core functionality such

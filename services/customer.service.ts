@@ -39,6 +39,94 @@ export interface PurchaseInitiation {
     serviceName: string;
 }
 
+export interface CustomerAddress {
+    id: string;
+    customerId: string;
+    label: string;
+    legalName: string;
+    line1: string;
+    line2?: string | null;
+    city: string;
+    stateCode: string;
+    stateName?: string;
+    postalCode: string;
+    country: string;
+    gstin?: string | null;
+    isDefault: boolean;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface GstState {
+    code: string;
+    name: string;
+    isUnionTerritory: boolean;
+}
+
+export type CustomerAddressPayload = {
+    label: string;
+    legalName: string;
+    line1: string;
+    line2?: string | null;
+    city: string;
+    stateCode: string;
+    postalCode: string;
+    gstin?: string | null;
+    isDefault?: boolean;
+};
+
+export interface CustomerInvoiceListItem {
+    id: string;
+    invoiceNumber: string;
+    kind: string;
+    orderId: string;
+    orderNumber?: string;
+    placeOfSupply: string;
+    supplyType: "intra_state" | "inter_state" | string;
+    taxableValue: number;
+    cgst: number;
+    sgst: number;
+    igst: number;
+    totalTax: number;
+    total: number;
+    issuedAt: string;
+}
+
+export interface CustomerInvoiceDetail extends CustomerInvoiceListItem {
+    financialYear: string;
+    sequence: number;
+    customerId: string;
+    placeOfSupplyLabel: string;
+    rateBps: number;
+    seller: InvoiceParty;
+    buyer: InvoiceParty;
+    lines: InvoiceLine[];
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface InvoiceParty {
+    name: string;
+    gstin?: string | null;
+    line1: string;
+    line2?: string | null;
+    city: string;
+    stateCode: string;
+    stateName: string;
+    postalCode: string;
+    country: string;
+    email?: string;
+    phone?: string;
+}
+
+export interface InvoiceLine {
+    description: string;
+    sacCode?: string;
+    quantity: number;
+    unitPrice: number;
+    taxableValue: number;
+}
+
 export type NormalizedList<T> = {
     data: T[];
     pagination: {
@@ -116,9 +204,32 @@ export const customerPurchaseService = {
         apiClient.get<ApiResponse<CustomerPurchase>>(`/customer/purchases/${id}`),
 };
 
+export const customerAddressService = {
+    states: () =>
+        apiClient.get<ApiResponse<GstState[]>>("/customer/addresses/states"),
+    list: () =>
+        apiClient.get<ApiResponse<CustomerAddress[]>>("/customer/addresses"),
+    get: (id: string) =>
+        apiClient.get<ApiResponse<CustomerAddress>>(`/customer/addresses/${id}`),
+    create: (payload: CustomerAddressPayload) =>
+        apiClient.post<ApiResponse<CustomerAddress>>("/customer/addresses", payload),
+    update: (id: string, payload: Partial<CustomerAddressPayload>) =>
+        apiClient.patch<ApiResponse<CustomerAddress>>(`/customer/addresses/${id}`, payload),
+    setDefault: (id: string) =>
+        apiClient.post<ApiResponse<CustomerAddress>>(`/customer/addresses/${id}/default`),
+    remove: (id: string) =>
+        apiClient.delete<ApiResponse<null>>(`/customer/addresses/${id}`),
+};
+
 export const customerInvoiceService = {
-    download: (orderId: string) =>
-        apiClient.get<Blob>(`/customer/invoices/${orderId}/download`, { responseType: "blob" }),
+    list: () =>
+        apiClient.get<ApiResponse<CustomerInvoiceListItem[]>>("/customer/invoices"),
+    get: (invoiceId: string) =>
+        apiClient.get<ApiResponse<CustomerInvoiceDetail>>(`/customer/invoices/${invoiceId}`),
+    download: (invoiceId: string) =>
+        apiClient.get<Blob>(`/customer/invoices/${invoiceId}/download`, { responseType: "blob" }),
+    downloadByOrder: (orderId: string) =>
+        apiClient.get<Blob>(`/customer/invoices/order/${orderId}/download`, { responseType: "blob" }),
 };
 
 export const publicInquiryService = {

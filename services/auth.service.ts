@@ -10,6 +10,10 @@ interface BackendAuthResponse {
     user: Omit<AuthUser, "role"> & { role?: string };
 }
 
+export type CustomerAuthResult =
+    | ({ status: "authenticated" } & AuthResponse)
+    | { status: "registration_required"; registrationToken: string; needs: Array<"phone" | "name" | "email">; phone?: string };
+
 function mapAuthResponse(response: BackendAuthResponse, role: AuthUser["role"]): AuthResponse {
     return {
         tokens: response.tokens,
@@ -61,6 +65,28 @@ export const authService = {
             phone: payload.mobile,
         });
         return { ...res.data.data, user: { ...res.data.data.user, role: ROLES.CUSTOMER } };
+    },
+
+    customerGoogle: async (idToken: string): Promise<CustomerAuthResult> => {
+        const res = await apiClient.post<ApiResponse<CustomerAuthResult>>("/customer/auth/google", { idToken });
+        const data = res.data.data;
+        if (data.status === "authenticated") {
+            return { ...data, user: { ...data.user, role: ROLES.CUSTOMER } };
+        }
+        return data;
+    },
+
+    customerCompleteRegistration: async (payload: {
+        registrationToken: string;
+        name?: string;
+        email?: string;
+        phone?: string;
+    }): Promise<AuthResponse> => {
+        const res = await apiClient.post<ApiResponse<{ status: "authenticated" } & BackendAuthResponse>>(
+            "/customer/auth/register/complete",
+            payload
+        );
+        return mapAuthResponse(res.data.data, ROLES.CUSTOMER);
     },
 
     customerForgotPassword: async (email: string): Promise<{ message: string }> => {

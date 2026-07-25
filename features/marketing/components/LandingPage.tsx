@@ -5,6 +5,7 @@ import { BrandsMarqueeSection } from "./sections/BrandsMarqueeSection";
 import { PromotionsSection } from "./sections/PromotionsSection";
 import { ServicesOverviewSection } from "./sections/ServicesOverviewSection";
 import { ConsultantCTASection } from "./sections/ConsultantCTASection";
+import { ProductDevelopmentSection } from "./sections/ProductDevelopmentSection";
 import { ServiceJourneySection } from "./sections/ServiceJourneySection";
 import { HowItWorksSection } from "./sections/HowItWorksSection";
 import { WhyChooseUsSection } from "./sections/WhyChooseUsSection";
@@ -14,13 +15,14 @@ import { LatestArticlesSection } from "./sections/LatestArticlesSection";
 import { LandingCTASection } from "./sections/LandingCTASection";
 import { LandingFAQSection } from "./sections/LandingFAQSection";
 import { SectionReveal } from "./ui/SectionReveal";
+import { ConsultancyDock } from "./ui/ConsultancyDock";
 import { getLatestArticles } from "@/features/articles/api/articles.service";
 
 export async function LandingPage() {
     const articles = await getLatestArticles(3);
 
     return (
-        <div className="bg-canvas py-6">
+        <div className="w-full overflow-x-clip bg-canvas py-6">
             <HeroSection />
             <SectionReveal delay={0.04}>
                 <BrandsMarqueeSection />
@@ -36,6 +38,7 @@ export async function LandingPage() {
             <SectionReveal delay={0.04}>
                 <WhyChooseUsSection />
             </SectionReveal>
+            <ProductDevelopmentSection />
             <SectionReveal delay={0.04}>
                 <FounderStorySection />
             </SectionReveal>
@@ -54,6 +57,7 @@ export async function LandingPage() {
             <SectionReveal delay={0.04}>
                 <LandingCTASection />
             </SectionReveal>
+            <ConsultancyDock />
         </div>
     );
 }

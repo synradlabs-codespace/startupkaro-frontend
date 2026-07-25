@@ -51,7 +51,7 @@ function TestimonialCard({ quote, name, role }: (typeof testimonials)[number]) {
 
 export function TestimonialsSection() {
     return (
-        <section className="bg-cloud px-4 py-20 sm:px-6 md:py-24 lg:px-8">
+        <section className="overflow-x-clip bg-cloud px-4 py-20 sm:px-6 md:py-24 lg:px-8">
             <div className="mx-auto max-w-7xl overflow-hidden rounded-2xl border border-hairline bg-canvas">
                 <div className="h-1 w-full bg-primary-brand" />
                 <div className="grid gap-8 border-b border-hairline px-6 py-10 md:grid-cols-[minmax(0,1fr)_360px] md:px-8 lg:px-10">

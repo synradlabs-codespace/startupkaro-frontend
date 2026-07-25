@@ -29,7 +29,7 @@ export function RefundPolicyPage() {
 
                 <div className="mb-10 p-5 bg-amber-50 border border-amber-100 rounded-2xl">
                     <p className="text-sm text-amber-800 leading-relaxed">
-                        <strong>Important:</strong> All refund decisions are made solely at the discretion of StartupKaro.
+                        <strong>Important:</strong> All refund decisions are made solely at the discretion of Startupkaro private limited.
                         Submitting a refund request does not guarantee approval. Please read this policy in full before
                         purchasing any service.
                     </p>
@@ -37,9 +37,9 @@ export function RefundPolicyPage() {
 
                 <Section title="Overview">
                     <p>
-                        StartupKaro provides professional compliance and registration services that involve significant human effort,
+                        Startupkaro private limited provides professional compliance and registration services that involve significant human effort,
                         government interaction, and third-party costs, often from the moment your order is placed. Because of the
-                        nature of these services, all refund decisions are made solely at the discretion of StartupKaro on a
+                        nature of these services, all refund decisions are made solely at the discretion of Startupkaro private limited on a
                         case-by-case basis.
                     </p>
                     <p>
@@ -71,7 +71,7 @@ export function RefundPolicyPage() {
 
                 <Section title="Circumstances Where a Refund May Be Considered">
                     <p>
-                        StartupKaro may, at its sole discretion, consider a partial or full refund in the following situations:
+                        Startupkaro private limited may, at its sole discretion, consider a partial or full refund in the following situations:
                     </p>
                     <ul className="list-disc pl-5 space-y-1.5">
                         <li>We are unable to begin the service due to reasons within our control</li>
@@ -80,7 +80,7 @@ export function RefundPolicyPage() {
                         <li>A duplicate payment was made in error</li>
                     </ul>
                     <p>
-                        Even in these circumstances, the refund amount and timing remain at the sole discretion of StartupKaro.
+                        Even in these circumstances, the refund amount and timing remain at the sole discretion of Startupkaro private limited.
                         We may choose to offer a service credit, partial refund, or full refund depending on the situation.
                     </p>
                 </Section>
@@ -138,7 +138,7 @@ export function RefundPolicyPage() {
 
                 <Section title="Contact">
                     <div className="p-4 bg-surface rounded-xl border border-hairline text-sm">
-                        <p className="font-medium text-ink">StartupKaro, Refund Requests</p>
+                        <p className="font-medium text-ink">Startupkaro private limited, Refund Requests</p>
                         <p className="text-slate mt-1">
                             Email:{" "}
                             <a href="mailto:contact@startupkaro.in" className="text-link-blue hover:underline">

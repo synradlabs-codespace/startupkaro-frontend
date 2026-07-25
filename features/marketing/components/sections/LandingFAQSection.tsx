@@ -83,7 +83,7 @@ export function LandingFAQSection() {
           };
 
     return (
-        <section className="bg-cloud py-20 md:py-24">
+        <section className="overflow-x-clip bg-cloud py-20 md:py-24">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="grid gap-12 lg:grid-cols-[1fr_2fr] lg:gap-20">
                     <motion.div {...leftProps} className="lg:pt-2">

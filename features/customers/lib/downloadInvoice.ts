@@ -1,7 +1,7 @@
 import { customerInvoiceService } from "@/services/customer.service";
 
 export async function downloadCustomerInvoice(orderId: string) {
-    const response = await customerInvoiceService.download(orderId);
+    const response = await customerInvoiceService.downloadByOrder(orderId);
     const disposition = response.headers["content-disposition"] as string | undefined;
     const match = disposition?.match(/filename="?([^"]+)"?/);
     const filename = match?.[1] ?? `invoice_${orderId}.pdf`;

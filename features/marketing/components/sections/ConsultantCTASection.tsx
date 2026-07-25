@@ -1,8 +1,8 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, BadgeIndianRupee, CalendarClock, MessageCircle, ShieldCheck, Sparkles } from "lucide-react";
-import Link from "next/link";
+import { BadgeIndianRupee, CalendarClock, MessageCircle, ShieldCheck, Sparkles } from "lucide-react";
+import { FlowButton } from "@/components/custom/FlowButton";
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
@@ -66,13 +66,14 @@ export function ConsultantCTASection() {
                                     <p className="mt-1 text-xs font-semibold uppercase tracking-[0.28px] text-white/68">per session</p>
                                 </div>
                             </div>
-                            <Link
+                            <FlowButton
                                 href="/customer/checkout?service=professional-consulting-service"
-                                className="group inline-flex h-12 items-center justify-center gap-2 rounded-md bg-white px-5 text-sm font-semibold text-ink transition-colors hover:bg-primary-soft"
-                            >
-                                Book Consulting
-                                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                            </Link>
+                                text="Book Consulting"
+                                iconName="message-circle"
+                                colorVariant="primary"
+                                wrapperClassName="w-full justify-stretch"
+                                className="h-12 w-full"
+                            />
                         </div>
                     </div>
                 </motion.div>

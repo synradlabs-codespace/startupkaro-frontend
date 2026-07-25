@@ -14,7 +14,7 @@ const CONTENT_LAYER = "relative z-10";
 
 export function WhyChooseUsSection() {
     return (
-        <section className="bg-cloud py-20 md:py-24">
+        <section id="why-founders-choose-us" className="bg-cloud py-20 md:py-24">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-10">
 

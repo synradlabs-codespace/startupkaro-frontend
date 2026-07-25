@@ -36,6 +36,7 @@ export function SectionReveal({
             whileInView={{ opacity: 1, x: 0, y: 0 }}
             viewport={{ once: true, amount }}
             transition={{ duration: resolvedDuration, delay, ease: EASE }}
+            className="overflow-x-clip"
         >
             {children}
         </motion.div>

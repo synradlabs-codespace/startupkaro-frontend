@@ -8,6 +8,17 @@ import { ServiceCard } from "@/components/custom/ServiceCard";
 import { SERVICE_CATEGORIES, categoryPillStyles, type ServiceCategory } from "@/lib/category-pills";
 import { getBundles, getStandaloneServices, type EnrichedService } from "@/features/services/lib/merge";
 
+const popularServiceNames = [
+    "Professional Consulting Service",
+    "Private Limited Company",
+    "LLP",
+    "Partnership",
+    "Proprietorship",
+    "GST Registration",
+    "Startup India DPIIT",
+    "FSSAI Registration (Basic)",
+];
+
 function getInitialCategory(category?: string): ServiceCategory {
     return SERVICE_CATEGORIES.includes(category as ServiceCategory) ? (category as ServiceCategory) : "All";
 }
@@ -21,6 +32,12 @@ export function ServicesListingPage({ services, initialCategory }: { services: E
     }, [initialCategory]);
 
     const bundles = useMemo(() => getBundles(services), [services]);
+    const popularServices = useMemo(() => {
+        const serviceMap = new Map(getStandaloneServices(services).map((service) => [service.name, service]));
+        return popularServiceNames
+            .map((name) => serviceMap.get(name))
+            .filter((service): service is EnrichedService => Boolean(service));
+    }, [services]);
 
     const filtered = useMemo(() => {
         return getStandaloneServices(services).filter((s) => {
@@ -65,6 +82,36 @@ export function ServicesListingPage({ services, initialCategory }: { services: E
                                 duration={bundle.duration ?? "Expert assisted"}
                                 href={`/bundles/${bundle.slug}`}
                                 isBundle
+                            />
+                        ))}
+                    </div>
+                </section>
+            )}
+
+            {popularServices.length > 0 && (
+                <section className="space-y-4 rounded-2xl border border-primary-soft bg-canvas p-5 shadow-[0_18px_52px_rgba(41,110,249,0.08)] md:p-6">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                        <div>
+                            <p className="text-xs font-medium uppercase tracking-[0.28px] text-primary-brand">Popular Services</p>
+                            <h2 className="font-display text-2xl font-medium text-ink md:text-3xl">Most requested by new founders</h2>
+                        </div>
+                        <p className="max-w-md text-sm leading-relaxed text-charcoal">
+                            Quick-start services founders usually need before launch, filings, banking, licenses, and first customers.
+                        </p>
+                    </div>
+                    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
+                        {popularServices.map((service) => (
+                            <ServiceCard
+                                key={service.slug}
+                                name={service.name}
+                                description={service.cardContent?.shortDescription ?? service.description}
+                                category={service.stage}
+                                price={service.pricePaise ?? 0}
+                                priceInPaise
+                                priceLabel={service.priceLabel}
+                                duration={service.duration ?? "Expert assisted"}
+                                href={`/services/${service.slug}`}
+                                actionLabel={service.cta === "quote" ? "View Details" : "Learn More"}
                             />
                         ))}
                     </div>

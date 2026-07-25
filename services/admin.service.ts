@@ -171,6 +171,86 @@ export interface AdminPaymentHealthAnalytics {
     successRate: number | null;
 }
 
+export interface AdminInvoiceListItem {
+    id: string;
+    invoiceNumber: string;
+    kind: string;
+    orderId: string;
+    orderNumber?: string;
+    placeOfSupply: string;
+    supplyType: "intra_state" | "inter_state" | string;
+    taxableValue: number;
+    cgst: number;
+    sgst: number;
+    igst: number;
+    totalTax: number;
+    total: number;
+    issuedAt: string;
+    financialYear: string;
+    sequence: number;
+    customerId: string;
+    customerName?: string;
+    buyerGstin?: string | null;
+    stateName?: string;
+}
+
+export interface AdminInvoiceDetail extends AdminInvoiceListItem {
+    placeOfSupplyLabel: string;
+    rateBps: number;
+    seller: AdminInvoiceParty;
+    buyer: AdminInvoiceParty;
+    lines: AdminInvoiceLine[];
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface AdminInvoiceParty {
+    name: string;
+    gstin?: string | null;
+    line1: string;
+    line2?: string | null;
+    city: string;
+    stateCode: string;
+    stateName: string;
+    postalCode: string;
+    country: string;
+    email?: string;
+    phone?: string;
+}
+
+export interface AdminInvoiceLine {
+    description: string;
+    sacCode?: string;
+    quantity: number;
+    unitPrice: number;
+    taxableValue: number;
+}
+
+export interface AdminInvoiceTaxSummary {
+    financialYear: string;
+    byState: Array<{
+        placeOfSupply: string;
+        stateName: string;
+        supplyType: string;
+        invoiceCount: number;
+        taxableValue: number;
+        cgst: number;
+        sgst: number;
+        igst: number;
+        totalTax: number;
+        total: number;
+    }>;
+    totals: {
+        invoiceCount: number;
+        taxableValue: number;
+        cgst: number;
+        sgst: number;
+        igst: number;
+        totalTax: number;
+        total: number;
+    };
+}
+
 export interface AdminInquiry {
     id: string;
     name: string;
@@ -297,8 +377,16 @@ export const adminInquiryService = {
 };
 
 export const adminInvoiceService = {
+    list: (params?: { page?: number; limit?: number; financialYear?: string; customerId?: string; orderId?: string }) =>
+        apiClient.get<PaginatedResponse<AdminInvoiceListItem>>("/admin/invoices", { params }),
+    taxSummary: (params?: { financialYear?: string }) =>
+        apiClient.get<ApiResponse<AdminInvoiceTaxSummary>>("/admin/invoices/tax-summary", { params }),
     getSummary: (orderId: string) =>
-        apiClient.get<ApiResponse<{ invoiceNumber: string; issuedAt: string; items: { description: string; amount: number }[] }>>(`/admin/invoices/order/${orderId}`),
-    download: (orderId: string) =>
-        apiClient.get<Blob>(`/admin/invoices/order/${orderId}/download`, { responseType: "blob" }),
+        apiClient.get<ApiResponse<AdminInvoiceDetail>>(`/admin/invoices/order/${orderId}`),
+    get: (invoiceId: string) =>
+        apiClient.get<ApiResponse<AdminInvoiceDetail>>(`/admin/invoices/${invoiceId}`),
+    issueForOrder: (orderId: string) =>
+        apiClient.post<ApiResponse<AdminInvoiceDetail>>(`/admin/invoices/order/${orderId}/issue`),
+    download: (invoiceId: string) =>
+        apiClient.get<Blob>(`/admin/invoices/${invoiceId}/download`, { responseType: "blob" }),
 };
