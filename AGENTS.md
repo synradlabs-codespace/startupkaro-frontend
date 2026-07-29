@@ -13,7 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | Customer 0 | `daksh.c@startupkaro.com` | `startupkaro123` | `/customer/login` |
 | Customer 1 | `daksh.c1@startupkaro.com` | `startupkaro123` | `/customer/login` |
 | Customer 2 (real email — use for email flow testing e.g. forgot password) | `mr.codefrost@gmail.com` | `startupkaro123` | `/customer/login` |
-
+| Customer 3 | `daksh.c2@startupkaro.com` | `startupkaro123` | `/customer/login` |
 API base URL: `https://server.startupkaro.in/api/v1`
 
 ## Investigating API issues
@@ -47,6 +47,7 @@ No test runner is configured.
 - **HTTP:** Axios via `services/api-client.ts` (base URL: `NEXT_PUBLIC_API_URL` or `http://localhost:4000/api`)
 - **Auth:** JWT stored in `localStorage` + cookies (set client-side); middleware in `proxy.ts` is currently disabled pending backend readiness
 - **Backend:** Developed by a separate team on Node.js and deployed via AWS. This repo is frontend-only. All feature API calls go through the shared Axios client in `services/api-client.ts` (base URL: `NEXT_PUBLIC_API_URL`) by appending feature-specific paths (e.g. `/careers/applications`). Do **not** create separate env vars per feature endpoint.
+- **Development phase:** This project is still in active development. Breaking changes are acceptable when they align the frontend with the intended product/API contract; do not preserve backward compatibility unless explicitly requested.
 
 ## Architecture
 
