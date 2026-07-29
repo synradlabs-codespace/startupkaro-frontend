@@ -4,9 +4,11 @@ import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { ArrowLeft, LockKeyhole, Mail, ShieldCheck } from "lucide-react";
 import { useAdminLogin } from "../hooks/useAdminAuth";
+import { useRedirectIfAuthenticated } from "@/features/auth/shared/hooks/useAuthRedirect";
 import { validators } from "@/lib/validations/common.schema";
 
 export function AdminLoginForm() {
+  useRedirectIfAuthenticated();
   const { login, loading, error } = useAdminLogin();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

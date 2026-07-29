@@ -34,7 +34,7 @@ export function GoogleAuthButton({
     const buttonRef = useRef<HTMLDivElement | null>(null);
     const [loadError, setLoadError] = useState("");
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-    const configError = clientId ? "" : "Google sign in is not configured.";
+    const configError = clientId ? "" : "Set NEXT_PUBLIC_GOOGLE_CLIENT_ID and restart the dev server.";
 
     useEffect(() => {
         if (!clientId) {

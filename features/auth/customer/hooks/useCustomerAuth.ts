@@ -6,9 +6,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authService } from "@/services/auth.service";
 import { useAuth } from "../../shared/hooks/useAuth";
-import { ROLE_REDIRECTS } from "@/lib/rbac/roles";
 import type { AuthResponse } from "@/features/auth/shared/types";
 import type { CustomerAuthResult } from "@/services/auth.service";
+import { getPostLoginRedirect } from "@/features/auth/shared/hooks/useAuthRedirect";
 
 type AxiosLikeError = { response?: { data?: { message?: string } } };
 
@@ -32,7 +32,8 @@ function useCustomerAuthActions() {
 
     const finishAuthenticated = (response: AuthResponse) => {
         saveSession(response.user, response.tokens);
-        router.push(ROLE_REDIRECTS[response.user.role]);
+        const searchParams = new URLSearchParams(window.location.search);
+        router.replace(getPostLoginRedirect(response.user.role, searchParams.get("next")));
     };
 
     const continueWithGoogle = async (idToken: string): Promise<CustomerAuthResult | null> => {

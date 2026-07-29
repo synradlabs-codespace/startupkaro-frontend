@@ -4,6 +4,7 @@ import { apiClient } from "./api-client";
 import type { ApiResponse } from "@/types/api.types";
 import type { AuthResponse, AuthTokens, AuthUser, LoginCredentials } from "@/features/auth/shared/types";
 import { ROLES } from "@/lib/rbac/roles";
+import { clearAuthSession } from "@/lib/auth-session";
 
 interface BackendAuthResponse {
     tokens: AuthTokens;
@@ -106,10 +107,7 @@ export const authService = {
         // No server-side logout endpoint exists yet (see API_MISMATCHES Q10).
         // Session is cleared client-side by clearSession() in useAuth.
         if (typeof window !== "undefined") {
-            localStorage.removeItem("accessToken");
-            localStorage.removeItem("refreshToken");
-            localStorage.removeItem("userRole");
-            localStorage.removeItem("authUser");
+            clearAuthSession();
         }
     },
 };

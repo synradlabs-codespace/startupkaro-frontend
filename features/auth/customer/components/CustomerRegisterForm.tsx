@@ -1,11 +1,12 @@
 "use client";
 
-import { useCallback, useState, FormEvent } from "react";
+import { useCallback, useEffect, useState, FormEvent } from "react";
 import Link from "next/link";
 import { ArrowLeft, FileCheck, LockKeyhole, Mail, Phone, User } from "lucide-react";
 import { GoogleAuthButton } from "./GoogleAuthButton";
 import { GooglePhoneCompletionForm } from "./GooglePhoneCompletionForm";
 import { useCustomerRegister } from "../hooks/useCustomerAuth";
+import { buildAuthRouteWithNext, useRedirectIfAuthenticated } from "@/features/auth/shared/hooks/useAuthRedirect";
 import {
     formatNameInput,
     formatPhoneDigits,
@@ -21,6 +22,7 @@ import {
 const FIELD_CLASS = "h-10 w-full rounded-md border bg-canvas px-4 text-sm text-ink placeholder:text-graphite outline-none transition-colors focus:border-ink";
 
 export function CustomerRegisterForm() {
+    useRedirectIfAuthenticated();
     const { register, continueWithGoogle, completeRegistration, loading, error } = useCustomerRegister();
     const [form, setForm] = useState({ name: "", email: "", password: "", confirm: "" });
     const [showPassword, setShowPassword] = useState(false);
@@ -28,9 +30,15 @@ export function CustomerRegisterForm() {
     const [phoneDigits, setPhoneDigits] = useState("");
     const [fieldErrors, setFieldErrors] = useState({ name: "", email: "", phone: "", password: "", confirm: "" });
     const [googleRegistrationToken, setGoogleRegistrationToken] = useState("");
+    const [loginHref, setLoginHref] = useState("/customer/login");
 
     const clearFieldError = (key: keyof typeof fieldErrors) =>
         setFieldErrors((f) => ({ ...f, [key]: "" }));
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(window.location.search);
+        setLoginHref(buildAuthRouteWithNext("/customer/login", "customer", searchParams.get("next")));
+    }, []);
 
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm((f) => ({ ...f, name: formatNameInput(e.target.value) }));
@@ -99,7 +107,7 @@ export function CustomerRegisterForm() {
                     <section className="p-5 md:p-6">
                         <div className="mb-5 border-b border-hairline pb-5">
                             <div>
-                                <Link href="/customer/login" className="mb-4 inline-flex w-fit items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-link-blue hover:text-primary-deep">
+                                <Link href={loginHref} className="mb-4 inline-flex w-fit items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-link-blue hover:text-primary-deep">
                                     <ArrowLeft className="h-3.5 w-3.5" />
                                     Back to sign in
                                 </Link>
@@ -261,7 +269,7 @@ export function CustomerRegisterForm() {
                         </div>
 
                         <div className="mt-4 text-center text-sm">
-                            <Link href="/customer/login" className="text-link-blue hover:text-primary-deep">
+                            <Link href={loginHref} className="text-link-blue hover:text-primary-deep">
                                 Already have an account? Sign in
                             </Link>
                         </div>

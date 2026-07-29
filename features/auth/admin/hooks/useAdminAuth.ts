@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authService } from "@/services/auth.service";
 import { useAuth } from "../../shared/hooks/useAuth";
-import { ROLE_REDIRECTS } from "@/lib/rbac/roles";
+import { getPostLoginRedirect } from "@/features/auth/shared/hooks/useAuthRedirect";
 
 export function useAdminLogin() {
     const [loading, setLoading] = useState(false);
@@ -20,7 +20,8 @@ export function useAdminLogin() {
         try {
             const response = await authService.adminLogin({ email, password });
             saveSession(response.user, response.tokens);
-            router.push(ROLE_REDIRECTS[response.user.role]);
+            const searchParams = new URLSearchParams(window.location.search);
+            router.replace(getPostLoginRedirect(response.user.role, searchParams.get("next")));
         } catch (err) {
             const e = err as { response?: { data?: { message?: string } } };
             setError(e?.response?.data?.message ?? "Invalid credentials");

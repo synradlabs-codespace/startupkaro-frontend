@@ -9,6 +9,7 @@ import { NAV_LINKS, type NavLink } from "./header/nav-data";
 import { FlowButton, FlowSecondaryButton } from "@/components/custom/FlowButton";
 import { categoryCardStyles, type ServiceVisualCategory } from "@/lib/category-pills";
 import { cn } from "@/lib/utils";
+import { AUTH_SESSION_EVENT, getPanelRedirect, readAuthSession } from "@/lib/auth-session";
 
 function Logo() {
   return (
@@ -27,13 +28,38 @@ function Logo() {
 }
 
 function HeaderActions({ mobile = false, onAction }: { mobile?: boolean; onAction?: () => void }) {
+  const [loginHref, setLoginHref] = useState("/customer/login");
+  const [loginText, setLoginText] = useState("Login");
+
+  useEffect(() => {
+    const syncLoginTarget = () => {
+      const session = readAuthSession();
+      if (session.accessToken && session.role) {
+        setLoginHref(getPanelRedirect(session.role));
+        setLoginText("Dashboard");
+      } else {
+        setLoginHref("/customer/login");
+        setLoginText("Login");
+      }
+    };
+
+    syncLoginTarget();
+    window.addEventListener("storage", syncLoginTarget);
+    window.addEventListener(AUTH_SESSION_EVENT, syncLoginTarget);
+    return () => {
+      window.removeEventListener("storage", syncLoginTarget);
+      window.removeEventListener(AUTH_SESSION_EVENT, syncLoginTarget);
+    };
+  }, []);
+
   return (
     <div className={cn("flex items-center gap-3", mobile && "grid w-full grid-cols-1 sm:grid-cols-2")}>
       <FlowSecondaryButton
-        href="/customer/login"
+        href={loginHref}
         onClick={onAction}
-        text="Login"
+        text={loginText}
         iconName="log-in"
+        showIcon={false}
         className={cn("h-11 px-6", mobile && "w-full")}
         wrapperClassName={mobile ? "w-full justify-stretch" : undefined}
       />
@@ -109,7 +135,7 @@ function DesktopMenuPanel({ link, onClose }: { link: NavLink; onClose?: () => vo
   const serviceMenu = link.menu.id === "services";
 
   return (
-    <div className="absolute inset-x-0 top-full border-y border-hairline bg-canvas shadow-[0_22px_54px_rgba(26,26,26,0.09)]">
+    <div className="absolute inset-x-0 top-full border-y border-hairline bg-canvas shadow-[0_22px_54px_rgba(26,26,26,0.09)] before:absolute before:inset-x-0 before:-top-3 before:h-3 before:content-['']">
       <div
         className={cn("grid w-full divide-x divide-hairline", serviceMenu && "max-h-[calc(100vh-9rem)] overflow-y-auto")}
         style={{ gridTemplateColumns: `repeat(${link.menu.columns.length}, minmax(0, 1fr))` }}
@@ -291,7 +317,7 @@ export function Header() {
 
   const scheduleDesktopClose = useCallback(() => {
     clearCloseTimer();
-    closeTimerRef.current = setTimeout(() => setActiveLabel(null), 140);
+    closeTimerRef.current = setTimeout(() => setActiveLabel(null), 320);
   }, [clearCloseTimer]);
 
   const closeMobile = useCallback(() => {
@@ -327,7 +353,8 @@ export function Header() {
   return (
     <>
       <header
-        className="fixed inset-x-0 top-0 z-50 h-18 max-w-full overflow-x-clip border-b border-hairline bg-canvas/95 shadow-sm backdrop-blur-xl"
+        className="fixed inset-x-0 top-0 z-50 h-18 max-w-full border-b border-hairline bg-canvas/95 shadow-sm backdrop-blur-xl"
+        onMouseEnter={clearCloseTimer}
         onMouseLeave={scheduleDesktopClose}
       >
         <div className="grid h-full w-full max-w-full grid-cols-[minmax(0,auto)_1fr_auto] items-center gap-3 px-4 sm:gap-4 sm:px-6 lg:px-8">

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
     LayoutDashboard,
     ShoppingBag,
@@ -14,6 +14,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useCustomerProfile } from "@/features/customers/hooks/useCustomerProfile";
 import { getInitials } from "@/features/customers/lib/format";
+import { useAuth } from "@/features/auth/shared/hooks/useAuth";
 
 const navItems = [
     { title: "Dashboard", href: "/customer", icon: LayoutDashboard, exact: true },
@@ -27,12 +28,20 @@ const ACCENT_TEXT_CLASS = "text-white";
 
 export function CustomerSidebar() {
     const pathname = usePathname();
+    const router = useRouter();
+    const { clearSession } = useAuth();
     const { state, isMobile, openMobile, setOpenMobile } = useSidebar();
     const collapsed = !isMobile && state === "collapsed";
     const profileQuery = useCustomerProfile();
     const profile = profileQuery.data;
 
     const closeMobile = () => { if (isMobile) setOpenMobile(false); };
+
+    const handleLogout = () => {
+        clearSession();
+        closeMobile();
+        router.replace("/customer/login");
+    };
 
     const isActive = (href: string, exact?: boolean) =>
         exact ? pathname === href : pathname.startsWith(href);
@@ -107,14 +116,14 @@ export function CustomerSidebar() {
                                     <p className="text-[13px] font-medium text-ink truncate leading-none">{profile?.name ?? "Customer"}</p>
                                     <p className="text-[11px] text-steel truncate mt-0.5">{profile?.email ?? "customer account"}</p>
                                 </div>
-                                <Link
-                                    href="/customer/login"
-                                    onClick={closeMobile}
+                                <button
+                                    type="button"
+                                    onClick={handleLogout}
                                     className="p-1.5 rounded-md text-stone hover:text-error-brand hover:bg-red-50"
                                     title="Sign out"
                                 >
                                     <LogOut className="h-[15px] w-[15px]" />
-                                </Link>
+                                </button>
                             </>
                         )}
                     </div>

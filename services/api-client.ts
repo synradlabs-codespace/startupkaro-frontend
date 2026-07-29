@@ -1,6 +1,7 @@
 // services/api-client.ts
 
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
+import { clearAuthSession } from "@/lib/auth-session";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://server.startupkaro.in/api/v1";
 
@@ -30,12 +31,7 @@ let refreshPromise: Promise<string> | null = null;
 
 function clearSessionAndRedirect() {
     const role = localStorage.getItem("userRole");
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("authUser");
-    document.cookie = "accessToken=; path=/; max-age=0";
-    document.cookie = "userRole=; path=/; max-age=0";
+    clearAuthSession();
 
     const loginRoutes: Record<string, string> = {
         admin: "/admin/login",

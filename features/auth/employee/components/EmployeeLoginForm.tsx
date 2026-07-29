@@ -4,9 +4,11 @@ import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { ArrowLeft, BriefcaseBusiness, LockKeyhole, Mail } from "lucide-react";
 import { useEmployeeLogin } from "../hooks/useEmployeeAuth";
+import { useRedirectIfAuthenticated } from "@/features/auth/shared/hooks/useAuthRedirect";
 import { validators } from "@/lib/validations/common.schema";
 
 export function EmployeeLoginForm() {
+  useRedirectIfAuthenticated();
   const { login, loading, error } = useEmployeeLogin();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

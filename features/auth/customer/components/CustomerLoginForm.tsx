@@ -1,23 +1,31 @@
 "use client";
 
-import { useCallback, useState, FormEvent } from "react";
+import { useCallback, useEffect, useState, FormEvent } from "react";
 import Link from "next/link";
 import { ArrowLeft, FileCheck, LockKeyhole, Mail } from "lucide-react";
 import { GoogleAuthButton } from "./GoogleAuthButton";
 import { GooglePhoneCompletionForm } from "./GooglePhoneCompletionForm";
 import { useCustomerLogin } from "../hooks/useCustomerAuth";
+import { buildAuthRouteWithNext, useRedirectIfAuthenticated } from "@/features/auth/shared/hooks/useAuthRedirect";
 import { validators } from "@/lib/validations/common.schema";
 
 export function CustomerLoginForm() {
+    useRedirectIfAuthenticated();
     const { login, continueWithGoogle, completeRegistration, loading, error } = useCustomerLogin();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [fieldErrors, setFieldErrors] = useState({ email: "", password: "" });
     const [googleRegistrationToken, setGoogleRegistrationToken] = useState("");
+    const [registerHref, setRegisterHref] = useState("/customer/register");
 
     const clearFieldError = (key: keyof typeof fieldErrors) =>
         setFieldErrors((f) => ({ ...f, [key]: "" }));
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(window.location.search);
+        setRegisterHref(buildAuthRouteWithNext("/customer/register", "customer", searchParams.get("next")));
+    }, []);
 
     const validate = () => {
         const errors = {
@@ -140,7 +148,7 @@ export function CustomerLoginForm() {
                         <div className="mt-5 flex flex-col gap-3 border-t border-hairline pt-5 text-sm">
                             <p className="text-xs font-semibold uppercase tracking-[0.7px] text-graphite">New to StartupKaro?</p>
                             <Link
-                                href="/customer/register"
+                                href={registerHref}
                                 className="flex h-11 w-full items-center justify-center rounded-md border border-primary-brand bg-canvas px-6 text-sm font-semibold uppercase tracking-[0.7px] text-primary-brand transition-colors hover:bg-surface hover:text-primary-deep"
                             >
                                 Create a customer account

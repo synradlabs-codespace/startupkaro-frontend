@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
     LayoutDashboard,
     ShoppingCart,
@@ -19,6 +19,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 import { useSidebar } from "@/components/ui/sidebar";
+import { useAuth } from "@/features/auth/shared/hooks/useAuth";
 
 const navItems = [
     { title: "Dashboard", href: "/admin", icon: LayoutDashboard, exact: true },
@@ -62,10 +63,18 @@ const ACCENT_TEXT_CLASS = "text-white";
 
 export function AdminSidebar() {
     const pathname = usePathname();
+    const router = useRouter();
+    const { clearSession } = useAuth();
     const { state, setOpen, isMobile, openMobile, setOpenMobile } = useSidebar();
     const collapsed = !isMobile && state === "collapsed";
 
     const closeMobile = () => { if (isMobile) setOpenMobile(false); };
+
+    const handleLogout = () => {
+        clearSession();
+        closeMobile();
+        router.replace("/admin/login");
+    };
 
     const [openMenus, setOpenMenus] = useState<Record<string, boolean>>(() => {
         const initialState: Record<string, boolean> = {};
@@ -199,14 +208,14 @@ export function AdminSidebar() {
                                 <p className="text-[13px] font-medium text-ink truncate leading-none">Admin</p>
                                 <p className="text-[11px] text-steel truncate mt-0.5">admin@startupkaro.com</p>
                             </div>
-                            <Link
-                                href="/admin/login"
-                                onClick={closeMobile}
+                            <button
+                                type="button"
+                                onClick={handleLogout}
                                 className="p-1.5 rounded-md text-stone hover:text-error-brand hover:bg-error-brand/10 transition-all duration-150 block"
                                 title="Sign out"
                             >
                                 <LogOut className="h-[15px] w-[15px]" />
-                            </Link>
+                            </button>
                         </div>
                     )}
                 </div>
