@@ -5,9 +5,12 @@ import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCustomerProfile } from "@/features/customers/hooks/useCustomerProfile";
 import { getApiErrorMessage } from "@/features/customers/lib/format";
+import { getApiSuccessMessage } from "@/lib/api-messages";
+import { useToast } from "@/components/providers/ToastProvider";
 import { publicInquiryService } from "@/services/customer.service";
 
 export function CustomerQuoteAction({ serviceName, serviceSlug }: { serviceName: string; serviceSlug: string }) {
+    const toast = useToast();
     const profileQuery = useCustomerProfile();
     const profile = profileQuery.data;
     const [status, setStatus] = useState<"idle" | "sent">("idle");
@@ -18,16 +21,19 @@ export function CustomerQuoteAction({ serviceName, serviceSlug }: { serviceName:
         setError("");
         setLoading(true);
         try {
-            await publicInquiryService.submit({
+            const response = await publicInquiryService.submit({
                 name: profile?.name ?? "Customer",
                 email: profile?.email ?? "",
                 phone: profile?.phone ?? profile?.mobile ?? "+910000000000",
                 subject: `Quote request: ${serviceName}`,
                 message: `Customer requested a quote for ${serviceName} (${serviceSlug}).`,
             });
+            toast.success(getApiSuccessMessage(response, "Inquiry created"));
             setStatus("sent");
         } catch (err: unknown) {
-            setError(getApiErrorMessage(err, "Could not create inquiry. Please contact support."));
+            const message = getApiErrorMessage(err, "Could not create inquiry. Please contact support.");
+            toast.error(message);
+            setError(message);
         } finally {
             setLoading(false);
         }

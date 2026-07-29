@@ -11,11 +11,13 @@ import { OrderStatusBadge, PaymentStatusBadge } from "@/components/custom/Status
 import { useCustomer } from "@/features/admin/hooks/useAdminCustomers";
 import { useCustomerOrders } from "@/features/admin/hooks/useAdminOrders";
 import { downloadInvoice } from "@/features/admin/lib/downloadInvoice";
-import { formatDate, getInitials } from "@/features/admin/lib/format";
+import { formatDate, getApiErrorMessage, getInitials } from "@/features/admin/lib/format";
+import { useToast } from "@/components/providers/ToastProvider";
 import { formatINR } from "@/lib/currency";
 import { Mail, Phone, Eye, Download } from "lucide-react";
 
 export function EmployeeCustomerDetailPage({ id }: { id: string }) {
+    const toast = useToast();
     const customerQuery = useCustomer(id);
     const ordersQuery = useCustomerOrders(id);
     const customer = customerQuery.data?.data;
@@ -26,6 +28,9 @@ export function EmployeeCustomerDetailPage({ id }: { id: string }) {
         setDownloadingId(orderId);
         try {
             await downloadInvoice(orderId);
+            toast.success("Invoice downloaded");
+        } catch (error: unknown) {
+            toast.error(getApiErrorMessage(error, "Failed to download invoice"));
         } finally {
             setDownloadingId("");
         }

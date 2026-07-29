@@ -11,6 +11,7 @@ import { useOrder, useUpdateOrder } from "@/features/admin/hooks/useAdminOrders"
 import { downloadInvoice } from "@/features/admin/lib/downloadInvoice";
 import { formatDate, formatDateHeader, formatTime, getApiErrorMessage } from "@/features/admin/lib/format";
 import { OrderPaymentsPanel } from "@/features/admin/components/OrderPaymentsPanel";
+import { useToast } from "@/components/providers/ToastProvider";
 import type { Note } from "@/services/admin.service";
 import { formatINR } from "@/lib/currency";
 import { Pencil, Download, StickyNote, Send } from "lucide-react";
@@ -30,6 +31,7 @@ function groupNotesByDate(notes: Note[]) {
 }
 
 export function AdminOrderDetailPage({ id }: { id: string }) {
+    const toast = useToast();
     const orderQuery = useOrder(id);
     const updateOrder = useUpdateOrder(id);
     const order = orderQuery.data?.data;
@@ -53,6 +55,9 @@ export function AdminOrderDetailPage({ id }: { id: string }) {
         setDownloading(true);
         try {
             await downloadInvoice(id);
+            toast.success("Invoice downloaded");
+        } catch (error: unknown) {
+            toast.error(getApiErrorMessage(error, "Failed to download invoice"));
         } finally {
             setDownloading(false);
         }

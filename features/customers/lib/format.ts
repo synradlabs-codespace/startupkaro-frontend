@@ -1,4 +1,5 @@
 import type { CustomerPurchase } from "@/services/customer.service";
+export { getApiErrorMessage } from "@/lib/api-messages";
 
 export function formatCustomerDate(value?: string) {
     if (!value) return "-";
@@ -25,11 +26,6 @@ export function getPurchaseId(purchase: CustomerPurchase) {
 
 export function getPurchaseServiceName(purchase: CustomerPurchase) {
     return purchase.service.name;
-}
-
-export function getApiErrorMessage(error: unknown, fallback: string) {
-    const apiError = error as { response?: { status?: number; data?: { message?: string } } };
-    return apiError.response?.data?.message ?? fallback;
 }
 
 export function isRateLimited(error: unknown) {

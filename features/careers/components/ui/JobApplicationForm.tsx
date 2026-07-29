@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/select";
 import { validators, formatNameInput, formatPhoneDigits, validatePhoneDigits, buildPhone, PHONE_PREFIX } from "@/lib/validations/common.schema";
 import { submitJobApplication } from "@/features/careers/api/applications.service";
+import { getApiErrorMessage, getApiSuccessMessage } from "@/lib/api-messages";
+import { useToast } from "@/components/providers/ToastProvider";
 import type {
     ApplicationFormState,
     ApplicationFormErrors,
@@ -93,6 +95,7 @@ interface JobApplicationFormProps {
 }
 
 export function JobApplicationForm({ job }: JobApplicationFormProps) {
+    const toast = useToast();
     const [form, setForm] = useState<ApplicationFormState>(EMPTY_FORM);
     const [errors, setErrors] = useState<ApplicationFormErrors>({});
     const [submitted, setSubmitted] = useState(false);
@@ -170,12 +173,15 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
         };
 
         try {
-            await submitJobApplication(payload);
+            const response = await submitJobApplication(payload);
+            toast.success(getApiSuccessMessage(response, "Application submitted"));
             setSubmitted(true);
-        } catch {
+        } catch (error: unknown) {
+            const message = getApiErrorMessage(error, "Something went wrong. Please try again or contact us directly.");
+            toast.error(message);
             setErrors((prev) => ({
                 ...prev,
-                submit: "Something went wrong. Please try again or contact us directly.",
+                submit: message,
             }));
         } finally {
             setLoading(false);

@@ -1,3 +1,5 @@
+export { getApiErrorMessage } from "@/lib/api-messages";
+
 export function formatDate(value?: string) {
     if (!value) return "-";
     return new Intl.DateTimeFormat("en-IN", {
@@ -31,9 +33,4 @@ export function getInitials(name: string) {
         .join("")
         .slice(0, 2)
         .toUpperCase();
-}
-
-export function getApiErrorMessage(error: unknown, fallback: string) {
-    const apiError = error as { response?: { data?: { message?: string } } };
-    return apiError.response?.data?.message ?? fallback;
 }

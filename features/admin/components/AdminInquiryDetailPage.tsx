@@ -43,8 +43,12 @@ export function AdminInquiryDetailPage({ id }: { id: string }) {
 
     const handleDelete = async () => {
         if (!window.confirm("Delete this inquiry?")) return;
-        await deleteInquiry.mutateAsync();
-        router.push("/admin/inquiries");
+        try {
+            await deleteInquiry.mutateAsync();
+            router.push("/admin/inquiries");
+        } catch {
+            // Toast is handled by the mutation hook.
+        }
     };
 
     const handleSaveStatus = async () => {

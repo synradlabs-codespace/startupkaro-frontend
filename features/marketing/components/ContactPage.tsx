@@ -6,6 +6,8 @@ import { useRef, useState, FormEvent } from "react";
 import { validators, formatNameInput, formatPhoneDigits, validatePhoneDigits, buildPhone, PHONE_PREFIX } from "@/lib/validations/common.schema";
 import { publicInquiryService } from "@/services/customer.service";
 import { getApiErrorMessage, isRateLimited } from "@/features/customers/lib/format";
+import { getApiSuccessMessage } from "@/lib/api-messages";
+import { useToast } from "@/components/providers/ToastProvider";
 import { GripHorizontal, Mail, MapPin, Minus, Phone, Plus, Send } from "lucide-react";
 
 interface FormState {
@@ -45,6 +47,7 @@ function humanizeSlug(slug?: string) {
 }
 
 export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: string } = {}) {
+    const toast = useToast();
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const serviceName = humanizeSlug(initialServiceSlug);
     const [form, setForm] = useState<FormState>({
@@ -104,19 +107,21 @@ export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: strin
         }
         setLoading(true);
         try {
-            await publicInquiryService.submit({
+            const response = await publicInquiryService.submit({
                 name: form.name.trim(),
                 email: form.email,
                 phone: buildPhone(phoneDigits)!,
                 subject: form.subject,
                 message: form.message,
             });
+            toast.success(getApiSuccessMessage(response, "Inquiry submitted successfully"));
             setSubmitted(true);
         } catch (err: unknown) {
-            setApiError(isRateLimited(err)
+            const message = isRateLimited(err)
                 ? "Too many messages were sent recently. Please wait a little and try again."
-                : getApiErrorMessage(err, "We could not send your message. Please try again.")
-            );
+                : getApiErrorMessage(err, "We could not send your message. Please try again.");
+            toast.error(message);
+            setApiError(message);
         } finally {
             setLoading(false);
         }
