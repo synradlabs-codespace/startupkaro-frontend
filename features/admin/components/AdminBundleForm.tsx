@@ -1,23 +1,30 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useBundle, useCreateBundle, useServiceList, useUpdateBundle } from "@/features/admin/hooks/useAdminServices";
 import { getApiErrorMessage } from "@/features/admin/lib/format";
 import { toPaise } from "@/lib/currency";
-import { LinkIcon, PackageCheck, Plus, Save, Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Check, ChevronsUpDown, LinkIcon, PackageCheck, Plus, Save, Search, Trash2 } from "lucide-react";
 
 type BundleItemForm = {
     label: string;
     componentServiceId: string;
+};
+
+type SearchableOption = {
+    value: string;
+    label: string;
+    description?: string;
+    searchText: string;
 };
 
 function slugify(value: string) {
@@ -30,7 +37,127 @@ function slugify(value: string) {
 }
 
 function emptyItem(): BundleItemForm {
-    return { label: "", componentServiceId: "__none__" };
+    return { label: "", componentServiceId: "" };
+}
+
+function SearchableServicePicker({
+    value,
+    onChange,
+    options,
+    loading,
+}: {
+    value: string;
+    onChange: (value: string) => void;
+    options: SearchableOption[];
+    loading?: boolean;
+}) {
+    const [open, setOpen] = useState(false);
+    const [query, setQuery] = useState("");
+    const wrapperRef = useRef<HTMLDivElement | null>(null);
+    const selected = options.find((option) => option.value === value);
+    const normalizedQuery = query.trim().toLowerCase();
+    const filteredOptions = useMemo(
+        () => options.filter((option) => option.searchText.toLowerCase().includes(normalizedQuery)),
+        [normalizedQuery, options],
+    );
+
+    useEffect(() => {
+        if (!open) return;
+
+        const handlePointerDown = (event: PointerEvent) => {
+            if (!wrapperRef.current?.contains(event.target as Node)) {
+                setOpen(false);
+            }
+        };
+
+        document.addEventListener("pointerdown", handlePointerDown);
+        return () => document.removeEventListener("pointerdown", handlePointerDown);
+    }, [open]);
+
+    return (
+        <div ref={wrapperRef} className="relative">
+            <button
+                type="button"
+                onClick={() => setOpen((current) => !current)}
+                disabled={loading}
+                className={cn(
+                    "flex h-11 w-full items-center justify-between gap-3 rounded-lg border border-hairline bg-canvas px-3 text-left text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary-brand/20",
+                    loading && "cursor-not-allowed opacity-60",
+                )}
+                aria-haspopup="listbox"
+                aria-expanded={open}
+            >
+                <span className="min-w-0">
+                    {selected ? (
+                        <span className="flex min-w-0 flex-col">
+                            <span className="truncate font-medium text-ink">{selected.label}</span>
+                            {selected.description && <span className="truncate text-xs text-slate">{selected.description}</span>}
+                        </span>
+                    ) : (
+                        <span className="text-slate">{loading ? "Loading..." : "Select a service"}</span>
+                    )}
+                </span>
+                <ChevronsUpDown className="h-4 w-4 shrink-0 text-stone" />
+            </button>
+
+            {open && (
+                <div className="absolute left-0 right-0 top-[calc(100%+0.375rem)] z-50 overflow-hidden rounded-lg border border-hairline bg-canvas shadow-[0_18px_45px_rgba(26,26,26,0.14)]">
+                    <div className="flex items-center gap-2 border-b border-hairline px-3 py-2">
+                        <Search className="h-3.5 w-3.5 shrink-0 text-stone" />
+                        <Input
+                            autoFocus
+                            value={query}
+                            onChange={(event) => setQuery(event.target.value)}
+                            placeholder="Search by service name..."
+                            className="h-8 border-0 bg-transparent px-0 text-sm shadow-none focus-visible:ring-0"
+                        />
+                    </div>
+                    <div className="max-h-72 overflow-y-auto p-1" role="listbox">
+                        {value && (
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    onChange("");
+                                    setQuery("");
+                                    setOpen(false);
+                                }}
+                                className="flex w-full items-center rounded-md px-3 py-2.5 text-left text-sm text-slate transition-colors hover:bg-surface focus:bg-surface focus:outline-none"
+                            >
+                                No linked service
+                            </button>
+                        )}
+                        {filteredOptions.length === 0 ? (
+                            <div className="px-3 py-6 text-center text-sm text-slate">No services found</div>
+                        ) : (
+                            filteredOptions.map((option) => {
+                                const selectedOption = option.value === value;
+                                return (
+                                    <button
+                                        key={option.value}
+                                        type="button"
+                                        onClick={() => {
+                                            onChange(option.value);
+                                            setQuery("");
+                                            setOpen(false);
+                                        }}
+                                        className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left transition-colors hover:bg-surface focus:bg-surface focus:outline-none"
+                                        role="option"
+                                        aria-selected={selectedOption}
+                                    >
+                                        <span className="min-w-0 flex-1">
+                                            <span className="block truncate text-sm font-medium text-ink">{option.label}</span>
+                                            {option.description && <span className="block truncate text-xs text-slate">{option.description}</span>}
+                                        </span>
+                                        {selectedOption && <Check className="h-4 w-4 shrink-0 text-primary-brand" />}
+                                    </button>
+                                );
+                            })
+                        )}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 }
 
 export function AdminBundleForm({ id }: { id?: string }) {
@@ -69,7 +196,7 @@ export function AdminBundleForm({ id }: { id?: string }) {
             items: bundle.items?.length
                 ? bundle.items.map((item) => ({
                       label: item.label,
-                      componentServiceId: item.componentServiceId ?? "__none__",
+                      componentServiceId: item.componentServiceId ?? "",
                   }))
                 : [emptyItem()],
         });
@@ -96,7 +223,7 @@ export function AdminBundleForm({ id }: { id?: string }) {
         const items = form.items
             .map((item) => ({
                 label: item.label.trim(),
-                componentServiceId: item.componentServiceId === "__none__" ? null : item.componentServiceId,
+                componentServiceId: item.componentServiceId || null,
             }))
             .filter((item) => item.label.length > 0);
 
@@ -144,6 +271,16 @@ export function AdminBundleForm({ id }: { id?: string }) {
     }
 
     const pending = createBundle.isPending || updateBundle.isPending;
+    const serviceOptions = useMemo(
+        () =>
+            services.map((service) => ({
+                value: service.id,
+                label: service.name,
+                description: `${service.category} - ${service.type}`,
+                searchText: service.name,
+            })),
+        [services],
+    );
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -152,14 +289,14 @@ export function AdminBundleForm({ id }: { id?: string }) {
                 description={isEdit ? form.slug : "Create a fixed-price bundle"}
             />
             <div className="flex-1 p-6 max-w-3xl">
-                <Card>
+                <Card className="overflow-visible">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-base">
                             <PackageCheck className="h-4 w-4 text-primary-brand" />
                             Bundle Details
                         </CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="overflow-visible">
                         <form onSubmit={submit} className="space-y-6">
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div className="space-y-1.5">
@@ -212,14 +349,6 @@ export function AdminBundleForm({ id }: { id?: string }) {
                                 )}
                             </div>
 
-                            <div className="space-y-1.5">
-                                <Label>Description</Label>
-                                <Textarea
-                                    value={form.description}
-                                    onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))}
-                                />
-                            </div>
-
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between gap-3">
                                     <Label>Bundle Items</Label>
@@ -236,31 +365,24 @@ export function AdminBundleForm({ id }: { id?: string }) {
                                 </div>
                                 <div className="space-y-3">
                                     {form.items.map((item, index) => (
-                                        <div key={index} className="grid gap-3 rounded-lg border border-hairline bg-surface p-3 sm:grid-cols-[1fr_1fr_auto]">
+                                        <div key={index} className="grid gap-3 overflow-visible rounded-lg border border-hairline bg-surface p-3 sm:grid-cols-[1fr_1fr_auto]">
                                             <Input
                                                 placeholder="Display label"
                                                 value={item.label}
                                                 onChange={(event) => setItem(index, { label: event.target.value })}
+                                                className="h-11 rounded-lg border-hairline bg-canvas text-sm focus-visible:ring-primary-brand/20"
                                             />
-                                            <Select
+                                            <SearchableServicePicker
                                                 value={item.componentServiceId}
-                                                onValueChange={(value) => setItem(index, { componentServiceId: value ?? "__none__" })}
-                                            >
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder={servicesQuery.isLoading ? "Loading services..." : "Optional linked service"} />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="__none__">No linked service</SelectItem>
-                                                    {services.map((service) => (
-                                                        <SelectItem key={service.id} value={service.id}>{service.name}</SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
+                                                onChange={(value) => setItem(index, { componentServiceId: value })}
+                                                options={serviceOptions}
+                                                loading={servicesQuery.isLoading}
+                                            />
                                             <Button
                                                 type="button"
                                                 variant="ghost"
                                                 size="icon"
-                                                className="text-error-brand hover:bg-error-brand/10 hover:text-error-brand"
+                                                className="h-11 w-11 text-error-brand hover:bg-error-brand/10 hover:text-error-brand"
                                                 onClick={() => removeItem(index)}
                                                 aria-label="Remove bundle item"
                                             >
@@ -269,6 +391,14 @@ export function AdminBundleForm({ id }: { id?: string }) {
                                         </div>
                                     ))}
                                 </div>
+                            </div>
+
+                            <div className="space-y-1.5">
+                                <Label>Description</Label>
+                                <Textarea
+                                    value={form.description}
+                                    onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))}
+                                />
                             </div>
 
                             {error && <p className="text-sm text-error-brand">{error}</p>}

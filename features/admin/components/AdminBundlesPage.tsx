@@ -85,7 +85,7 @@ function BundleActions({ id }: { id: string }) {
 
     const handleDelete = async () => {
         if (!window.confirm("Delete this bundle?")) return;
-        await deleteBundle.mutateAsync();
+        await deleteBundle.mutateAsync().catch(() => undefined);
     };
 
     return (
