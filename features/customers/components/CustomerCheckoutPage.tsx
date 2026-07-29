@@ -10,7 +10,7 @@ import { useCustomerProfile } from "@/features/customers/hooks/useCustomerProfil
 import { getApiErrorMessage } from "@/features/customers/lib/format";
 import { formatINR } from "@/lib/currency";
 import { loadRazorpayScript, openRazorpayCheckout } from "@/lib/razorpay";
-import { ShieldCheck, CreditCard, ArrowLeft, Clock, Tag, Receipt } from "lucide-react";
+import { ShieldCheck, CreditCard, ArrowLeft, Tag, Receipt } from "lucide-react";
 import Link from "next/link";
 
 const GST_RATE = 0.18;
@@ -162,7 +162,6 @@ function CheckoutContent() {
                     <div className="p-6 flex-1 space-y-4">
                         {[
                             { label: "Service", value: service.name, icon: Tag },
-                            { label: "Processing Time", value: "Expert assisted", icon: Clock },
                         ].map(({ label, value, icon: Icon }) => (
                             <div key={label} className="flex items-center justify-between py-3 border-b border-hairline last:border-0">
                                 <span className="text-sm text-steel flex items-center gap-2">
