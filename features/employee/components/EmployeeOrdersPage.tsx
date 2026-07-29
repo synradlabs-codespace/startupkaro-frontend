@@ -13,18 +13,20 @@ import { OrderStatusBadge, PaymentStatusBadge, formatOrderStatus } from "@/compo
 import { useOrderList } from "@/features/admin/hooks/useAdminOrders";
 import { formatDate } from "@/features/admin/lib/format";
 import { formatINR } from "@/lib/currency";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { Search, Eye, Pencil } from "lucide-react";
 
 const PAGE_SIZE = 10;
 
 export function EmployeeOrdersPage() {
     const [search, setSearch] = useState("");
+    const debouncedSearch = useDebouncedValue(search);
     const [statusFilter, setStatusFilter] = useState("all");
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
 
     const ordersQuery = useOrderList({
-        search: search || undefined,
+        search: debouncedSearch || undefined,
         status: statusFilter === "all" ? undefined : statusFilter,
         page,
         limit: pageSize,

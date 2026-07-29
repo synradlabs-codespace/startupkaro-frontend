@@ -13,6 +13,7 @@ import { PaymentStatusBadge, formatPaymentStatus } from "@/components/custom/Sta
 import { usePaymentList } from "@/features/admin/hooks/useAdminPayments";
 import { formatDate } from "@/features/admin/lib/format";
 import { formatINR } from "@/lib/currency";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { Search, Eye } from "lucide-react";
 
 const PAGE_SIZE = 10;
@@ -27,11 +28,12 @@ function getPaymentCustomerName(payment: { customer?: { name: string }; customer
 
 export function AdminPaymentsPage() {
     const [search, setSearch] = useState("");
+    const debouncedSearch = useDebouncedValue(search);
     const [statusFilter, setStatusFilter] = useState("all");
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
     const paymentsQuery = usePaymentList({
-        search: search || undefined,
+        search: debouncedSearch || undefined,
         status: statusFilter === "all" ? undefined : statusFilter,
         page,
         limit: pageSize,

@@ -5,23 +5,40 @@ import Link from "next/link";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { TablePagination } from "@/components/custom/TablePagination";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ActiveBadge } from "@/components/custom/StatusBadge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useDeleteService, useServiceList, useServiceContentSlugs } from "@/features/admin/hooks/useAdminServices";
+import type { ServiceStatusFilter } from "@/features/admin/hooks/useAdminServices";
 import { formatINR } from "@/lib/currency";
-import { AlertTriangle, CheckCircle2, Eye, ExternalLink, Plus, Trash2 } from "lucide-react";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
+import { AlertTriangle, CheckCircle2, Eye, ExternalLink, Plus, Search, Trash2 } from "lucide-react";
 
 const PAGE_SIZE = 10;
 
 export function AdminServicesPage() {
+    const [search, setSearch] = useState("");
+    const debouncedSearch = useDebouncedValue(search);
+    const [status, setStatus] = useState<ServiceStatusFilter>("all");
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
-    const servicesQuery = useServiceList({ page, limit: pageSize });
+    const servicesQuery = useServiceList({ search: debouncedSearch || undefined, status, page, limit: pageSize });
     const contentSlugsQuery = useServiceContentSlugs();
     const services = servicesQuery.data?.data ?? [];
     const total = servicesQuery.data?.pagination.total ?? 0;
     const contentSlugs = contentSlugsQuery.data ?? new Set<string>();
+
+    const handleSearch = (value: string) => {
+        setSearch(value);
+        setPage(1);
+    };
+
+    const handleStatusChange = (value: ServiceStatusFilter | null) => {
+        setStatus(value ?? "all");
+        setPage(1);
+    };
 
     return (
         <div>
@@ -37,6 +54,28 @@ export function AdminServicesPage() {
                 }
             />
             <div className="p-6 space-y-4">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <div className="relative w-full sm:max-w-sm">
+                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate" />
+                        <Input
+                            placeholder="Search by service name..."
+                            value={search}
+                            onChange={(e) => handleSearch(e.target.value)}
+                            className="pl-9"
+                        />
+                    </div>
+                    <Select value={status} onValueChange={handleStatusChange}>
+                        <SelectTrigger className="w-full sm:w-[180px]">
+                            <SelectValue placeholder="Filter status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All statuses</SelectItem>
+                            <SelectItem value="active">Active only</SelectItem>
+                            <SelectItem value="inactive">Inactive only</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+
                 <Card className="overflow-hidden">
                     <CardContent className="p-0">
                         <Table>
@@ -150,7 +189,7 @@ function ServiceActions({ id }: { id: string }) {
 
     const handleDelete = async () => {
         if (!window.confirm("Delete this service?")) return;
-        await deleteService.mutateAsync();
+        await deleteService.mutateAsync().catch(() => undefined);
     };
 
     return (

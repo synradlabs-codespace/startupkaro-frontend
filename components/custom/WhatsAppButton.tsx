@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 
@@ -10,11 +10,17 @@ export function WhatsAppButton() {
     const [visible, setVisible] = useState(false);
     const [toastOpen, setToastOpen] = useState(false);
     const [toastDismissed, setToastDismissed] = useState(false);
+    const visibleRef = useRef(false);
 
     useEffect(() => {
         const onScroll = () => {
-            if (window.scrollY > 200) setVisible(true);
+            if (visibleRef.current || window.scrollY <= 200) return;
+
+            visibleRef.current = true;
+            setVisible(true);
         };
+
+        onScroll();
         window.addEventListener("scroll", onScroll, { passive: true });
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
@@ -28,7 +34,7 @@ export function WhatsAppButton() {
     if (!visible) return null;
 
     return (
-        <div className="fixed right-4 bottom-[calc(env(safe-area-inset-bottom)+5rem)] z-50 flex max-w-[calc(100vw-2rem)] flex-col items-end gap-2 sm:right-6 sm:bottom-6">
+        <div className="fixed right-4 bottom-[calc(env(safe-area-inset-bottom)+1.125rem)] z-50 flex max-w-[calc(100vw-2rem)] flex-col items-end gap-2 sm:right-6 sm:bottom-6">
             {toastOpen && (
                 <div className="flex items-start gap-2 rounded-xl border border-hairline bg-canvas p-3 shadow-[0_4px_20px_rgba(26,26,26,0.12)] max-w-[210px] animate-in fade-in slide-in-from-bottom-2 duration-300">
                     <div className="min-w-0">

@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import { customerPurchaseService, normalizeList } from "@/services/customer.service";
 import type { RazorpayHandlerResponse } from "@/lib/razorpay";
 
@@ -9,6 +9,7 @@ export function useCustomerPurchaseList(params: { page?: number; limit?: number 
             const response = await customerPurchaseService.list(params);
             return normalizeList(response.data, params.page ?? 1, params.limit ?? 10);
         },
+        placeholderData: keepPreviousData,
     });
 }
 

@@ -12,16 +12,18 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useCustomerList } from "@/features/admin/hooks/useAdminCustomers";
 import { formatDate } from "@/features/admin/lib/format";
 import { getInitials } from "@/features/admin/lib/format";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { Search, Eye } from "lucide-react";
 
 const PAGE_SIZE = 10;
 
 export function EmployeeCustomersPage() {
     const [search, setSearch] = useState("");
+    const debouncedSearch = useDebouncedValue(search);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
 
-    const customersQuery = useCustomerList({ search: search || undefined, page, limit: pageSize });
+    const customersQuery = useCustomerList({ search: debouncedSearch || undefined, page, limit: pageSize });
 
     const customers = customersQuery.data?.data ?? [];
     const total = customersQuery.data?.pagination.total ?? 0;

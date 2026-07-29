@@ -12,17 +12,19 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { InquiryStatusBadge, formatInquiryStatus } from "@/components/custom/StatusBadge";
 import { useDeleteInquiry, useInquiryList } from "@/features/admin/hooks/useAdminInquiries";
 import { formatDate } from "@/features/admin/lib/format";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { Search, Eye, Trash2 } from "lucide-react";
 
 const PAGE_SIZE = 10;
 
 export function AdminInquiriesPage() {
     const [search, setSearch] = useState("");
+    const debouncedSearch = useDebouncedValue(search);
     const [statusFilter, setStatusFilter] = useState("all");
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
     const inquiriesQuery = useInquiryList({
-        search: search || undefined,
+        search: debouncedSearch || undefined,
         status: statusFilter === "all" ? undefined : statusFilter,
         page,
         limit: pageSize,
@@ -145,7 +147,7 @@ function DeleteInquiryButton({ id }: { id: string }) {
 
     const handleDelete = async () => {
         if (!window.confirm("Delete this inquiry?")) return;
-        await deleteInquiry.mutateAsync();
+        await deleteInquiry.mutateAsync().catch(() => undefined);
     };
 
     return (

@@ -111,7 +111,7 @@ export function PromotionsSection() {
                         <div className="absolute bottom-3 left-1/2 h-10 w-[58%] -translate-x-1/2 rounded-[999px] bg-ink/15 blur-xl" />
                         <div className="absolute -bottom-6 left-1/2 top-0 w-full max-w-[620px] -translate-x-1/2 md:-bottom-10 md:-top-8 md:w-[120%] lg:-right-10 lg:left-auto lg:translate-x-0">
                             <Image
-                                src="/assets/itr-refund-promo-cutout.png"
+                                src="/assets/itr-refund-promo-cutout.webp"
                                 alt="Professional woman holding a phone showing an ITR refund"
                                 fill
                                 sizes="(min-width: 1024px) 620px, 100vw"

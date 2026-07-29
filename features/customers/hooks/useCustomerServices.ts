@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { customerServiceCatalog, normalizeServiceCatalog } from "@/services/customer.service";
 
 export function useCustomerServiceList(params: { search?: string; category?: string; page?: number; limit?: number }) {
@@ -8,6 +8,7 @@ export function useCustomerServiceList(params: { search?: string; category?: str
             const response = await customerServiceCatalog.list(params);
             return normalizeServiceCatalog(response.data, params.page ?? 1, params.limit ?? 20);
         },
+        placeholderData: keepPreviousData,
     });
 }
 

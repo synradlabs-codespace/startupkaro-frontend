@@ -1,22 +1,24 @@
 // features/marketing/components/LandingPage.tsx
 
+import dynamic from "next/dynamic";
 import { HeroSection } from "./sections/HeroSection";
 import { BrandsMarqueeSection } from "./sections/BrandsMarqueeSection";
-import { PromotionsSection } from "./sections/PromotionsSection";
 import { ServicesOverviewSection } from "./sections/ServicesOverviewSection";
-import { ConsultantCTASection } from "./sections/ConsultantCTASection";
-import { ProductDevelopmentSection } from "./sections/ProductDevelopmentSection";
-import { ServiceJourneySection } from "./sections/ServiceJourneySection";
-import { HowItWorksSection } from "./sections/HowItWorksSection";
 import { WhyChooseUsSection } from "./sections/WhyChooseUsSection";
-import { FounderStorySection } from "./sections/FounderStorySection";
 import { TestimonialsSection } from "./sections/TestimonialsSection";
 import { LatestArticlesSection } from "./sections/LatestArticlesSection";
 import { LandingCTASection } from "./sections/LandingCTASection";
-import { LandingFAQSection } from "./sections/LandingFAQSection";
 import { SectionReveal } from "./ui/SectionReveal";
-import { ConsultancyDock } from "./ui/ConsultancyDock";
 import { getLatestArticles } from "@/features/articles/api/articles.service";
+
+const PromotionsSection = dynamic(() => import("./sections/PromotionsSection").then((mod) => mod.PromotionsSection));
+const ConsultantCTASection = dynamic(() => import("./sections/ConsultantCTASection").then((mod) => mod.ConsultantCTASection));
+const ProductDevelopmentSection = dynamic(() => import("./sections/ProductDevelopmentSection").then((mod) => mod.ProductDevelopmentSection));
+const ServiceJourneySection = dynamic(() => import("./sections/ServiceJourneySection").then((mod) => mod.ServiceJourneySection));
+const HowItWorksSection = dynamic(() => import("./sections/HowItWorksSection").then((mod) => mod.HowItWorksSection));
+const FounderStorySection = dynamic(() => import("./sections/FounderStorySection").then((mod) => mod.FounderStorySection));
+const LandingFAQSection = dynamic(() => import("./sections/LandingFAQSection").then((mod) => mod.LandingFAQSection));
+const ConsultancyDock = dynamic(() => import("./ui/ConsultancyDock").then((mod) => mod.ConsultancyDock));
 
 export async function LandingPage() {
     const articles = await getLatestArticles(3);

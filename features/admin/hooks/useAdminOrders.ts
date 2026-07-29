@@ -1,10 +1,13 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminOrderService } from "@/services/admin.service";
+import { getApiErrorMessage, getApiSuccessMessage } from "@/lib/api-messages";
+import { useToast } from "@/components/providers/ToastProvider";
 
 export function useOrderList(params: { search?: string; status?: string; customerId?: string; page?: number; limit?: number }) {
     return useQuery({
         queryKey: ["admin", "orders", params.search ?? "", params.status ?? "", params.customerId ?? "", params.page ?? 1, params.limit ?? 10],
         queryFn: async () => (await adminOrderService.list(params)).data,
+        placeholderData: keepPreviousData,
     });
 }
 
@@ -26,22 +29,30 @@ export function useOrder(id: string) {
 
 export function useCreateOrder() {
     const queryClient = useQueryClient();
+    const toast = useToast();
     return useMutation({
         mutationFn: (payload: { customerId: string; serviceId: string; amount: number; status?: string; notes?: string; inquiryId?: string }) =>
             adminOrderService.create(payload),
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin", "orders"] }),
+        onSuccess: (response) => {
+            toast.success(getApiSuccessMessage(response, "Order created"));
+            queryClient.invalidateQueries({ queryKey: ["admin", "orders"] });
+        },
+        onError: (error) => toast.error(getApiErrorMessage(error, "Failed to create order")),
     });
 }
 
 export function useUpdateOrder(id: string) {
     const queryClient = useQueryClient();
+    const toast = useToast();
     return useMutation({
         mutationFn: (payload: Partial<{ status: string; amount: number; notes: { text: string }[] }>) =>
             adminOrderService.update(id, payload),
-        onSuccess: () => {
+        onSuccess: (response) => {
+            toast.success(getApiSuccessMessage(response, "Order updated"));
             queryClient.invalidateQueries({ queryKey: ["admin", "orders"] });
             queryClient.invalidateQueries({ queryKey: ["admin", "orders", id] });
         },
+        onError: (error) => toast.error(getApiErrorMessage(error, "Failed to update order")),
     });
 }
 

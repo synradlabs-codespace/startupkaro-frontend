@@ -12,18 +12,20 @@ import { InquiryStatusBadge, formatInquiryStatus } from "@/components/custom/Sta
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useInquiryList } from "@/features/admin/hooks/useAdminInquiries";
 import { formatDate } from "@/features/admin/lib/format";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { Search, Eye } from "lucide-react";
 
 const PAGE_SIZE = 10;
 
 export function EmployeeInquiriesPage() {
     const [search, setSearch] = useState("");
+    const debouncedSearch = useDebouncedValue(search);
     const [statusFilter, setStatusFilter] = useState("all");
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
 
     const inquiriesQuery = useInquiryList({
-        search: search || undefined,
+        search: debouncedSearch || undefined,
         status: statusFilter === "all" ? undefined : statusFilter,
         page,
         limit: pageSize,

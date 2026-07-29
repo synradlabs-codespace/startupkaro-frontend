@@ -12,15 +12,17 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useEmployeeList } from "@/features/admin/hooks/useAdminEmployees";
 import { formatDate, getInitials } from "@/features/admin/lib/format";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { Search, Plus, Eye } from "lucide-react";
 
 const PAGE_SIZE = 10;
 
 export function AdminEmployeesPage() {
     const [search, setSearch] = useState("");
+    const debouncedSearch = useDebouncedValue(search);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
-    const employeesQuery = useEmployeeList({ search: search || undefined, page, limit: pageSize });
+    const employeesQuery = useEmployeeList({ search: debouncedSearch || undefined, page, limit: pageSize });
 
     const employees = employeesQuery.data?.data ?? [];
     const total = employeesQuery.data?.pagination.total ?? 0;

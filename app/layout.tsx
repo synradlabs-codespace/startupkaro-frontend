@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryProvider } from "@/components/providers/QueryProvider";
 import { Quicksand } from "next/font/google";
 import localFont from "next/font/local";
 
@@ -27,15 +25,22 @@ const gilroy = localFont({
 export const metadata: Metadata = {
   title: "StartupKaro",
   description: "Startup services platform",
+  manifest: "/site.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${quicksand.variable} ${gilroy.variable}`}>
       <body className="antialiased font-sans">
-        <QueryProvider>
-          <TooltipProvider>{children}</TooltipProvider>
-        </QueryProvider>
+        {children}
       </body>
     </html>
   );

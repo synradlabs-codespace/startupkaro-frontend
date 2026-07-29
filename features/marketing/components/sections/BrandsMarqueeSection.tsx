@@ -2,15 +2,15 @@ import Image from "next/image";
 import { Marquee } from "@/components/ui/marquee";
 
 const BRANDS = [
-    { name: "Chai Churi", src: "/brands/chai-churi.jpg" },
-    { name: "Kleenjal Sipster", src: "/brands/kleenjal-sipster.jpg" },
-    { name: "Nadar Properties", src: "/brands/nadar-properties.jpg" },
-    { name: "Paggnation", src: "/brands/paggnation.jpeg" },
-    { name: "Sardar Ji", src: "/brands/sardar-ji.jpg" },
-    { name: "Social", src: "/brands/social.jpeg" },
-    { name: "Swastik Finance", src: "/brands/swastik-finance.jpg" },
-    { name: "Synrad Labs", src: "/brands/synrad-labs.jpg" },
-    { name: "Theka Coffee", src: "/brands/theka-coffee.jpg" },
+    { name: "Chai Churi", src: "/brands/chai-churi.webp" },
+    { name: "Kleenjal Sipster", src: "/brands/kleenjal-sipster.webp" },
+    { name: "Nadar Properties", src: "/brands/nadar-properties.webp" },
+    { name: "Paggnation", src: "/brands/paggnation.webp" },
+    { name: "Sardar Ji", src: "/brands/sardar-ji.webp" },
+    { name: "Social", src: "/brands/social.webp" },
+    { name: "Swastik Finance", src: "/brands/swastik-finance.webp" },
+    { name: "Synrad Labs", src: "/brands/synrad-labs.webp" },
+    { name: "Theka Coffee", src: "/brands/theka-coffee.webp" },
 ];
 
 function BrandLogo({ name, src }: { name: string; src: string }) {

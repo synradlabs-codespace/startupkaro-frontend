@@ -32,9 +32,10 @@ export function WhyChooseUsSection() {
 
                         <div className="hidden lg:block absolute inset-x-0 bottom-0 top-0 pointer-events-none z-10">
                             <Image
-                                src="/macbook_guy.png"
+                                src="/macbook_guy.webp"
                                 alt="StartupKaro founder at work"
                                 fill
+                                sizes="(min-width: 1024px) 320px, 0px"
                                 className="object-contain object-bottom scale-[1.4] origin-bottom"
                             />
                         </div>
@@ -59,7 +60,7 @@ export function WhyChooseUsSection() {
                                         Expert CA &amp; CS team
                                     </h3>
                                     <p className="max-w-lg text-base leading-relaxed text-charcoal">
-                                        Every filing is handled by a qualified Chartered Accountant or Company Secretary, not a software bot.
+                                        Every service is carefully supervised by our experts, ensuring quality, accuracy, and compliance
                                     </p>
                                 </div>
                             </div>
@@ -81,7 +82,7 @@ export function WhyChooseUsSection() {
                                 <div className={CONTENT_LAYER}>
                                     <h3 className="mb-2 font-display text-xl font-medium leading-[1.1] text-ink">Fixed, transparent pricing</h3>
                                     <p className="text-sm leading-relaxed text-charcoal">
-                                        What you see is what you pay. Government fees are included. No surprises at checkout.
+                                        What you see is what you pay. Transparent pricing with no hidden charges, unexpected fees, or last-minute surprises.
                                     </p>
                                 </div>
                             </div>
@@ -92,7 +93,7 @@ export function WhyChooseUsSection() {
                                 <div className={`${CONTENT_LAYER} max-w-2xl`}>
                                     <h3 className="mb-2 font-display text-2xl font-medium leading-[1.17] text-ink">Expert-led status updates</h3>
                                     <p className="text-sm leading-relaxed text-charcoal md:text-base">
-                                        Your assigned expert keeps you updated by email and call, so you always know where your filing stands.
+                                        Stay informed with personalized updates from your dedicated expert, ensuring complete visibility into your filing&apos;s progress at every stage.
                                     </p>
                                 </div>
                             </div>

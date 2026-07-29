@@ -108,7 +108,7 @@ export function ArticleDetailPage({ article, related }: ArticleDetailPageProps) 
             <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 mb-8">
                 <div className="relative h-64 md:h-96 w-full rounded-2xl overflow-hidden">
                     <Image
-                        src={article.coverImage?.url ?? "/assets/blog-placeholder.jpg"}
+                        src={article.coverImage?.url ?? "/assets/blog-placeholder.webp"}
                         alt={article.coverImage?.alt ?? article.title}
                         fill
                         className="object-cover"

@@ -21,7 +21,7 @@ export function ArticleCard({ article }: { article: ArticleCardType; index?: num
             {/* Cover image */}
             <div className="relative h-44 w-full overflow-hidden">
                 <Image
-                    src={article.coverImage?.url ?? "/assets/blog-placeholder.jpg"}
+                    src={article.coverImage?.url ?? "/assets/blog-placeholder.webp"}
                     alt={article.coverImage?.alt ?? article.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"

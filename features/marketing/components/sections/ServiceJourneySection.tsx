@@ -95,6 +95,7 @@ const cubeRotations = [0, 90, 180];
 
 export function ServiceJourneySection() {
     const [activeStep, setActiveStep] = useState(0);
+    const activeStepRef = useRef(0);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const { scrollYProgress } = useScroll({
@@ -103,10 +104,17 @@ export function ServiceJourneySection() {
     });
 
     useMotionValueEvent(scrollYProgress, "change", (v) => {
-        if (v < 0.34) setActiveStep(0);
-        else if (v < 0.67) setActiveStep(1);
-        else setActiveStep(2);
+        const nextStep = v < 0.34 ? 0 : v < 0.67 ? 1 : 2;
+        if (activeStepRef.current === nextStep) return;
+
+        activeStepRef.current = nextStep;
+        setActiveStep(nextStep);
     });
+
+    const handleSelectStep = (step: number) => {
+        activeStepRef.current = step;
+        setActiveStep(step);
+    };
 
     return (
         <section className="bg-cloud py-20 md:py-24">
@@ -132,7 +140,7 @@ export function ServiceJourneySection() {
                 <div className="lg:grid lg:grid-cols-2 lg:gap-16">
                     <div>
                         <div className="lg:sticky lg:top-24 lg:h-[calc(100vh-6rem)] flex flex-col justify-center items-center gap-6">
-                            <JourneyVisual activeStep={activeStep} onSelectStep={setActiveStep} />
+                            <JourneyVisual activeStep={activeStep} onSelectStep={handleSelectStep} />
 
                             {/* Progress rail */}
                             <div className="flex items-center gap-3">

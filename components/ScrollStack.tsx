@@ -172,23 +172,23 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       }
 
       const newTransform = {
-        translateY: Math.round(translateY * 100) / 100,
-        scale: Math.round(scale * 1000) / 1000,
-        rotation: Math.round(rotation * 100) / 100,
-        blur: Math.round(blur * 100) / 100
+        translateY,
+        scale,
+        rotation,
+        blur
       };
 
       const lastTransform = lastTransformsRef.current.get(i);
       const hasChanged =
         !lastTransform ||
-        Math.abs(lastTransform.translateY - newTransform.translateY) > 0.1 ||
-        Math.abs(lastTransform.scale - newTransform.scale) > 0.001 ||
-        Math.abs(lastTransform.rotation - newTransform.rotation) > 0.1 ||
-        Math.abs(lastTransform.blur - newTransform.blur) > 0.1;
+        Math.abs(lastTransform.translateY - newTransform.translateY) > 0.001 ||
+        Math.abs(lastTransform.scale - newTransform.scale) > 0.0001 ||
+        Math.abs(lastTransform.rotation - newTransform.rotation) > 0.001 ||
+        Math.abs(lastTransform.blur - newTransform.blur) > 0.001;
 
       if (hasChanged) {
-        const transform = `translate3d(0, ${newTransform.translateY}px, 0) scale(${newTransform.scale}) rotate(${newTransform.rotation}deg)`;
-        const filter = newTransform.blur > 0 ? `blur(${newTransform.blur}px)` : '';
+        const transform = `translate3d(0, ${newTransform.translateY.toFixed(3)}px, 0) scale(${newTransform.scale.toFixed(5)}) rotate(${newTransform.rotation.toFixed(3)}deg)`;
+        const filter = newTransform.blur > 0 ? `blur(${newTransform.blur.toFixed(3)}px)` : '';
 
         card.style.transform = transform;
         card.style.filter = filter;
@@ -233,6 +233,10 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     });
   }, [updateCardTransforms]);
 
+  const handleLenisScroll = useCallback(() => {
+    updateCardTransforms();
+  }, [updateCardTransforms]);
+
   const setupLenis = useCallback(() => {
     const prefersNativeTouchScroll =
       typeof window !== 'undefined' &&
@@ -257,7 +261,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         syncTouchLerp: 0.075
       });
 
-      lenis.on('scroll', handleScroll);
+      lenis.on('scroll', handleLenisScroll);
 
       const raf = (time: number) => {
         lenis.raf(time);
@@ -286,7 +290,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         syncTouchLerp: 0.075
       });
 
-      lenis.on('scroll', handleScroll);
+      lenis.on('scroll', handleLenisScroll);
 
       const raf = (time: number) => {
         lenis.raf(time);
@@ -297,7 +301,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       lenisRef.current = lenis;
       return lenis;
     }
-  }, [handleScroll, useWindowScroll]);
+  }, [handleScroll, handleLenisScroll, useWindowScroll]);
 
   useLayoutEffect(() => {
     if (!useWindowScroll && !scrollerRef.current) return;
@@ -377,7 +381,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       style={{
         overscrollBehavior: 'contain',
         WebkitOverflowScrolling: 'touch',
-        scrollBehavior: 'smooth',
+        scrollBehavior: 'auto',
         WebkitTransform: 'translateZ(0)',
         transform: 'translateZ(0)',
         willChange: 'scroll-position'
