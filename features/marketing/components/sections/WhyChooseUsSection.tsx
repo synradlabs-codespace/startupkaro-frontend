@@ -56,10 +56,10 @@ export function WhyChooseUsSection() {
                             <div className={`${CARD_BASE} sm:col-span-2 sm:row-span-2 p-7 flex flex-col justify-end min-h-70 sm:min-h-80`}>
                                 <Users className={`${AMBIENT_ICON} h-36 w-36 sm:h-44 sm:w-44`} />
                                 <div className={CONTENT_LAYER}>
-                                    <h3 className="mb-3 font-display text-2xl font-medium leading-[1.17] text-ink">
+                                    <h3 className="mb-2 font-display text-xl font-medium leading-none text-ink">
                                         Expert CA &amp; CS team
                                     </h3>
-                                    <p className="max-w-lg text-base leading-relaxed text-charcoal">
+                                    <p className="max-w-lg text-sm leading-relaxed text-charcoal text-justify">
                                         Every service is carefully supervised by our experts, ensuring quality, accuracy, and compliance
                                     </p>
                                 </div>
@@ -70,7 +70,7 @@ export function WhyChooseUsSection() {
                                 <Globe className={`${AMBIENT_ICON} h-28 w-28`} />
                                 <div className={CONTENT_LAYER}>
                                     <h3 className="mb-2 font-display text-xl font-medium leading-none text-ink">Email-led document flow</h3>
-                                    <p className="text-sm leading-relaxed text-charcoal">
+                                    <p className="text-sm leading-relaxed text-charcoal text-justify">
                                         No office visits or courier delays. Share documents on StartupKaro&apos;s official email and our team coordinates the rest.
                                     </p>
                                 </div>
@@ -81,7 +81,7 @@ export function WhyChooseUsSection() {
                                 <Tag className={`${AMBIENT_ICON} h-28 w-28`} />
                                 <div className={CONTENT_LAYER}>
                                     <h3 className="mb-2 font-display text-xl font-medium leading-[1.1] text-ink">Fixed, transparent pricing</h3>
-                                    <p className="text-sm leading-relaxed text-charcoal">
+                                    <p className="text-sm leading-relaxed text-charcoal text-justify">
                                         What you see is what you pay. Transparent pricing with no hidden charges, unexpected fees, or last-minute surprises.
                                     </p>
                                 </div>
@@ -91,8 +91,8 @@ export function WhyChooseUsSection() {
                             <div className={`${CARD_BASE} sm:col-span-3 p-6 min-h-40 flex items-center`}>
                                 <BarChart3 className={`${AMBIENT_ICON} h-32 w-32 sm:h-36 sm:w-36`} />
                                 <div className={`${CONTENT_LAYER} max-w-2xl`}>
-                                    <h3 className="mb-2 font-display text-2xl font-medium leading-[1.17] text-ink">Expert-led status updates</h3>
-                                    <p className="text-sm leading-relaxed text-charcoal md:text-base">
+                                    <h3 className="mb-2 font-display text-xl font-medium leading-none text-ink">Expert-led status updates</h3>
+                                    <p className="text-sm leading-relaxed text-charcoal text-justify">
                                         Stay informed with personalized updates from your dedicated expert, ensuring complete visibility into your filing&apos;s progress at every stage.
                                     </p>
                                 </div>

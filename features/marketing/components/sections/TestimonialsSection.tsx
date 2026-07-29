@@ -65,7 +65,7 @@ function TestimonialCard({ quote, name, role }: (typeof testimonials)[number]) {
     return (
         <article className="group relative flex h-72 w-[320px] shrink-0 flex-col justify-between overflow-hidden rounded-xl border border-hairline bg-canvas p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-brand hover:shadow-[0_2px_8px_rgba(26,26,26,0.08)] sm:w-[420px]">
             <Quote className="pointer-events-none absolute -right-2 -top-3 h-24 w-24 text-primary-brand opacity-10" />
-            <p className="relative z-10 text-sm leading-relaxed text-charcoal">{quote}</p>
+            <p className="relative z-10 text-sm leading-relaxed text-charcoal text-justify">{quote}</p>
             <div className="relative z-10 border-t border-hairline pt-4">
                 <p className="text-sm font-medium text-ink">{name}</p>
                 <p className="mt-0.5 text-xs text-graphite">{role}</p>

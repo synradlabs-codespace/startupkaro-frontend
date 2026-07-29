@@ -82,7 +82,7 @@ export function ConsultancyDock() {
                 <div className="relative hidden h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-brand text-white shadow-[0_10px_24px_rgba(41,110,249,0.22)] sm:flex">
                     <MessageCircle className="h-5 w-5" />
                 </div>
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0 flex-1 px-2 py-1 sm:px-0 sm:py-0">
                     <p className="relative text-sm font-semibold leading-tight text-ink">Need to Talk Strategy?</p>
                     <p className="relative mt-0.5 truncate text-xs leading-relaxed text-graphite sm:hidden">1:1 expert consult - Rs. 399</p>
                     <p className="relative mt-0.5 hidden truncate text-xs leading-relaxed text-graphite sm:block">Private 1:1 expert consultation at Rs. 399</p>

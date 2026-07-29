@@ -57,7 +57,7 @@ function StepCard({ item }: { item: typeof steps[number] }) {
                 <h3 className={`font-display text-2xl md:text-3xl font-medium leading-snug ${item.dark ? "text-white" : "text-ink"}`}>
                     {item.title}
                 </h3>
-                <p className={`text-base md:text-lg leading-relaxed ${item.dark ? "text-white/85" : "text-charcoal"}`}>{item.description}</p>
+                <p className={`text-base md:text-lg leading-relaxed text-justify ${item.dark ? "text-white/85" : "text-charcoal"}`}>{item.description}</p>
             </div>
         </div>
     );

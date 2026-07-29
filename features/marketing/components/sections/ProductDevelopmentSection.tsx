@@ -177,7 +177,7 @@ export function ProductDevelopmentSection() {
                                         <div className="mt-5 grid gap-3 sm:grid-cols-[1.2fr_0.8fr]">
                                             <WireframePreview mode={active.id} prefersReducedMotion={prefersReducedMotion} />
                                             <div className="space-y-3">
-                                                {["UX", "API", "Ship"].map((step, index) => (
+                                                {["UI/UX", "API", "Ship"].map((step, index) => (
                                                     <motion.div
                                                         key={`${active.id}-${step}`}
                                                         className="flex items-center gap-2 rounded-lg border border-hairline bg-canvas p-3 shadow-sm"
