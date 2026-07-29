@@ -2526,6 +2526,156 @@
           "name": "Auth",
           "item": [
             {
+              "name": "Signup (Email + Password)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const res = pm.response.json();",
+                      "if (res.success && res.data && res.data.tokens) {",
+                      "  pm.collectionVariables.set('customer_access_token', res.data.tokens.accessToken);",
+                      "  pm.collectionVariables.set('customer_refresh_token', res.data.tokens.refreshToken);",
+                      "  pm.collectionVariables.set('customer_id', res.data.user.id);",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/customer/auth/signup",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "customer",
+                    "auth",
+                    "signup"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane@example.com\",\n  \"password\": \"secret123\",\n  \"phone\": \"9112233445\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "Create a customer account with email + password and sign in immediately. Works alongside Google and phone-OTP sign-in.\n\n**Body**\n- `name` — required\n- `email` — required, unique\n- `password` — required, min 8 characters\n- `phone` — optional; self-entered, so stored **unverified**\n\nReturns `{ status: \"authenticated\", tokens, user }`. A duplicate email or phone returns 409."
+              },
+              "response": [
+                {
+                  "name": "201 Account Created",
+                  "status": "Created",
+                  "code": 201,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": true,\n  \"message\": \"Account created successfully\",\n  \"data\": {\n    \"status\": \"authenticated\",\n    \"tokens\": {\n      \"accessToken\": \"eyJ...\",\n      \"refreshToken\": \"eyJ...\"\n    },\n    \"user\": {\n      \"id\": \"880e8400-e29b-41d4-a716-446655440003\",\n      \"name\": \"Jane Doe\",\n      \"email\": \"jane@example.com\",\n      \"phone\": \"+919112233445\"\n    }\n  }\n}"
+                },
+                {
+                  "name": "409 Already Registered",
+                  "status": "Conflict",
+                  "code": 409,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": false,\n  \"message\": \"This email is already registered. Try signing in instead.\",\n  \"errors\": [\n    {\n      \"field\": \"email\",\n      \"message\": \"Already registered\"\n    }\n  ]\n}"
+                }
+              ]
+            },
+            {
+              "name": "Login (Email + Password)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const res = pm.response.json();",
+                      "if (res.success && res.data && res.data.tokens) {",
+                      "  pm.collectionVariables.set('customer_access_token', res.data.tokens.accessToken);",
+                      "  pm.collectionVariables.set('customer_refresh_token', res.data.tokens.refreshToken);",
+                      "  pm.collectionVariables.set('customer_id', res.data.user.id);",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/customer/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "customer",
+                    "auth",
+                    "login"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"jane@example.com\",\n  \"password\": \"secret123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "Sign in with email + password. Accounts created via Google / phone OTP / admin have no password until one is set through the forgot-password flow — for them this returns a generic 401.\n\n**Body**\n- `email` — required\n- `password` — required\n\nReturns `{ status: \"authenticated\", tokens, user }`."
+              },
+              "response": [
+                {
+                  "name": "200 Login Successful",
+                  "status": "OK",
+                  "code": 200,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": true,\n  \"message\": \"Login successful\",\n  \"data\": {\n    \"status\": \"authenticated\",\n    \"tokens\": {\n      \"accessToken\": \"eyJ...\",\n      \"refreshToken\": \"eyJ...\"\n    },\n    \"user\": {\n      \"id\": \"880e8400-e29b-41d4-a716-446655440003\",\n      \"name\": \"Jane Doe\",\n      \"email\": \"jane@example.com\",\n      \"phone\": \"+919112233445\"\n    }\n  }\n}"
+                },
+                {
+                  "name": "401 Invalid Credentials",
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": false,\n  \"message\": \"Invalid email or password\"\n}"
+                }
+              ]
+            },
+            {
               "name": "Google (Sign in / Start signup)",
               "request": {
                 "method": "POST",
@@ -2813,6 +2963,112 @@
                       "}"
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "name": "Forgot Password",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/customer/auth/forgot-password",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "customer",
+                    "auth",
+                    "forgot-password"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"jane@example.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "Start a password reset. Always returns the same message so it never reveals whether the email exists. If it does, a reset link (Resend) is emailed with a token valid for 1 hour.\n\n> Dev without Resend configured: the reset link/token is logged to the server console."
+              },
+              "response": [
+                {
+                  "name": "200 OK",
+                  "status": "OK",
+                  "code": 200,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": {\n    \"message\": \"If the email exists, a reset link has been sent\"\n  }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Reset Password",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/customer/auth/reset-password",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "customer",
+                    "auth",
+                    "reset-password"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"token\": \"<token-from-reset-email>\",\n  \"password\": \"newsecret123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "Consume a reset token and set a new password (min 8 characters). Also works to set a first password on a Google-/phone-/admin-created account. Invalid or expired token → 400.\n\n**Body**\n- `token` — required, from the reset email\n- `password` — required, min 8 characters"
+              },
+              "response": [
+                {
+                  "name": "200 Password Reset",
+                  "status": "OK",
+                  "code": 200,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": {\n    \"message\": \"Password reset successfully\"\n  }\n}"
+                },
+                {
+                  "name": "400 Invalid Token",
+                  "status": "Bad Request",
+                  "code": 400,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": false,\n  \"message\": \"Invalid or expired reset token\"\n}"
                 }
               ]
             },
