@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { LayoutDashboard, MonitorSmartphone, Rocket, Smartphone, Sparkles } from "lucide-react";
 import { MagnetLines } from "@/components/fancy/MagnetLines";
-import { FlowButton, FlowSecondaryButton } from "@/components/custom/FlowButton";
+import { FlowButton } from "@/components/custom/FlowButton";
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
 const MODES = [
@@ -98,7 +98,7 @@ export function ProductDevelopmentSection() {
                                 Websites and apps that make your startup feel real from day one
                             </h2>
                             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-charcoal md:text-base">
-                                Your registration is only the start. We help founders ship polished landing pages, mobile apps, customer portals, and admin dashboards that look investor-ready and work cleanly for the first real users.
+                                Turn your startup into a complete digital business. From professional websites and mobile apps to customer portals and admin dashboards, we build everything you need to launch, manage, and grow.
                             </p>
                             <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.28px] text-charcoal">
                                 <span className="rounded-md border border-primary-brand/20 bg-canvas/70 px-3 py-2">MVP to market</span>
@@ -114,17 +114,10 @@ export function ProductDevelopmentSection() {
                                     wrapperClassName="w-full sm:w-auto sm:min-w-[190px]"
                                     className="h-11 w-full"
                                 />
-                                <FlowSecondaryButton
-                                    href="/services/professional-consulting-service"
-                                    text="Start With Consulting"
-                                    iconName="message-circle"
-                                    wrapperClassName="w-full sm:w-auto sm:min-w-[230px]"
-                                    className="h-11 w-full bg-canvas/75"
-                                />
                             </div>
                         </div>
 
-                        <div className="relative min-h-[340px] overflow-hidden sm:min-h-[390px] lg:min-h-[370px]">
+                        <div className="relative overflow-visible pt-2 sm:min-h-[390px] sm:overflow-hidden sm:pt-0 lg:min-h-[370px]">
                             <MagnetLines
                                 rows={7}
                                 columns={8}
@@ -136,15 +129,15 @@ export function ProductDevelopmentSection() {
                                 className="pointer-events-none absolute right-3 top-4 max-w-full overflow-hidden opacity-45"
                             />
                             <motion.div
-                                className="absolute inset-x-0 bottom-0 z-10 mx-auto max-w-[430px] rounded-xl border border-hairline bg-canvas shadow-[0_28px_56px_rgba(26,26,26,0.12)]"
+                                className="relative z-10 mx-auto w-full max-w-[430px] rounded-xl border border-hairline bg-canvas shadow-[0_28px_56px_rgba(26,26,26,0.12)] sm:absolute sm:inset-x-0 sm:bottom-0"
                             >
                                 <div className="flex items-center justify-between border-b border-hairline px-3 py-2">
-                                    <div className="flex items-center gap-1.5">
+                                    <div className="hidden items-center gap-1.5 sm:flex">
                                         <span className="h-2.5 w-2.5 rounded-full bg-bloom-coral" />
                                         <span className="h-2.5 w-2.5 rounded-full bg-tint-sky" />
                                         <span className="h-2.5 w-2.5 rounded-full bg-storm-deep" />
                                     </div>
-                                    <div className="grid grid-cols-3 rounded-md border border-hairline bg-surface p-1">
+                                    <div className="grid w-full grid-cols-3 rounded-md border border-hairline bg-surface p-1 sm:w-auto">
                                         {MODES.map(({ id, label, Icon }) => (
                                             <button
                                                 key={id}
@@ -156,7 +149,7 @@ export function ProductDevelopmentSection() {
                                                     }`}
                                                 aria-pressed={activeMode === id}
                                             >
-                                                <Icon className="h-3.5 w-3.5" />
+                                                <Icon className="hidden h-3.5 w-3.5 sm:block" />
                                                 {label}
                                             </button>
                                         ))}
@@ -181,7 +174,7 @@ export function ProductDevelopmentSection() {
                                             </div>
                                         </div>
 
-                                        <div className="mt-5 grid grid-cols-[1.2fr_0.8fr] gap-3">
+                                        <div className="mt-5 grid gap-3 sm:grid-cols-[1.2fr_0.8fr]">
                                             <WireframePreview mode={active.id} prefersReducedMotion={prefersReducedMotion} />
                                             <div className="space-y-3">
                                                 {["UX", "API", "Ship"].map((step, index) => (

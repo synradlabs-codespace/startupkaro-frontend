@@ -2,6 +2,7 @@
 
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { UniqueAccordion } from "@/components/ui/unique-accordion";
@@ -13,56 +14,107 @@ const faqItems = [
     {
         id: "1",
         number: "01",
-        title: "What types of businesses can StartupKaro help me register?",
+        title: "What services do you offer?",
         content:
-            "We support Private Limited Companies, Limited Liability Partnerships (LLPs), One Person Companies, Sole Proprietorships, and more. Our experts help you pick the structure that best fits your goals, liability preference, and growth plans.",
+            "We provide end-to-end business solutions including but not limited to company registration, GST, trademarks, taxation, accounting, ROC compliance, legal advisory, websites, branding, funding support, and business consulting-all under one roof.",
     },
     {
         id: "2",
         number: "02",
-        title: "How long does the registration process take?",
+        title: "Who can benefit from your services?",
         content:
-            "Most registrations are completed within 7–15 working days, depending on the business structure and document readiness. Your assigned CA tracks every application actively to prevent delays.",
+            "We work with startups, MSMEs, private limited companies, LLPs, partnerships, proprietorships, established businesses, professionals, and entrepreneurs across India.",
     },
     {
         id: "3",
         number: "03",
-        title: "Do I need to visit any government office in person?",
+        title: "Why choose StartupKaro over others?",
         content:
-            "No. StartupKaro is 100% online. Your CA or CS handles all filings, government interactions, and follow-ups digitally. You only need to upload the required documents from wherever you are.",
+            "Unlike traditional consultants, we don't just complete registrations-we become your long-term business partner by supporting legal, financial, compliance, technology, branding, and growth needs.",
     },
     {
         id: "4",
         number: "04",
-        title: "What's included in the annual compliance packages?",
+        title: "Do I need to visit your office?",
         content:
-            "Packages cover board meetings, annual returns, financial statements, income tax filings, and GST returns, covering everything required to keep your company in good standing with the MCA and Income Tax Department.",
+            "No. Most of our services are completely online. You can share documents digitally, and our team will handle the complete process remotely.",
     },
     {
         id: "5",
         number: "05",
-        title: "Are the CAs and CSs on the platform verified professionals?",
+        title: "How does the process work?",
         content:
-            "Yes. Every professional is verified for their ICAI or ICSI membership, practice certificate, and prior experience before being onboarded. You can view credentials directly from your dashboard.",
+            "Book a consultation, share your requirements and documents, receive expert guidance, and let our team manage the entire process while keeping you updated.",
     },
     {
         id: "6",
         number: "06",
-        title: "What happens if I miss a compliance deadline?",
+        title: "How long will my service take?",
         content:
-            "Late filings attract government penalties. Our system sends proactive reminders well before each deadline, and your assigned expert will alert you if urgent action is needed, minimising your risk.",
+            "Timelines vary depending on the service and government approvals. Before we begin, we'll provide an estimated completion timeline.",
     },
     {
         id: "7",
         number: "07",
-        title: "Can I start with one service and add more later?",
+        title: "Will I get a dedicated consultant?",
         content:
-            "Absolutely. Many clients begin with company registration and add GST, payroll, or accounting services as their business grows. There's no lock-in, and pricing is fixed for each service you choose.",
+            "Yes. Every client is assigned a dedicated expert who remains your single point of contact throughout the project.",
+    },
+    {
+        id: "8",
+        number: "08",
+        title: "Do you provide support after completion?",
+        content:
+            "Absolutely. We continue assisting clients with compliance, taxation, legal matters, business growth, and future requirements even after project completion.",
+    },
+    {
+        id: "9",
+        number: "09",
+        title: "Are my documents secure?",
+        content:
+            "Yes. We maintain strict confidentiality and use secure processes to protect your business information and documents.",
+    },
+    {
+        id: "10",
+        number: "10",
+        title: "Can you help if my business is already running?",
+        content:
+            "Yes. Whether you're launching a new venture or managing an existing business, we help with compliance, taxation, restructuring, expansion, branding, and strategic growth.",
+    },
+    {
+        id: "11",
+        number: "11",
+        title: "Can you help with funding and investor readiness?",
+        content:
+            "Yes. We assist businesses with financial planning, investor documentation, due diligence support, business structuring, and fundraising readiness.",
+    },
+    {
+        id: "12",
+        number: "12",
+        title: "Which industries do you serve?",
+        content:
+            "We work with businesses across hospitality, healthcare, manufacturing, retail, education, e-commerce, IT, professional services, real estate, finance, and many other sectors.",
+    },
+    {
+        id: "13",
+        number: "13",
+        title: "How can I get started?",
+        content:
+            "Simply book a consultation, and our experts will understand your requirements and recommend the best solution for your business.",
+    },
+    {
+        id: "14",
+        number: "14",
+        title: "Are all your consultations free?",
+        content:
+            "Yes! Most general business queries and initial guidance are completely free of charge. For businesses that require in-depth strategic advice, 1:1 consultations with our Chartered Accountants (CAs), Company Secretaries (CSs), legal experts, or business consultants are offered as paid sessions. These consultations are tailored to your specific needs and focus on strategy, planning, compliance, and problem-solving to help you make informed business decisions. This way, you receive free guidance for general questions while paying only for personalized expert advice when you need it.",
     },
 ];
 
 export function LandingFAQSection() {
     const prefersReducedMotion = useReducedMotion();
+    const [showAllFaqs, setShowAllFaqs] = useState(false);
+    const visibleFaqItems = showAllFaqs ? faqItems : faqItems.slice(0, 7);
 
     const leftProps = prefersReducedMotion
         ? {}
@@ -91,10 +143,11 @@ export function LandingFAQSection() {
                             Questions
                         </p>
                         <h2 className="mb-4 font-display text-4xl font-medium leading-tight text-ink md:text-5xl">
-                            Common questions, clear answers
+                            Common Questions, Clear Answers
                         </h2>
                         <p className="mb-8 text-sm leading-relaxed text-charcoal">
-                            Everything you need to know before getting started. Can't find what you're looking for?
+                            Everything you need to know before getting started.<br />
+                            Can&apos;t find what you&apos;re looking for?
                         </p>
                         <Link
                             href="/contact"
@@ -106,7 +159,18 @@ export function LandingFAQSection() {
                     </motion.div>
 
                     <motion.div {...rightProps}>
-                        <UniqueAccordion items={faqItems} defaultOpenId="1" />
+                        <UniqueAccordion items={visibleFaqItems} defaultOpenId="1" />
+                        {faqItems.length > 7 && (
+                            <div className="mt-8 flex justify-center">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowAllFaqs((current) => !current)}
+                                    className="inline-flex h-10 items-center justify-center rounded-md border border-hairline-strong bg-canvas px-5 text-xs font-semibold uppercase tracking-[0.7px] text-ink transition-colors hover:border-primary-brand hover:text-primary-brand"
+                                >
+                                    {showAllFaqs ? "Show Less" : "Show More"}
+                                </button>
+                            </div>
+                        )}
                     </motion.div>
                 </div>
             </div>

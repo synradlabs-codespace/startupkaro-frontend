@@ -65,7 +65,7 @@ export const NAV_LINKS: NavLink[] = [
           items: [
             { label: "Trademark Registration", description: "Protect your brand identity", href: "/services/trademark-registration" },
             { label: "Renew Your Trademark", description: "Keep trademark protection active", href: "/services/renew-your-trademark" },
-            { label: "Contracts & Agreements", description: "Legal documents for business needs", href: "/services/contracts-agreements" },
+            { label: "Contracts & Agreements", description: "Legal documents for business needs", href: "/services/contracts-and-agreements" },
             { label: "Investor Agreements", description: "Founder and investor documentation", href: "/services/investor-agreements" },
           ],
         },

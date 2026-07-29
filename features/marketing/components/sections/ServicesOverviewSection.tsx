@@ -28,7 +28,7 @@ const categories = [
     {
         icon: PackageCheck,
         label: "Bundles" as const,
-        description: "Fixed-price service packs for company, LLP, partnership, and proprietorship setup.",
+        description: "Incorporation and essential business registrations bundled together at attractive prices.",
         href: "/bundles",
     },
 ];

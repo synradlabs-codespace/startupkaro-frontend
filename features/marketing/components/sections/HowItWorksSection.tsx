@@ -8,36 +8,36 @@ const steps = [
     {
         icon: MousePointerClick,
         step: "01",
-        title: "Choose a service",
+        title: "Choose a Service",
         description:
-            "Browse our catalogue and pick what your startup needs. Every service has a fixed, upfront price: no hidden fees, no surprise invoices.",
+            "Select the service you need and submit your basic details. Whether it's a consultation, registration, compliance, or assistance, we'll take it from there.",
         itemClassName: "bg-canvas border border-hairline",
         dark: false,
     },
     {
         icon: Mail,
         step: "02",
-        title: "Email your documents",
+        title: "Expert Assigned",
         description:
-            "We send you a precise checklist and our official email address. Share the required documents by email, and our team reviews everything before filing.",
+            "Your request is carefully reviewed and assigned to the most suitable expert—based on your specific requirements.",
         itemClassName: "bg-canvas border border-hairline",
         dark: false,
     },
     {
         icon: FileCheck2,
         step: "03",
-        title: "We file for you",
+        title: "Work in Progress",
         description:
-            "A dedicated CA, CS, or legal professional prepares and submits all filings with the relevant authority. You get milestone updates by email and call.",
+            "Your dedicated expert starts working on your request, coordinating documentation, filings, consultations, and approvals while keeping you informed throughout the process.",
         itemClassName: "bg-canvas border border-hairline",
         dark: false,
     },
     {
         icon: CheckCircle2,
         step: "04",
-        title: "You are compliant",
+        title: "Delivered",
         description:
-            "Your certificate, GSTIN, or licence is shared with you over email. Your assigned expert also keeps you informed about renewal dates and compliance deadlines.",
+            "Once completed, you'll receive your documents, registrations, or expert solution along with continued support for any follow-up assistance you may need.",
         itemClassName: "bg-ink border border-ink",
         dark: true,
     },
@@ -53,7 +53,7 @@ function StepCard({ item }: { item: typeof steps[number] }) {
                 </div>
                 <span className={`text-xs font-semibold tracking-widest ${item.dark ? "text-white/70" : "text-primary-brand"}`}>{item.step}</span>
             </div>
-            <div className="flex flex-col gap-3 min-w-0">
+            <div className="flex min-w-0 flex-col items-center gap-3 text-center sm:items-start sm:text-left">
                 <h3 className={`font-display text-2xl md:text-3xl font-medium leading-snug ${item.dark ? "text-white" : "text-ink"}`}>
                     {item.title}
                 </h3>

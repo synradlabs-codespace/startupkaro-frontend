@@ -10,35 +10,60 @@ const proofStats = [
 
 const testimonials = [
     {
-        quote: "StartupKaro made our company registration feel simple. The pricing was clear, the checklist was precise, and we always knew what was happening next.",
-        name: "Aarav Mehta",
-        role: "Founder, Fintech startup",
+        quote: "Partnering with StartupKaro has been one of the best decisions for our business. Their expertise in legal structuring, financial planning, and strategic consulting helped us build a stronger foundation and move forward with confidence. They truly understand the challenges founders face.",
+        name: "Gourav Kamboj",
+        role: "Founder & Managing Director, CHAICHURI",
     },
     {
-        quote: "I had delayed GST registration because I did not know where to begin. Their team handled the documents, filing, and follow-ups without the usual back-and-forth.",
-        name: "Priya Nair",
-        role: "Owner, D2C brand",
+        quote: "The team's support in internal audits, compliance reviews, and investor relations has been exceptional. Their professionalism, responsiveness, and practical approach have made them a trusted advisory partner for our organization.",
+        name: "Rohit Sahani",
+        role: "Managing Director & CEO, Swastik Finance Limited",
     },
     {
-        quote: "The biggest win was transparency. No surprise charges, no vague timelines, and a real expert explaining what each step meant for our business.",
-        name: "Rohan Kapoor",
-        role: "Co-founder, SaaS company",
+        quote: "StartupKaro made our company incorporation and compliance journey completely hassle-free. Every process was handled efficiently, timelines were met, and their proactive guidance ensured we could focus on growing our business without worrying about regulatory matters.",
+        name: "Rushil Sehgal",
+        role: "Director, Synrad Labs Private Limited",
     },
     {
-        quote: "We needed trademark filing quickly before launch. StartupKaro helped us understand classes, risks, and next steps in plain language.",
-        name: "Meera Sethi",
-        role: "Founder, Consumer brand",
+        quote: "From setting up our company to providing valuable business and management consultancy, the guidance has been exceptional. Their strategic advice has played an important role in helping us make better business decisions.",
+        name: "Urvashi Khanna",
+        role: "Managing Director, Prideora Exports Private Limited",
     },
     {
-        quote: "For a small business, compliance can feel intimidating. Their online process removed the friction and let us focus on operations.",
-        name: "Kabir Arora",
-        role: "Director, Retail services",
+        quote: "The entire incorporation process was smooth, transparent, and professionally managed. Whenever we had questions, the team responded promptly and ensured everything was completed without unnecessary delays.",
+        name: "Priyanka Kohli",
+        role: "Director, VelvetVista Accommodations Private Limited",
+    },
+    {
+        quote: "After a frustrating experience with another consultant, I had almost lost confidence in the registration process. StartupKaro completely changed that experience. They simplified every step, handled all the formalities professionally, and made the entire journey stress-free.",
+        name: "Surangma Chhabra",
+        role: "Managing Partner, Mixectar LLP",
+    },
+    {
+        quote: "StartupKaro's legal advisory is simply phenomenal. Their team explains every legal aspect with clarity, protects our interests, and is always available whenever we need guidance. It's reassuring to have such dependable experts by our side.",
+        name: "Tina Ahuja",
+        role: "Artist, Celebrity",
+    },
+    {
+        quote: "Setting up a manufacturing beverages plant involved multiple regulatory and operational challenges. The guidance and support we received throughout the project were outstanding. Their expertise gave us the confidence to establish our manufacturing unit successfully.",
+        name: "Navjot Kaur",
+        role: "Director, Bora Bora Wellness Private Limited",
+    },
+    {
+        quote: "StartupKaro's franchise advisory and business consulting are among the best I've experienced. Their deep understanding of branding, expansion, and the food industry has helped us create a strong roadmap for future growth. I highly recommend them to every aspiring entrepreneur.",
+        name: "Rajinder Singh",
+        role: "Proprietor, Sardaar Ji Amritsari Kulcha",
+    },
+    {
+        quote: "I've been relying on StartupKaro for my income tax filings, and the experience has always been seamless. Their team ensures timely filing, accurate compliance, and excellent support, making taxation completely stress-free every year.",
+        name: "Amit Verma",
+        role: "Salaried Individual",
     },
 ];
 
 function TestimonialCard({ quote, name, role }: (typeof testimonials)[number]) {
     return (
-        <article className="group relative flex h-56 w-[320px] shrink-0 flex-col justify-between overflow-hidden rounded-xl border border-hairline bg-canvas p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-brand hover:shadow-[0_2px_8px_rgba(26,26,26,0.08)] sm:w-[380px]">
+        <article className="group relative flex h-72 w-[320px] shrink-0 flex-col justify-between overflow-hidden rounded-xl border border-hairline bg-canvas p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-brand hover:shadow-[0_2px_8px_rgba(26,26,26,0.08)] sm:w-[420px]">
             <Quote className="pointer-events-none absolute -right-2 -top-3 h-24 w-24 text-primary-brand opacity-10" />
             <p className="relative z-10 text-sm leading-relaxed text-charcoal">{quote}</p>
             <div className="relative z-10 border-t border-hairline pt-4">
@@ -63,7 +88,7 @@ export function TestimonialsSection() {
                             Built for founders who want clarity before commitment
                         </h2>
                         <p className="mt-4 text-base leading-relaxed text-charcoal">
-                            Compliance decisions carry real consequences. These stories highlight the things founders care about most: predictable pricing, responsive experts, and zero confusion about what happens next.
+                            Every startup has a unique journey. Read what founders have to say about their experience working with us—from validating business ideas and navigating compliance to launching, scaling, and achieving sustainable growth with the right strategic guidance
                         </p>
                     </div>
 

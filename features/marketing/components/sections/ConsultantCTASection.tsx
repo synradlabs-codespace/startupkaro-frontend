@@ -9,7 +9,7 @@ const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
 const points = [
     { icon: MessageCircle, label: "Private 1:1 call" },
     { icon: ShieldCheck, label: "CA/CS/legal guidance" },
-    { icon: CalendarClock, label: "Book only the time you need" },
+    { icon: CalendarClock, label: "Select Your Preferred Time Slot" },
 ];
 
 export function ConsultantCTASection() {
@@ -40,7 +40,7 @@ export function ConsultantCTASection() {
                                 Need clarity before choosing?
                             </div>
                             <h2 className="font-display text-3xl font-medium leading-tight md:text-5xl">
-                                Talk privately with a consultant at Rs. 399 per session
+                                Get Personalized Consultation Tailored to Your Business
                             </h2>
                             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/78 md:text-base">
                                 For founders who want peace of mind before filing, registering, or fixing compliance, book a focused 1:1 session and leave with a clear next step.
