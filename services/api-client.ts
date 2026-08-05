@@ -11,7 +11,7 @@ export const apiClient = axios.create({
     withCredentials: true,
 });
 
-// Bare client used only for token refresh — no interceptors to avoid recursion.
+// Bare client used only for token refresh, with no interceptors to avoid recursion.
 const refreshClient = axios.create({
     baseURL: API_BASE_URL,
     headers: { "Content-Type": "application/json" },
@@ -31,6 +31,7 @@ let refreshPromise: Promise<string> | null = null;
 
 function clearSessionAndRedirect() {
     const role = localStorage.getItem("userRole");
+    const pathname = window.location.pathname;
     clearAuthSession();
 
     const loginRoutes: Record<string, string> = {
@@ -39,7 +40,19 @@ function clearSessionAndRedirect() {
         customer: "/customer/login",
     };
 
-    window.location.href = role ? (loginRoutes[role] ?? "/admin/login") : "/admin/login";
+    const inferredRole = pathname.startsWith("/customer")
+        ? "customer"
+        : pathname.startsWith("/employee")
+            ? "employee"
+            : pathname.startsWith("/admin")
+                ? "admin"
+                : undefined;
+
+    window.location.href = role ? (loginRoutes[role] ?? "/admin/login") : (inferredRole ? loginRoutes[inferredRole] : "/admin/login");
+}
+
+function isAuthEndpoint(url?: string) {
+    return Boolean(url?.includes("/auth/"));
 }
 
 apiClient.interceptors.response.use(
@@ -52,9 +65,13 @@ apiClient.interceptors.response.use(
         const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
         const refreshToken = localStorage.getItem("refreshToken");
         const role = localStorage.getItem("userRole");
+        const isRefreshCall = originalRequest.url?.includes("/auth/refresh");
+
+        if (isAuthEndpoint(originalRequest.url) && !isRefreshCall) {
+            return Promise.reject(error);
+        }
 
         // Don't attempt refresh if this was already a retry, a refresh call itself, or we have no token.
-        const isRefreshCall = originalRequest.url?.includes("/auth/refresh");
         if (originalRequest._retry || isRefreshCall || !refreshToken) {
             clearSessionAndRedirect();
             return Promise.reject(error);

@@ -22,7 +22,7 @@ export function TablePagination({ total, page, pageSize, onPageChange, onPageSiz
         <div className="flex items-center justify-between px-4 py-3 border-t">
             <p className="text-sm text-muted-foreground">
                 {total === 0 ? "No results" : (
-                    <>Showing <span className="font-medium text-foreground">{from}–{to}</span> of <span className="font-medium text-foreground">{total}</span></>
+                    <>Showing <span className="font-medium text-foreground">{from}-{to}</span> of <span className="font-medium text-foreground">{total}</span></>
                 )}
             </p>
             <div className="flex items-center gap-2">

@@ -59,7 +59,7 @@
   --color-link-blue: #024ad8;
   --color-error-brand: #b3262b;
 
-  /* Per-panel accents (deferred — panels not yet migrated) */
+  /* Per-panel accents (deferred, panels not yet migrated) */
   --color-accent-admin: #c9e0fc;
   --color-accent-employee: #f7f7f7;
   --color-accent-customer: #f7f7f7;
@@ -84,7 +84,7 @@
   --color-status-muted-fg:        #636363;
   --color-status-muted-border:    #e8e8e8;
 
-  /* Fonts — Gilroy for headings/display, Quicksand for body and all other text */
+  /* Fonts: Gilroy for headings/display, Quicksand for body and all other text */
   --font-sans: var(--font-quicksand), "Quicksand", ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-gilroy), "Gilroy", ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-quicksand), "Quicksand", ui-sans-serif, system-ui, sans-serif;

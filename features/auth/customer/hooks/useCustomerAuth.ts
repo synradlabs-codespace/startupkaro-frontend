@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authService } from "@/services/auth.service";
 import { useAuth } from "../../shared/hooks/useAuth";
+import { useToast } from "@/components/providers/ToastProvider";
 import type { AuthResponse } from "@/features/auth/shared/types";
 import type { CustomerAuthResult } from "@/services/auth.service";
 import { getPostLoginRedirect } from "@/features/auth/shared/hooks/useAuthRedirect";
@@ -28,6 +29,7 @@ function useCustomerAuthActions() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { saveSession } = useAuth();
+    const toast = useToast();
     const router = useRouter();
 
     const finishAuthenticated = (response: AuthResponse) => {
@@ -46,7 +48,9 @@ function useCustomerAuthActions() {
             }
             return response;
         } catch (err) {
-            setError(getErrorMessage(err, "Google sign in failed"));
+            const message = getErrorMessage(err, "Google sign in failed");
+            setError(message);
+            toast.error(message);
             return null;
         } finally {
             setLoading(false);
@@ -60,13 +64,15 @@ function useCustomerAuthActions() {
             const response = await authService.customerCompleteRegistration(payload);
             finishAuthenticated(response);
         } catch (err) {
-            setError(getErrorMessage(err, "Registration failed"));
+            const message = getErrorMessage(err, "Registration failed");
+            setError(message);
+            toast.error(message);
         } finally {
             setLoading(false);
         }
     };
 
-    return { loading, error, setLoading, setError, finishAuthenticated, continueWithGoogle, completeRegistration };
+    return { loading, error, setLoading, setError, toast, finishAuthenticated, continueWithGoogle, completeRegistration };
 }
 
 export function useCustomerLogin() {
@@ -79,7 +85,9 @@ export function useCustomerLogin() {
             const response = await authService.customerLogin({ email, password });
             auth.finishAuthenticated(response);
         } catch (err) {
-            auth.setError(getErrorMessage(err, "Invalid credentials"));
+            const message = getErrorMessage(err, "Invalid credentials");
+            auth.setError(message);
+            auth.toast.error(message);
         } finally {
             auth.setLoading(false);
         }
@@ -109,7 +117,9 @@ export function useCustomerRegister() {
             const response = await authService.customerRegister(payload);
             auth.finishAuthenticated(response);
         } catch (err) {
-            auth.setError(getErrorMessage(err, "Registration failed"));
+            const message = getErrorMessage(err, "Registration failed");
+            auth.setError(message);
+            auth.toast.error(message);
         } finally {
             auth.setLoading(false);
         }

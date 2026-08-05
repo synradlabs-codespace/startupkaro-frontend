@@ -45,7 +45,7 @@ export const validators = {
 
     phone: (v: string): string | null => {
         if (!v.trim()) return "Phone number is required";
-        // Allows optional leading +, digits, spaces, dashes, parens — 7–15 digit chars
+        // Allows optional leading +, digits, spaces, dashes, and parens: 7-15 digit chars
         if (!/^[+]?[\d\s\-()+]{7,15}$/.test(v.trim()))
             return "Enter a valid phone number (e.g. +91 98765 43210)";
         return null;
@@ -70,7 +70,7 @@ export const validators = {
 };
 
 export interface PasswordStrength {
-    score: number; // 0–5
+    score: number; // 0-5
     label: string;
     color: string; // Tailwind bg class
     textColor: string; // Tailwind text class

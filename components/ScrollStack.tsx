@@ -73,7 +73,6 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const cardTopsRef = useRef<number[]>([]);
   const lastTransformsRef = useRef(new Map<number, { translateY: number; scale: number; rotation: number; blur: number }>());
   const isUpdatingRef = useRef(false);
-  const scrollUpdateFrameRef = useRef<number | null>(null);
 
   const calculateProgress = useCallback((scrollTop: number, start: number, end: number) => {
     if (scrollTop < start) return 0;
@@ -93,12 +92,14 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       return {
         scrollTop: window.scrollY,
         containerHeight: window.innerHeight,
+        scrollContainer: document.documentElement
       };
     } else {
       const scroller = scrollerRef.current;
       return {
         scrollTop: scroller ? scroller.scrollTop : 0,
         containerHeight: scroller ? scroller.clientHeight : 0,
+        scrollContainer: scroller
       };
     }
   }, [useWindowScroll]);
@@ -106,7 +107,6 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const getElementOffset = useCallback(
     (element: HTMLElement) => {
       if (useWindowScroll) {
-        // Use layout position (ignores transforms) to avoid position feedback loops
         return getLayoutTop(element);
       } else {
         return element.offsetTop;
@@ -133,7 +133,6 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     cardsRef.current.forEach((card, i) => {
       if (!card) return;
 
-      // Use cached layout tops (measured before any transforms) to prevent feedback loops
       const cardTop = cardTopsRef.current[i] ?? getElementOffset(card);
       const triggerStart = cardTop - stackPositionPx - itemStackDistance * i;
       const triggerEnd = cardTop - scaleEndPositionPx;
@@ -172,23 +171,23 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       }
 
       const newTransform = {
-        translateY,
-        scale,
-        rotation,
-        blur
+        translateY: Math.round(translateY * 100) / 100,
+        scale: Math.round(scale * 1000) / 1000,
+        rotation: Math.round(rotation * 100) / 100,
+        blur: Math.round(blur * 100) / 100
       };
 
       const lastTransform = lastTransformsRef.current.get(i);
       const hasChanged =
         !lastTransform ||
-        Math.abs(lastTransform.translateY - newTransform.translateY) > 0.001 ||
-        Math.abs(lastTransform.scale - newTransform.scale) > 0.0001 ||
-        Math.abs(lastTransform.rotation - newTransform.rotation) > 0.001 ||
-        Math.abs(lastTransform.blur - newTransform.blur) > 0.001;
+        Math.abs(lastTransform.translateY - newTransform.translateY) > 0.1 ||
+        Math.abs(lastTransform.scale - newTransform.scale) > 0.001 ||
+        Math.abs(lastTransform.rotation - newTransform.rotation) > 0.1 ||
+        Math.abs(lastTransform.blur - newTransform.blur) > 0.1;
 
       if (hasChanged) {
-        const transform = `translate3d(0, ${newTransform.translateY.toFixed(3)}px, 0) scale(${newTransform.scale.toFixed(5)}) rotate(${newTransform.rotation.toFixed(3)}deg)`;
-        const filter = newTransform.blur > 0 ? `blur(${newTransform.blur.toFixed(3)}px)` : '';
+        const transform = `translate3d(0, ${newTransform.translateY}px, 0) scale(${newTransform.scale}) rotate(${newTransform.rotation}deg)`;
+        const filter = newTransform.blur > 0 ? `blur(${newTransform.blur}px)` : '';
 
         card.style.transform = transform;
         card.style.filter = filter;
@@ -225,29 +224,10 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   ]);
 
   const handleScroll = useCallback(() => {
-    if (scrollUpdateFrameRef.current !== null) return;
-
-    scrollUpdateFrameRef.current = requestAnimationFrame(() => {
-      scrollUpdateFrameRef.current = null;
-      updateCardTransforms();
-    });
-  }, [updateCardTransforms]);
-
-  const handleLenisScroll = useCallback(() => {
     updateCardTransforms();
   }, [updateCardTransforms]);
 
   const setupLenis = useCallback(() => {
-    const prefersNativeTouchScroll =
-      typeof window !== 'undefined' &&
-      (window.matchMedia('(hover: none), (pointer: coarse)').matches || navigator.maxTouchPoints > 0);
-
-    if (prefersNativeTouchScroll) {
-      const target = useWindowScroll ? window : scrollerRef.current;
-      target?.addEventListener('scroll', handleScroll, { passive: true });
-      return undefined;
-    }
-
     if (useWindowScroll) {
       const lenis = new Lenis({
         duration: 1.2,
@@ -261,7 +241,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         syncTouchLerp: 0.075
       });
 
-      lenis.on('scroll', handleLenisScroll);
+      lenis.on('scroll', handleScroll);
 
       const raf = (time: number) => {
         lenis.raf(time);
@@ -290,7 +270,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         syncTouchLerp: 0.075
       });
 
-      lenis.on('scroll', handleLenisScroll);
+      lenis.on('scroll', handleScroll);
 
       const raf = (time: number) => {
         lenis.raf(time);
@@ -301,7 +281,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       lenisRef.current = lenis;
       return lenis;
     }
-  }, [handleScroll, handleLenisScroll, useWindowScroll]);
+  }, [handleScroll, useWindowScroll]);
 
   useLayoutEffect(() => {
     if (!useWindowScroll && !scrollerRef.current) return;
@@ -318,7 +298,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       if (i < cards.length - 1) {
         card.style.marginBottom = `${itemDistance}px`;
       }
-      card.style.willChange = 'transform, filter';
+      card.style.willChange = blurAmount ? 'transform, filter' : 'transform';
       card.style.transformOrigin = 'top center';
       card.style.backfaceVisibility = 'hidden';
       card.style.transform = 'translateZ(0)';
@@ -327,34 +307,34 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       card.style.webkitPerspective = '1000px';
     });
 
-    // Cache layout positions BEFORE any transforms are applied.
-    // Must happen after initial style setup (transform: translateZ(0) is applied above)
-    // but before Lenis starts mutating transforms on scroll.
     cardTopsRef.current = cards.map(card => getElementOffset(card));
 
-    const lenis = setupLenis();
+    setupLenis();
+
     updateCardTransforms();
+
+    const handleResize = () => {
+      cardTopsRef.current = cards.map(card => getElementOffset(card));
+      updateCardTransforms();
+    };
+
+    window.addEventListener('resize', handleResize, { passive: true });
+    window.addEventListener('load', handleResize, { once: true });
 
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
-      if (scrollUpdateFrameRef.current !== null) {
-        cancelAnimationFrame(scrollUpdateFrameRef.current);
-      }
       if (lenisRef.current) {
         lenisRef.current.destroy();
-      }
-      if (!lenis) {
-        const target = useWindowScroll ? window : scrollerRef.current;
-        target?.removeEventListener('scroll', handleScroll);
       }
       stackCompletedRef.current = false;
       cardsRef.current = [];
       cardTopsRef.current = [];
       transformsCache.clear();
       isUpdatingRef.current = false;
-      scrollUpdateFrameRef.current = null;
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('load', handleResize);
     };
   }, [
     itemDistance,
@@ -370,21 +350,20 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     onStackComplete,
     setupLenis,
     updateCardTransforms,
-    getElementOffset,
-    handleScroll,
+    getElementOffset
   ]);
 
   return (
     <div
-      className={`relative w-full h-full overflow-y-auto overflow-x-visible ${className}`.trim()}
+      className={`relative w-full h-full ${useWindowScroll ? 'overflow-y-visible' : 'overflow-y-auto'} overflow-x-visible ${className}`.trim()}
       ref={scrollerRef}
       style={{
-        overscrollBehavior: 'contain',
+        overscrollBehavior: useWindowScroll ? 'auto' : 'contain',
         WebkitOverflowScrolling: 'touch',
-        scrollBehavior: 'auto',
+        scrollBehavior: useWindowScroll ? 'auto' : 'smooth',
         WebkitTransform: 'translateZ(0)',
         transform: 'translateZ(0)',
-        willChange: 'scroll-position'
+        willChange: useWindowScroll ? undefined : 'scroll-position'
       }}
     >
       <div className="scroll-stack-inner pt-[20vh] px-20 min-h-screen" style={{ paddingBottom: `${scrollBuffer}px` }}>

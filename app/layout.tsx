@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Quicksand } from "next/font/google";
 import localFont from "next/font/local";
+import { ToastProvider } from "@/components/providers/ToastProvider";
 
 const quicksand = Quicksand({
   subsets: ["latin"],
@@ -40,7 +41,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${quicksand.variable} ${gilroy.variable}`}>
       <body className="antialiased font-sans">
-        {children}
+        <ToastProvider>
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );

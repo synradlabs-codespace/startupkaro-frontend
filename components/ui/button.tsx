@@ -10,10 +10,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        /* charcoal rectangle — primary CTA */
+        /* charcoal rectangle: primary CTA */
         default:
           "rounded-md bg-primary text-primary-foreground hover:bg-primary-deep active:bg-primary-deep",
-        /* pill outline — taxonomy/filter controls */
+        /* pill outline: taxonomy/filter controls */
         "pill-outline":
           "rounded-full border border-input bg-transparent text-foreground hover:bg-muted",
         outline:
