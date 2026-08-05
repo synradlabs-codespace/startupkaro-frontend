@@ -7,9 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { OrderStatusBadge, PaymentStatusBadge } from "@/components/custom/StatusBadge";
-import { useOrder, useUpdateOrder } from "@/features/admin/hooks/useAdminOrders";
+import { useOrder, useOrderHistory, useUpdateOrder } from "@/features/admin/hooks/useAdminOrders";
 import { downloadInvoice } from "@/features/admin/lib/downloadInvoice";
-import { formatDate, formatDateHeader, formatTime, getApiErrorMessage } from "@/features/admin/lib/format";
+import { formatDate, formatDateHeader, formatTime, getAdminOrderPaymentStatus, getApiErrorMessage } from "@/features/admin/lib/format";
 import { OrderPaymentsPanel } from "@/features/admin/components/OrderPaymentsPanel";
 import { useToast } from "@/components/providers/ToastProvider";
 import type { Note } from "@/services/admin.service";
@@ -33,6 +33,7 @@ function groupNotesByDate(notes: Note[]) {
 export function AdminOrderDetailPage({ id }: { id: string }) {
     const toast = useToast();
     const orderQuery = useOrder(id);
+    const historyQuery = useOrderHistory(id);
     const updateOrder = useUpdateOrder(id);
     const order = orderQuery.data?.data;
     const [downloading, setDownloading] = useState(false);
@@ -82,12 +83,14 @@ export function AdminOrderDetailPage({ id }: { id: string }) {
     }
 
     const notes = order.notes ?? [];
+    const items = order.items ?? [];
+    const serviceLabel = order.service?.name ?? (items.length === 1 ? items[0].name : `${items.length} services`);
 
     return (
         <div>
             <PageHeader
                 title={`Order ${order.orderNumber || order.id}`}
-                description={order.service.name}
+                description={serviceLabel}
                 action={
                     <div className="flex gap-2">
                         <Button variant="outline" size="sm" onClick={handleDownload} disabled={downloading} className="uppercase tracking-wide">
@@ -108,8 +111,11 @@ export function AdminOrderDetailPage({ id }: { id: string }) {
                         <CardHeader><CardTitle className="text-base">Order Info</CardTitle></CardHeader>
                         <CardContent className="space-y-3 text-sm">
                             <Row label="Order ID" value={order.orderNumber || order.id} mono />
-                            <Row label="Service" value={order.service.name} />
+                            <Row label="Service" value={serviceLabel} />
                             <Row label="Amount" value={formatINR(order.amount)} />
+                            {order.amountPaid != null && <Row label="Paid" value={formatINR(order.amountPaid)} />}
+                            {order.amountDue != null && <Row label="Due" value={formatINR(order.amountDue)} />}
+                            {order.paymentState && <Row label="Payment State" value={String(order.paymentState).replace(/_/g, " ")} />}
                             <Row label="Date" value={formatDate(order.createdAt)} />
                             <div className="flex items-center justify-between pt-1 border-t">
                                 <span className="text-slate">Order Status</span>
@@ -117,7 +123,7 @@ export function AdminOrderDetailPage({ id }: { id: string }) {
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-slate">Payment Status</span>
-                                <PaymentStatusBadge status={order.paymentStatus} />
+                                <PaymentStatusBadge status={getAdminOrderPaymentStatus(order)} />
                             </div>
                         </CardContent>
                     </Card>
@@ -134,10 +140,29 @@ export function AdminOrderDetailPage({ id }: { id: string }) {
                             </div>
                         </CardContent>
                     </Card>
+                    {items.length > 0 && (
+                        <Card>
+                            <CardHeader><CardTitle className="text-base">Line Items</CardTitle></CardHeader>
+                            <CardContent className="space-y-2 text-sm">
+                                {items.map((item) => (
+                                    <div key={item.id} className="rounded-lg border border-hairline bg-surface p-3">
+                                        <div className="flex items-start justify-between gap-3">
+                                            <div>
+                                                <p className="font-medium text-charcoal">{item.name}</p>
+                                                <p className="mt-0.5 text-xs text-slate">Qty {item.quantity} x {formatINR(item.unitPrice)}</p>
+                                            </div>
+                                            <p className="font-medium text-ink">{formatINR(item.amount)}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </CardContent>
+                        </Card>
+                    )}
                     <OrderPaymentsPanel orderId={order.id} orderAmount={order.amount} />
                 </div>
 
-                {/* Col 2 — Notes */}
+                {/* Col 2 Notes */}
+                <div className="space-y-4">
                 <Card className="flex flex-col max-h-[calc(100vh-8rem)] overflow-hidden">
                     <CardHeader>
                         <CardTitle className="text-base flex items-center gap-2">
@@ -207,6 +232,31 @@ export function AdminOrderDetailPage({ id }: { id: string }) {
                         <p className="text-xs text-slate">Press Enter for a new line. Shift+Enter adds the note.</p>
                     </CardContent>
                 </Card>
+                <Card>
+                    <CardHeader><CardTitle className="text-base">Status History</CardTitle></CardHeader>
+                    <CardContent className="space-y-3 text-sm">
+                        {historyQuery.isLoading ? (
+                            <p className="text-slate">Loading history...</p>
+                        ) : historyQuery.isError ? (
+                            <p className="text-error-brand">Failed to load history</p>
+                        ) : (historyQuery.data ?? []).length === 0 ? (
+                            <p className="text-slate">No status history yet.</p>
+                        ) : (
+                            (historyQuery.data ?? []).map((entry) => (
+                                <div key={entry.id} className="rounded-lg border border-hairline bg-surface p-3">
+                                    <p className="font-medium text-charcoal">
+                                        {entry.fromStatus ? `${entry.fromStatus} to ` : ""}{entry.toStatus}
+                                    </p>
+                                    <p className="mt-1 text-xs text-slate">
+                                        {formatDate(entry.createdAt)} | {entry.actorName ?? entry.actorType ?? "System"}
+                                    </p>
+                                    {entry.reason && <p className="mt-1 text-xs text-graphite">{entry.reason}</p>}
+                                </div>
+                            ))
+                        )}
+                    </CardContent>
+                </Card>
+                </div>
             </div>
         </div>
     );

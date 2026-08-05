@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { OrderStatusBadge, PaymentStatusBadge } from "@/components/custom/StatusBadge";
 import { useOrder, useUpdateOrder } from "@/features/admin/hooks/useAdminOrders";
-import { formatDate, formatDateHeader, formatTime, getApiErrorMessage } from "@/features/admin/lib/format";
+import { formatDate, formatDateHeader, formatTime, getAdminOrderPaymentStatus, getAdminOrderServiceName, getApiErrorMessage } from "@/features/admin/lib/format";
 import { downloadInvoice } from "@/features/admin/lib/downloadInvoice";
 import { OrderPaymentsPanel } from "@/features/admin/components/OrderPaymentsPanel";
 import { useToast } from "@/components/providers/ToastProvider";
@@ -88,7 +88,7 @@ export function EmployeeOrderDetailPage({ id }: { id: string }) {
         <div>
             <PageHeader
                 title={`Order ${order.orderNumber || order.id}`}
-                description={order.service.name}
+                description={getAdminOrderServiceName(order)}
                 action={
                     <div className="flex gap-2">
                         <Button variant="outline" size="sm" onClick={handleDownload} disabled={downloading} className="uppercase tracking-wide">
@@ -109,7 +109,7 @@ export function EmployeeOrderDetailPage({ id }: { id: string }) {
                         <CardHeader><CardTitle className="text-base">Order Info</CardTitle></CardHeader>
                         <CardContent className="space-y-3 text-sm">
                             <Row label="Order ID" value={order.orderNumber || order.id} mono />
-                            <Row label="Service" value={order.service.name} />
+                            <Row label="Service" value={getAdminOrderServiceName(order)} />
                             <Row label="Amount" value={formatINR(order.amount)} />
                             <Row label="Date" value={formatDate(order.createdAt)} />
                             <div className="flex items-center justify-between pt-1 border-t">
@@ -118,7 +118,7 @@ export function EmployeeOrderDetailPage({ id }: { id: string }) {
                             </div>
                             <div className="flex items-center justify-between">
                                 <span className="text-slate">Payment Status</span>
-                                <PaymentStatusBadge status={order.paymentStatus} />
+                                <PaymentStatusBadge status={getAdminOrderPaymentStatus(order)} />
                             </div>
                         </CardContent>
                     </Card>
@@ -138,7 +138,7 @@ export function EmployeeOrderDetailPage({ id }: { id: string }) {
                     <OrderPaymentsPanel orderId={order.id} orderAmount={order.amount} />
                 </div>
 
-                {/* Col 2 — Notes */}
+                {/* Col 2 Notes */}
                 <Card className="flex flex-col max-h-[calc(100vh-8rem)] overflow-hidden">
                     <CardHeader>
                         <CardTitle className="text-base flex items-center gap-2">

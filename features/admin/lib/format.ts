@@ -1,4 +1,5 @@
 export { getApiErrorMessage } from "@/lib/api-messages";
+import type { AdminOrder } from "@/services/admin.service";
 
 export function formatDate(value?: string) {
     if (!value) return "-";
@@ -33,4 +34,15 @@ export function getInitials(name: string) {
         .join("")
         .slice(0, 2)
         .toUpperCase();
+}
+
+export function getAdminOrderServiceName(order: Pick<AdminOrder, "service" | "items">) {
+    if (order.service?.name) return order.service.name;
+    if (order.items?.length === 1) return order.items[0].name;
+    if (order.items?.length) return `${order.items.length} services`;
+    return "StartupKaro service";
+}
+
+export function getAdminOrderPaymentStatus(order: Pick<AdminOrder, "paymentStatus" | "paymentState">) {
+    return order.paymentStatus ?? order.paymentState ?? "unpaid";
 }

@@ -11,7 +11,7 @@ import { OrderStatusBadge, PaymentStatusBadge } from "@/components/custom/Status
 import { useCustomer } from "@/features/admin/hooks/useAdminCustomers";
 import { useCustomerOrders } from "@/features/admin/hooks/useAdminOrders";
 import { downloadInvoice } from "@/features/admin/lib/downloadInvoice";
-import { formatDate, getApiErrorMessage, getInitials } from "@/features/admin/lib/format";
+import { formatDate, getAdminOrderPaymentStatus, getAdminOrderServiceName, getApiErrorMessage, getInitials } from "@/features/admin/lib/format";
 import { useToast } from "@/components/providers/ToastProvider";
 import { formatINR } from "@/lib/currency";
 import { Mail, Phone, Eye, Download } from "lucide-react";
@@ -118,10 +118,10 @@ export function EmployeeCustomerDetailPage({ id }: { id: string }) {
                                     orders.map((order) => (
                                         <TableRow key={order.id}>
                                             <TableCell className="font-mono text-xs">{order.orderNumber || order.id.slice(0, 8)}</TableCell>
-                                            <TableCell>{order.service.name}</TableCell>
+                                            <TableCell>{getAdminOrderServiceName(order)}</TableCell>
                                             <TableCell>{formatINR(order.amount)}</TableCell>
                                             <TableCell><OrderStatusBadge status={order.status} /></TableCell>
-                                            <TableCell><PaymentStatusBadge status={order.paymentStatus} /></TableCell>
+                                            <TableCell><PaymentStatusBadge status={getAdminOrderPaymentStatus(order)} /></TableCell>
                                             <TableCell className="text-slate text-sm">{formatDate(order.createdAt)}</TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex gap-1 justify-end">

@@ -50,7 +50,7 @@ export function EmployeeProfilePage() {
                 {/* ── Content Grid ────────────────────────── */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-                    {/* Personal Information — locked (no edit endpoint) */}
+                    {/* Personal Information, locked (no edit endpoint) */}
                     <div className="rounded-lg border border-hairline bg-canvas p-6 space-y-5">
                         <div className="flex items-center gap-2 pb-1 border-b border-hairline">
                             <div className="h-7 w-7 rounded-lg bg-primary-brand/10 flex items-center justify-center">
@@ -63,21 +63,21 @@ export function EmployeeProfilePage() {
                             <p className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
                                 <User className="h-3 w-3" /> Full Name
                             </p>
-                            <p className="text-sm font-medium text-ink">{me.name || "—"}</p>
+                            <p className="text-sm font-medium text-ink">{me.name || "N/A"}</p>
                         </div>
 
                         <div className="space-y-1.5">
                             <p className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
                                 <Mail className="h-3 w-3" /> Email Address
                             </p>
-                            <p className="text-sm text-slate">{me.email || "—"}</p>
+                            <p className="text-sm text-slate">{me.email || "N/A"}</p>
                         </div>
 
                         <div className="space-y-1.5">
                             <p className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
                                 <Phone className="h-3 w-3" /> Phone Number
                             </p>
-                            <p className="text-sm text-slate">{me.phone || "—"}</p>
+                            <p className="text-sm text-slate">{me.phone || "N/A"}</p>
                         </div>
 
                     </div>
@@ -91,14 +91,14 @@ export function EmployeeProfilePage() {
                             <h3 className="text-sm font-semibold text-charcoal">Account &amp; Security</h3>
                         </div>
 
-                        {/* Password — kept in UI, API endpoint pending */}
+                        {/* Password kept in UI, API endpoint pending */}
                         <div className="flex items-center gap-4 p-4 rounded-lg border border-hairline bg-surface">
                             <div className="h-9 w-9 rounded-lg bg-primary-brand/10 flex items-center justify-center shrink-0">
                                 <KeyRound className="h-4 w-4 text-primary-brand" />
                             </div>
                             <div className="flex-1 min-w-0">
                                 <p className="text-sm font-medium text-charcoal">Password</p>
-                                {/* TODO: wire to POST /admin/profile/change-password once backend adds endpoint — see API_MISMATCHES.md */}
+                                {/* TODO: wire to POST /admin/profile/change-password once backend adds endpoint. See API_MISMATCHES.md */}
                                 <p className="text-xs text-stone">Keep your account secure with a strong password</p>
                             </div>
                             <Link

@@ -11,10 +11,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { PaymentStatusBadge, formatPaymentStatus } from "@/components/custom/StatusBadge";
 import { usePaymentList } from "@/features/admin/hooks/useAdminPayments";
+import { downloadAdminReceipt } from "@/features/admin/lib/downloadReceipt";
 import { formatDate } from "@/features/admin/lib/format";
 import { formatINR } from "@/lib/currency";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
-import { Search, Eye } from "lucide-react";
+import { Download, Search, Eye } from "lucide-react";
 
 const PAGE_SIZE = 10;
 
@@ -125,11 +126,23 @@ export function AdminPaymentsPage() {
                                             <TableCell><PaymentStatusBadge status={payment.status} /></TableCell>
                                             <TableCell className="text-slate text-sm">{formatDate(payment.createdAt)}</TableCell>
                                             <TableCell className="text-right">
-                                                <Link href={`/admin/payments/${payment.id}`}>
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-brand/10 hover:text-charcoal">
-                                                        <Eye className="h-4 w-4" />
+                                                <div className="flex justify-end gap-1">
+                                                    <Link href={`/admin/payments/${payment.id}`}>
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary-brand/10 hover:text-charcoal">
+                                                            <Eye className="h-4 w-4" />
+                                                        </Button>
+                                                    </Link>
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        className="h-8 w-8 hover:bg-muted"
+                                                        title="Download Receipt"
+                                                        onClick={() => void downloadAdminReceipt(payment.id)}
+                                                    >
+                                                        <Download className="h-4 w-4" />
                                                     </Button>
-                                                </Link>
+                                                </div>
                                             </TableCell>
                                         </TableRow>
                                     ))

@@ -3,7 +3,7 @@ import type { ApiResponse, PaginatedResponse } from "@/types/api.types";
 
 export type AdminRole = "admin" | "employee";
 export type OrderStatus = "pending" | "confirmed" | "in_progress" | "completed" | "cancelled";
-export type PaymentStatus = "created" | "authorized" | "captured" | "failed" | "refunded";
+export type PaymentStatus = "created" | "authorized" | "captured" | "failed" | "refunded" | "voided";
 export type InquiryStatus = "unresolved" | "resolved";
 
 export interface Note {
@@ -68,12 +68,46 @@ export interface AdminOrder {
     id: string;
     orderNumber: string;
     customer: { id: string; name: string; email: string; phone?: string };
-    service: { id: string; name: string };
+    service?: { id: string; name: string };
+    items?: AdminOrderItem[];
     amount: number;
+    amountPaid?: number;
+    amountDue?: number;
+    paymentState?: OrderPaymentState | string;
     status: OrderStatus;
-    paymentStatus: PaymentStatus;
+    paymentStatus?: PaymentStatus;
+    source?: string;
     notes: Note[];
     createdAt: string;
+}
+
+export interface AdminOrderItem {
+    id: string;
+    serviceId: string;
+    name: string;
+    sacCode?: string | null;
+    quantity: number;
+    unitPrice: number;
+    taxableValue?: number;
+    amount: number;
+}
+
+export interface AdminOrderHistoryEntry {
+    id: string;
+    orderId: string;
+    fromStatus?: OrderStatus | string | null;
+    toStatus: OrderStatus | string;
+    actorType?: string;
+    actorId?: string | null;
+    actorName?: string | null;
+    reason?: string | null;
+    createdAt: string;
+}
+
+export interface AdminOrderCreateItem {
+    serviceId: string;
+    quantity: number;
+    amount: number;
 }
 
 export interface AdminPayment {
@@ -105,6 +139,8 @@ export interface AdminOrderPayment {
     razorpayPaymentId?: string | null;
     paidAt?: string | null;
     createdAt?: string;
+    voidedAt?: string | null;
+    voidReason?: string | null;
 }
 
 export interface AdminOrderPaymentsSummary {
@@ -160,6 +196,12 @@ export interface AdminServiceAnalyticsRow {
     count?: number;
     revenue?: number;
     amount?: number;
+}
+
+export interface AdminServiceAnalytics {
+    from?: string;
+    to?: string;
+    services: AdminServiceAnalyticsRow[];
 }
 
 export interface AdminPaymentHealthAnalytics {
@@ -331,20 +373,22 @@ export const adminBundleService = {
 };
 
 export const adminOrderService = {
-    list: (params?: { search?: string; status?: string; customerId?: string; page?: number; limit?: number }) =>
+    list: (params?: { search?: string; status?: string; customerId?: string; sortBy?: string; sortOrder?: "asc" | "desc"; page?: number; limit?: number }) =>
         apiClient.get<PaginatedResponse<AdminOrder>>("/admin/orders", { params }),
     listByCustomer: (customerId: string) =>
         apiClient.get<PaginatedResponse<AdminOrder>>("/admin/orders", { params: { customerId } }),
     get: (id: string) =>
         apiClient.get<ApiResponse<AdminOrder>>(`/admin/orders/${id}`),
-    create: (payload: { customerId: string; serviceId: string; amount: number; status?: string; notes?: string; inquiryId?: string }) =>
+    create: (payload: { customerId: string; items: AdminOrderCreateItem[]; inquiryId?: string }) =>
         apiClient.post<ApiResponse<AdminOrder>>("/admin/orders", payload),
     update: (id: string, payload: Partial<{ status: string; amount: number; notes: { text: string }[] }>) =>
         apiClient.patch<ApiResponse<AdminOrder>>(`/admin/orders/${id}`, payload),
     listPayments: (id: string) =>
         apiClient.get<ApiResponse<AdminOrderPaymentsSummary | AdminOrderPayment[]>>(`/admin/orders/${id}/payments`),
-    recordOfflinePayment: (id: string, payload: { amount: number; reference?: string; paidAt?: string }) =>
+    recordOfflinePayment: (id: string, payload: { amount: number; method: string; reference?: string }) =>
         apiClient.post<ApiResponse<AdminOrderPayment>>(`/admin/orders/${id}/payments`, payload),
+    history: (id: string, params?: { page?: number; limit?: number }) =>
+        apiClient.get<ApiResponse<AdminOrderHistoryEntry | AdminOrderHistoryEntry[]> | PaginatedResponse<AdminOrderHistoryEntry>>(`/admin/orders/${id}/history`, { params }),
 };
 
 export const adminPaymentService = {
@@ -352,6 +396,10 @@ export const adminPaymentService = {
         apiClient.get<PaginatedResponse<AdminPayment>>("/admin/payments", { params }),
     get: (id: string) =>
         apiClient.get<ApiResponse<AdminPayment>>(`/admin/payments/${id}`),
+    downloadReceipt: (id: string) =>
+        apiClient.get<Blob>(`/admin/payments/${id}/receipt`, { responseType: "blob" }),
+    voidReceipt: (id: string, payload: { reason: string }) =>
+        apiClient.post<ApiResponse<AdminPayment>>(`/admin/payments/${id}/void`, payload),
 };
 
 export const adminAnalyticsService = {
@@ -360,7 +408,7 @@ export const adminAnalyticsService = {
     orders: (params?: { from?: string; to?: string }) =>
         apiClient.get<ApiResponse<AdminOrdersAnalytics>>("/admin/analytics/orders", { params }),
     byService: (params?: { from?: string; to?: string }) =>
-        apiClient.get<ApiResponse<AdminServiceAnalyticsRow[]>>("/admin/analytics/by-service", { params }),
+        apiClient.get<ApiResponse<AdminServiceAnalytics>>("/admin/analytics/by-service", { params }),
     paymentHealth: (params?: { from?: string; to?: string }) =>
         apiClient.get<ApiResponse<AdminPaymentHealthAnalytics>>("/admin/analytics/payment-health", { params }),
 };

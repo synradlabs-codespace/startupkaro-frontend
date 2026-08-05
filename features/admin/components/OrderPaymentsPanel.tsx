@@ -1,16 +1,18 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { CreditCard, IndianRupee, ReceiptText } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CreditCard, Download, IndianRupee, ReceiptText, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PaymentStatusBadge } from "@/components/custom/StatusBadge";
 import { useOrderPayments, useRecordOfflinePayment } from "@/features/admin/hooks/useAdminOrders";
+import { downloadAdminReceipt } from "@/features/admin/lib/downloadReceipt";
 import { formatDate, getApiErrorMessage } from "@/features/admin/lib/format";
 import { formatINR, toPaise } from "@/lib/currency";
-import type { AdminOrderPayment, AdminOrderPaymentsSummary } from "@/services/admin.service";
+import { adminPaymentService, type AdminOrderPayment, type AdminOrderPaymentsSummary } from "@/services/admin.service";
 
 type PaymentPayload = AdminOrderPaymentsSummary | AdminOrderPayment[];
 
@@ -41,12 +43,27 @@ function formatPaymentState(state: string) {
 }
 
 export function OrderPaymentsPanel({ orderId, orderAmount }: { orderId: string; orderAmount: number }) {
+    const queryClient = useQueryClient();
     const paymentsQuery = useOrderPayments(orderId);
     const recordPayment = useRecordOfflinePayment(orderId);
     const [amount, setAmount] = useState("");
+    const [method, setMethod] = useState("cheque");
     const [reference, setReference] = useState("");
-    const [paidAt, setPaidAt] = useState("");
+    const [voidingId, setVoidingId] = useState("");
+    const [voidReason, setVoidReason] = useState("");
     const [error, setError] = useState("");
+    const voidPayment = useMutation({
+        mutationFn: ({ id, reason }: { id: string; reason: string }) => adminPaymentService.voidReceipt(id, { reason }),
+        onSuccess: () => {
+            setVoidingId("");
+            setVoidReason("");
+            queryClient.invalidateQueries({ queryKey: ["admin", "orders"] });
+            queryClient.invalidateQueries({ queryKey: ["admin", "orders", orderId] });
+            queryClient.invalidateQueries({ queryKey: ["admin", "orders", orderId, "payments"] });
+            queryClient.invalidateQueries({ queryKey: ["admin", "orders", orderId, "history"] });
+            queryClient.invalidateQueries({ queryKey: ["admin", "payments"] });
+        },
+    });
     const summary = useMemo(
         () => normalizePayments(paymentsQuery.data, orderAmount),
         [paymentsQuery.data, orderAmount],
@@ -58,12 +75,11 @@ export function OrderPaymentsPanel({ orderId, orderAmount }: { orderId: string; 
         try {
             await recordPayment.mutateAsync({
                 amount: toPaise(Number(amount)),
+                method,
                 reference: reference.trim() || undefined,
-                paidAt: paidAt ? new Date(paidAt).toISOString() : undefined,
             });
             setAmount("");
             setReference("");
-            setPaidAt("");
         } catch (err: unknown) {
             setError(getApiErrorMessage(err, "Failed to record payment"));
         }
@@ -117,6 +133,38 @@ export function OrderPaymentsPanel({ orderId, orderAmount }: { orderId: string; 
                                                     {formatDate(payment.paidAt ?? payment.createdAt ?? "")}
                                                 </p>
                                             )}
+                                            <div className="mt-3 flex flex-wrap gap-2">
+                                                <Button type="button" variant="outline" size="sm" className="h-8 gap-1.5 uppercase tracking-wide" onClick={() => void downloadAdminReceipt(payment.id)}>
+                                                    <Download className="h-3.5 w-3.5" />
+                                                    Receipt
+                                                </Button>
+                                                {payment.status !== "voided" && (
+                                                    <Button type="button" variant="outline" size="sm" className="h-8 gap-1.5 uppercase tracking-wide" onClick={() => setVoidingId(payment.id)}>
+                                                        <Undo2 className="h-3.5 w-3.5" />
+                                                        Void
+                                                    </Button>
+                                                )}
+                                            </div>
+                                            {voidingId === payment.id && (
+                                                <form
+                                                    className="mt-3 flex flex-col gap-2 sm:flex-row"
+                                                    onSubmit={(event) => {
+                                                        event.preventDefault();
+                                                        if (voidReason.trim()) voidPayment.mutate({ id: payment.id, reason: voidReason.trim() });
+                                                    }}
+                                                >
+                                                    <Input
+                                                        required
+                                                        value={voidReason}
+                                                        onChange={(event) => setVoidReason(event.target.value)}
+                                                        placeholder="Reason for voiding"
+                                                        className="h-9"
+                                                    />
+                                                    <Button type="submit" size="sm" disabled={voidPayment.isPending || !voidReason.trim()} className="h-9 bg-primary-brand text-white hover:bg-primary-brand/90 uppercase tracking-wide">
+                                                        Confirm
+                                                    </Button>
+                                                </form>
+                                            )}
                                         </div>
                                     ))}
                                 </div>
@@ -143,19 +191,20 @@ export function OrderPaymentsPanel({ orderId, orderAmount }: { orderId: string; 
                             />
                         </div>
                         <div className="space-y-1.5">
+                            <Label className="text-xs uppercase tracking-[0.28px] text-graphite">Method</Label>
+                            <Input
+                                required
+                                placeholder="cheque / upi / bank_transfer"
+                                value={method}
+                                onChange={(event) => setMethod(event.target.value)}
+                            />
+                        </div>
+                        <div className="space-y-1.5">
                             <Label className="text-xs uppercase tracking-[0.28px] text-graphite">Reference</Label>
                             <Input
                                 placeholder="UTR / cheque / txn id"
                                 value={reference}
                                 onChange={(event) => setReference(event.target.value)}
-                            />
-                        </div>
-                        <div className="space-y-1.5">
-                            <Label className="text-xs uppercase tracking-[0.28px] text-graphite">Paid At</Label>
-                            <Input
-                                type="datetime-local"
-                                value={paidAt}
-                                onChange={(event) => setPaidAt(event.target.value)}
                             />
                         </div>
                     </div>

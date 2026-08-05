@@ -141,7 +141,7 @@ export function EmployeeSidebar() {
               <>
                 <div className="flex-1 min-w-0">
                   <p className="text-[13px] font-medium text-ink truncate leading-none">{me.name || "Employee"}</p>
-                  <p className="text-[11px] text-steel truncate mt-0.5">{me.email || "—"}</p>
+                  <p className="text-[11px] text-steel truncate mt-0.5">{me.email || "N/A"}</p>
                 </div>
                 <button
                   type="button"

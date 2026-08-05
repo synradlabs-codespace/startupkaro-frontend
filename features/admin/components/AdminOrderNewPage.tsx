@@ -6,15 +6,13 @@ import { PageHeader } from "@/components/custom/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useCustomerList } from "@/features/admin/hooks/useAdminCustomers";
 import { useCreateOrder } from "@/features/admin/hooks/useAdminOrders";
-import { formatOrderStatus } from "@/components/custom/StatusBadge";
 import { useServiceList } from "@/features/admin/hooks/useAdminServices";
 import { getApiErrorMessage } from "@/features/admin/lib/format";
-import { toPaise } from "@/lib/currency";
+import { formatINR, toPaise } from "@/lib/currency";
 import { cn } from "@/lib/utils";
-import { Check, ChevronsUpDown, Search, ShoppingBag, User, Briefcase, IndianRupee, ClipboardList, StickyNote } from "lucide-react";
+import { Check, ChevronsUpDown, Search, ShoppingBag, User, Briefcase, ClipboardList, PlusCircle, Trash2 } from "lucide-react";
 
 type SearchableOption = {
     value: string;
@@ -143,11 +141,8 @@ export function AdminOrderNewPage() {
     const createOrder = useCreateOrder();
     const [form, setForm] = useState({
         customerId: "",
-        serviceId: "",
-        amount: "",
-        status: "pending",
-        notes: "",
     });
+    const [items, setItems] = useState([{ id: crypto.randomUUID(), serviceId: "", quantity: "1", amount: "" }]);
     const [error, setError] = useState("");
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -155,12 +150,14 @@ export function AdminOrderNewPage() {
         setError("");
 
         try {
+            const payloadItems = items.map((item) => ({
+                serviceId: item.serviceId,
+                quantity: Math.max(1, Number(item.quantity) || 1),
+                amount: toPaise(Number(item.amount)),
+            }));
             await createOrder.mutateAsync({
                 customerId: form.customerId,
-                serviceId: form.serviceId,
-                amount: toPaise(Number(form.amount)),
-                status: form.status,
-                notes: form.notes || undefined,
+                items: payloadItems,
             });
             router.push("/admin/orders");
         } catch (err: unknown) {
@@ -171,6 +168,11 @@ export function AdminOrderNewPage() {
     const set = (key: keyof typeof form) => (value: string | null) => {
         setForm((f) => ({ ...f, [key]: value ?? f[key] }));
     };
+    const setItem = (id: string, key: "serviceId" | "quantity" | "amount", value: string | null) => {
+        setItems((current) => current.map((item) => item.id === id ? { ...item, [key]: value ?? item[key] } : item));
+    };
+    const addItem = () => setItems((current) => current.concat({ id: crypto.randomUUID(), serviceId: "", quantity: "1", amount: "" }));
+    const removeItem = (id: string) => setItems((current) => current.length === 1 ? current : current.filter((item) => item.id !== id));
     const customers = customersQuery.data?.data ?? [];
     const services = servicesQuery.data?.data ?? [];
     const customerOptions = useMemo(
@@ -193,6 +195,7 @@ export function AdminOrderNewPage() {
             })),
         [services]
     );
+    const totalAmount = items.reduce((sum, item) => sum + toPaise(Number(item.amount || 0)), 0);
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -220,7 +223,7 @@ export function AdminOrderNewPage() {
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-5">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div className="grid grid-cols-1 gap-5">
                             <div className="space-y-1.5">
                                 <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
                                     <User className="h-3 w-3" /> Customer
@@ -236,66 +239,73 @@ export function AdminOrderNewPage() {
                                 />
                             </div>
 
-                            <div className="space-y-1.5">
-                                <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
-                                    <Briefcase className="h-3 w-3" /> Service
-                                </Label>
-                                <SearchablePicker
-                                    value={form.serviceId}
-                                    onChange={set("serviceId")}
-                                    options={serviceOptions}
-                                    placeholder="Select a service"
-                                    searchPlaceholder="Search by service name..."
-                                    emptyMessage="No services found"
-                                    loading={servicesQuery.isLoading}
-                                />
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between gap-3">
+                                    <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
+                                        <Briefcase className="h-3 w-3" /> Line Items
+                                    </Label>
+                                    <Button type="button" variant="outline" size="sm" onClick={addItem} className="gap-2 uppercase tracking-wide">
+                                        <PlusCircle className="h-4 w-4" />
+                                        Add Item
+                                    </Button>
+                                </div>
+                                {items.map((item, index) => (
+                                    <div key={item.id} className="grid grid-cols-1 gap-3 rounded-lg border border-hairline bg-surface p-3 md:grid-cols-[1fr_110px_150px_40px] md:items-end">
+                                        <div className="space-y-1.5">
+                                            <Label className="text-xs text-slate">Service</Label>
+                                            <SearchablePicker
+                                                value={item.serviceId}
+                                                onChange={(value) => setItem(item.id, "serviceId", value)}
+                                                options={serviceOptions}
+                                                placeholder={`Select service ${index + 1}`}
+                                                searchPlaceholder="Search by service name..."
+                                                emptyMessage="No services found"
+                                                loading={servicesQuery.isLoading}
+                                            />
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            <Label className="text-xs text-slate">Quantity</Label>
+                                            <Input
+                                                required
+                                                type="number"
+                                                min="1"
+                                                step="1"
+                                                value={item.quantity}
+                                                onChange={(e) => setItem(item.id, "quantity", e.target.value)}
+                                                className="rounded-lg border-hairline focus-visible:ring-primary-brand/20"
+                                            />
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            <Label className="text-xs text-slate">Amount (Rs)</Label>
+                                            <Input
+                                                required
+                                                type="number"
+                                                min="0"
+                                                step="0.01"
+                                                value={item.amount}
+                                                onChange={(e) => setItem(item.id, "amount", e.target.value)}
+                                                className="rounded-lg border-hairline focus-visible:ring-primary-brand/20"
+                                            />
+                                        </div>
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => removeItem(item.id)}
+                                            disabled={items.length === 1}
+                                            className="h-10 w-10 text-slate hover:text-error-brand"
+                                            title="Remove item"
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                ))}
+                                <div className="flex justify-end text-sm">
+                                    <span className="rounded-md border border-hairline bg-canvas px-3 py-2 font-medium text-charcoal">
+                                        Total {formatINR(totalAmount)}
+                                    </span>
+                                </div>
                             </div>
-
-                            <div className="space-y-1.5">
-                                <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
-                                    <IndianRupee className="h-3 w-3" /> Amount (Rs)
-                                </Label>
-                                <Input
-                                    required
-                                    type="number"
-                                    min="0"
-                                    step="0.01"
-                                    placeholder="Amount"
-                                    value={form.amount}
-                                    onChange={(e) => setForm({ ...form, amount: e.target.value })}
-                                    className="rounded-lg border-hairline focus-visible:ring-primary-brand/20"
-                                />
-                            </div>
-
-                            <div className="space-y-1.5">
-                                <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
-                                    <ClipboardList className="h-3 w-3" /> Status
-                                </Label>
-                                <Select value={form.status} onValueChange={set("status")}>
-                                    <SelectTrigger className="rounded-lg border-hairline focus:ring-primary-brand/20">
-                                        <SelectValue>{formatOrderStatus(form.status)}</SelectValue>
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="pending">Pending</SelectItem>
-                                        <SelectItem value="confirmed">Confirmed</SelectItem>
-                                        <SelectItem value="in_progress">In Progress</SelectItem>
-                                        <SelectItem value="completed">Completed</SelectItem>
-                                        <SelectItem value="cancelled">Cancelled</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-
-                        <div className="space-y-1.5">
-                            <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
-                                <StickyNote className="h-3 w-3" /> Notes (optional)
-                            </Label>
-                            <Input
-                                placeholder="Any additional notes..."
-                                value={form.notes}
-                                onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                                className="rounded-lg border-hairline focus-visible:ring-primary-brand/20"
-                            />
                         </div>
 
                         {error && <p className="text-sm text-error-brand">{error}</p>}

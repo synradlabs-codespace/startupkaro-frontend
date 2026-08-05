@@ -1,5 +1,5 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { adminOrderService } from "@/services/admin.service";
+import { adminOrderService, type AdminOrderCreateItem, type AdminOrderHistoryEntry } from "@/services/admin.service";
 import { getApiErrorMessage, getApiSuccessMessage } from "@/lib/api-messages";
 import { useToast } from "@/components/providers/ToastProvider";
 
@@ -31,13 +31,33 @@ export function useCreateOrder() {
     const queryClient = useQueryClient();
     const toast = useToast();
     return useMutation({
-        mutationFn: (payload: { customerId: string; serviceId: string; amount: number; status?: string; notes?: string; inquiryId?: string }) =>
+        mutationFn: (payload: { customerId: string; items: AdminOrderCreateItem[]; inquiryId?: string }) =>
             adminOrderService.create(payload),
         onSuccess: (response) => {
             toast.success(getApiSuccessMessage(response, "Order created"));
             queryClient.invalidateQueries({ queryKey: ["admin", "orders"] });
         },
         onError: (error) => toast.error(getApiErrorMessage(error, "Failed to create order")),
+    });
+}
+
+function normalizeHistory(payload: unknown): AdminOrderHistoryEntry[] {
+    if (Array.isArray(payload)) return payload;
+    if (payload && typeof payload === "object" && "data" in payload) {
+        const data = (payload as { data?: unknown }).data;
+        return Array.isArray(data) ? data as AdminOrderHistoryEntry[] : data ? [data as AdminOrderHistoryEntry] : [];
+    }
+    return payload ? [payload as AdminOrderHistoryEntry] : [];
+}
+
+export function useOrderHistory(id: string) {
+    return useQuery({
+        queryKey: ["admin", "orders", id, "history"],
+        queryFn: async () => {
+            const response = await adminOrderService.history(id, { limit: 50 });
+            return normalizeHistory(response.data);
+        },
+        enabled: Boolean(id),
     });
 }
 
@@ -67,7 +87,7 @@ export function useOrderPayments(id: string) {
 export function useRecordOfflinePayment(id: string) {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (payload: { amount: number; reference?: string; paidAt?: string }) =>
+        mutationFn: (payload: { amount: number; method: string; reference?: string }) =>
             adminOrderService.recordOfflinePayment(id, payload),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["admin", "orders"] });

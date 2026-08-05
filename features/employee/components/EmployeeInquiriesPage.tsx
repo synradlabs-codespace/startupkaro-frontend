@@ -108,7 +108,7 @@ export function EmployeeInquiriesPage() {
                                         <TableRow key={inq.id} className="hover:bg-muted/30">
                                             <TableCell className="font-medium">{inq.name}</TableCell>
                                             <TableCell className="text-slate text-sm">{inq.email}</TableCell>
-                                            <TableCell className="text-slate text-sm">{inq.phone || "—"}</TableCell>
+                                            <TableCell className="text-slate text-sm">{inq.phone || "N/A"}</TableCell>
                                             <TableCell className="max-w-xs">
                                                 <p className="text-sm text-slate truncate">{inq.subject}</p>
                                             </TableCell>

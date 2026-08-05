@@ -12,7 +12,7 @@ import {
     type AnalyticsRange,
 } from "@/features/admin/hooks/useAdminAnalytics";
 import { formatINR } from "@/lib/currency";
-import type { AdminRevenueAnalytics, AdminRevenuePoint, AdminServiceAnalyticsRow } from "@/services/admin.service";
+import type { AdminRevenueAnalytics, AdminRevenuePoint, AdminServiceAnalytics } from "@/services/admin.service";
 import { AlertTriangle, BarChart3, CheckCircle2, CreditCard, IndianRupee, PieChart, ShoppingCart, TrendingUp } from "lucide-react";
 
 type RangeKey = "30d" | "90d" | "all";
@@ -51,8 +51,8 @@ function normalizeRevenue(data: AdminRevenueAnalytics | undefined) {
     return { points: normalized, total };
 }
 
-function normalizeServiceRows(rows: AdminServiceAnalyticsRow[] | undefined) {
-    return (rows ?? []).map((row) => ({
+function normalizeServiceRows(data: AdminServiceAnalytics | undefined) {
+    return (data?.services ?? []).map((row) => ({
         id: row.id ?? row.serviceId ?? row.name ?? row.serviceName ?? "service",
         name: row.name ?? row.serviceName ?? "Unknown service",
         category: row.category ?? "uncategorized",

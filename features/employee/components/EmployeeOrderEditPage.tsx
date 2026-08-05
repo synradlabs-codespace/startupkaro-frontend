@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { formatOrderStatus } from "@/components/custom/StatusBadge";
 import { useOrder, useUpdateOrder } from "@/features/admin/hooks/useAdminOrders";
-import { getApiErrorMessage } from "@/features/admin/lib/format";
+import { getAdminOrderServiceName, getApiErrorMessage } from "@/features/admin/lib/format";
 import { formatINR } from "@/lib/currency";
 
 export function EmployeeOrderEditPage({ id }: { id: string }) {
@@ -65,7 +65,7 @@ export function EmployeeOrderEditPage({ id }: { id: string }) {
                         </div>
                         <div className="flex justify-between">
                             <span className="text-slate">Service</span>
-                            <span className="font-medium">{order.service.name}</span>
+                            <span className="font-medium">{getAdminOrderServiceName(order)}</span>
                         </div>
                         <div className="flex justify-between">
                             <span className="text-slate">Amount</span>

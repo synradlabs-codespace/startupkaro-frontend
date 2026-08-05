@@ -4,7 +4,7 @@ import Link from "next/link";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { OrderStatusBadge } from "@/components/custom/StatusBadge";
 import { useEmployeeDashboard } from "@/features/employee/hooks/useEmployeeDashboard";
-import { formatDate } from "@/features/admin/lib/format";
+import { formatDate, getAdminOrderServiceName } from "@/features/admin/lib/format";
 import { formatINR } from "@/lib/currency";
 import { ShoppingCart, Users, MessageSquare, ArrowRight, TrendingUp, Clock } from "lucide-react";
 
@@ -74,7 +74,7 @@ export function EmployeeDashboard() {
                                 </div>
                             </div>
                             <p className="text-2xl font-display font-medium text-ink">
-                                {isLoading ? "—" : stat.value}
+                                {isLoading ? "..." : stat.value}
                             </p>
                             <p className="text-xs text-stone mt-1">{stat.sub}</p>
                         </div>
@@ -107,7 +107,7 @@ export function EmployeeDashboard() {
                                     <div>
                                         <p className="text-sm font-medium text-charcoal">{order.customer.name}</p>
                                         <p className="text-xs text-stone flex items-center gap-1 mt-0.5">
-                                            <Clock className="h-3 w-3" /> {order.service.name} · {formatINR(order.amount)}
+                                            <Clock className="h-3 w-3" /> {getAdminOrderServiceName(order)} | {formatINR(order.amount)}
                                         </p>
                                     </div>
                                     <div className="flex items-center gap-2">

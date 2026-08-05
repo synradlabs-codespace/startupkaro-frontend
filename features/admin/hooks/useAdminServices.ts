@@ -92,7 +92,7 @@ export function useServiceContentSlugs() {
             const json: { slugs: string[] } = await res.json();
             return new Set<string>(json.slugs ?? []);
         },
-        staleTime: 5 * 60 * 1000, // 5 min — revalidate webhook keeps Sanity side fresh
+        staleTime: 5 * 60 * 1000, // 5 min. Revalidate webhook keeps Sanity side fresh
     });
 }
 

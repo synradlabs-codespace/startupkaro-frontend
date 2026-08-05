@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PaymentStatusBadge, formatOrderStatus } from "@/components/custom/StatusBadge";
 import { useOrder, useUpdateOrder } from "@/features/admin/hooks/useAdminOrders";
-import { getApiErrorMessage } from "@/features/admin/lib/format";
+import { getAdminOrderPaymentStatus, getAdminOrderServiceName, getApiErrorMessage } from "@/features/admin/lib/format";
 import { toPaise } from "@/lib/currency";
 
 export function AdminOrderEditPage({ id }: { id: string }) {
@@ -69,7 +69,7 @@ export function AdminOrderEditPage({ id }: { id: string }) {
                         <form onSubmit={handleSubmit} className="space-y-5">
                             <div className="space-y-2">
                                 <Label>Service</Label>
-                                <Input value={order.service.name} readOnly className="bg-surface" />
+                                <Input value={getAdminOrderServiceName(order)} readOnly className="bg-surface" />
                             </div>
                             <div className="space-y-2">
                                 <Label>Amount (Rs)</Label>
@@ -91,7 +91,7 @@ export function AdminOrderEditPage({ id }: { id: string }) {
                             <div className="space-y-2">
                                 <Label>Payment Status</Label>
                                 <div className="h-10 flex items-center">
-                                    <PaymentStatusBadge status={order.paymentStatus} />
+                                    <PaymentStatusBadge status={getAdminOrderPaymentStatus(order)} />
                                 </div>
                             </div>
                             {error && <p className="text-sm text-error-brand">{error}</p>}

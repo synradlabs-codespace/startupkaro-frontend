@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { OrderStatusBadge, PaymentStatusBadge, formatOrderStatus } from "@/components/custom/StatusBadge";
 import { useOrderList } from "@/features/admin/hooks/useAdminOrders";
-import { formatDate } from "@/features/admin/lib/format";
+import { formatDate, getAdminOrderPaymentStatus, getAdminOrderServiceName } from "@/features/admin/lib/format";
 import { formatINR } from "@/lib/currency";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { Plus, Search, Eye, Pencil } from "lucide-react";
@@ -122,10 +122,10 @@ export function AdminOrdersPage() {
                                         <TableRow key={order.id} className="hover:bg-muted/30">
                                             <TableCell className="font-mono text-xs text-slate">{order.orderNumber || order.id.slice(0, 8)}</TableCell>
                                             <TableCell className="font-medium">{order.customer.name}</TableCell>
-                                            <TableCell className="text-slate text-sm">{order.service.name}</TableCell>
+                                            <TableCell className="text-slate text-sm">{getAdminOrderServiceName(order)}</TableCell>
                                             <TableCell className="font-medium">{formatINR(order.amount)}</TableCell>
                                             <TableCell><OrderStatusBadge status={order.status} /></TableCell>
-                                            <TableCell><PaymentStatusBadge status={order.paymentStatus} /></TableCell>
+                                            <TableCell><PaymentStatusBadge status={getAdminOrderPaymentStatus(order)} /></TableCell>
                                             <TableCell className="text-slate text-sm">{formatDate(order.createdAt)}</TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex gap-1 justify-end">

@@ -1,17 +1,25 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { Button } from "@/components/ui/button";
 import { PaymentStatusBadge } from "@/components/custom/StatusBadge";
-import { usePayment } from "@/features/admin/hooks/useAdminPayments";
-import { formatDate } from "@/features/admin/lib/format";
+import { usePayment, useVoidPayment } from "@/features/admin/hooks/useAdminPayments";
+import { downloadAdminReceipt } from "@/features/admin/lib/downloadReceipt";
+import { formatDate, getApiErrorMessage } from "@/features/admin/lib/format";
 import { formatINR } from "@/lib/currency";
-import { CreditCard, Hash, User, IndianRupee, Smartphone, Calendar, ShieldCheck } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/providers/ToastProvider";
+import { CreditCard, Download, Hash, User, IndianRupee, Smartphone, Calendar, ShieldCheck, Undo2 } from "lucide-react";
 
 export function AdminPaymentDetailPage({ id }: { id: string }) {
+    const toast = useToast();
     const paymentQuery = usePayment(id);
+    const voidPayment = useVoidPayment(id);
     const payment = paymentQuery.data?.data;
+    const [voidReason, setVoidReason] = useState("");
+    const [downloading, setDownloading] = useState(false);
 
     if (paymentQuery.isLoading) {
         return (
@@ -43,6 +51,18 @@ export function AdminPaymentDetailPage({ id }: { id: string }) {
         { label: "Method", value: payment.method ?? "-", icon: Smartphone, mono: false },
         { label: "Date", value: formatDate(payment.createdAt), icon: Calendar, mono: false },
     ] as const;
+
+    const handleDownloadReceipt = async () => {
+        setDownloading(true);
+        try {
+            await downloadAdminReceipt(payment.id);
+            toast.success("Receipt downloaded");
+        } catch (error) {
+            toast.error(getApiErrorMessage(error, "Failed to download receipt"));
+        } finally {
+            setDownloading(false);
+        }
+    };
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -99,6 +119,30 @@ export function AdminPaymentDetailPage({ id }: { id: string }) {
                                         </Button>
                                     </Link>
                                 ) : null}
+                                <Button type="button" variant="outline" size="sm" onClick={handleDownloadReceipt} disabled={downloading} className="w-full gap-2 rounded-lg uppercase tracking-wide">
+                                    <Download className="h-4 w-4" />
+                                    {downloading ? "Downloading..." : "Download Receipt"}
+                                </Button>
+                                {payment.status !== "voided" && (
+                                    <form
+                                        className="space-y-2 rounded-lg border border-hairline bg-surface p-3"
+                                        onSubmit={(event) => {
+                                            event.preventDefault();
+                                            if (voidReason.trim()) voidPayment.mutate({ reason: voidReason.trim() });
+                                        }}
+                                    >
+                                        <Input
+                                            value={voidReason}
+                                            onChange={(event) => setVoidReason(event.target.value)}
+                                            placeholder="Reason for voiding receipt"
+                                            className="h-9"
+                                        />
+                                        <Button type="submit" size="sm" disabled={voidPayment.isPending || !voidReason.trim()} className="w-full gap-2 bg-primary-brand text-white hover:bg-primary-brand/90 uppercase tracking-wide">
+                                            <Undo2 className="h-4 w-4" />
+                                            Void Receipt
+                                        </Button>
+                                    </form>
+                                )}
                             </div>
                         </div>
                     </div>

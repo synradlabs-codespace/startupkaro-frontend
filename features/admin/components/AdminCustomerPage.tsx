@@ -85,7 +85,7 @@ export function AdminCustomersPage() {
                                                 </div>
                                             </TableCell>
                                             <TableCell className="text-slate text-sm">{customer.email}</TableCell>
-                                            <TableCell className="text-slate text-sm">{customer.phone || "—"}</TableCell>
+                                            <TableCell className="text-slate text-sm">{customer.phone || "N/A"}</TableCell>
                                             <TableCell className="text-slate text-sm">{formatDate(customer.createdAt)}</TableCell>
                                             <TableCell className="text-right">
                                                 <Link href={`/admin/customers/${customer.id}`}>
