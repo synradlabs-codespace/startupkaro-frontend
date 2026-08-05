@@ -8,7 +8,7 @@ import { PageHeader } from "@/components/custom/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useChangeCustomerPassword } from "@/features/customers/hooks/useCustomerProfile";
+import { useChangeCustomerPassword, useCustomerProfile } from "@/features/customers/hooks/useCustomerProfile";
 import { getApiErrorMessage } from "@/features/customers/lib/format";
 import { validators, getPasswordStrength } from "@/lib/validations/common.schema";
 import {
@@ -17,6 +17,7 @@ import {
     ArrowLeft,
     Check,
     Info,
+    Lock,
 } from "lucide-react";
 
 interface FormState {
@@ -33,6 +34,7 @@ interface FieldErrors {
 
 export function CustomerChangePasswordPage() {
     const router = useRouter();
+    const profileQuery = useCustomerProfile();
     const changePassword = useChangeCustomerPassword();
     const [form, setForm] = useState<FormState>({ current: "", next: "", confirm: "" });
     const [errors, setErrors] = useState<FieldErrors>({});
@@ -79,6 +81,53 @@ export function CustomerChangePasswordPage() {
 
     const toggleShow = (key: keyof typeof show) =>
         setShow((prev) => ({ ...prev, [key]: !prev[key] }));
+
+    const isGoogleAccount = profileQuery.data?.authProvider === "google";
+
+    if (profileQuery.isLoading) {
+        return (
+            <div className="flex flex-col min-h-screen">
+                <PageHeader title="Change Password" description="Update your account password to keep it secure" />
+                <div className="p-6 text-sm text-slate">Loading account security...</div>
+            </div>
+        );
+    }
+
+    if (isGoogleAccount) {
+        return (
+            <div className="flex flex-col min-h-screen">
+                <PageHeader
+                    title="Change Password"
+                    description="Google sign-up accounts do not use a StartupKaro password"
+                    action={
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => router.push("/customer/profile")}
+                            className="gap-1.5 text-steel hover:text-charcoal rounded-lg"
+                        >
+                            <ArrowLeft className="h-3.5 w-3.5" />
+                            Back to Profile
+                        </Button>
+                    }
+                />
+
+                <div className="flex-1 p-6">
+                    <div className="max-w-2xl rounded-lg border border-hairline bg-canvas p-6 flex items-start gap-4">
+                        <div className="h-10 w-10 rounded-lg bg-primary-brand/10 flex items-center justify-center shrink-0">
+                            <Lock className="h-5 w-5 text-primary-brand" />
+                        </div>
+                        <div>
+                            <p className="text-sm font-semibold text-charcoal">Password cannot be changed here</p>
+                            <p className="mt-1 text-sm leading-relaxed text-stone">
+                                This account is authenticated with Google, so password management is handled through Google instead of StartupKaro.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-col min-h-screen">

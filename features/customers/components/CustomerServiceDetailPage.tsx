@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight, Clock, ShieldCheck, Tag } from "lucide-react";
 import { PageHeader } from "@/components/custom/PageHeader";
+import { Button } from "@/components/ui/button";
 import { ServiceEditorial } from "@/features/services/components/ServiceEditorial";
+import { useAddCartItem } from "@/features/customers/hooks/useCustomerCart";
 import { formatINR } from "@/lib/currency";
 import { categoryCardStyles, fallbackCardStyles } from "@/lib/category-pills";
 import type { EnrichedService } from "@/features/services/lib/merge";
@@ -11,7 +16,15 @@ interface CustomerServiceDetailPageProps {
 }
 
 export function CustomerServiceDetailPage({ service }: CustomerServiceDetailPageProps) {
+    const router = useRouter();
+    const addCartItem = useAddCartItem();
     const meta = categoryCardStyles[service.stage as keyof typeof categoryCardStyles] ?? fallbackCardStyles;
+    const serviceId = service.id ?? service.slug;
+
+    const addToCart = async (goToCart = false) => {
+        await addCartItem.mutateAsync({ serviceId, quantity: 1 });
+        if (goToCart) router.push("/customer/cart");
+    };
 
     return (
         <div className="flex min-h-screen flex-col">
@@ -94,13 +107,26 @@ export function CustomerServiceDetailPage({ service }: CustomerServiceDetailPage
                             <div className="h-px bg-surface" />
 
                             {service.cta === "buy" ? (
-                                <Link
-                                    href={`/customer/checkout?service=${service.slug}`}
-                                    className="flex h-9 w-full items-center justify-center gap-2 rounded-lg bg-primary-brand px-4 text-sm font-medium text-white transition-colors hover:bg-primary-brand/90"
-                                >
-                                    Proceed to Checkout
-                                    <ArrowRight className="h-4 w-4" />
-                                </Link>
+                                <div className="grid grid-cols-1 gap-2">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        className="w-full rounded-lg uppercase tracking-wide"
+                                        onClick={() => void addToCart(false)}
+                                        disabled={addCartItem.isPending}
+                                    >
+                                        Add to Cart
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        className="w-full gap-2 rounded-lg bg-primary-brand px-4 text-sm font-medium text-white transition-colors hover:bg-primary-brand/90 uppercase tracking-wide"
+                                        onClick={() => void addToCart(true)}
+                                        disabled={addCartItem.isPending}
+                                    >
+                                        Buy Now
+                                        <ArrowRight className="h-4 w-4" />
+                                    </Button>
+                                </div>
                             ) : (
                                 <Link
                                     href={`/contact?service=${service.slug}`}

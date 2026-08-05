@@ -4,7 +4,8 @@ import type { RazorpayHandlerResponse } from "@/lib/razorpay";
 import { flattenBackendServices, type BackendService, type BackendServiceCategory } from "@/features/services/api/services.backend";
 
 export type CustomerOrderStatus = "pending" | "confirmed" | "in_progress" | "completed" | "cancelled";
-export type CustomerPaymentStatus = "created" | "authorized" | "captured" | "failed" | "refunded";
+export type CustomerPaymentStatus = "created" | "authorized" | "captured" | "failed" | "refunded" | "voided";
+export type CustomerPaymentState = "unpaid" | "partially_paid" | "paid";
 
 export interface CustomerProfile {
     id: string;
@@ -12,6 +13,8 @@ export interface CustomerProfile {
     email: string;
     phone?: string;
     mobile?: string;
+    authProvider?: "google" | "email" | "phone" | string;
+    hasPassword?: boolean;
     createdAt: string;
     updatedAt?: string;
 }
@@ -21,22 +24,79 @@ export type CustomerService = BackendService;
 export interface CustomerPurchase {
     id: string;
     orderNumber?: string;
-    service: { id: string; name: string; description?: string };
+    service?: { id: string; name: string; description?: string };
+    items?: CustomerOrderItem[];
     amount: number;
+    amountPaid?: number;
+    amountDue?: number;
+    paymentState?: CustomerPaymentState | string;
     status: CustomerOrderStatus;
-    paymentStatus: CustomerPaymentStatus;
+    paymentStatus?: CustomerPaymentStatus;
+    paymentId?: string;
+    payments?: Array<{ id: string; amount: number; status?: CustomerPaymentStatus | string; method?: string | null; createdAt?: string }>;
     createdAt?: string;
     date?: string;
 }
 
-export interface PurchaseInitiation {
+export interface CustomerOrderItem {
+    id: string;
+    serviceId: string;
+    name: string;
+    sacCode?: string | null;
+    quantity: number;
+    unitPrice: number;
+    taxableValue?: number;
+    amount: number;
+}
+
+export interface RazorpayInitiation {
     orderId: string;
-    orderNumber: string;
-    razorpayOrderId: string;
-    razorpayKeyId: string;
+    orderNumber?: string;
+    paymentId?: string;
+    razorpayOrderId?: string;
+    razorpayKeyId?: string;
+    keyId?: string;
     amount: number;
     currency: string;
-    serviceName: string;
+    serviceName?: string;
+    description?: string;
+}
+
+export interface CustomerCartItem {
+    id: string;
+    serviceId: string;
+    name?: string;
+    service?: { id: string; name: string; slug?: string; type?: string; price?: number | null };
+    quantity: number;
+    unitPrice?: number;
+    price?: number;
+    amount?: number;
+    taxableValue?: number;
+}
+
+export interface CustomerCartSummary {
+    itemCount: number;
+    subtotal: number;
+    tax: number;
+    total: number;
+    checkoutBlocked?: boolean;
+}
+
+export interface CustomerCart {
+    items: CustomerCartItem[];
+    summary: CustomerCartSummary;
+}
+
+export interface CustomerPaymentAttempt {
+    id: string;
+    paymentId?: string;
+    razorpayOrderId?: string | null;
+    razorpayPaymentId?: string | null;
+    status?: CustomerPaymentStatus | string;
+    amount: number;
+    currency?: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export interface CustomerAddress {
@@ -190,8 +250,6 @@ export const customerServiceCatalog = {
 };
 
 export const customerPurchaseService = {
-    initiate: (payload: { serviceId: string }) =>
-        apiClient.post<ApiResponse<PurchaseInitiation>>("/customer/purchases/initiate", payload),
     verify: (payload: RazorpayHandlerResponse) =>
         apiClient.post<ApiResponse<{ message: string; orderId: string }>>("/customer/purchases/verify", {
             razorpayOrderId: payload.razorpay_order_id,
@@ -202,6 +260,29 @@ export const customerPurchaseService = {
         apiClient.get<ListEnvelope<CustomerPurchase>>("/customer/purchases", { params }),
     get: (id: string) =>
         apiClient.get<ApiResponse<CustomerPurchase>>(`/customer/purchases/${id}`),
+    payBalance: (orderId: string, payload: { amount: number }) =>
+        apiClient.post<ApiResponse<RazorpayInitiation>>(`/customer/purchases/${orderId}/pay`, payload),
+    retryPayment: (paymentId: string) =>
+        apiClient.post<ApiResponse<RazorpayInitiation>>(`/customer/purchases/payments/${paymentId}/retry`),
+    listPaymentAttempts: (paymentId: string) =>
+        apiClient.get<ApiResponse<CustomerPaymentAttempt[]> | PaginatedResponse<CustomerPaymentAttempt>>(`/customer/purchases/payments/${paymentId}/attempts`),
+    downloadReceipt: (paymentId: string) =>
+        apiClient.get<Blob>(`/customer/purchases/payments/${paymentId}/receipt`, { responseType: "blob" }),
+};
+
+export const customerCartService = {
+    get: () =>
+        apiClient.get<ApiResponse<CustomerCart>>("/customer/cart"),
+    addItem: (payload: { serviceId: string; quantity: number }) =>
+        apiClient.post<ApiResponse<CustomerCart>>("/customer/cart/items", payload),
+    updateItem: (cartItemId: string, payload: { quantity: number }) =>
+        apiClient.patch<ApiResponse<CustomerCart>>(`/customer/cart/items/${cartItemId}`, payload),
+    removeItem: (cartItemId: string) =>
+        apiClient.delete<ApiResponse<CustomerCart>>(`/customer/cart/items/${cartItemId}`),
+    clear: () =>
+        apiClient.delete<ApiResponse<CustomerCart>>("/customer/cart"),
+    checkout: () =>
+        apiClient.post<ApiResponse<RazorpayInitiation>>("/customer/cart/checkout"),
 };
 
 export const customerAddressService = {

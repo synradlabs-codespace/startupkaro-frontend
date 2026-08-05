@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
     LayoutDashboard,
     ShoppingBag,
+    ShoppingCart,
     Store,
     User,
     LogOut,
@@ -20,6 +21,7 @@ const navItems = [
     { title: "Dashboard", href: "/customer", icon: LayoutDashboard, exact: true },
     { title: "My Purchases", href: "/customer/purchases", icon: ShoppingBag },
     { title: "Services", href: "/customer/services", icon: Store },
+    { title: "Cart", href: "/customer/cart", icon: ShoppingCart },
     { title: "Profile", href: "/customer/profile", icon: User },
 ];
 

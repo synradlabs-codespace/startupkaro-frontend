@@ -25,7 +25,10 @@ export function getPurchaseId(purchase: CustomerPurchase) {
 }
 
 export function getPurchaseServiceName(purchase: CustomerPurchase) {
-    return purchase.service.name;
+    if (purchase.service?.name) return purchase.service.name;
+    if (purchase.items?.length === 1) return purchase.items[0].name;
+    if (purchase.items?.length) return `${purchase.items.length} services`;
+    return "StartupKaro service";
 }
 
 export function isRateLimited(error: unknown) {

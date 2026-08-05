@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type React from "react";
 import { Clock, ArrowRight, Rocket, LineChart, ShieldCheck, LayoutGrid, PackageCheck } from "lucide-react";
 import { categoryCardStyles, fallbackCardStyles } from "@/lib/category-pills";
 import { formatINR } from "@/lib/currency";
@@ -20,9 +21,10 @@ export interface ServiceCardProps {
     isBundle?: boolean;
     priceLabel?: string | null;
     actionLabel?: string;
+    footerAction?: React.ReactNode;
 }
 
-export function ServiceCard({ name, description, category, price, priceInPaise = false, duration, href, isBundle = false, priceLabel, actionLabel = "Learn More" }: ServiceCardProps) {
+export function ServiceCard({ name, description, category, price, priceInPaise = false, duration, href, isBundle = false, priceLabel, actionLabel = "Learn More", footerAction }: ServiceCardProps) {
     const visualCategory = isBundle ? "Bundles" : category;
     const styles = categoryCardStyles[visualCategory as keyof typeof categoryCardStyles] ?? fallbackCardStyles;
     const Icon = isBundle ? PackageCheck : categoryIcons[category] ?? LayoutGrid;
@@ -59,13 +61,16 @@ export function ServiceCard({ name, description, category, price, priceInPaise =
                             {duration}
                         </p>
                     </div>
-                    <Link
-                        href={href}
-                        className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md bg-primary-brand px-3 text-xs font-medium text-white transition-colors hover:bg-primary-deep"
-                    >
-                        {actionLabel}
-                        <ArrowRight className="h-3.5 w-3.5" />
-                    </Link>
+                    <div className="flex shrink-0 items-center gap-2">
+                        {footerAction}
+                        <Link
+                            href={href}
+                            className="inline-flex h-8 items-center gap-1.5 rounded-md bg-primary-brand px-3 text-xs font-medium text-white transition-colors hover:bg-primary-deep"
+                        >
+                            {actionLabel}
+                            <ArrowRight className="h-3.5 w-3.5" />
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

@@ -42,6 +42,7 @@ export function CustomerProfilePage() {
     const [draft, setDraft] = useState<FormState | null>(null);
     const [errors, setErrors] = useState<FieldErrors>({});
     const [apiError, setApiError] = useState("");
+    const isGoogleAccount = profile?.authProvider === "google";
 
     const form = draft ?? {
         name: profile?.name ?? "",
@@ -298,14 +299,24 @@ export function CustomerProfilePage() {
                             </div>
                             <div className="flex-1 min-w-0">
                                 <p className="text-sm font-medium text-charcoal">Password</p>
-                                <p className="text-xs text-stone">Keep your account secure with a strong password</p>
+                                <p className="text-xs text-stone">
+                                    {isGoogleAccount
+                                        ? "Password changes are managed by Google for this account"
+                                        : "Keep your account secure with a strong password"}
+                                </p>
                             </div>
-                            <Link
-                                href="/customer/profile/change-password"
-                                className="inline-flex items-center h-7 px-2.5 text-xs font-medium border border-hairline bg-canvas text-slate hover:bg-surface rounded-lg transition-colors shrink-0"
-                            >
-                                Change
-                            </Link>
+                            {isGoogleAccount ? (
+                                <span className="inline-flex items-center h-7 px-2.5 text-xs font-medium border border-hairline bg-canvas text-stone rounded-lg shrink-0">
+                                    Google
+                                </span>
+                            ) : (
+                                <Link
+                                    href="/customer/profile/change-password"
+                                    className="inline-flex items-center h-7 px-2.5 text-xs font-medium border border-hairline bg-canvas text-slate hover:bg-surface rounded-lg transition-colors shrink-0"
+                                >
+                                    Change
+                                </Link>
+                            )}
                         </div>
 
                     </div>

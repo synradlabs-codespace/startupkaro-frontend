@@ -5,7 +5,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { Button } from "@/components/ui/button";
 import { useCustomerServiceBySlug } from "@/features/customers/hooks/useCustomerServices";
-import { useInitiateCustomerPurchase, useVerifyCustomerPurchase } from "@/features/customers/hooks/useCustomerPurchases";
+import { useVerifyCustomerPurchase } from "@/features/customers/hooks/useCustomerPurchases";
+import { useAddCartItem, useCheckoutCustomerCart } from "@/features/customers/hooks/useCustomerCart";
 import { useCustomerProfile } from "@/features/customers/hooks/useCustomerProfile";
 import { getApiErrorMessage } from "@/features/customers/lib/format";
 import { formatINR } from "@/lib/currency";
@@ -27,7 +28,8 @@ function CheckoutContent() {
     const router = useRouter();
     const serviceParam = searchParams.get("service") ?? "";
     const serviceQuery = useCustomerServiceBySlug(serviceParam);
-    const initiatePurchase = useInitiateCustomerPurchase();
+    const addCartItem = useAddCartItem();
+    const checkoutCart = useCheckoutCustomerCart();
     const verifyPurchase = useVerifyCustomerPurchase();
     const profileQuery = useCustomerProfile();
     const profile = profileQuery.data;
@@ -47,15 +49,16 @@ function CheckoutContent() {
                 return;
             }
 
-            const initiation = (await initiatePurchase.mutateAsync({ serviceId: service.id || service.slug })).data.data;
+            await addCartItem.mutateAsync({ serviceId: service.id || service.slug, quantity: 1 });
+            const initiation = (await checkoutCart.mutateAsync()).data.data;
             await loadRazorpayScript();
             const response = await openRazorpayCheckout({
-                key: initiation.razorpayKeyId,
+                key: initiation.razorpayKeyId ?? initiation.keyId ?? "",
                 amount: initiation.amount,
                 currency: initiation.currency,
                 name: "StartupKaro",
-                description: initiation.serviceName,
-                order_id: initiation.razorpayOrderId,
+                description: initiation.serviceName ?? initiation.description ?? service.name,
+                order_id: initiation.razorpayOrderId ?? "",
                 prefill: {
                     name: profile?.name,
                     email: profile?.email,
@@ -94,13 +97,13 @@ function CheckoutContent() {
         );
     }
 
-    const isPaying = initiatePurchase.isPending || verifyPurchase.isPending;
+    const isPaying = addCartItem.isPending || checkoutCart.isPending || verifyPurchase.isPending;
 
     if (isPaying) {
         return (
             <div className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-                    {/* Left skeleton — order summary */}
+                    {/* Left skeleton order summary */}
                     <div className="md:col-span-2 rounded-lg border border-hairline bg-canvas overflow-hidden flex flex-col">
                         <div className="px-6 py-4 border-b border-hairline flex items-center gap-3">
                             <div className="h-7 w-7 rounded-lg bg-hairline animate-pulse" />
@@ -123,7 +126,7 @@ function CheckoutContent() {
                         </div>
                     </div>
 
-                    {/* Right skeleton — payment panel */}
+                    {/* Right skeleton payment panel */}
                     <div className="rounded-lg border border-hairline bg-canvas overflow-hidden flex flex-col">
                         <div className="h-1.5 bg-primary-brand/30 animate-pulse" />
                         <div className="p-6 flex flex-col flex-1 space-y-5">

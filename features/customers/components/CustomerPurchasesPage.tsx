@@ -82,7 +82,7 @@ export function CustomerPurchasesPage() {
                                                 <TableCell className="font-medium">{getPurchaseServiceName(purchase)}</TableCell>
                                                 <TableCell className="font-medium">{formatINR(purchase.amount)}</TableCell>
                                                 <TableCell><OrderStatusBadge status={purchase.status} /></TableCell>
-                                                <TableCell><PaymentStatusBadge status={purchase.paymentStatus} /></TableCell>
+                                                <TableCell><PaymentStatusBadge status={purchase.paymentStatus ?? purchase.paymentState ?? "unpaid"} /></TableCell>
                                                 <TableCell className="text-slate text-sm">{formatCustomerDate(purchase.createdAt ?? purchase.date)}</TableCell>
                                                 <TableCell className="text-right">
                                                     <div className="flex gap-1 justify-end">

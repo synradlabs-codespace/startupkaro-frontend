@@ -2,12 +2,14 @@
 
 import { useMemo, useState } from "react";
 import { Search, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { ServiceCard } from "@/components/custom/ServiceCard";
 import { TablePagination } from "@/components/custom/TablePagination";
 import { Input } from "@/components/ui/input";
 import { SERVICE_CATEGORIES, categoryPillStyles, type ServiceCategory } from "@/lib/category-pills";
 import { getBundles, type EnrichedService } from "@/features/services/lib/merge";
+import { useAddCartItem } from "@/features/customers/hooks/useCustomerCart";
 
 const PAGE_SIZE = 9;
 
@@ -16,6 +18,7 @@ interface CustomerServicesPageProps {
 }
 
 export function CustomerServicesPage({ services }: CustomerServicesPageProps) {
+    const addCartItem = useAddCartItem();
     const [search, setSearch] = useState("");
     const [activeCategory, setActiveCategory] = useState<ServiceCategory>("All");
     const [page, setPage] = useState(1);
@@ -77,6 +80,19 @@ export function CustomerServicesPage({ services }: CustomerServicesPageProps) {
                                     duration={bundle.duration ?? "Expert assisted"}
                                     href={`/customer/services/${bundle.slug}`}
                                     isBundle
+                                    actionLabel="View"
+                                    footerAction={
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            className="h-8 rounded-md px-3 text-xs uppercase tracking-wide"
+                                            onClick={() => addCartItem.mutate({ serviceId: bundle.id ?? bundle.slug, quantity: 1 })}
+                                            disabled={addCartItem.isPending}
+                                        >
+                                            Add
+                                        </Button>
+                                    }
                                 />
                             ))}
                         </div>
@@ -135,7 +151,19 @@ export function CustomerServicesPage({ services }: CustomerServicesPageProps) {
                                     duration={service.duration ?? "Expert assisted"}
                                     href={`/customer/services/${service.slug}`}
                                     isBundle={service.isBundle}
-                                    actionLabel={service.cta === "quote" ? "Request Quote" : "Learn More"}
+                                    actionLabel={service.cta === "quote" ? "Quote" : "View"}
+                                    footerAction={service.cta === "buy" ? (
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            className="h-8 rounded-md px-3 text-xs uppercase tracking-wide"
+                                            onClick={() => addCartItem.mutate({ serviceId: service.id ?? service.slug, quantity: 1 })}
+                                            disabled={addCartItem.isPending}
+                                        >
+                                            Add
+                                        </Button>
+                                    ) : null}
                                 />
                             ))}
                         </div>
