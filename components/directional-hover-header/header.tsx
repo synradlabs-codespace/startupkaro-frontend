@@ -1,13 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { ElementType } from "react";
-import { ChevronDown, LineChart, Menu, PackageCheck, Rocket, ShieldCheck, X } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { NAV_LINKS, type NavLink } from "./header/nav-data";
 import { FlowButton, FlowSecondaryButton } from "@/components/custom/FlowButton";
-import { categoryCardStyles, type ServiceVisualCategory } from "@/lib/category-pills";
+import { categoryCardStyles, serviceCategoryIcons, type ServiceVisualCategory } from "@/lib/category-pills";
 import { cn } from "@/lib/utils";
 import { AUTH_SESSION_EVENT, getPanelRedirect, readAuthSession } from "@/lib/auth-session";
 
@@ -76,15 +75,8 @@ function HeaderActions({ mobile = false, onAction }: { mobile?: boolean; onActio
   );
 }
 
-const serviceCategoryIcons: Record<ServiceVisualCategory, ElementType> = {
-  Bundles: PackageCheck,
-  Start: Rocket,
-  Manage: LineChart,
-  Protect: ShieldCheck,
-};
-
 function isServiceCategory(heading: string): heading is ServiceVisualCategory {
-  return heading === "Bundles" || heading === "Start" || heading === "Manage" || heading === "Protect";
+  return heading === "Bundles" || heading === "Start" || heading === "Manage" || heading === "Protect" || heading === "Tech";
 }
 
 function DesktopColumnHeading({ heading, href, serviceMenu, onClose }: { heading: string; href?: string; serviceMenu: boolean; onClose?: () => void }) {

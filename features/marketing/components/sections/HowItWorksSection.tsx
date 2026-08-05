@@ -19,7 +19,7 @@ const steps = [
         step: "02",
         title: "Expert Assigned",
         description:
-            "Your request is carefully reviewed and assigned to the most suitable expert—based on your specific requirements.",
+            "Your request is carefully reviewed and assigned to the most suitable expert based on your specific requirements.",
         itemClassName: "bg-canvas border border-hairline",
         dark: false,
     },
@@ -97,7 +97,7 @@ export function HowItWorksSection() {
                 </div>
             </div>
 
-            {/* Mobile — plain visible stack */}
+            {/* Mobile plain visible stack */}
             {!isDesktopStack && (
                 <div className="mx-auto flex max-w-3xl flex-col gap-4 px-4">
                     {steps.map((item) => (
@@ -111,7 +111,7 @@ export function HowItWorksSection() {
                 </div>
             )}
 
-            {/* Desktop — animated ScrollStack */}
+            {/* Desktop animated ScrollStack */}
             {isDesktopStack && (
             <div className="hidden md:block">
                 <ScrollStack

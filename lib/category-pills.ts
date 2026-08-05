@@ -1,8 +1,11 @@
+import type { ElementType } from "react";
+import { Code2, LineChart, PackageCheck, Rocket, ShieldCheck } from "lucide-react";
+
 export const SERVICE_CATEGORIES = ["All", "Start", "Manage", "Protect"] as const;
 
 export type ServiceCategory = (typeof SERVICE_CATEGORIES)[number];
 export type ServiceStage = Exclude<ServiceCategory, "All">;
-export type ServiceVisualCategory = ServiceStage | "Bundles";
+export type ServiceVisualCategory = ServiceStage | "Bundles" | "Tech";
 
 export const categoryPillStyles: Record<ServiceCategory, { idle: string; active: string }> = {
     All: {
@@ -53,6 +56,20 @@ export const categoryCardStyles: Record<ServiceVisualCategory, {
         badge: "border-rose-200 bg-rose-100 text-rose-700",
         strip: "bg-rose-600",
     },
+    Tech: {
+        iconBg: "bg-fuchsia-50",
+        iconText: "text-fuchsia-700",
+        badge: "border-fuchsia-200 bg-fuchsia-100 text-fuchsia-800",
+        strip: "bg-fuchsia-600",
+    },
+};
+
+export const serviceCategoryIcons: Record<ServiceVisualCategory, ElementType> = {
+    Bundles: PackageCheck,
+    Start: Rocket,
+    Manage: LineChart,
+    Protect: ShieldCheck,
+    Tech: Code2,
 };
 
 export const fallbackCardStyles = {

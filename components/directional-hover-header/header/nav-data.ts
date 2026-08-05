@@ -69,8 +69,26 @@ export const NAV_LINKS: NavLink[] = [
             { label: "Investor Agreements", description: "Founder and investor documentation", href: "/services/investor-agreements" },
           ],
         },
+        {
+          heading: "Tech",
+          href: "/tech-services",
+          items: [
+            { label: "Website and Apps", description: "Responsive websites and mobile-first product flows", href: "/tech-services" },
+            { label: "UI/UX Design", description: "Screens, flows, and founder-ready interfaces", href: "/tech-services" },
+            { label: "Automation", description: "Reduce manual work with practical workflows", href: "/tech-services" },
+            { label: "Dashboards", description: "Admin panels and operating dashboards", href: "/tech-services" },
+          ],
+        },
       ],
     },
+  },
+  {
+    label: "Tech",
+    href: "/tech-services",
+  },
+  {
+    label: "Franchise",
+    href: "/franchise",
   },
   {
     label: "Articles",

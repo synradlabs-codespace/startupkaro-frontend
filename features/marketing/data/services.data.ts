@@ -90,7 +90,7 @@ export const MOCK_SERVICES: Service[] = [
             { step: 5, title: "Acknowledgement & TM usage", description: "You receive the application number and can immediately start using the ™ symbol." },
         ],
         faqs: [
-            { question: "How long does trademark registration take?", answer: "Filing takes 15 days from receipt of required documents over email. Registration (examination + publication + approval) typically takes 18–24 months. You can use ™ from filing day." },
+            { question: "How long does trademark registration take?", answer: "Filing takes 15 days from receipt of required documents over email. Registration (examination + publication + approval) typically takes 18 to 24 months. You can use ™ from filing day." },
             { question: "What can be trademarked?", answer: "A word, name, device (logo), label, colour combination, sound, smell, anything that uniquely identifies your goods or services in trade." },
             { question: "Is government fee included in the price?", answer: "Yes, government fee for 1 class is included. Additional classes cost extra (₹4,500 per class for individuals/MSMEs, ₹9,000 for others)." },
             { question: "What happens if my trademark is opposed?", answer: "We offer opposition handling as a separate service. Our attorneys file a counterstatement and represent you in hearings." },
@@ -152,9 +152,9 @@ export const MOCK_SERVICES: Service[] = [
             { step: 5, title: "Licence issuance", description: "Your FSSAI licence certificate is issued and must be displayed at your place of business." },
         ],
         faqs: [
-            { question: "What is the difference between Basic, State, and Central FSSAI licence?", answer: "Basic registration is for turnover below ₹12 lakhs. State licence is for ₹12 lakhs–₹20 crores. Central licence is for businesses above ₹20 crores or operating in multiple states." },
+            { question: "What is the difference between Basic, State, and Central FSSAI licence?", answer: "Basic registration is for turnover below ₹12 lakhs. State licence is for ₹12 lakhs to ₹20 crores. Central licence is for businesses above ₹20 crores or operating in multiple states." },
             { question: "Is FSSAI required for home-based food businesses?", answer: "Yes, even home kitchen operators selling food online need at least Basic FSSAI registration." },
-            { question: "How long is the FSSAI licence valid?", answer: "1 to 5 years, as chosen at the time of application. We recommend 2–3 years for cost efficiency." },
+            { question: "How long is the FSSAI licence valid?", answer: "1 to 5 years, as chosen at the time of application. We recommend 2 to 3 years for cost efficiency." },
             { question: "Do I need a separate licence for each branch?", answer: "Yes, a separate licence is required for each manufacturing or processing location, though a single Central licence can cover multiple states for some business types." },
         ],
     },
@@ -186,7 +186,7 @@ export const MOCK_SERVICES: Service[] = [
             { question: "Is IEC mandatory for every export transaction?", answer: "Yes, for exports of goods IEC is mandatory. For service exports, IEC is not required if payment is received in foreign exchange and no foreign exchange is being repatriated." },
             { question: "Can individuals apply for IEC?", answer: "Yes, individuals can obtain an IEC in their personal name. It is not limited to companies and firms." },
             { question: "Is IEC valid for all types of goods?", answer: "Yes, a single IEC covers all goods and all ports. However, some goods require additional licences (e.g., weapons, chemicals, pharmaceutical products)." },
-            { question: "What if I need to update my IEC?", answer: "IEC must be updated every year (April–June window) even with no changes. We offer IEC modification and annual update as a separate service." },
+            { question: "What if I need to update my IEC?", answer: "IEC must be updated every year, during the April to June window, even with no changes. We offer IEC modification and annual update as a separate service." },
         ],
     },
     {
@@ -215,7 +215,7 @@ export const MOCK_SERVICES: Service[] = [
         ],
         faqs: [
             { question: "Who is eligible for Udyam Registration?", answer: "Any proprietorship, partnership, LLP, private limited company, or any other legal entity operating as a Micro, Small, or Medium Enterprise is eligible." },
-            { question: "What are the MSME turnover thresholds?", answer: "Micro: up to ₹5 crore turnover. Small: ₹5–50 crore. Medium: ₹50–250 crore. Investment limits in plant & machinery also apply." },
+            { question: "What are the MSME turnover thresholds?", answer: "Micro: up to ₹5 crore turnover. Small: ₹5 to ₹50 crore. Medium: ₹50 to ₹250 crore. Investment limits in plant & machinery also apply." },
             { question: "Is Udyog Aadhaar still valid?", answer: "All Udyog Aadhaar registrations must be migrated to the new Udyam portal. We handle migration as part of this service." },
             { question: "Does registration need to be renewed?", answer: "No, Udyam Registration is valid for the lifetime of the entity. However, details must be updated if your turnover or investment category changes." },
         ],
@@ -341,7 +341,7 @@ export const MOCK_SERVICES: Service[] = [
             { question: "Who is eligible for Startup India Recognition?", answer: "Any entity (Pvt Ltd, LLP, or Partnership Firm) incorporated for less than 10 years, with annual turnover not exceeding ₹100 crore, working towards innovation, development, or improvement of a product, process, or service." },
             { question: "Is the income tax exemption automatic upon recognition?", answer: "No, the 3-year tax exemption under Section 80-IAC requires a separate application to and approval by the Inter-Ministerial Board. Recognition is a prerequisite. We assist with both." },
             { question: "What is angel tax and how does recognition help?", answer: "Angel tax (Section 56(2)(viib)) is a tax on investments received at a valuation higher than fair market value. DPIIT-recognised startups are fully exempt from this tax, making fundraising much easier." },
-            { question: "How long does DPIIT take to process the application?", answer: "Typically 2–7 working days after a complete application is submitted. Our team ensures the application is complete to avoid delays." },
+            { question: "How long does DPIIT take to process the application?", answer: "Typically 2 to 7 working days after a complete application is submitted. Our team ensures the application is complete to avoid delays." },
         ],
     },
 ];

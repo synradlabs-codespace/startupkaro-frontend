@@ -1,5 +1,5 @@
 // features/marketing/data/services.service.ts
-// NOTE: CMS swap point — replace each function body with a Sanity query
+// NOTE: CMS swap point. Replace each function body with a Sanity query
 // (e.g. sanityClient.fetch(...)) without changing signatures or call sites.
 
 import { MOCK_SERVICES } from "./services.data";

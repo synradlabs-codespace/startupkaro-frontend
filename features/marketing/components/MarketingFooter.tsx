@@ -48,11 +48,13 @@ export function MarketingFooter() {
                             </span>
                         </Link>
                         <p className="max-w-sm text-sm leading-relaxed text-charcoal">
-                            End to End startup solutions delivered by verified CAs, CSs, Lawyers, and Industry Experts.
+                            End to End startup solutions delivered by verified CAs, CSs, lawyers, software engineers, and industry experts.
                         </p>
                         <div className="flex gap-3 pt-1">
                             <a
-                                href="#"
+                                href="https://www.instagram.com/Startupkaro.india"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 aria-label="Instagram"
                                 className="flex h-9 w-9 items-center justify-center rounded-md border border-hairline text-graphite transition-colors hover:border-primary-brand hover:text-primary-brand"
                             >
@@ -107,7 +109,7 @@ export function MarketingFooter() {
                                     )}
                                     <ul className="space-y-3">
                                         {column.items.map((item) => (
-                                            <li key={item.href ?? item.label}>
+                                            <li key={`${column.heading}-${item.label}-${item.href ?? "no-link"}`}>
                                                 {item.href ? (
                                                     <Link
                                                         href={item.href}

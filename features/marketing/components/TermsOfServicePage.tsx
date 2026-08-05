@@ -41,12 +41,12 @@ export function TermsOfServicePage() {
 
                 <Section title="Services">
                     <p>
-                        Startupkaro private limited provides business compliance and registration services including, but not limited to: GST registration,
-                        company incorporation, trademark filing, income tax return filing, FSSAI licensing, and import-export code registration.
+                        Startupkaro private limited provides business compliance, registration, legal, and technology services including, but not limited to: GST registration,
+                        company incorporation, trademark filing, income tax return filing, FSSAI licensing, import-export code registration, websites, apps, automation, and dashboards.
                     </p>
                     <p>
                         All services are delivered through qualified professionals, Chartered Accountants (CAs), Company Secretaries (CSs),
-                        and legal professionals, assigned on a case-by-case basis.
+                        legal professionals, and software engineers, assigned on a case-by-case basis.
                     </p>
                     <p>
                         We act as a facilitator and professional service provider. We do not guarantee outcomes that are subject to

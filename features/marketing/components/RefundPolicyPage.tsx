@@ -108,7 +108,7 @@ export function RefundPolicyPage() {
                     </ul>
                     <p>
                         We will acknowledge your request within 2 business days and communicate our decision within 7 business days.
-                        If approved, refunds will be processed to the original payment method within 5–10 business days depending
+                        If approved, refunds will be processed to the original payment method within 5 to 10 business days depending
                         on your bank or payment provider.
                     </p>
                 </Section>
@@ -146,7 +146,7 @@ export function RefundPolicyPage() {
                             </a>
                         </p>
                         <p className="text-slate">Phone: +91 789 00000 88</p>
-                        <p className="text-slate">Business hours: Mon–Sat, 10am–6pm IST</p>
+                        <p className="text-slate">Business hours: Mon-Sat, 10am-6pm IST</p>
                     </div>
                 </Section>
             </div>

@@ -165,7 +165,7 @@ export function ServiceJourneySection() {
                         </div>
                     </div>
 
-                    {/* Right — scrollable cards */}
+                    {/* Right scrollable cards */}
                     <div>
                         {steps.map((step, i) => (
                             <div

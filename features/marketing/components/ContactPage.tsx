@@ -180,7 +180,7 @@ export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: strin
             <div className="mx-auto w-full max-w-6xl">
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-5 lg:items-start">
 
-                    {/* Left — info panel */}
+                    {/* Left info panel */}
                     <div className="space-y-5 lg:col-span-2">
                         <div>
                             <p className="mb-2 text-xs font-medium uppercase tracking-[0.28px] text-graphite">
@@ -225,7 +225,7 @@ export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: strin
                         </div>
                     </div>
 
-                    {/* Right — form */}
+                    {/* Right form */}
                     <div className="lg:col-span-3">
                         <div className="rounded-2xl border border-hairline bg-cloud p-5 md:p-6">
                             <form onSubmit={handleSubmit} className="space-y-4" noValidate>

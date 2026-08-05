@@ -18,7 +18,7 @@ export function WhyChooseUsSection() {
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-10">
 
-                    {/* LHS — brand image panel */}
+                    {/* LHS brand image panel */}
                     <div className="relative hidden lg:block">
                         <div className="relative overflow-hidden rounded-2xl border border-hairline bg-canvas min-h-[28rem] lg:min-h-152.5 shadow-[0_2px_8px_rgba(26,26,26,0.08)]">
                             <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-canvas/40 blur-3xl" />
@@ -41,7 +41,7 @@ export function WhyChooseUsSection() {
                         </div>
                     </div>
 
-                    {/* RHS — heading + bento grid */}
+                    {/* RHS heading + bento grid */}
                     <div className="lg:col-span-3">
                         <div className="mb-8">
                             <p className="text-xs uppercase tracking-[0.28px] text-graphite font-medium mb-2">Our edge</p>
@@ -52,20 +52,20 @@ export function WhyChooseUsSection() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
 
-                            {/* Tile 1 — Hero (2×2): Expert CA & CS team */}
+                            {/* Tile 1 Hero (2x2): Expert professional team */}
                             <div className={`${CARD_BASE} sm:col-span-2 sm:row-span-2 p-7 flex flex-col justify-end min-h-70 sm:min-h-80`}>
                                 <Users className={`${AMBIENT_ICON} h-36 w-36 sm:h-44 sm:w-44`} />
                                 <div className={CONTENT_LAYER}>
                                     <h3 className="mb-2 font-display text-xl font-medium leading-none text-ink">
-                                        Expert CA &amp; CS team
+                                        Expert CA, CS, Legal &amp; Tech team
                                     </h3>
                                     <p className="max-w-lg text-sm leading-relaxed text-charcoal text-justify">
-                                        Every service is carefully supervised by our experts, ensuring quality, accuracy, and compliance
+                                        Chartered Accountants, Company Secretaries, legal professionals, and software engineers work together to deliver accurate, compliant, and practical business solutions.
                                     </p>
                                 </div>
                             </div>
 
-                            {/* Tile 2 — Small (1×1): 100% online */}
+                            {/* Tile 2 Small (1x1): 100% online */}
                             <div className={`${CARD_BASE} sm:col-span-1 p-6 flex flex-col justify-end min-h-40`}>
                                 <Globe className={`${AMBIENT_ICON} h-28 w-28`} />
                                 <div className={CONTENT_LAYER}>
@@ -76,7 +76,7 @@ export function WhyChooseUsSection() {
                                 </div>
                             </div>
 
-                            {/* Tile 3 — Small (1×1): Fixed pricing */}
+                            {/* Tile 3 Small (1x1): Fixed pricing */}
                             <div className={`${CARD_BASE} sm:col-span-1 p-6 flex flex-col justify-end min-h-40`}>
                                 <Tag className={`${AMBIENT_ICON} h-28 w-28`} />
                                 <div className={CONTENT_LAYER}>
@@ -87,7 +87,7 @@ export function WhyChooseUsSection() {
                                 </div>
                             </div>
 
-                            {/* Tile 4 — Wide strip (3×1): Expert updates */}
+                            {/* Tile 4 Wide strip (3x1): Expert updates */}
                             <div className={`${CARD_BASE} sm:col-span-3 p-6 min-h-40 flex items-center`}>
                                 <BarChart3 className={`${AMBIENT_ICON} h-32 w-32 sm:h-36 sm:w-36`} />
                                 <div className={`${CONTENT_LAYER} max-w-2xl`}>

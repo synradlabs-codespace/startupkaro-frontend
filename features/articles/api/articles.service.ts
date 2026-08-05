@@ -7,6 +7,7 @@ import {
     RELATED_FALLBACK_QUERY,
     ALL_SLUGS_QUERY,
     LATEST_ARTICLES_QUERY,
+    ARTICLES_BY_CATEGORY_QUERY,
 } from "@/sanity/queries";
 import type { Article, ArticleCard } from "@/features/articles/types";
 import { calculateReadTime } from "@/features/articles/lib/read-time";
@@ -62,7 +63,7 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
     return { ...raw, readTime };
 }
 
-// Uses the plain client — safe to call from generateStaticParams (no draftMode() call)
+// Uses the plain client, safe to call from generateStaticParams (no draftMode() call)
 export async function getAllArticleSlugs(): Promise<{ slug: string }[]> {
     const data = await client.fetch(ALL_SLUGS_QUERY);
     return (data ?? []) as { slug: string }[];
@@ -75,6 +76,21 @@ export async function getLatestArticles(limit = 3): Promise<ArticleCard[]> {
         tags: ["article"],
     });
     return (result.data ?? []) as ArticleCard[];
+}
+
+export async function getArticlesByCategory(categorySlug: string, limit = 3): Promise<ArticleCard[]> {
+    const result = await sanityFetch({
+        query: ARTICLES_BY_CATEGORY_QUERY,
+        params: { categorySlug, limit },
+        tags: ["article", `category:${categorySlug}`],
+    });
+    return (result.data ?? []) as ArticleCard[];
+}
+
+export async function getTechArticles(limit = 3): Promise<ArticleCard[]> {
+    const techArticles = await getArticlesByCategory("tech", limit);
+    if (techArticles.length > 0) return techArticles;
+    return getLatestArticles(limit);
 }
 
 export async function getRelatedArticles(

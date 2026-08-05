@@ -107,7 +107,7 @@ const faqItems = [
         number: "14",
         title: "Are all your consultations free?",
         content:
-            "Yes! Most general business queries and initial guidance are completely free of charge. For businesses that require in-depth strategic advice, 1:1 consultations with our Chartered Accountants (CAs), Company Secretaries (CSs), legal experts, or business consultants are offered as paid sessions. These consultations are tailored to your specific needs and focus on strategy, planning, compliance, and problem-solving to help you make informed business decisions. This way, you receive free guidance for general questions while paying only for personalized expert advice when you need it.",
+            "Yes! Most general business queries and initial guidance are completely free of charge. For businesses that require in-depth strategic advice, 1:1 consultations with our Chartered Accountants (CAs), Company Secretaries (CSs), legal experts, software engineers, or business consultants are offered as paid sessions. These consultations are tailored to your specific needs and focus on strategy, planning, compliance, and problem-solving to help you make informed business decisions. This way, you receive free guidance for general questions while paying only for personalized expert advice when you need it.",
     },
 ];
 

@@ -30,7 +30,7 @@ export function PrivacyPolicyPage() {
                 <Section title="Overview">
                     <p>
                         Startupkaro private limited (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) operates the website startupkaro.in and provides business
-                        compliance and registration services. This Privacy Policy explains how we collect, use, store, and share
+                        compliance, registration, legal, and technology services. This Privacy Policy explains how we collect, use, store, and share
                         information when you visit our website or use our services.
                     </p>
                     <p>
@@ -75,7 +75,7 @@ export function PrivacyPolicyPage() {
                     <p>We do not sell or rent your personal information. We may share your information with:</p>
                     <ul className="list-disc pl-5 space-y-1.5">
                         <li>
-                            <strong className="text-ink">Assigned professionals:</strong> The CA, CS, or legal expert handling your specific service case.
+                            <strong className="text-ink">Assigned professionals:</strong> The CA, CS, legal expert, or software engineer handling your specific service case.
                         </li>
                         <li>
                             <strong className="text-ink">Government portals:</strong> We submit your information to relevant portals (MCA, GST Portal, DGFT, IP India, etc.)

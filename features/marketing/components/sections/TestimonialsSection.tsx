@@ -88,7 +88,7 @@ export function TestimonialsSection() {
                             Built for founders who want clarity before commitment
                         </h2>
                         <p className="mt-4 text-base leading-relaxed text-charcoal">
-                            Every startup has a unique journey. Read what founders have to say about their experience working with us—from validating business ideas and navigating compliance to launching, scaling, and achieving sustainable growth with the right strategic guidance
+                            Every startup has a unique journey. Read what founders have to say about their experience working with us, from validating business ideas and navigating compliance to launching, scaling, and achieving sustainable growth with the right strategic guidance
                         </p>
                     </div>
 

@@ -77,12 +77,20 @@ export function ConsultancyDock() {
                     }
                 }
             `}</style>
-            <div className="group relative flex w-full max-w-[520px] items-center gap-2 rounded-xl border border-primary-soft/80 bg-canvas/92 p-2 pr-1.5 shadow-[0_20px_60px_rgba(41,110,249,0.16)] backdrop-blur-xl transition-transform duration-300 hover:-translate-y-1 sm:w-auto sm:min-w-[470px] sm:gap-3 sm:rounded-2xl sm:p-2.5 sm:pr-2">
+            <div className="group relative flex w-full max-w-[520px] items-center gap-2 rounded-xl border border-primary-soft/80 bg-canvas/92 px-6 py-2 shadow-[0_20px_60px_rgba(41,110,249,0.16)] backdrop-blur-xl transition-transform duration-300 hover:-translate-y-1 sm:w-auto sm:min-w-[470px] sm:gap-3 sm:rounded-2xl sm:p-2.5 sm:pr-2">
                 <div className="absolute inset-0 rounded-2xl bg-[linear-gradient(110deg,rgba(201,224,252,0.58),transparent_42%,rgba(255,255,255,0.78))] opacity-80" />
+                <button
+                    type="button"
+                    onClick={handleDismiss}
+                    className="absolute -left-2.5 -top-2.5 z-20 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-hairline bg-white text-graphite shadow-[0_8px_22px_rgba(26,26,26,0.16)] transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-brand/35 sm:-left-3 sm:-top-3 sm:h-8 sm:w-8"
+                    aria-label="Dismiss consultancy prompt"
+                >
+                    <X className="h-3.5 w-3.5" />
+                </button>
                 <div className="relative hidden h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-brand text-white shadow-[0_10px_24px_rgba(41,110,249,0.22)] sm:flex">
                     <MessageCircle className="h-5 w-5" />
                 </div>
-                <div className="min-w-0 flex-1 px-2 py-1 sm:px-0 sm:py-0">
+                <div className="min-w-0 flex-1 py-1 sm:px-0 sm:py-0">
                     <p className="relative text-sm font-semibold leading-tight text-ink">Need to Talk Strategy?</p>
                     <p className="relative mt-0.5 truncate text-xs leading-relaxed text-graphite sm:hidden">1:1 expert consult - Rs. 399</p>
                     <p className="relative mt-0.5 hidden truncate text-xs leading-relaxed text-graphite sm:block">Private 1:1 expert consultation at Rs. 399</p>
@@ -99,14 +107,6 @@ export function ConsultancyDock() {
                 >
                     Book
                 </Link>
-                <button
-                    type="button"
-                    onClick={handleDismiss}
-                    className="relative -ml-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-graphite/60 transition-colors hover:bg-canvas/80 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-brand/35"
-                    aria-label="Dismiss consultancy prompt"
-                >
-                    <X className="h-3.5 w-3.5" />
-                </button>
             </div>
         </div>
     );

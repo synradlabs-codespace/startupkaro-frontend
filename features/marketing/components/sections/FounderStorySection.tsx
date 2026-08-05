@@ -95,7 +95,7 @@ export function FounderStorySection() {
                                 {member.name}
                             </h3>
                             <p className="mt-1 min-h-10 text-sm font-semibold leading-snug text-primary-brand">{member.role}</p>
-                            <p className="mt-3 min-h-12 border-t border-hairline pt-3 text-sm leading-relaxed text-graphite">{member.description}</p>
+                            <p className="mt-3 min-h-12 border-t border-hairline pt-3 text-justify text-sm leading-relaxed text-graphite">{member.description}</p>
                         </article>
                     ))}
                 </div>

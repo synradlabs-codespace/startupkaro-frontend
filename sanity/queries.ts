@@ -91,7 +91,14 @@ export const ALL_SLUGS_QUERY = defineQuery(`
 export const LATEST_ARTICLES_QUERY = defineQuery(`
   *[_type == "article" && defined(slug.current) && defined(publishedAt)]
   | order(publishedAt desc)
-  [0...3] ${ARTICLE_CARD_PROJECTION}
+  [0...$limit] ${ARTICLE_CARD_PROJECTION}
+`);
+
+export const ARTICLES_BY_CATEGORY_QUERY = defineQuery(`
+  *[_type == "article" && defined(slug.current) && defined(publishedAt)
+    && $categorySlug in categories[]->slug.current]
+  | order(publishedAt desc)
+  [0...$limit] ${ARTICLE_CARD_PROJECTION}
 `);
 
 export const CATEGORIES_QUERY = defineQuery(`

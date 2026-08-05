@@ -8,7 +8,7 @@ const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
 const points = [
     { icon: MessageCircle, label: "Private 1:1 call" },
-    { icon: ShieldCheck, label: "CA/CS/legal guidance" },
+    { icon: ShieldCheck, label: "CA/CS/legal/tech guidance" },
     { icon: CalendarClock, label: "Select Your Preferred Time Slot" },
 ];
 
