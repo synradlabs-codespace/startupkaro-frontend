@@ -20,7 +20,7 @@ export async function getServiceContentBySlug(slug: string): Promise<ServiceCont
     return (result.data ?? null) as ServiceContent | null;
 }
 
-// Uses plain client — safe for generateStaticParams (no draftMode() call)
+// Uses plain client, safe for generateStaticParams (no draftMode() call)
 export async function getAllServiceSlugs(): Promise<{ slug: string }[]> {
     const data = await client.fetch(ALL_SERVICE_SLUGS_QUERY);
     return (data ?? []) as { slug: string }[];

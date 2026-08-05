@@ -48,14 +48,14 @@ export const jobType = defineType({
             title: "Job ID",
             type: "string",
             group: "overview",
-            description: "Unique identifier shown on the application form. Auto-generated on creation — e.g. SK-874291",
+            description: "Unique identifier shown on the application form. Auto-generated on creation, e.g. SK-874291",
             initialValue: () => `SK-${String(Date.now()).slice(-6)}`,
             components: { input: JobIdInput },
             validation: (Rule) =>
                 Rule.required().custom((val: string | undefined) => {
                     if (!val) return true;
                     if (/^[A-Z]{2,4}-\d{3,6}$/.test(val)) return true;
-                    return "Must match format SK-874291 (2–4 uppercase letters, hyphen, 3–6 digits)";
+                    return "Must match format SK-874291 (2-4 uppercase letters, hyphen, 3-6 digits)";
                 }),
         }),
         defineField({
@@ -96,7 +96,7 @@ export const jobType = defineType({
             type: "text",
             group: "overview",
             rows: 3,
-            description: "1–2 sentence summary shown on the listing card (max 220 chars).",
+            description: "1-2 sentence summary shown on the listing card (max 220 chars).",
             validation: (Rule) => Rule.required().max(220),
         }),
         defineField({
@@ -111,7 +111,7 @@ export const jobType = defineType({
             title: "What You'll Do",
             type: "portableTextBody",
             group: "content",
-            description: "Main responsibilities — rendered as rich text on the job detail page.",
+            description: "Main responsibilities, rendered as rich text on the job detail page.",
         }),
         defineField({
             name: "requirements",

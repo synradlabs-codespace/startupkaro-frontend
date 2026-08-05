@@ -10,7 +10,7 @@ export const mockOrders = [
 export const mockPayments = [
   { id: "PAY-001", orderId: "ORD-001", customer: "Rahul Sharma", amount: 1499, method: "Razorpay", status: "paid", date: "2025-03-01" },
   { id: "PAY-002", orderId: "ORD-002", customer: "Priya Mehta", amount: 6999, method: "Razorpay", status: "paid", date: "2025-03-05" },
-  { id: "PAY-003", orderId: "ORD-003", customer: "Amit Patel", amount: 3999, method: "—", status: "unpaid", date: "—" },
+  { id: "PAY-003", orderId: "ORD-003", customer: "Amit Patel", amount: 3999, method: "N/A", status: "unpaid", date: "N/A" },
   { id: "PAY-004", orderId: "ORD-004", customer: "Sneha Roy", amount: 999, method: "Razorpay", status: "paid", date: "2025-03-12" },
   { id: "PAY-005", orderId: "ORD-005", customer: "Vikram Singh", amount: 1499, method: "Razorpay", status: "refunded", date: "2025-03-16" },
   { id: "PAY-006", orderId: "ORD-006", customer: "Neha Gupta", amount: 1200, method: "Razorpay", status: "partial", date: "2025-03-18" },

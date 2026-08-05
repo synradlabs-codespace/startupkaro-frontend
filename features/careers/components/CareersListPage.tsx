@@ -19,7 +19,7 @@ const CULTURE_PILLARS = [
     {
         icon: Users,
         title: "Expert, not corporate",
-        body: "Real CAs, CSs, and legal experts, approachable, fast, and always in your corner.",
+        body: "Real CAs, CSs, legal experts, and software engineers, approachable, fast, and always in your corner.",
     },
     {
         icon: Zap,

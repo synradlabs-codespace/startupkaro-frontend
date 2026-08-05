@@ -35,7 +35,7 @@ export function ServiceEditorial({ content }: ServiceEditorialProps) {
                 </section>
             )}
 
-            {/* Overview — rich text */}
+            {/* Overview rich text */}
             {content.overview?.length > 0 && (
                 <section className="bg-canvas py-10">
                     <div className="space-y-5">

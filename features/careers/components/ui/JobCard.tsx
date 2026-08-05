@@ -17,7 +17,7 @@ export function JobCard({ job }: JobCardProps) {
             />
 
             <div className="flex flex-1 flex-col sm:flex-row gap-4 p-5">
-                {/* Left — title + description */}
+                {/* Left title + description */}
                 <div className="flex-1 min-w-0">
                     <h3 className="mb-1.5 text-base font-medium leading-snug text-ink">
                         {job.title}
@@ -29,7 +29,7 @@ export function JobCard({ job }: JobCardProps) {
 
                 <div className="h-px sm:h-auto sm:w-px bg-hairline sm:self-stretch shrink-0" />
 
-                {/* Right — meta + CTA */}
+                {/* Right meta + CTA */}
                 <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-3 sm:min-w-40">
                     <div className="flex flex-wrap gap-2">
                         <span className="inline-flex items-center gap-1 rounded-md bg-cloud px-2.5 py-1 text-xs text-charcoal">

@@ -20,7 +20,7 @@ export async function getJobBySlug(slug: string): Promise<Job | null> {
     return (result.data ?? null) as Job | null;
 }
 
-// Uses the plain client — safe to call from generateStaticParams (no draftMode() call)
+// Uses the plain client, safe to call from generateStaticParams (no draftMode() call)
 export async function getAllJobSlugs(): Promise<{ slug: string }[]> {
     const data = await client.fetch(ALL_JOB_SLUGS_QUERY);
     return (data ?? []) as { slug: string }[];

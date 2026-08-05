@@ -31,7 +31,7 @@ export const serviceType = defineType({
             type: "slug",
             group: "overview",
             description:
-                "MUST exactly match the backend service slug (e.g. llp). This is the join key — a mismatch means no price or checkout CTA on the site.",
+                "MUST exactly match the backend service slug (e.g. llp). This is the join key. A mismatch means no price or checkout CTA on the site.",
             options: { source: "name", maxLength: 96 },
             validation: (Rule) =>
                 Rule.required().custom((val: { current?: string } | undefined) => {
@@ -69,7 +69,7 @@ export const serviceType = defineType({
             title: "Estimated Duration",
             type: "string",
             group: "overview",
-            description: "e.g. 7–10 working days",
+            description: "e.g. 7-10 working days",
             validation: (Rule) => Rule.required(),
         }),
         defineField({
@@ -101,7 +101,7 @@ export const serviceType = defineType({
             type: "text",
             group: "overview",
             rows: 3,
-            description: "1–2 sentence summary shown on listing cards (max 220 chars).",
+            description: "1-2 sentence summary shown on listing cards (max 220 chars).",
             validation: (Rule) => Rule.required().max(220),
         }),
         defineField({
@@ -148,7 +148,7 @@ export const serviceType = defineType({
                     },
                 },
             ],
-            description: "Step number is derived from position — reorder to change sequence.",
+            description: "Step number is derived from position. Reorder to change sequence.",
         }),
         defineField({
             name: "faqs",

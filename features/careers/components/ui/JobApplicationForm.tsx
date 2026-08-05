@@ -28,16 +28,16 @@ import type { Job } from "@/features/careers/types";
 
 const CURRENT_CTC_OPTIONS: { label: string; value: CurrentCTC }[] = [
     { label: "0 (Fresher)", value: "0" },
-    { label: "2 – 5 LPA", value: "2-5 LPA" },
-    { label: "5 – 8 LPA", value: "5-8 LPA" },
-    { label: "8 – 11 LPA", value: "8-11 LPA" },
+    { label: "2 to 5 LPA", value: "2-5 LPA" },
+    { label: "5 to 8 LPA", value: "5-8 LPA" },
+    { label: "8 to 11 LPA", value: "8-11 LPA" },
     { label: "Above 11 LPA", value: "Above 11 LPA" },
 ];
 
 const EXPECTED_CTC_OPTIONS: { label: string; value: ExpectedCTC }[] = [
-    { label: "2 – 5 LPA", value: "2-5 LPA" },
-    { label: "5 – 8 LPA", value: "5-8 LPA" },
-    { label: "8 – 11 LPA", value: "8-11 LPA" },
+    { label: "2 to 5 LPA", value: "2-5 LPA" },
+    { label: "5 to 8 LPA", value: "5-8 LPA" },
+    { label: "8 to 11 LPA", value: "8-11 LPA" },
     { label: "Above 11 LPA", value: "Above 11 LPA" },
 ];
 

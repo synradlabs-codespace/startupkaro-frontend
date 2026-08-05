@@ -75,7 +75,7 @@ export const portableTextBodyType = defineType({
                 },
             },
         }),
-        // Custom quote block (distinct from blockquote style — for styled pull-quotes with citation)
+        // Custom quote block (distinct from blockquote style, for styled pull-quotes with citation)
         defineArrayMember({
             type: "object",
             name: "quote",
@@ -99,7 +99,7 @@ export const portableTextBodyType = defineType({
                 prepare({ title, subtitle }) {
                     return {
                         title: `"${String(title).slice(0, 60)}${String(title).length > 60 ? "…" : ""}"`,
-                        subtitle: subtitle ? `— ${subtitle}` : undefined,
+                        subtitle: subtitle ? `- ${subtitle}` : undefined,
                     };
                 },
             },
