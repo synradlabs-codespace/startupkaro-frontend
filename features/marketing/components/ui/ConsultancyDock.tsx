@@ -82,10 +82,10 @@ export function ConsultancyDock() {
                 <button
                     type="button"
                     onClick={handleDismiss}
-                    className="absolute -left-2.5 -top-2.5 z-20 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-hairline bg-white text-graphite shadow-[0_8px_22px_rgba(26,26,26,0.16)] transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-brand/35 sm:-left-3 sm:-top-3 sm:h-8 sm:w-8"
+                    className="absolute -left-1.5 -top-1.5 z-20 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-hairline bg-white text-graphite shadow-[0_8px_22px_rgba(26,26,26,0.16)] transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-brand/35 sm:-left-2 sm:-top-2 sm:h-6 sm:w-6"
                     aria-label="Dismiss consultancy prompt"
                 >
-                    <X className="h-3.5 w-3.5" />
+                    <X className="h-3 w-3" />
                 </button>
                 <div className="relative hidden h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-brand text-white shadow-[0_10px_24px_rgba(41,110,249,0.22)] sm:flex">
                     <MessageCircle className="h-5 w-5" />

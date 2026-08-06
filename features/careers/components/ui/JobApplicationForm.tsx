@@ -5,6 +5,9 @@ import { CheckCircle2, FileText, Paperclip, UploadCloud, X } from "lucide-react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { PhoneField } from "@/components/custom/PhoneField";
 import {
     Select,
     SelectContent,
@@ -12,7 +15,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { validators, formatNameInput, formatPhoneDigits, validatePhoneDigits, buildPhone, PHONE_PREFIX } from "@/lib/validations/common.schema";
+import { validators, formatNameInput, validatePhoneDigits, buildPhone } from "@/lib/validations/common.schema";
 import { submitJobApplication } from "@/features/careers/api/applications.service";
 import { getApiErrorMessage, getApiSuccessMessage } from "@/lib/api-messages";
 import { useToast } from "@/components/providers/ToastProvider";
@@ -51,10 +54,9 @@ const NOTICE_PERIOD_OPTIONS: { label: string; value: NoticePeriod }[] = [
 const YEARS = Array.from({ length: 41 }, (_, i) => String(i));
 const MONTHS = Array.from({ length: 12 }, (_, i) => String(i));
 
-const INPUT_BASE =
-    "w-full bg-surface border rounded-xl px-4 py-3 text-ink text-sm placeholder-gray-400 focus:outline-none transition-colors font-sans";
-const INPUT_DEFAULT = "border-hairline focus:border-hairline-strong";
-const INPUT_ERROR = "border-red-300 focus:border-red-400";
+const INPUT_BASE = "h-auto w-full rounded-xl bg-surface px-4 py-3 text-sm";
+const INPUT_DEFAULT = "border-hairline";
+const INPUT_ERROR = "border-error-brand";
 
 const LABEL_CLASS = "block text-xs text-graphite mb-2 font-mono tracking-widest uppercase";
 
@@ -215,19 +217,21 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                     {/* Auto-filled fields */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                         <div>
-                            <label className={LABEL_CLASS}>Job ID</label>
-                            <input
+                            <Label className={LABEL_CLASS}>Job ID</Label>
+                            <Input
                                 readOnly
+                                disabled
                                 value={job.jobId}
-                                className={`${INPUT_BASE} ${INPUT_DEFAULT} bg-fog text-graphite cursor-default select-none`}
+                                className={`${INPUT_BASE} ${INPUT_DEFAULT} cursor-default select-none bg-fog text-graphite`}
                             />
                         </div>
                         <div className="sm:col-span-2">
-                            <label className={LABEL_CLASS}>Position</label>
-                            <input
+                            <Label className={LABEL_CLASS}>Position</Label>
+                            <Input
                                 readOnly
+                                disabled
                                 value={job.title}
-                                className={`${INPUT_BASE} ${INPUT_DEFAULT} bg-fog text-graphite cursor-default select-none`}
+                                className={`${INPUT_BASE} ${INPUT_DEFAULT} cursor-default select-none bg-fog text-graphite`}
                             />
                         </div>
                     </div>
@@ -237,8 +241,8 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                     {/* Name row */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                         <div>
-                            <label className={LABEL_CLASS}>First Name</label>
-                            <input
+                            <Label className={LABEL_CLASS}>First Name</Label>
+                            <Input
                                 type="text"
                                 value={form.firstName}
                                 onChange={(e) => set("firstName", formatNameInput(e.target.value))}
@@ -247,14 +251,14 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                                 className={`${INPUT_BASE} ${errors.firstName ? INPUT_ERROR : INPUT_DEFAULT}`}
                             />
                             {errors.firstName && (
-                                <p className="mt-1.5 text-xs text-red-500">{errors.firstName}</p>
+                                <p className="mt-1.5 text-xs text-error-brand">{errors.firstName}</p>
                             )}
                         </div>
                         <div>
-                            <label className={LABEL_CLASS}>
+                            <Label className={LABEL_CLASS}>
                                 Middle Name <span className="normal-case text-stone">(optional)</span>
-                            </label>
-                            <input
+                            </Label>
+                            <Input
                                 type="text"
                                 value={form.middleName}
                                 onChange={(e) => set("middleName", formatNameInput(e.target.value))}
@@ -264,8 +268,8 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                             />
                         </div>
                         <div>
-                            <label className={LABEL_CLASS}>Last Name</label>
-                            <input
+                            <Label className={LABEL_CLASS}>Last Name</Label>
+                            <Input
                                 type="text"
                                 value={form.lastName}
                                 onChange={(e) => set("lastName", formatNameInput(e.target.value))}
@@ -274,7 +278,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                                 className={`${INPUT_BASE} ${errors.lastName ? INPUT_ERROR : INPUT_DEFAULT}`}
                             />
                             {errors.lastName && (
-                                <p className="mt-1.5 text-xs text-red-500">{errors.lastName}</p>
+                                <p className="mt-1.5 text-xs text-error-brand">{errors.lastName}</p>
                             )}
                         </div>
                     </div>
@@ -282,8 +286,8 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                     {/* Contact */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
-                            <label className={LABEL_CLASS}>Email Address</label>
-                            <input
+                            <Label className={LABEL_CLASS}>Email Address</Label>
+                            <Input
                                 type="email"
                                 value={form.email}
                                 onChange={(e) => set("email", e.target.value)}
@@ -292,26 +296,19 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                                 className={`${INPUT_BASE} ${errors.email ? INPUT_ERROR : INPUT_DEFAULT}`}
                             />
                             {errors.email && (
-                                <p className="mt-1.5 text-xs text-red-500">{errors.email}</p>
+                                <p className="mt-1.5 text-xs text-error-brand">{errors.email}</p>
                             )}
                         </div>
                         <div>
-                            <label className={LABEL_CLASS}>Mobile Number</label>
-                            <div className={`flex items-center rounded-xl border bg-surface overflow-hidden focus-within:border-hairline-strong ${errors.mobile ? "border-red-300" : "border-hairline"}`}>
-                                <span className="px-3 py-3 text-sm text-ink bg-fog border-r border-hairline select-none shrink-0">{PHONE_PREFIX}</span>
-                                <input
-                                    type="tel"
-                                    inputMode="numeric"
-                                    value={form.mobile}
-                                    onChange={(e) => set("mobile", formatPhoneDigits(e.target.value))}
-                                    placeholder="Number"
-                                    maxLength={10}
-                                    autoComplete="tel"
-                                    className="flex-1 px-3 py-3 text-sm text-ink bg-surface outline-none placeholder-gray-400"
-                                />
-                            </div>
+                            <Label className={LABEL_CLASS}>Mobile Number</Label>
+                            <PhoneField
+                                value={form.mobile}
+                                onChange={(digits) => set("mobile", digits)}
+                                error={!!errors.mobile}
+                                className="h-auto rounded-xl bg-surface py-1"
+                            />
                             {errors.mobile && (
-                                <p className="mt-1.5 text-xs text-red-500">{errors.mobile}</p>
+                                <p className="mt-1.5 text-xs text-error-brand">{errors.mobile}</p>
                             )}
                         </div>
                     </div>
@@ -325,7 +322,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                                     value={form.experienceYears}
                                     onValueChange={(v) => set("experienceYears", v ?? "0")}
                                 >
-                                    <SelectTrigger className={`h-11 rounded-xl bg-surface text-sm ${errors.experienceYears ? "border-red-300" : "border-hairline"}`}>
+                                    <SelectTrigger className={`h-11 rounded-xl bg-surface text-sm ${errors.experienceYears ? "border-error-brand" : "border-hairline"}`}>
                                         <SelectValue placeholder="Years" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -356,7 +353,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                             </div>
                         </div>
                         {errors.experienceYears && (
-                            <p className="mt-1.5 text-xs text-red-500">{errors.experienceYears}</p>
+                            <p className="mt-1.5 text-xs text-error-brand">{errors.experienceYears}</p>
                         )}
                     </div>
 
@@ -385,7 +382,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                             ))}
                         </RadioGroup>
                         {errors.currentCtc && (
-                            <p className="mt-1.5 text-xs text-red-500">{errors.currentCtc}</p>
+                            <p className="mt-1.5 text-xs text-error-brand">{errors.currentCtc}</p>
                         )}
                     </div>
 
@@ -414,7 +411,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                             ))}
                         </RadioGroup>
                         {errors.expectedCtc && (
-                            <p className="mt-1.5 text-xs text-red-500">{errors.expectedCtc}</p>
+                            <p className="mt-1.5 text-xs text-error-brand">{errors.expectedCtc}</p>
                         )}
                     </div>
 
@@ -443,14 +440,14 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                             ))}
                         </RadioGroup>
                         {errors.noticePeriod && (
-                            <p className="mt-1.5 text-xs text-red-500">{errors.noticePeriod}</p>
+                            <p className="mt-1.5 text-xs text-error-brand">{errors.noticePeriod}</p>
                         )}
                     </div>
 
                     {/* LinkedIn */}
                     <div>
-                        <label className={LABEL_CLASS}>LinkedIn Profile URL</label>
-                        <input
+                        <Label className={LABEL_CLASS}>LinkedIn Profile URL</Label>
+                        <Input
                             type="url"
                             value={form.linkedinUrl}
                             onChange={(e) => set("linkedinUrl", e.target.value)}
@@ -458,7 +455,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                             className={`${INPUT_BASE} ${errors.linkedinUrl ? INPUT_ERROR : INPUT_DEFAULT}`}
                         />
                         {errors.linkedinUrl && (
-                            <p className="mt-1.5 text-xs text-red-500">{errors.linkedinUrl}</p>
+                            <p className="mt-1.5 text-xs text-error-brand">{errors.linkedinUrl}</p>
                         )}
                     </div>
 
@@ -474,7 +471,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                                 isDragging
                                     ? "border-primary-brand bg-tint-sky/30"
                                     : errors.resume
-                                    ? "border-red-300 bg-surface"
+                                    ? "border-error-brand bg-surface"
                                     : "border-hairline-strong bg-surface hover:border-primary-brand hover:bg-tint-sky/20"
                             }`}
                         >
@@ -527,17 +524,17 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                             )}
                         </div>
                         {errors.resume && (
-                            <p className="mt-1.5 text-xs text-red-500">{errors.resume}</p>
+                            <p className="mt-1.5 text-xs text-error-brand">{errors.resume}</p>
                         )}
                     </div>
 
                     {/* Summary */}
                     <div>
-                        <label className={LABEL_CLASS}>
+                        <Label className={LABEL_CLASS}>
                             Summary, Achievements &amp; Work Links{" "}
                             <span className="normal-case text-stone">(optional)</span>
-                        </label>
-                        <textarea
+                        </Label>
+                        <Textarea
                             value={form.summary}
                             onChange={(e) => set("summary", e.target.value)}
                             placeholder="Tell us about your key achievements, projects, portfolio links, or anything that sets you apart…"
@@ -575,7 +572,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                             ))}
                         </RadioGroup>
                         {errors.hasCriminalCase && (
-                            <p className="mt-1.5 text-xs text-red-500">{errors.hasCriminalCase}</p>
+                            <p className="mt-1.5 text-xs text-error-brand">{errors.hasCriminalCase}</p>
                         )}
                     </div>
 
@@ -593,14 +590,14 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                                 <span className="text-[#296ef9] ml-0.5">*</span>
                             </Label>
                             {errors.agreeToTerms && (
-                                <p className="mt-1 text-xs text-red-500">{errors.agreeToTerms}</p>
+                                <p className="mt-1 text-xs text-error-brand">{errors.agreeToTerms}</p>
                             )}
                         </div>
                     </div>
 
                     {/* Submit error */}
                     {errors.submit && (
-                        <p className="text-sm text-red-500 text-center">{errors.submit}</p>
+                        <p className="text-sm text-error-brand text-center">{errors.submit}</p>
                     )}
 
                     <button

@@ -27,11 +27,16 @@ import {
 import type { ArticleCard } from "@/features/articles/types";
 import { FlowButton, FlowSecondaryButton } from "@/components/custom/FlowButton";
 import { UniqueAccordion } from "@/components/ui/unique-accordion";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { PhoneField } from "@/components/custom/PhoneField";
 import { publicInquiryService } from "@/services/customer.service";
 import { getApiErrorMessage, isRateLimited } from "@/features/customers/lib/format";
 import { getApiSuccessMessage } from "@/lib/api-messages";
 import { useToast } from "@/components/providers/ToastProvider";
-import { validators, formatNameInput, formatPhoneDigits, validatePhoneDigits, buildPhone, PHONE_PREFIX } from "@/lib/validations/common.schema";
+import { validators, formatNameInput, validatePhoneDigits, buildPhone } from "@/lib/validations/common.schema";
 import { techTemplates } from "@/features/marketing/data/tech-templates";
 import { MarketingCTASection } from "./sections/MarketingCTASection";
 
@@ -425,13 +430,21 @@ export function TechServicesPage({ articles }: TechServicesPageProps) {
                                     <TextField label="Full Name" value={form.name} error={errors.name} onChange={(value) => setField("name", value)} autoComplete="name" />
                                     <TextField label="Email Address" value={form.email} error={errors.email} onChange={(value) => setField("email", value)} autoComplete="email" type="email" />
                                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                        <PhoneField phoneDigits={phoneDigits} error={errors.phone} onChange={(value) => {
-                                            setPhoneDigits(formatPhoneDigits(value));
-                                            if (errors.phone) setErrors((current) => ({ ...current, phone: "" }));
-                                        }} />
                                         <div>
-                                            <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">Date of Submission</label>
-                                            <input type="text" value={getTodayDate()} readOnly className="w-full cursor-default select-none rounded-md border border-hairline bg-canvas px-4 py-2.5 text-sm text-graphite" />
+                                            <Label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">Mobile Number</Label>
+                                            <PhoneField
+                                                value={phoneDigits}
+                                                onChange={(digits) => {
+                                                    setPhoneDigits(digits);
+                                                    if (errors.phone) setErrors((current) => ({ ...current, phone: "" }));
+                                                }}
+                                                error={!!errors.phone}
+                                            />
+                                            {errors.phone ? <p className="mt-1.5 text-xs text-error-brand">{errors.phone}</p> : <p className="mt-1.5 text-xs text-graphite">10-digit number, no spaces</p>}
+                                        </div>
+                                        <div>
+                                            <Label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">Date of Submission</Label>
+                                            <Input type="text" value={getTodayDate()} readOnly disabled className="h-10 w-full cursor-default select-none border-hairline-strong bg-surface text-graphite" />
                                         </div>
                                     </div>
                                     <SelectField label="Service Type" value={form.serviceType} values={["Custom Development", "Landing Page Template"]} onChange={(value) => setField("serviceType", value)} />
@@ -600,22 +613,9 @@ function ContactInfo({ icon, label, value }: { icon: React.ReactNode; label: str
 function TextField({ label, value, error, onChange, type = "text", autoComplete }: { label: string; value: string; error?: string; onChange: (value: string) => void; type?: string; autoComplete?: string }) {
     return (
         <div>
-            <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">{label}</label>
-            <input type={type} value={value} onChange={(event) => onChange(event.target.value)} placeholder={label} autoComplete={autoComplete} className={`w-full rounded-md border bg-canvas px-4 py-2.5 text-sm text-ink placeholder-graphite outline-none transition-colors focus:ring-2 focus:ring-primary-brand/20 ${error ? "border-error-brand focus:border-error-brand" : "border-hairline-strong focus:border-hairline-strong"}`} />
+            <Label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">{label}</Label>
+            <Input type={type} value={value} onChange={(event) => onChange(event.target.value)} placeholder={label} autoComplete={autoComplete} className={`h-10 w-full ${error ? "border-error-brand" : "border-hairline-strong"}`} />
             {error && <p className="mt-1.5 text-xs text-error-brand">{error}</p>}
-        </div>
-    );
-}
-
-function PhoneField({ phoneDigits, error, onChange }: { phoneDigits: string; error?: string; onChange: (value: string) => void }) {
-    return (
-        <div>
-            <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">Mobile Number</label>
-            <div className={`flex items-center overflow-hidden rounded-md border bg-canvas transition-colors focus-within:ring-2 focus-within:ring-primary-brand/20 ${error ? "border-error-brand" : "border-hairline-strong"}`}>
-                <span className="shrink-0 select-none border-r border-hairline bg-surface px-3 py-2.5 text-sm text-ink">{PHONE_PREFIX}</span>
-                <input type="tel" inputMode="numeric" value={phoneDigits} onChange={(event) => onChange(event.target.value)} placeholder="Number" maxLength={10} autoComplete="tel" className="min-w-0 flex-1 bg-canvas px-3 py-2.5 text-sm text-ink outline-none placeholder:text-graphite" />
-            </div>
-            {error ? <p className="mt-1.5 text-xs text-error-brand">{error}</p> : <p className="mt-1.5 text-xs text-graphite">10-digit number, no spaces</p>}
         </div>
     );
 }
@@ -623,12 +623,17 @@ function PhoneField({ phoneDigits, error, onChange }: { phoneDigits: string; err
 function SelectField({ label, value, values, onChange }: { label: string; value: string; values: string[]; onChange: (value: string) => void }) {
     return (
         <div>
-            <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">{label}</label>
-            <select value={value} onChange={(event) => onChange(event.target.value)} className="w-full rounded-md border border-hairline-strong bg-canvas px-4 py-2.5 text-sm text-ink outline-none transition-colors focus:border-hairline-strong focus:ring-2 focus:ring-primary-brand/20">
-                {values.map((item) => (
-                    <option key={item} value={item}>{item}</option>
-                ))}
-            </select>
+            <Label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">{label}</Label>
+            <Select value={value} onValueChange={(next) => onChange(next ?? value)}>
+                <SelectTrigger className="h-10 w-full border-hairline-strong">
+                    <SelectValue>{value}</SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                    {values.map((item) => (
+                        <SelectItem key={item} value={item}>{item}</SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
         </div>
     );
 }
@@ -636,9 +641,9 @@ function SelectField({ label, value, values, onChange }: { label: string; value:
 function MessageField({ value, error, height, onChange, onResizeStart, onResize }: { value: string; error?: string; height: number; onChange: (value: string) => void; onResizeStart: (event: React.PointerEvent<HTMLButtonElement>) => void; onResize: (delta: number) => void }) {
     return (
         <div>
-            <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">Message</label>
+            <Label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">Message</Label>
             <div className="relative">
-                <textarea value={value} onChange={(event) => onChange(event.target.value)} placeholder="Example: I need a delivery app for a local food business, with customer ordering and admin order tracking." rows={4} style={{ height }} className={`w-full resize-none rounded-md border bg-canvas px-4 py-2.5 pb-14 text-sm text-ink placeholder-graphite outline-none transition-colors focus:ring-2 focus:ring-primary-brand/20 sm:pb-4 ${error ? "border-error-brand focus:border-error-brand" : "border-hairline-strong focus:border-hairline-strong"}`} />
+                <Textarea value={value} onChange={(event) => onChange(event.target.value)} placeholder="Example: I need a delivery app for a local food business, with customer ordering and admin order tracking." rows={4} style={{ height }} className={`resize-none pb-14 sm:pb-4 ${error ? "border-error-brand" : "border-hairline-strong"}`} />
                 <div className="absolute bottom-2 left-1/2 flex h-11 -translate-x-1/2 items-center rounded-md border border-hairline-strong bg-canvas text-graphite shadow-[0_2px_8px_rgba(26,26,26,0.08)] sm:hidden">
                     <button type="button" aria-label="Reduce message box height" onClick={() => onResize(-MESSAGE_RESIZE_STEP)} className="flex h-11 w-11 items-center justify-center rounded-l-md transition-colors hover:bg-surface hover:text-primary-brand focus:outline-none focus:ring-2 focus:ring-primary-brand/20"><Minus className="h-4 w-4" /></button>
                     <button type="button" aria-label="Increase message box height" onClick={() => onResize(MESSAGE_RESIZE_STEP)} className="flex h-11 w-11 items-center justify-center rounded-r-md border-l border-hairline-strong transition-colors hover:bg-surface hover:text-primary-brand focus:outline-none focus:ring-2 focus:ring-primary-brand/20"><Plus className="h-4 w-4" /></button>

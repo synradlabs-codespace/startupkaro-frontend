@@ -3,11 +3,15 @@
 "use client";
 
 import { useRef, useState, FormEvent } from "react";
-import { validators, formatNameInput, formatPhoneDigits, validatePhoneDigits, buildPhone, PHONE_PREFIX } from "@/lib/validations/common.schema";
+import { validators, formatNameInput, validatePhoneDigits, buildPhone } from "@/lib/validations/common.schema";
 import { publicInquiryService } from "@/services/customer.service";
 import { getApiErrorMessage, isRateLimited } from "@/features/customers/lib/format";
 import { getApiSuccessMessage } from "@/lib/api-messages";
 import { useToast } from "@/components/providers/ToastProvider";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { PhoneField } from "@/components/custom/PhoneField";
 import { GripHorizontal, Mail, MapPin, Minus, Phone, Plus, Send } from "lucide-react";
 
 interface FormState {
@@ -90,8 +94,8 @@ export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: strin
         if (apiError) setApiError("");
     };
 
-    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPhoneDigits(formatPhoneDigits(e.target.value));
+    const handlePhoneChange = (digits: string) => {
+        setPhoneDigits(digits);
         if (errors.phone) setErrors((prev) => ({ ...prev, phone: undefined }));
         if (apiError) setApiError("");
     };
@@ -171,10 +175,6 @@ export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: strin
         );
     }
 
-    const inputBase = "w-full bg-canvas border rounded-md px-4 py-2.5 text-ink text-sm placeholder-graphite focus:outline-none focus:ring-2 focus:ring-primary-brand/20 transition-colors";
-    const inputError = "border-error-brand focus:border-error-brand";
-    const inputNormal = "border-hairline-strong focus:border-hairline-strong";
-
     return (
         <main className="bg-canvas px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
             <div className="mx-auto w-full max-w-6xl">
@@ -231,16 +231,16 @@ export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: strin
                             <form onSubmit={handleSubmit} className="space-y-4" noValidate>
 
                                 <div>
-                                    <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
+                                    <Label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                                         Full Name
-                                    </label>
-                                    <input
+                                    </Label>
+                                    <Input
                                         type="text"
                                         value={form.name}
                                         onChange={handleChange("name")}
                                         placeholder="Full Name"
                                         autoComplete="name"
-                                        className={`${inputBase} ${errors.name ? inputError : inputNormal}`}
+                                        className={`h-10 w-full ${errors.name ? "border-error-brand" : "border-hairline-strong"}`}
                                     />
                                     {errors.name && (
                                         <p className="mt-1.5 text-xs text-error-brand">{errors.name}</p>
@@ -248,16 +248,16 @@ export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: strin
                                 </div>
 
                                 <div>
-                                    <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
+                                    <Label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                                         Email Address
-                                    </label>
-                                    <input
+                                    </Label>
+                                    <Input
                                         type="email"
                                         value={form.email}
                                         onChange={handleChange("email")}
                                         placeholder="Email"
                                         autoComplete="email"
-                                        className={`${inputBase} ${errors.email ? inputError : inputNormal}`}
+                                        className={`h-10 w-full ${errors.email ? "border-error-brand" : "border-hairline-strong"}`}
                                     />
                                     {errors.email && (
                                         <p className="mt-1.5 text-xs text-error-brand">{errors.email}</p>
@@ -266,22 +266,14 @@ export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: strin
 
                                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                     <div>
-                                        <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
+                                        <Label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                                             Mobile Number
-                                        </label>
-                                        <div className={`flex items-center rounded-md border bg-canvas overflow-hidden focus-within:ring-2 focus-within:ring-primary-brand/20 transition-colors ${errors.phone ? "border-error-brand" : "border-hairline-strong"}`}>
-                                            <span className="px-3 py-2.5 text-sm text-ink bg-surface border-r border-hairline select-none shrink-0">{PHONE_PREFIX}</span>
-                                            <input
-                                                type="tel"
-                                                inputMode="numeric"
-                                                value={phoneDigits}
-                                                onChange={handlePhoneChange}
-                                                placeholder="Number"
-                                                maxLength={10}
-                                                autoComplete="tel"
-                                                className="flex-1 px-3 py-2.5 text-sm text-ink bg-canvas outline-none placeholder:text-graphite"
-                                            />
-                                        </div>
+                                        </Label>
+                                        <PhoneField
+                                            value={phoneDigits}
+                                            onChange={handlePhoneChange}
+                                            error={!!errors.phone}
+                                        />
                                         {errors.phone ? (
                                             <p className="mt-1.5 text-xs text-error-brand">{errors.phone}</p>
                                         ) : (
@@ -290,28 +282,29 @@ export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: strin
                                     </div>
 
                                     <div>
-                                        <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
+                                        <Label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                                             Date of Submission
-                                        </label>
-                                        <input
+                                        </Label>
+                                        <Input
                                             type="text"
                                             value={getTodayDate()}
                                             readOnly
-                                            className="w-full cursor-default select-none rounded-md border border-hairline bg-canvas px-4 py-2.5 text-sm text-graphite"
+                                            disabled
+                                            className="h-10 w-full cursor-default select-none border-hairline-strong bg-surface text-graphite"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
+                                    <Label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                                         Subject
-                                    </label>
-                                    <input
+                                    </Label>
+                                    <Input
                                         type="text"
                                         value={form.subject}
                                         onChange={handleChange("subject")}
                                         placeholder="Subject"
-                                        className={`${inputBase} ${errors.subject ? inputError : inputNormal}`}
+                                        className={`h-10 w-full ${errors.subject ? "border-error-brand" : "border-hairline-strong"}`}
                                     />
                                     {errors.subject && (
                                         <p className="mt-1.5 text-xs text-error-brand">{errors.subject}</p>
@@ -319,18 +312,18 @@ export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: strin
                                 </div>
 
                                 <div>
-                                    <label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
+                                    <Label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">
                                         Message
-                                    </label>
+                                    </Label>
                                     <div className="relative">
-                                        <textarea
+                                        <Textarea
                                             ref={textareaRef}
                                             value={form.message}
                                             onChange={handleChange("message")}
                                             placeholder="Your message"
                                             rows={4}
                                             style={{ height: messageHeight }}
-                                            className={`${inputBase} resize-none pb-14 sm:pb-4 ${errors.message ? inputError : inputNormal}`}
+                                            className={`resize-none pb-14 sm:pb-4 ${errors.message ? "border-error-brand" : "border-hairline-strong"}`}
                                         />
                                         {/* Mobile: +/- buttons (touch users can't drag) */}
                                         <div className="sm:hidden absolute bottom-2 left-1/2 flex h-11 -translate-x-1/2 items-center rounded-md border border-hairline-strong bg-canvas text-graphite shadow-[0_2px_8px_rgba(26,26,26,0.08)]">
