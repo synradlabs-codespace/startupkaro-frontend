@@ -13,7 +13,14 @@ interface BackendAuthResponse {
 
 export type CustomerAuthResult =
     | ({ status: "authenticated" } & AuthResponse)
-    | { status: "registration_required"; registrationToken: string; needs: Array<"phone" | "name" | "email">; phone?: string };
+    | {
+          status: "registration_required";
+          registrationToken: string;
+          needs: Array<"phone" | "name" | "email">;
+          name?: string;
+          email?: string;
+          phone?: string;
+      };
 
 function mapAuthResponse(response: BackendAuthResponse, role: AuthUser["role"]): AuthResponse {
     return {

@@ -1,6 +1,6 @@
 type ApiErrorDetail = { field?: string; message?: string };
 
-function getResponseData(value: unknown): unknown {
+export function getResponseData(value: unknown): unknown {
     if (!value || typeof value !== "object") return null;
     const maybeResponse = value as { response?: { data?: unknown }; data?: unknown };
     return maybeResponse.response?.data ?? maybeResponse.data ?? null;
@@ -48,6 +48,26 @@ export function getApiErrorMessage(error: unknown, fallback: string) {
     const details = getValidationDetails(data);
     if (!details) return message || fallback;
     return `${message || fallback}: ${details}`;
+}
+
+/** Maps a validation error response's `errors: [{ field, message }]` onto a
+ * flat `{ field: message }` map, so server-side field errors (e.g. GSTIN/state
+ * cross-checks) can be shown on the matching input instead of only a toast. */
+export function mapServerFieldErrors(error: unknown): Record<string, string> {
+    const data = getResponseData(error);
+    if (!data || typeof data !== "object") return {};
+
+    const errors = (data as { errors?: unknown }).errors;
+    if (!Array.isArray(errors)) return {};
+
+    const map: Record<string, string> = {};
+    for (const item of errors) {
+        const detail = item as ApiErrorDetail;
+        if (detail.field && detail.message && !map[detail.field]) {
+            map[detail.field] = detail.message;
+        }
+    }
+    return map;
 }
 
 export function getApiSuccessMessage(response: unknown, fallback: string) {

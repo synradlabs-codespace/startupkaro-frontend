@@ -3,6 +3,9 @@
 import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle2, FileCheck, LockKeyhole, Mail } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { PasswordField } from "@/components/custom/PasswordField";
 import { useCustomerResetPassword, useCustomerConfirmReset } from "../hooks/useCustomerAuth";
 
 // ─── Step 1: request reset email ────────────────────────────────────────────
@@ -51,18 +54,18 @@ function ForgotPasswordStep() {
           )}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
+              <Label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
                 <Mail className="h-3.5 w-3.5" />
                 Email
-              </label>
-              <input
+              </Label>
+              <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="email"
                 placeholder="Email"
-                className="h-11 w-full rounded-md border border-hairline-strong bg-canvas px-4 text-sm text-ink placeholder:text-graphite outline-none transition-colors focus:border-ink"
+                className="h-11 w-full border-hairline-strong"
               />
             </div>
             <button
@@ -85,7 +88,6 @@ function SetNewPasswordStep({ token }: { token: string }) {
   const { confirmReset, loading, error, done } = useCustomerConfirmReset();
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [matchError, setMatchError] = useState("");
 
   const handleSubmit = async (e: FormEvent) => {
@@ -133,43 +135,34 @@ function SetNewPasswordStep({ token }: { token: string }) {
           )}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
+              <Label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
                 <LockKeyhole className="h-3.5 w-3.5" />
                 New password
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  autoComplete="new-password"
-                  placeholder="New password"
-                  className="h-11 w-full rounded-md border border-hairline-strong bg-canvas px-4 pr-16 text-sm text-ink placeholder:text-graphite outline-none transition-colors focus:border-ink"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-semibold uppercase tracking-[0.7px] text-link-blue hover:text-primary-deep"
-                >
-                  {showPassword ? "HIDE" : "SHOW"}
-                </button>
-              </div>
+              </Label>
+              <PasswordField
+                value={password}
+                onChange={setPassword}
+                required
+                autoComplete="new-password"
+                placeholder="New password"
+                className="h-11"
+                toggleLabels={["SHOW", "HIDE"]}
+              />
             </div>
 
             <div className="space-y-2">
-              <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
+              <Label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
                 <LockKeyhole className="h-3.5 w-3.5" />
                 Confirm password
-              </label>
-              <input
-                type={showPassword ? "text" : "password"}
+              </Label>
+              <PasswordField
                 value={confirm}
-                onChange={(e) => setConfirm(e.target.value)}
+                onChange={setConfirm}
                 required
                 autoComplete="new-password"
                 placeholder="Confirm password"
-                className="h-11 w-full rounded-md border border-hairline-strong bg-canvas px-4 text-sm text-ink placeholder:text-graphite outline-none transition-colors focus:border-ink"
+                className="h-11"
+                toggleLabels={["SHOW", "HIDE"]}
               />
             </div>
 

@@ -15,6 +15,16 @@ export function formatPhoneDigits(raw: string): string {
     return raw.replace(/\D/g, "").slice(0, 10);
 }
 
+/** Strip non-digits and cap at 6 (Indian PIN code length). */
+export function formatPostalCode(raw: string): string {
+    return raw.replace(/\D/g, "").slice(0, 6);
+}
+
+/** Uppercase alphanumerics, capped at 15 (GSTIN length). */
+export function formatGstin(raw: string): string {
+    return raw.replace(/[^a-zA-Z0-9]/g, "").toUpperCase().slice(0, 15);
+}
+
 /** Compose the full phone string to send to the API. */
 export function buildPhone(digits: string): string | undefined {
     return digits ? `${PHONE_PREFIX}${digits}` : undefined;
@@ -67,7 +77,67 @@ export const validators = {
         if (!v) return "Current password is required";
         return null;
     },
+
+    addressLine1: (v: string): string | null => {
+        if (!v.trim()) return "Address line 1 is required";
+        if (v.trim().length < 3) return "Enter a complete address";
+        if (v.trim().length > 200) return "Address line 1 is too long";
+        return null;
+    },
+
+    city: (v: string): string | null => {
+        if (!v.trim()) return "City is required";
+        if (v.trim().length > 100) return "City name is too long";
+        return null;
+    },
+
+    stateCode: (v: string): string | null => {
+        if (!v.trim()) return "Select your state";
+        return null;
+    },
+
+    postalCode: (v: string): string | null => {
+        if (!v.trim()) return "PIN code is required";
+        if (!/^[1-9][0-9]{5}$/.test(v.trim())) return "Enter a valid 6-digit PIN code";
+        return null;
+    },
+
+    /** Optional field: empty input is valid. When present, checks format and — if a
+     * state is selected — that the GSTIN's state prefix matches (mirrors the backend). */
+    gstin: (v: string, stateCode?: string): string | null => {
+        if (!v.trim()) return null;
+        const value = v.trim().toUpperCase();
+        if (value.length !== 15) return "A GSTIN is 15 characters, e.g. 06AAGCB7383J1ZC";
+        if (!/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/.test(value)) {
+            return "That GSTIN is not valid — check for typos";
+        }
+        if (stateCode && value.slice(0, 2) !== stateCode) {
+            return "This GSTIN's state code doesn't match the state you selected";
+        }
+        return null;
+    },
 };
+
+/**
+ * Runs a set of `validators`-style results (string | null, null = valid) and
+ * normalizes them to the "" = valid convention the form components render.
+ * Scales the validation pattern across the app without every form hand-rolling
+ * its own error-collection loop.
+ *
+ * Usage: `const { errors, isValid } = collectErrors({ name: validators.name(name), city: validators.city(city) });`
+ */
+export function collectErrors<T extends Record<string, string | null>>(
+    results: T
+): { errors: { [K in keyof T]: string }; isValid: boolean } {
+    const errors = {} as { [K in keyof T]: string };
+    let isValid = true;
+    for (const key in results) {
+        const message = results[key];
+        errors[key] = message ?? "";
+        if (message) isValid = false;
+    }
+    return { errors, isValid };
+}
 
 export interface PasswordStrength {
     score: number; // 0-5

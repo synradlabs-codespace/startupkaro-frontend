@@ -3,6 +3,9 @@
 import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { ArrowLeft, BriefcaseBusiness, LockKeyhole, Mail } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { PasswordField } from "@/components/custom/PasswordField";
 import { useEmployeeLogin } from "../hooks/useEmployeeAuth";
 import { useRedirectIfAuthenticated } from "@/features/auth/shared/hooks/useAuthRedirect";
 import { validators } from "@/lib/validations/common.schema";
@@ -12,7 +15,6 @@ export function EmployeeLoginForm() {
   const { login, loading, error } = useEmployeeLogin();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({ email: "", password: "" });
 
   const clearFieldError = (key: keyof typeof fieldErrors) =>
@@ -35,7 +37,7 @@ export function EmployeeLoginForm() {
 
   return (
     <main className="min-h-screen bg-cloud px-4 py-4 sm:px-6 lg:px-8 lg:py-8">
-      <div className="mx-auto flex min-h-[calc(100vh-2rem)] w-full max-w-md items-center lg:min-h-[calc(100vh-4rem)] lg:max-w-6xl">
+      <div className="mx-auto flex min-h-[calc(100vh-2rem)] w-full max-w-md items-center md:max-w-2xl lg:min-h-[calc(100vh-4rem)] lg:max-w-6xl">
         <div className="grid w-full overflow-hidden rounded-xl border border-hairline bg-canvas lg:grid-cols-[0.9fr_1.1fr]">
           <section className="hidden min-h-[390px] flex-col justify-between bg-surface p-8 md:p-10 lg:flex">
             <Link href="/" className="inline-flex w-fit items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-link-blue hover:text-primary-deep">
@@ -86,45 +88,36 @@ export function EmployeeLoginForm() {
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
-                <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
+                <Label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
                   <Mail className="h-3.5 w-3.5" />
                   Email
-                </label>
-                <input
+                </Label>
+                <Input
                   type="email"
                   value={email}
                   onChange={(e) => { setEmail(e.target.value); clearFieldError("email"); }}
                   required
                   autoComplete="email"
                   placeholder="Email"
-                  className={`h-11 w-full rounded-md border bg-canvas px-4 text-sm text-ink placeholder:text-graphite outline-none transition-colors focus:border-ink ${fieldErrors.email ? "border-error-brand" : "border-hairline-strong"}`}
+                  className={`h-11 w-full ${fieldErrors.email ? "border-error-brand" : "border-hairline-strong"}`}
                 />
                 {fieldErrors.email && <p className="mt-1 text-xs text-error-brand">{fieldErrors.email}</p>}
               </div>
 
               <div className="space-y-2">
-                <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
+                <Label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
                   <LockKeyhole className="h-3.5 w-3.5" />
                   Password
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => { setPassword(e.target.value); clearFieldError("password"); }}
-                    required
-                    autoComplete="current-password"
-                    placeholder="Password"
-                    className={`h-11 w-full rounded-md border bg-canvas px-4 pr-16 text-sm text-ink placeholder:text-graphite outline-none transition-colors focus:border-ink ${fieldErrors.password ? "border-error-brand" : "border-hairline-strong"}`}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((value) => !value)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-semibold uppercase tracking-[0.7px] text-link-blue hover:text-primary-deep"
-                  >
-                    {showPassword ? "Hide" : "Show"}
-                  </button>
-                </div>
+                </Label>
+                <PasswordField
+                  value={password}
+                  onChange={(value) => { setPassword(value); clearFieldError("password"); }}
+                  error={!!fieldErrors.password}
+                  required
+                  autoComplete="current-password"
+                  placeholder="Password"
+                  className="h-11"
+                />
                 {fieldErrors.password && <p className="mt-1 text-xs text-error-brand">{fieldErrors.password}</p>}
               </div>
 

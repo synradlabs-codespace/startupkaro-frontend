@@ -23,6 +23,7 @@ declare global {
 }
 
 const GOOGLE_SCRIPT_ID = "google-identity-services";
+const GOOGLE_MAX_BUTTON_WIDTH = 400;
 let initializedClientId: string | null = null;
 let activeCredentialHandler: ((response: GoogleCredentialResponse) => void) | null = null;
 
@@ -38,19 +39,7 @@ function initializeGoogleIdentity(clientId: string) {
 
 function getButtonWidth(parent: HTMLElement) {
     const width = parent.getBoundingClientRect().width || parent.parentElement?.getBoundingClientRect().width || 360;
-    return Math.max(220, Math.floor(width));
-}
-
-function stretchRenderedButton(parent: HTMLElement, targetWidth: number) {
-    const rendered = parent.firstElementChild as HTMLElement | null;
-    if (!rendered) return;
-
-    const sourceWidth = rendered.getBoundingClientRect().width || 400;
-    const scaleX = targetWidth / sourceWidth;
-    rendered.style.transformOrigin = "left center";
-    rendered.style.transform = `scaleX(${scaleX})`;
-    rendered.style.width = `${sourceWidth}px`;
-    parent.style.height = `${rendered.getBoundingClientRect().height}px`;
+    return Math.min(GOOGLE_MAX_BUTTON_WIDTH, Math.max(220, Math.floor(width)));
 }
 
 export function GoogleAuthButton({
@@ -61,6 +50,7 @@ export function GoogleAuthButton({
     onCredential: (idToken: string) => void;
 }) {
     const buttonRef = useRef<HTMLDivElement | null>(null);
+    const lastWidthRef = useRef(0);
     const [loadError, setLoadError] = useState("");
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
     const configError = clientId ? "" : "Set NEXT_PUBLIC_GOOGLE_CLIENT_ID and restart the dev server.";
@@ -76,18 +66,18 @@ export function GoogleAuthButton({
 
         const render = () => {
             if (!buttonRef.current || !window.google?.accounts?.id) return;
-            initializeGoogleIdentity(clientId);
             const width = getButtonWidth(buttonRef.current);
+            if (width === lastWidthRef.current) return;
+            lastWidthRef.current = width;
+
+            initializeGoogleIdentity(clientId);
             buttonRef.current.innerHTML = "";
             window.google.accounts.id.renderButton(buttonRef.current, {
                 type: "standard",
                 theme: "outline",
                 size: "large",
-                width: Math.min(width, 400),
+                width,
                 text,
-            });
-            window.requestAnimationFrame(() => {
-                if (buttonRef.current) stretchRenderedButton(buttonRef.current, width);
             });
         };
 
@@ -135,11 +125,11 @@ export function GoogleAuthButton({
 
     if (error) {
         return (
-            <div className="flex h-11 w-full items-center justify-center rounded-md border border-hairline-strong bg-surface px-4 text-center text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
+            <div className="flex h-11 w-full max-w-100 items-center justify-center rounded-md border border-hairline-strong bg-surface px-4 text-center text-xs font-semibold uppercase tracking-[0.7px] text-graphite">
                 {error}
             </div>
         );
     }
 
-    return <div ref={buttonRef} className="min-h-11 w-full overflow-hidden" />;
+    return <div ref={buttonRef} className="flex min-h-11 w-full max-w-100 items-center justify-center" />;
 }
