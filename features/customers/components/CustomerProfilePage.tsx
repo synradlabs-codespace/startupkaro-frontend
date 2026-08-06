@@ -2,18 +2,38 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useQueryClient } from "@tanstack/react-query";
 import { PageHeader } from "@/components/custom/PageHeader";
+import { PhoneField } from "@/components/custom/PhoneField";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCustomerProfile, useUpdateCustomerProfile } from "@/features/customers/hooks/useCustomerProfile";
+import { Combobox } from "@/components/ui/combobox";
+import { useToast } from "@/components/providers/ToastProvider";
+import { useCustomerProfile } from "@/features/customers/hooks/useCustomerProfile";
+import { useCustomerAddresses, useCustomerAddressStates } from "@/features/customers/hooks/useCustomerAddresses";
+import { customerAddressService, customerProfileService } from "@/services/customer.service";
 import { formatCustomerDate, getApiErrorMessage, getInitials } from "@/features/customers/lib/format";
 import { validators, formatNameInput } from "@/lib/validations/common.schema";
-import { formatPhoneDigits, validatePhoneDigits, buildPhone, PHONE_PREFIX } from "@/lib/validation";
+import {
+    formatPostalCode,
+    formatGstin,
+    validatePhoneDigits,
+    validateAddressLine1,
+    validateCity,
+    validateStateCode,
+    validatePostalCode,
+    validateGstin,
+    mapServerFieldErrors,
+    collectErrors,
+    buildPhone,
+} from "@/lib/validation";
 import {
     User,
     Mail,
     Phone,
+    MapPin,
+    Receipt,
     Calendar,
     Pencil,
     X,
@@ -27,73 +47,164 @@ import {
 interface FormState {
     name: string;
     phone: string;
+    line1: string;
+    line2: string;
+    city: string;
+    stateCode: string;
+    postalCode: string;
+    gstin: string;
 }
 
-interface FieldErrors {
-    name?: string;
-    phone?: string;
+type FieldErrors = Record<keyof FormState, string>;
+
+const EMPTY_ERRORS: FieldErrors = {
+    name: "", phone: "", line1: "", line2: "", city: "", stateCode: "", postalCode: "", gstin: "",
+};
+
+function digitsFromPhone(phone?: string) {
+    if (!phone) return "";
+    return phone.replace(/^\+91/, "").replace(/\D/g, "").slice(0, 10);
 }
+
+const DISABLED_INPUT_CLASS = "h-10 rounded-md bg-surface text-graphite cursor-not-allowed border-hairline-strong";
 
 export function CustomerProfilePage() {
     const profileQuery = useCustomerProfile();
-    const updateProfile = useUpdateCustomerProfile();
+    const addressesQuery = useCustomerAddresses();
+    const statesQuery = useCustomerAddressStates();
+    const toast = useToast();
+    const queryClient = useQueryClient();
+
     const profile = profileQuery.data;
+    const addresses = addressesQuery.data ?? [];
+    const defaultAddress = addresses.find((a) => a.isDefault) ?? addresses[0];
+    const states = statesQuery.data ?? [];
+
     const [editing, setEditing] = useState(false);
     const [draft, setDraft] = useState<FormState | null>(null);
-    const [errors, setErrors] = useState<FieldErrors>({});
+    const [errors, setErrors] = useState<FieldErrors>(EMPTY_ERRORS);
     const [apiError, setApiError] = useState("");
+    const [submitting, setSubmitting] = useState(false);
     const isGoogleAccount = profile?.authProvider === "google";
 
     const form = draft ?? {
         name: profile?.name ?? "",
-        phone: profile?.phone ?? profile?.mobile ?? "",
+        phone: digitsFromPhone(profile?.phone ?? profile?.mobile),
+        line1: defaultAddress?.line1 ?? "",
+        line2: defaultAddress?.line2 ?? "",
+        city: defaultAddress?.city ?? "",
+        stateCode: defaultAddress?.stateCode ?? "",
+        postalCode: defaultAddress?.postalCode ?? "",
+        gstin: defaultAddress?.gstin ?? "",
     };
 
+    const selectedState = states.find((s) => s.code === form.stateCode);
+
     const validate = (): boolean => {
-        const next: FieldErrors = {
-            name: validators.name(form.name) ?? undefined,
-            phone: validatePhoneDigits(form.phone, true) || undefined,
-        };
+        const { errors: next, isValid } = collectErrors({
+            name: validators.name(form.name),
+            phone: validatePhoneDigits(form.phone, true) || null,
+            line1: validateAddressLine1(form.line1) || null,
+            line2: null,
+            city: validateCity(form.city) || null,
+            stateCode: validateStateCode(form.stateCode) || null,
+            postalCode: validatePostalCode(form.postalCode) || null,
+            gstin: validateGstin(form.gstin, form.stateCode) || null,
+        });
         setErrors(next);
-        return !Object.values(next).some(Boolean);
+        return isValid;
     };
 
     const handleEdit = () => {
         if (!profile) return;
-        const rawPhone = profile.phone ?? profile.mobile ?? "";
-        const digits = rawPhone.replace(/^\+91/, "").replace(/\D/g, "").slice(0, 10);
-        setDraft({ name: profile.name, phone: digits });
-        setErrors({});
+        setDraft({
+            name: profile.name,
+            phone: digitsFromPhone(profile.phone ?? profile.mobile),
+            line1: defaultAddress?.line1 ?? "",
+            line2: defaultAddress?.line2 ?? "",
+            city: defaultAddress?.city ?? "",
+            stateCode: defaultAddress?.stateCode ?? "",
+            postalCode: defaultAddress?.postalCode ?? "",
+            gstin: defaultAddress?.gstin ?? "",
+        });
+        setErrors(EMPTY_ERRORS);
         setApiError("");
         setEditing(true);
     };
 
+    const setDraftField = <K extends keyof FormState>(key: K, value: FormState[K]) => {
+        setDraft((prev) => ({ ...(prev ?? form), [key]: value }));
+        if (errors[key]) setErrors((prev) => ({ ...prev, [key]: "" }));
+    };
+
+    // Single combined save: profile (name/phone) and the default billing
+    // address are edited together in one form, so they're saved together too
+    // — calling the services directly (not the mutation hooks, which each
+    // fire their own toast) keeps this to exactly one success/error toast.
     const handleSave = async () => {
         if (!validate()) return;
         setApiError("");
+        setSubmitting(true);
 
         try {
-            await updateProfile.mutateAsync({ name: form.name, phone: buildPhone(form.phone) ?? "" });
+            const phone = buildPhone(form.phone) ?? "";
+            const nameChanged = profile && profile.name !== form.name.trim();
+            const phoneChanged = profile && digitsFromPhone(profile.phone ?? profile.mobile) !== form.phone;
+            if (nameChanged || phoneChanged) {
+                await customerProfileService.update({ name: form.name.trim(), phone });
+            }
+
+            const addressPayload = {
+                label: defaultAddress?.label || "Primary",
+                legalName: form.name.trim(),
+                line1: form.line1.trim(),
+                line2: form.line2.trim() || undefined,
+                city: form.city.trim(),
+                stateCode: form.stateCode,
+                postalCode: form.postalCode.trim(),
+                country: "IN",
+                gstin: form.gstin.trim() || undefined,
+                isDefault: true,
+            };
+
+            if (defaultAddress) {
+                await customerAddressService.update(defaultAddress.id, addressPayload);
+            } else {
+                await customerAddressService.create(addressPayload);
+            }
+
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ["customer", "profile"] }),
+                queryClient.invalidateQueries({ queryKey: ["customer", "addresses"] }),
+            ]);
+
+            toast.success("Profile updated");
             setDraft(null);
             setEditing(false);
         } catch (err: unknown) {
-            setApiError(getApiErrorMessage(err, "Failed to update profile"));
+            const serverFieldErrors = mapServerFieldErrors(err);
+            if (Object.keys(serverFieldErrors).length) {
+                setErrors((prev) => ({ ...prev, ...serverFieldErrors }));
+            }
+            const message = getApiErrorMessage(err, "Failed to update profile");
+            setApiError(message);
+            toast.error(message);
+        } finally {
+            setSubmitting(false);
         }
     };
 
     const handleCancel = () => {
         setDraft(null);
-        setErrors({});
+        setErrors(EMPTY_ERRORS);
         setApiError("");
         setEditing(false);
     };
 
-    const field = (key: keyof FormState) => ({
+    const field = (key: keyof FormState, formatter?: (raw: string) => string) => ({
         value: form[key],
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-            const value = key === "name" ? formatNameInput(e.target.value) : e.target.value;
-            setDraft((prev) => ({ ...(prev ?? form), [key]: value }));
-            if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
+            setDraftField(key, formatter ? formatter(e.target.value) : e.target.value);
         },
     });
 
@@ -155,11 +266,11 @@ export function CustomerProfilePage() {
                                 <Button
                                     size="sm"
                                     onClick={handleSave}
-                                    disabled={updateProfile.isPending}
+                                    disabled={submitting}
                                     className="gap-1.5 bg-white text-primary-deep hover:bg-white/90 rounded-lg uppercase tracking-wide"
                                 >
                                     <Check className="h-3.5 w-3.5" />
-                                    {updateProfile.isPending ? "Saving..." : "Save"}
+                                    {submitting ? "Saving..." : "Save"}
                                 </Button>
                                 <Button
                                     size="sm"
@@ -191,7 +302,7 @@ export function CustomerProfilePage() {
                             {editing ? (
                                 <div className="space-y-1">
                                     <Input
-                                        {...field("name")}
+                                        {...field("name", formatNameInput)}
                                         placeholder="Full Name"
                                         className={`h-10 rounded-md focus-visible:ring-0 focus:border-ink transition-colors ${errors.name ? "border-error-brand" : "border-hairline-strong"}`}
                                     />
@@ -228,22 +339,11 @@ export function CustomerProfilePage() {
                             </Label>
                             {editing ? (
                                 <div className="space-y-1">
-                                    <div className={`flex items-center rounded-md border bg-canvas overflow-hidden focus-within:border-ink transition-colors ${errors.phone ? "border-error-brand" : "border-hairline-strong"}`}>
-                                        <span className="px-3 h-10 flex items-center text-sm text-ink bg-surface border-r border-hairline select-none shrink-0">{PHONE_PREFIX}</span>
-                                        <input
-                                            type="tel"
-                                            inputMode="numeric"
-                                            value={form.phone}
-                                            onChange={(e) => {
-                                                const digits = formatPhoneDigits(e.target.value);
-                                                setDraft((prev) => ({ ...(prev ?? form), phone: digits }));
-                                                if (errors.phone) setErrors((prev) => ({ ...prev, phone: undefined }));
-                                            }}
-                                            placeholder="10-digit number"
-                                            maxLength={10}
-                                            className="flex-1 px-3 h-10 text-sm text-ink bg-canvas outline-none placeholder:text-graphite"
-                                        />
-                                    </div>
+                                    <PhoneField
+                                        value={form.phone}
+                                        onChange={(digits) => setDraftField("phone", digits)}
+                                        error={!!errors.phone}
+                                    />
                                     {errors.phone && <p className="text-xs text-error-brand">{errors.phone}</p>}
                                 </div>
                             ) : (
@@ -258,11 +358,11 @@ export function CustomerProfilePage() {
                                 <Button
                                     size="sm"
                                     onClick={handleSave}
-                                    disabled={updateProfile.isPending}
+                                    disabled={submitting}
                                     className="gap-1.5 bg-primary-brand hover:bg-primary-brand/90 text-white rounded-lg flex-1 uppercase tracking-wide"
                                 >
                                     <Check className="h-3.5 w-3.5" />
-                                    {updateProfile.isPending ? "Saving..." : "Save Changes"}
+                                    {submitting ? "Saving..." : "Save Changes"}
                                 </Button>
                                 <Button
                                     size="sm"
@@ -320,6 +420,116 @@ export function CustomerProfilePage() {
                         </div>
 
                     </div>
+                </div>
+
+                <div className="rounded-lg border border-hairline bg-canvas p-6 flex flex-col gap-5">
+                    <div className="flex items-center gap-2 pb-1 border-b border-hairline">
+                        <div className="h-7 w-7 rounded-lg bg-primary-brand/10 flex items-center justify-center">
+                            <MapPin className="h-3.5 w-3.5 text-primary-brand" />
+                        </div>
+                        <h3 className="text-sm font-semibold text-charcoal">Billing Address</h3>
+                    </div>
+
+                    {editing ? (
+                        <div className="space-y-4">
+                            <div className="space-y-1.5">
+                                <Label className="text-xs font-medium text-steel uppercase tracking-wide">Address line 1</Label>
+                                <Input
+                                    {...field("line1")}
+                                    placeholder="Flat / building / street"
+                                    className={`h-10 rounded-md focus-visible:ring-0 focus:border-ink transition-colors ${errors.line1 ? "border-error-brand" : "border-hairline-strong"}`}
+                                />
+                                {errors.line1 && <p className="text-xs text-error-brand">{errors.line1}</p>}
+                            </div>
+
+                            <div className="space-y-1.5">
+                                <Label className="text-xs font-medium text-steel uppercase tracking-wide">
+                                    Address line 2 <span className="normal-case text-stone">(optional)</span>
+                                </Label>
+                                <Input
+                                    {...field("line2")}
+                                    placeholder="Area / landmark"
+                                    className="h-10 rounded-md focus-visible:ring-0 focus:border-ink transition-colors border-hairline-strong"
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div className="space-y-1.5">
+                                    <Label className="text-xs font-medium text-steel uppercase tracking-wide">City</Label>
+                                    <Input
+                                        {...field("city")}
+                                        placeholder="City"
+                                        className={`h-10 rounded-md focus-visible:ring-0 focus:border-ink transition-colors ${errors.city ? "border-error-brand" : "border-hairline-strong"}`}
+                                    />
+                                    {errors.city && <p className="text-xs text-error-brand">{errors.city}</p>}
+                                </div>
+
+                                <div className="space-y-1.5">
+                                    <Label className="text-xs font-medium text-steel uppercase tracking-wide">State</Label>
+                                    <Combobox
+                                        options={states.map((s) => ({ value: s.code, label: s.name }))}
+                                        value={form.stateCode}
+                                        onChange={(stateCode) => setDraftField("stateCode", stateCode)}
+                                        placeholder="Select state"
+                                        error={!!errors.stateCode}
+                                        loading={statesQuery.isLoading}
+                                    />
+                                    {errors.stateCode && <p className="text-xs text-error-brand">{errors.stateCode}</p>}
+                                </div>
+
+                                <div className="space-y-1.5">
+                                    <Label className="text-xs font-medium text-steel uppercase tracking-wide">PIN code</Label>
+                                    <Input
+                                        {...field("postalCode", formatPostalCode)}
+                                        inputMode="numeric"
+                                        maxLength={6}
+                                        placeholder="6-digit PIN"
+                                        className={`h-10 rounded-md focus-visible:ring-0 focus:border-ink transition-colors ${errors.postalCode ? "border-error-brand" : "border-hairline-strong"}`}
+                                    />
+                                    {errors.postalCode
+                                        ? <p className="text-xs text-error-brand">{errors.postalCode}</p>
+                                        : <p className="text-xs text-stone">6-digit PIN code</p>
+                                    }
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div className="space-y-1.5">
+                                    <Label className="text-xs font-medium text-steel uppercase tracking-wide">Country</Label>
+                                    <Input value="India" disabled className={DISABLED_INPUT_CLASS} />
+                                    <p className="text-xs text-stone">Only Indian billing addresses are supported today</p>
+                                </div>
+
+                                <div className="space-y-1.5">
+                                    <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
+                                        <Receipt className="h-3 w-3" /> GSTIN <span className="normal-case text-stone">(optional)</span>
+                                    </Label>
+                                    <Input
+                                        {...field("gstin", formatGstin)}
+                                        maxLength={15}
+                                        placeholder="15-character GSTIN"
+                                        className={`h-10 rounded-md focus-visible:ring-0 focus:border-ink transition-colors ${errors.gstin ? "border-error-brand" : "border-hairline-strong"}`}
+                                    />
+                                    {errors.gstin
+                                        ? <p className="text-xs text-error-brand">{errors.gstin}</p>
+                                        : <p className="text-xs text-stone">
+                                            Add it to receive GST invoices{selectedState ? ` for ${selectedState.name}` : ""}
+                                        </p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    ) : defaultAddress ? (
+                        <div className="space-y-1 text-sm text-slate">
+                            <p className="font-medium text-ink">{defaultAddress.legalName}</p>
+                            <p>{defaultAddress.line1}{defaultAddress.line2 ? `, ${defaultAddress.line2}` : ""}</p>
+                            <p>{defaultAddress.city}, {defaultAddress.stateName ?? defaultAddress.stateCode} {defaultAddress.postalCode}</p>
+                            <p>India</p>
+                            {defaultAddress.gstin && <p className="text-xs text-stone mt-1">GSTIN: {defaultAddress.gstin}</p>}
+                        </div>
+                    ) : (
+                        <p className="text-sm text-stone">No billing address on file yet. Click Edit Profile to add one.</p>
+                    )}
                 </div>
             </div>
         </div>
