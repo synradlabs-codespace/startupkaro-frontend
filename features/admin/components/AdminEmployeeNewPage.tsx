@@ -7,12 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { PhoneField } from "@/components/custom/PhoneField";
 import { useCreateEmployee } from "@/features/admin/hooks/useAdminEmployees";
 import { getApiErrorMessage } from "@/features/admin/lib/format";
 import { formatRole } from "@/components/custom/StatusBadge";
 import type { AdminRole } from "@/services/admin.service";
 import {
-    formatNameInput, formatPhoneDigits,
+    formatNameInput,
     validateName, validateEmail, validatePassword, validatePhoneDigits, buildPhone,
 } from "@/lib/validation";
 import { UserPlus, Mail, KeyRound, User, Phone, ShieldCheck } from "lucide-react";
@@ -43,8 +44,8 @@ export function AdminEmployeeNewPage() {
         if (fieldErrors.password) clearFieldError("password");
     };
 
-    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPhoneDigits(formatPhoneDigits(e.target.value));
+    const handlePhoneChange = (digits: string) => {
+        setPhoneDigits(digits);
         if (fieldErrors.phone) clearFieldError("phone");
     };
 
@@ -134,18 +135,11 @@ export function AdminEmployeeNewPage() {
                             <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
                                 <Phone className="h-3 w-3" /> Phone
                             </Label>
-                            <div className={`flex items-center rounded-lg border bg-canvas overflow-hidden focus-within:ring-2 focus-within:ring-primary-brand/20 ${fieldErrors.phone ? "border-error-brand" : "border-hairline"}`}>
-                                <span className="px-3 py-2 text-sm text-ink bg-surface border-r border-hairline select-none shrink-0">+91</span>
-                                <input
-                                    type="tel"
-                                    inputMode="numeric"
-                                    value={phoneDigits}
-                                    onChange={handlePhoneChange}
-                                    placeholder="Number"
-                                    maxLength={10}
-                                    className="flex-1 px-3 py-2 text-sm text-ink bg-canvas outline-none placeholder:text-graphite"
-                                />
-                            </div>
+                            <PhoneField
+                                value={phoneDigits}
+                                onChange={handlePhoneChange}
+                                error={!!fieldErrors.phone}
+                            />
                             {fieldErrors.phone && <p className="text-xs text-error-brand">{fieldErrors.phone}</p>}
                         </div>
 

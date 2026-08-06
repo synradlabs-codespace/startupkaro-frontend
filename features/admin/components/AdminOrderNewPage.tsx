@@ -1,138 +1,18 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Combobox } from "@/components/ui/combobox";
 import { useCustomerList } from "@/features/admin/hooks/useAdminCustomers";
 import { useCreateOrder } from "@/features/admin/hooks/useAdminOrders";
 import { useServiceList } from "@/features/admin/hooks/useAdminServices";
 import { getApiErrorMessage } from "@/features/admin/lib/format";
 import { formatINR, toPaise } from "@/lib/currency";
-import { cn } from "@/lib/utils";
-import { Check, ChevronsUpDown, Search, ShoppingBag, User, Briefcase, ClipboardList, PlusCircle, Trash2 } from "lucide-react";
-
-type SearchableOption = {
-    value: string;
-    label: string;
-    description?: string;
-    searchText: string;
-};
-
-function SearchablePicker({
-    value,
-    onChange,
-    options,
-    placeholder,
-    searchPlaceholder,
-    emptyMessage,
-    loading,
-}: {
-    value: string;
-    onChange: (value: string) => void;
-    options: SearchableOption[];
-    placeholder: string;
-    searchPlaceholder: string;
-    emptyMessage: string;
-    loading?: boolean;
-}) {
-    const [open, setOpen] = useState(false);
-    const [query, setQuery] = useState("");
-    const wrapperRef = useRef<HTMLDivElement | null>(null);
-    const selected = options.find((option) => option.value === value);
-    const normalizedQuery = query.trim().toLowerCase();
-    const filteredOptions = useMemo(
-        () => options.filter((option) => option.searchText.toLowerCase().includes(normalizedQuery)),
-        [normalizedQuery, options]
-    );
-
-    useEffect(() => {
-        if (!open) return;
-
-        const handlePointerDown = (event: PointerEvent) => {
-            if (!wrapperRef.current?.contains(event.target as Node)) {
-                setOpen(false);
-            }
-        };
-
-        document.addEventListener("pointerdown", handlePointerDown);
-        return () => document.removeEventListener("pointerdown", handlePointerDown);
-    }, [open]);
-
-    return (
-        <div ref={wrapperRef} className="relative">
-            <button
-                type="button"
-                onClick={() => setOpen((current) => !current)}
-                disabled={loading}
-                className={cn(
-                    "flex h-11 w-full items-center justify-between gap-3 rounded-lg border border-hairline bg-canvas px-3 text-left text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary-brand/20",
-                    loading && "cursor-not-allowed opacity-60"
-                )}
-                aria-haspopup="listbox"
-                aria-expanded={open}
-            >
-                <span className="min-w-0">
-                    {selected ? (
-                        <span className="flex min-w-0 flex-col">
-                            <span className="truncate font-medium text-ink">{selected.label}</span>
-                            {selected.description && <span className="truncate text-xs text-slate">{selected.description}</span>}
-                        </span>
-                    ) : (
-                        <span className="text-slate">{loading ? "Loading..." : placeholder}</span>
-                    )}
-                </span>
-                <ChevronsUpDown className="h-4 w-4 shrink-0 text-stone" />
-            </button>
-
-            {open && (
-                <div className="absolute left-0 right-0 top-[calc(100%+0.375rem)] z-50 overflow-hidden rounded-lg border border-hairline bg-canvas shadow-[0_18px_45px_rgba(26,26,26,0.14)]">
-                    <div className="flex items-center gap-2 border-b border-hairline px-3 py-2">
-                        <Search className="h-3.5 w-3.5 shrink-0 text-stone" />
-                        <Input
-                            autoFocus
-                            value={query}
-                            onChange={(event) => setQuery(event.target.value)}
-                            placeholder={searchPlaceholder}
-                            className="h-8 border-0 bg-transparent px-0 text-sm shadow-none focus-visible:ring-0"
-                        />
-                    </div>
-                    <div className="max-h-72 overflow-y-auto p-1" role="listbox">
-                        {filteredOptions.length === 0 ? (
-                            <div className="px-3 py-6 text-center text-sm text-slate">{emptyMessage}</div>
-                        ) : (
-                            filteredOptions.map((option) => {
-                                const selectedOption = option.value === value;
-                                return (
-                                    <button
-                                        key={option.value}
-                                        type="button"
-                                        onClick={() => {
-                                            onChange(option.value);
-                                            setQuery("");
-                                            setOpen(false);
-                                        }}
-                                        className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left transition-colors hover:bg-surface focus:bg-surface focus:outline-none"
-                                        role="option"
-                                        aria-selected={selectedOption}
-                                    >
-                                        <span className="min-w-0 flex-1">
-                                            <span className="block truncate text-sm font-medium text-ink">{option.label}</span>
-                                            {option.description && <span className="block truncate text-xs text-slate">{option.description}</span>}
-                                        </span>
-                                        {selectedOption && <Check className="h-4 w-4 shrink-0 text-primary-brand" />}
-                                    </button>
-                                );
-                            })
-                        )}
-                    </div>
-                </div>
-            )}
-        </div>
-    );
-}
+import { ShoppingBag, User, Briefcase, ClipboardList, PlusCircle, Trash2 } from "lucide-react";
 
 export function AdminOrderNewPage() {
     const router = useRouter();
@@ -181,7 +61,6 @@ export function AdminOrderNewPage() {
                 value: customer.id,
                 label: customer.name,
                 description: customer.email,
-                searchText: `${customer.name} ${customer.email}`,
             })),
         [customers]
     );
@@ -191,7 +70,6 @@ export function AdminOrderNewPage() {
                 value: service.id,
                 label: service.name,
                 description: `${service.category} - ${service.type}`,
-                searchText: service.name,
             })),
         [services]
     );
@@ -228,13 +106,11 @@ export function AdminOrderNewPage() {
                                 <Label className="text-xs font-medium text-steel uppercase tracking-wide flex items-center gap-1.5">
                                     <User className="h-3 w-3" /> Customer
                                 </Label>
-                                <SearchablePicker
+                                <Combobox
                                     value={form.customerId}
                                     onChange={set("customerId")}
                                     options={customerOptions}
                                     placeholder="Select a customer"
-                                    searchPlaceholder="Search by name or email..."
-                                    emptyMessage="No customers found"
                                     loading={customersQuery.isLoading}
                                 />
                             </div>
@@ -253,13 +129,11 @@ export function AdminOrderNewPage() {
                                     <div key={item.id} className="grid grid-cols-1 gap-3 rounded-lg border border-hairline bg-surface p-3 md:grid-cols-[1fr_110px_150px_40px] md:items-end">
                                         <div className="space-y-1.5">
                                             <Label className="text-xs text-slate">Service</Label>
-                                            <SearchablePicker
+                                            <Combobox
                                                 value={item.serviceId}
                                                 onChange={(value) => setItem(item.id, "serviceId", value)}
                                                 options={serviceOptions}
                                                 placeholder={`Select service ${index + 1}`}
-                                                searchPlaceholder="Search by service name..."
-                                                emptyMessage="No services found"
                                                 loading={servicesQuery.isLoading}
                                             />
                                         </div>

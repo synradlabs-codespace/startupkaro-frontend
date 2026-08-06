@@ -91,10 +91,6 @@ export const NAV_LINKS: NavLink[] = [
     href: "/franchise",
   },
   {
-    label: "Articles",
-    href: "/article",
-  },
-  {
     label: "Company",
     menu: {
       id: "company",
@@ -104,6 +100,7 @@ export const NAV_LINKS: NavLink[] = [
           items: [
             { label: "About StartupKaro", description: "Our story and mission", href: "/about" },
             { label: "Careers", description: "Join our growing team", href: "/careers" },
+            { label: "Articles", description: "Insights and guides for founders", href: "/article" },
             { label: "Contact", description: "Talk to our team", href: "/contact" },
           ],
         },
