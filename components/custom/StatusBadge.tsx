@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 
 type OrderStatus = "pending" | "confirmed" | "in_progress" | "completed" | "cancelled";
-type PaymentStatus = "created" | "authorized" | "captured" | "failed" | "refunded";
+type PaymentStatus = "created" | "authorized" | "captured" | "failed" | "refunded" | "voided" | "unpaid" | "partially_paid" | "paid";
 type InquiryStatus = "unresolved" | "resolved";
 type Role = "admin" | "employee" | "customer";
 type ActiveStatus = "active" | "inactive";
@@ -21,11 +21,15 @@ const orderStatusConfig: Record<OrderStatus, { label: string; className: string 
 };
 
 const paymentStatusConfig: Record<PaymentStatus, { label: string; className: string }> = {
-  created:    { label: "Created",    className: neutral },
-  authorized: { label: "Authorized", className: info },
-  captured:   { label: "Captured",   className: positive },
-  failed:     { label: "Failed",     className: danger },
-  refunded:   { label: "Refunded",   className: warning },
+  created:        { label: "Created",        className: neutral },
+  authorized:     { label: "Authorized",     className: info },
+  captured:       { label: "Captured",       className: positive },
+  failed:         { label: "Failed",         className: danger },
+  refunded:       { label: "Refunded",       className: warning },
+  voided:         { label: "Voided",         className: neutral },
+  unpaid:         { label: "Unpaid",         className: warning },
+  partially_paid: { label: "Partially Paid", className: warning },
+  paid:           { label: "Paid",           className: positive },
 };
 
 const inquiryStatusConfig: Record<InquiryStatus, { label: string; className: string }> = {
@@ -39,7 +43,10 @@ export function OrderStatusBadge({ status }: { status: string }) {
 }
 
 export function PaymentStatusBadge({ status }: { status: string }) {
-  const config = paymentStatusConfig[status as PaymentStatus] ?? paymentStatusConfig.created;
+  const config = paymentStatusConfig[status as PaymentStatus];
+  if (!config) {
+    return <Badge variant="outline" className={neutral}>{status.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</Badge>;
+  }
   return <Badge variant="outline" className={config.className}>{config.label}</Badge>;
 }
 
@@ -74,5 +81,7 @@ export const formatActiveStatus = (isActive: boolean) => activeStatusConfig[isAc
 export const formatOrderStatus = (status: string) =>
   orderStatusConfig[status as OrderStatus]?.label ??
   status.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-export const formatPaymentStatus = (status: string) => paymentStatusConfig[status as PaymentStatus]?.label ?? status;
+export const formatPaymentStatus = (status: string) =>
+  paymentStatusConfig[status as PaymentStatus]?.label ??
+  status.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 export const formatInquiryStatus = (status: string) => inquiryStatusConfig[status as InquiryStatus]?.label ?? status;

@@ -2,17 +2,43 @@
 
 // features/customers/components/CustomerCheckoutFailure.tsx
 
-import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { XCircle, RefreshCw, LayoutDashboard, Phone } from "lucide-react";
+import { XCircle, RefreshCw, LayoutDashboard, Phone, Loader2 } from "lucide-react";
+import { useCustomerPurchase } from "@/features/customers/hooks/useCustomerPurchases";
+import { useResumePayment } from "@/features/customers/hooks/useResumePayment";
+import { RazorpayCheckoutError } from "@/lib/razorpay";
 
 function FailureContent() {
+    const router = useRouter();
     const searchParams = useSearchParams();
     const serviceId = searchParams.get("service");
-    const retryHref = serviceId
-        ? `/customer/checkout?service=${serviceId}`
-        : "/customer/services";
+    const orderId = searchParams.get("order");
+    const message = searchParams.get("message");
+    const [retrying, setRetrying] = useState(false);
+
+    // Only fetched when we have an order id to retry against.
+    const purchaseQuery = useCustomerPurchase(orderId ?? "");
+    const { resumePayment } = useResumePayment();
+
+    const canRetryOrder = Boolean(orderId);
+    const retryHref = serviceId ? `/customer/checkout?service=${serviceId}` : "/customer/services";
+
+    const handleTryAgain = async () => {
+        if (!purchaseQuery.data) return;
+        setRetrying(true);
+        try {
+            const { orderId: verifiedOrderId } = await resumePayment(purchaseQuery.data);
+            router.push(`/customer/checkout/success?order_id=${verifiedOrderId}`);
+        } catch (error) {
+            if (!(error instanceof RazorpayCheckoutError)) {
+                router.push("/customer/purchases");
+            }
+        } finally {
+            setRetrying(false);
+        }
+    };
 
     return (
         <div className="min-h-screen flex items-center justify-center p-6 bg-accent-customer">
@@ -40,20 +66,32 @@ function FailureContent() {
                         {/* Error note */}
                         <div className="inline-flex items-center gap-2 bg-error-brand/10 border border-error-brand/20 text-error-brand text-xs font-medium px-4 py-2 rounded-full">
                             <XCircle className="h-3.5 w-3.5" />
-                            Transaction declined by payment gateway
+                            {message || "Transaction declined by payment gateway"}
                         </div>
 
                         <div className="h-px bg-surface" />
 
                         {/* Actions */}
                         <div className="flex flex-col sm:flex-row gap-3">
-                            <Link
-                                href={retryHref}
-                                className="flex-1 inline-flex items-center justify-center gap-2 h-9 px-4 text-sm font-medium bg-primary-brand text-white hover:bg-primary-brand/90 rounded-md transition-colors"
-                            >
-                                <RefreshCw className="h-4 w-4" />
-                                Try Again
-                            </Link>
+                            {canRetryOrder ? (
+                                <button
+                                    type="button"
+                                    onClick={handleTryAgain}
+                                    disabled={retrying || purchaseQuery.isLoading}
+                                    className="flex-1 inline-flex items-center justify-center gap-2 h-9 px-4 text-sm font-medium bg-primary-brand text-white hover:bg-primary-brand/90 rounded-md transition-colors disabled:opacity-60"
+                                >
+                                    {retrying ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+                                    {retrying ? "Retrying..." : "Try Again"}
+                                </button>
+                            ) : (
+                                <Link
+                                    href={retryHref}
+                                    className="flex-1 inline-flex items-center justify-center gap-2 h-9 px-4 text-sm font-medium bg-primary-brand text-white hover:bg-primary-brand/90 rounded-md transition-colors"
+                                >
+                                    <RefreshCw className="h-4 w-4" />
+                                    Try Again
+                                </Link>
+                            )}
                             <Link
                                 href="/customer"
                                 className="flex-1 inline-flex items-center justify-center gap-2 h-9 px-4 text-sm font-medium border border-hairline bg-canvas text-slate hover:bg-surface rounded-md transition-colors"

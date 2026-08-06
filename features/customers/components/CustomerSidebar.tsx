@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useSidebar } from "@/components/ui/sidebar";
+import { useCustomerCart } from "@/features/customers/hooks/useCustomerCart";
 import { useCustomerProfile } from "@/features/customers/hooks/useCustomerProfile";
 import { getInitials } from "@/features/customers/lib/format";
 import { useAuth } from "@/features/auth/shared/hooks/useAuth";
@@ -36,6 +37,8 @@ export function CustomerSidebar() {
     const collapsed = !isMobile && state === "collapsed";
     const profileQuery = useCustomerProfile();
     const profile = profileQuery.data;
+    const cartQuery = useCustomerCart();
+    const cartItemCount = cartQuery.data?.summary.itemCount ?? 0;
 
     const closeMobile = () => { if (isMobile) setOpenMobile(false); };
 
@@ -88,16 +91,27 @@ export function CustomerSidebar() {
                 <div className="flex-1 overflow-y-auto overflow-x-hidden px-3 py-4 space-y-1 scrollbar-hide">
                     {navItems.map((item) => {
                         const active = isActive(item.href, item.exact);
+                        const badgeCount = item.href === "/customer/cart" ? cartItemCount : 0;
                         return (
                             <div key={item.href} className="flex flex-col group relative">
                                 <Link
                                     href={item.href}
                                     title={collapsed ? item.title : undefined}
                                     onClick={closeMobile}
-                                    className={`h-9 w-full rounded-md flex items-center gap-2.5 px-3 transition-all duration-150 outline-none ${active ? `${ACCENT_BG_CLASS} ${ACCENT_TEXT_CLASS}` : "text-steel hover:bg-surface hover:text-ink"} ${collapsed ? "justify-center" : ""}`}
+                                    className={`relative h-9 w-full rounded-md flex items-center gap-2.5 px-3 transition-all duration-150 outline-none ${active ? `${ACCENT_BG_CLASS} ${ACCENT_TEXT_CLASS}` : "text-steel hover:bg-surface hover:text-ink"} ${collapsed ? "justify-center" : ""}`}
                                 >
-                                    <item.icon className="h-[18px] w-[18px] shrink-0" />
+                                    <span className="relative shrink-0">
+                                        <item.icon className="h-[18px] w-[18px]" />
+                                        {badgeCount > 0 && collapsed && (
+                                            <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-error-brand" />
+                                        )}
+                                    </span>
                                     {!collapsed && <span className="text-[13px] font-medium whitespace-nowrap">{item.title}</span>}
+                                    {badgeCount > 0 && !collapsed && (
+                                        <span className={`ml-auto flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[11px] font-semibold ${active ? "bg-white/20 text-white" : "bg-error-brand text-white"}`}>
+                                            {badgeCount}
+                                        </span>
+                                    )}
                                 </Link>
                             </div>
                         );

@@ -90,11 +90,14 @@ export interface CustomerCart {
 export interface CustomerPaymentAttempt {
     id: string;
     paymentId?: string;
+    attemptNumber?: number;
     razorpayOrderId?: string | null;
     razorpayPaymentId?: string | null;
     status?: CustomerPaymentStatus | string;
     amount: number;
     currency?: string;
+    errorCode?: string | null;
+    errorDescription?: string | null;
     createdAt?: string;
     updatedAt?: string;
 }
@@ -131,6 +134,9 @@ export type CustomerAddressPayload = {
     city: string;
     stateCode: string;
     postalCode: string;
+    /** ISO-2 country code. The backend currently only accepts "IN" ("Only Indian
+     * billing addresses are supported at present") and defaults to it when omitted. */
+    country?: string;
     gstin?: string | null;
     isDefault?: boolean;
 };
@@ -314,6 +320,6 @@ export const customerInvoiceService = {
 };
 
 export const publicInquiryService = {
-    submit: (payload: { name: string; email: string; phone: string; subject: string; message: string }) =>
-        apiClient.post<ApiResponse<{ id: string; name: string; email: string; phone: string; subject: string; message: string; createdAt: string }>>("/customer/inquiry", payload),
+    submit: (payload: { name: string; email: string; phone?: string; subject?: string; message: string; serviceId?: string }) =>
+        apiClient.post<ApiResponse<{ id: string; name: string; email: string; phone: string; subject: string; message: string; serviceId?: string; createdAt: string }>>("/customer/inquiry", payload),
 };

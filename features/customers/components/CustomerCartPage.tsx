@@ -2,17 +2,16 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Minus, Plus, ShoppingCart, Trash2, CreditCard, ArrowLeft, X } from "lucide-react";
+import { Minus, Plus, Trash2, CreditCard, ArrowLeft, X } from "lucide-react";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useCustomerProfile } from "@/features/customers/hooks/useCustomerProfile";
 import { useCheckoutCustomerCart, useClearCustomerCart, useCustomerCart, useRemoveCartItem, useUpdateCartItem } from "@/features/customers/hooks/useCustomerCart";
-import { useVerifyCustomerPurchase } from "@/features/customers/hooks/useCustomerPurchases";
-import { getApiErrorMessage } from "@/features/customers/lib/format";
+import { useResumePayment } from "@/features/customers/hooks/useResumePayment";
+import { normalizePaymentInitiation } from "@/features/customers/lib/payment";
 import { formatINR } from "@/lib/currency";
-import { loadRazorpayScript, openRazorpayCheckout } from "@/lib/razorpay";
-import type { CustomerCartItem, RazorpayInitiation } from "@/services/customer.service";
+import { RazorpayCheckoutError } from "@/lib/razorpay";
+import type { CustomerCartItem } from "@/services/customer.service";
 
 function itemName(item: CustomerCartItem) {
     return item.name ?? item.service?.name ?? item.serviceId;
@@ -26,14 +25,6 @@ function itemTotal(item: CustomerCartItem) {
     return item.amount ?? item.taxableValue ?? itemUnitPrice(item) * item.quantity;
 }
 
-function razorpayKey(initiation: RazorpayInitiation) {
-    return initiation.razorpayKeyId ?? initiation.keyId ?? "";
-}
-
-function razorpayOrderId(initiation: RazorpayInitiation) {
-    return initiation.razorpayOrderId ?? "";
-}
-
 export function CustomerCartPage() {
     const router = useRouter();
     const cartQuery = useCustomerCart();
@@ -41,37 +32,30 @@ export function CustomerCartPage() {
     const removeItem = useRemoveCartItem();
     const clearCart = useClearCustomerCart();
     const checkoutCart = useCheckoutCustomerCart();
-    const verifyPurchase = useVerifyCustomerPurchase();
-    const profileQuery = useCustomerProfile();
-    const profile = profileQuery.data;
+    const { startPayment, isPending: isPaying } = useResumePayment();
     const cart = cartQuery.data;
     const items = cart?.items ?? [];
     const summary = cart?.summary;
-    const isCheckingOut = checkoutCart.isPending || verifyPurchase.isPending;
+    const isCheckingOut = checkoutCart.isPending || isPaying;
 
     const handleCheckout = async () => {
+        let normalized: ReturnType<typeof normalizePaymentInitiation> | undefined;
         try {
             const initiation = (await checkoutCart.mutateAsync()).data.data;
-            await loadRazorpayScript();
-            const response = await openRazorpayCheckout({
-                key: razorpayKey(initiation),
-                amount: initiation.amount,
-                currency: initiation.currency,
-                name: "StartupKaro",
-                description: initiation.description ?? initiation.serviceName ?? "StartupKaro services",
-                order_id: razorpayOrderId(initiation),
-                prefill: {
-                    name: profile?.name,
-                    email: profile?.email,
-                    contact: profile?.phone ?? profile?.mobile,
-                },
-                theme: { color: "#296ef9" },
-            });
-            const verification = (await verifyPurchase.mutateAsync(response)).data.data;
-            router.push(`/customer/checkout/success?payment_id=${response.razorpay_payment_id}&order_id=${verification.orderId}`);
+            normalized = normalizePaymentInitiation(initiation);
+            const { response, orderId } = await startPayment(initiation);
+            router.push(`/customer/checkout/success?payment_id=${response.razorpay_payment_id}&order_id=${orderId}`);
         } catch (error) {
-            const message = encodeURIComponent(getApiErrorMessage(error, "Payment could not be completed"));
-            router.push(`/customer/checkout/failure?message=${message}`);
+            // A dismissed checkout is handled (toast + stay put) inside
+            // useResumePayment - only a genuine gateway decline routes away,
+            // carrying the order/payment id so "Try Again" retries the same
+            // payment instead of starting a brand new order.
+            if (error instanceof RazorpayCheckoutError && error.reason === "failed") {
+                const params = new URLSearchParams({ message: error.description || "Transaction declined by payment gateway" });
+                if (normalized?.orderId) params.set("order", normalized.orderId);
+                if (normalized?.paymentId) params.set("payment", normalized.paymentId);
+                router.push(`/customer/checkout/failure?${params.toString()}`);
+            }
         }
     };
 
@@ -89,13 +73,7 @@ export function CustomerCartPage() {
             />
             <div className="grid flex-1 grid-cols-1 gap-6 p-6 lg:grid-cols-[1fr_320px]">
                 <Card className="overflow-hidden">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-base">
-                            <ShoppingCart className="h-4 w-4 text-primary-brand" />
-                            Services
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
+                    <CardContent className="space-y-3 pt-6">
                         {cartQuery.isLoading ? (
                             <p className="text-sm text-slate">Loading cart...</p>
                         ) : cartQuery.isError ? (

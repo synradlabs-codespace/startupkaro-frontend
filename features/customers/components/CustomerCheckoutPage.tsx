@@ -4,13 +4,14 @@ import { Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { Button } from "@/components/ui/button";
+import { RequestQuoteDialog } from "@/features/customers/components/ui/RequestQuoteDialog";
 import { useCustomerServiceBySlug } from "@/features/customers/hooks/useCustomerServices";
-import { useVerifyCustomerPurchase } from "@/features/customers/hooks/useCustomerPurchases";
 import { useAddCartItem, useCheckoutCustomerCart } from "@/features/customers/hooks/useCustomerCart";
-import { useCustomerProfile } from "@/features/customers/hooks/useCustomerProfile";
+import { useResumePayment } from "@/features/customers/hooks/useResumePayment";
 import { getApiErrorMessage } from "@/features/customers/lib/format";
+import { normalizePaymentInitiation } from "@/features/customers/lib/payment";
 import { formatINR } from "@/lib/currency";
-import { loadRazorpayScript, openRazorpayCheckout } from "@/lib/razorpay";
+import { RazorpayCheckoutError } from "@/lib/razorpay";
 import { ShieldCheck, CreditCard, ArrowLeft, Tag, Receipt } from "lucide-react";
 import Link from "next/link";
 
@@ -30,10 +31,9 @@ function CheckoutContent() {
     const serviceQuery = useCustomerServiceBySlug(serviceParam);
     const addCartItem = useAddCartItem();
     const checkoutCart = useCheckoutCustomerCart();
-    const verifyPurchase = useVerifyCustomerPurchase();
-    const profileQuery = useCustomerProfile();
-    const profile = profileQuery.data;
+    const { startPayment, isPending: isResumingPayment } = useResumePayment();
     const [error, setError] = useState("");
+    const [quoteOpen, setQuoteOpen] = useState(false);
     const service = serviceQuery.data;
     const baseAmount = service?.pricing?.base ?? service?.price ?? 0;
     const taxAmount = service?.pricing?.tax ?? Math.round(baseAmount * GST_RATE);
@@ -43,35 +43,33 @@ function CheckoutContent() {
         if (!service) return;
         setError("");
 
+        let normalized: ReturnType<typeof normalizePaymentInitiation> | undefined;
         try {
             if (!isCheckoutEligible(service)) {
-                router.push(`/contact?service=${service.slug}`);
+                setQuoteOpen(true);
                 return;
             }
 
             await addCartItem.mutateAsync({ serviceId: service.id || service.slug, quantity: 1 });
             const initiation = (await checkoutCart.mutateAsync()).data.data;
-            await loadRazorpayScript();
-            const response = await openRazorpayCheckout({
-                key: initiation.razorpayKeyId ?? initiation.keyId ?? "",
-                amount: initiation.amount,
-                currency: initiation.currency,
-                name: "StartupKaro",
-                description: initiation.serviceName ?? initiation.description ?? service.name,
-                order_id: initiation.razorpayOrderId ?? "",
-                prefill: {
-                    name: profile?.name,
-                    email: profile?.email,
-                    contact: profile?.phone ?? profile?.mobile,
-                },
-                theme: { color: "#296ef9" },
-            });
-            const verification = (await verifyPurchase.mutateAsync(response)).data.data;
-            router.push(`/customer/checkout/success?payment_id=${response.razorpay_payment_id}&order_id=${verification.orderId}`);
+            normalized = normalizePaymentInitiation(initiation);
+            const { response, orderId } = await startPayment(initiation, { serviceName: service.name });
+            router.push(`/customer/checkout/success?payment_id=${response.razorpay_payment_id}&order_id=${orderId}`);
         } catch (err: unknown) {
-            const message = getApiErrorMessage(err, "Payment could not be completed");
-            setError(message);
-            router.push(`/customer/checkout/failure?service=${serviceParam}`);
+            // A dismissed checkout is handled (toast + stay put) inside
+            // useResumePayment - only a genuine gateway decline routes away,
+            // carrying the order/payment id so "Try Again" retries the same
+            // payment instead of starting a brand new order.
+            if (err instanceof RazorpayCheckoutError) {
+                if (err.reason === "failed") {
+                    const params = new URLSearchParams({ message: err.description || "Transaction declined by payment gateway" });
+                    if (normalized?.orderId) params.set("order", normalized.orderId);
+                    if (normalized?.paymentId) params.set("payment", normalized.paymentId);
+                    router.push(`/customer/checkout/failure?${params.toString()}`);
+                }
+                return;
+            }
+            setError(getApiErrorMessage(err, "Payment could not be completed"));
         }
     };
 
@@ -89,15 +87,16 @@ function CheckoutContent() {
                 <div className="rounded-lg border border-hairline bg-canvas p-6">
                     <p className="text-sm font-medium text-ink">This service requires a quote.</p>
                     <p className="mt-1 text-sm text-slate">Please send an inquiry and our team will get back to you.</p>
-                    <Link href={`/contact?service=${service.slug}`} className="mt-4 inline-flex h-9 items-center rounded-md bg-primary-brand px-4 text-sm font-medium text-white">
+                    <Button type="button" onClick={() => setQuoteOpen(true)} className="mt-4 h-9 rounded-md bg-primary-brand px-4 text-sm font-medium text-white hover:bg-primary-brand/90">
                         Request Quote
-                    </Link>
+                    </Button>
                 </div>
+                <RequestQuoteDialog open={quoteOpen} onOpenChange={setQuoteOpen} service={{ id: service.id, name: service.name }} />
             </div>
         );
     }
 
-    const isPaying = addCartItem.isPending || checkoutCart.isPending || verifyPurchase.isPending;
+    const isPaying = addCartItem.isPending || checkoutCart.isPending || isResumingPayment;
 
     if (isPaying) {
         return (
