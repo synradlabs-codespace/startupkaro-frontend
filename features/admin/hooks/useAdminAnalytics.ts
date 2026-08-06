@@ -7,7 +7,15 @@ export type AnalyticsRange = {
     granularity?: "day" | "month";
 };
 
-function assertSuccess<T>(payload: { success: boolean; message?: string; data: T }) {
+// Wide bounds used where a KPI should read as a lifetime total rather than a
+// rolling window (e.g. the admin dashboard). Period-scoped analysis lives on
+// the /admin/analytics page.
+export const ALL_TIME: AnalyticsRange = {
+    from: "2000-01-01T00:00:00.000Z",
+    to: "2100-01-01T00:00:00.000Z",
+};
+
+export function assertSuccess<T>(payload: { success: boolean; message?: string; data: T }) {
     if (!payload.success) {
         throw new Error(payload.message || "Analytics request failed");
     }
