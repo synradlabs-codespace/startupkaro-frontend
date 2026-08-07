@@ -68,8 +68,13 @@ export function CustomerSidebar() {
                 <div className={`h-16 flex items-center px-4 py-5 border-b border-hairline ${collapsed ? "justify-center" : "justify-between"}`}>
                     <div className={`flex items-center gap-3 overflow-hidden ${collapsed ? "w-auto" : "w-full"}`}>
                         {collapsed ? (
-                            <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg font-semibold text-xs text-white ${ACCENT_BG_CLASS}`}>
-                                SK
+                            <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full border border-hairline">
+                                <Image
+                                    src="/assets/startupkaro-small-logo.jpeg"
+                                    alt="StartupKaro"
+                                    fill
+                                    className="object-cover"
+                                />
                             </div>
                         ) : (
                             <div className="flex flex-col whitespace-nowrap gap-0.5">
