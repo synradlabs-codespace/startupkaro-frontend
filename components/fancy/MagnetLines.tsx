@@ -36,9 +36,20 @@ export function MagnetLines({
         const container = containerRef.current;
         if (!container) return;
 
-        const items = container.querySelectorAll<HTMLSpanElement>("span");
+        const items = Array.from(container.querySelectorAll<HTMLSpanElement>("span"));
+        if (!items.length) return;
 
-        const onPointerMove = (pointer: { x: number; y: number }) => {
+        let isVisible = true;
+        const visibilityObserver = new IntersectionObserver(([entry]) => {
+            isVisible = entry.isIntersecting;
+        });
+        visibilityObserver.observe(container);
+
+        // Re-measure every span's center fresh each time we actually apply an update
+        // (not on every raw pointermove) — the container's on-screen position can
+        // shift from an ancestor's scroll-reveal transform without the container's
+        // own size changing, so a cache keyed only on size/mount goes stale.
+        const applyPointer = (pointer: { x: number; y: number }) => {
             items.forEach((item) => {
                 const rect = item.getBoundingClientRect();
                 const centerX = rect.x + rect.width / 2;
@@ -53,20 +64,32 @@ export function MagnetLines({
             });
         };
 
+        // Coalesce pointermove events to at most one measure+update pass per frame —
+        // pointermove can fire far more often than the screen repaints, so this is
+        // the expensive part to cut, not the geometry read itself.
+        let rafId: number | null = null;
+        let latestPointer: { x: number; y: number } | null = null;
+
         const handlePointerMove = (e: PointerEvent) => {
-            onPointerMove({ x: e.x, y: e.y });
+            if (!isVisible) return;
+            latestPointer = { x: e.x, y: e.y };
+            if (rafId !== null) return;
+            rafId = requestAnimationFrame(() => {
+                rafId = null;
+                if (latestPointer) applyPointer(latestPointer);
+            });
         };
 
-        window.addEventListener("pointermove", handlePointerMove);
+        window.addEventListener("pointermove", handlePointerMove, { passive: true });
 
-        if (items.length) {
-            const middleIndex = Math.floor(items.length / 2);
-            const rect = items[middleIndex].getBoundingClientRect();
-            onPointerMove({ x: rect.x, y: rect.y });
-        }
+        const middleIndex = Math.floor(items.length / 2);
+        const middleRect = items[middleIndex].getBoundingClientRect();
+        applyPointer({ x: middleRect.x, y: middleRect.y });
 
         return () => {
             window.removeEventListener("pointermove", handlePointerMove);
+            visibilityObserver.disconnect();
+            if (rafId !== null) cancelAnimationFrame(rafId);
         };
     }, [rows, columns]);
 
@@ -81,7 +104,6 @@ export function MagnetLines({
                 height: lineHeight,
                 "--rotate": `${baseAngle}deg`,
                 transform: "rotate(var(--rotate))",
-                willChange: "transform",
             } as MagnetLineStyle}
         />
     ));
