@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { MapPin, Phone, Receipt, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ import { useCustomerProfile } from "@/features/customers/hooks/useCustomerProfil
 import { useCustomerAddressStates } from "@/features/customers/hooks/useCustomerAddresses";
 import { customerAddressService, customerProfileService } from "@/services/customer.service";
 import { getApiErrorMessage } from "@/lib/api-messages";
+import { getSafeRoleNext } from "@/features/auth/shared/hooks/useAuthRedirect";
 import {
     buildPhone,
     collectErrors,
@@ -60,6 +61,7 @@ function digitsFromPhone(phone?: string) {
 
 export function CompleteProfilePage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const toast = useToast();
     const queryClient = useQueryClient();
     const profileQuery = useCustomerProfile();
@@ -145,7 +147,8 @@ export function CompleteProfilePage() {
             ]);
 
             toast.success("Profile completed");
-            router.replace("/customer");
+            const safeNext = getSafeRoleNext("customer", searchParams.get("next"));
+            router.replace(safeNext ?? "/customer");
         } catch (err) {
             const serverFieldErrors = mapServerFieldErrors(err);
             if (Object.keys(serverFieldErrors).length) {
