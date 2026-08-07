@@ -240,7 +240,7 @@ export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: strin
                                         onChange={handleChange("name")}
                                         placeholder="Full Name"
                                         autoComplete="name"
-                                        className={`h-10 w-full ${errors.name ? "border-error-brand" : "border-hairline-strong"}`}
+                                        className={`h-10 w-full bg-canvas ${errors.name ? "border-error-brand" : "border-hairline-strong"}`}
                                     />
                                     {errors.name && (
                                         <p className="mt-1.5 text-xs text-error-brand">{errors.name}</p>
@@ -257,7 +257,7 @@ export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: strin
                                         onChange={handleChange("email")}
                                         placeholder="Email"
                                         autoComplete="email"
-                                        className={`h-10 w-full ${errors.email ? "border-error-brand" : "border-hairline-strong"}`}
+                                        className={`h-10 w-full bg-canvas ${errors.email ? "border-error-brand" : "border-hairline-strong"}`}
                                     />
                                     {errors.email && (
                                         <p className="mt-1.5 text-xs text-error-brand">{errors.email}</p>
@@ -304,7 +304,7 @@ export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: strin
                                         value={form.subject}
                                         onChange={handleChange("subject")}
                                         placeholder="Subject"
-                                        className={`h-10 w-full ${errors.subject ? "border-error-brand" : "border-hairline-strong"}`}
+                                        className={`h-10 w-full bg-canvas ${errors.subject ? "border-error-brand" : "border-hairline-strong"}`}
                                     />
                                     {errors.subject && (
                                         <p className="mt-1.5 text-xs text-error-brand">{errors.subject}</p>
@@ -323,7 +323,7 @@ export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: strin
                                             placeholder="Your message"
                                             rows={4}
                                             style={{ height: messageHeight }}
-                                            className={`resize-none pb-14 sm:pb-4 ${errors.message ? "border-error-brand" : "border-hairline-strong"}`}
+                                            className={`resize-none pb-14 sm:pb-4 bg-canvas ${errors.message ? "border-error-brand" : "border-hairline-strong"}`}
                                         />
                                         {/* Mobile: +/- buttons (touch users can't drag) */}
                                         <div className="sm:hidden absolute bottom-2 left-1/2 flex h-11 -translate-x-1/2 items-center rounded-md border border-hairline-strong bg-canvas text-graphite shadow-[0_2px_8px_rgba(26,26,26,0.08)]">

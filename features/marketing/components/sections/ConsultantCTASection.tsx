@@ -67,7 +67,7 @@ export function ConsultantCTASection() {
                                 </div>
                             </div>
                             <FlowButton
-                                href="/customer/checkout?service=professional-consulting-service"
+                                href="/customer/services/professional-consulting-service"
                                 text="Book Consulting"
                                 iconName="message-circle"
                                 colorVariant="primary"

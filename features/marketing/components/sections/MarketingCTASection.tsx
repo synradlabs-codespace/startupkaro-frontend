@@ -47,7 +47,7 @@ export function MarketingCTASection({
         >
             <div className="mx-auto max-w-2xl">
                 {eyebrow && (
-                    <p className="mb-3 text-xs font-medium uppercase tracking-[0.28px] text-primary-brand">
+                    <p className="mb-3 text-xs font-medium uppercase tracking-[0.28px] text-white/80">
                         {eyebrow}
                     </p>
                 )}
@@ -72,7 +72,7 @@ export function MarketingCTASection({
                     />
                 </div>
                 {trustText && (
-                    <p className="mt-6 flex items-center justify-center gap-1.5 text-xs text-primary-brand">
+                    <p className="mt-6 flex items-center justify-center gap-1.5 text-xs text-white/80">
                         <ShieldCheck className="h-3.5 w-3.5" />
                         {trustText}
                     </p>

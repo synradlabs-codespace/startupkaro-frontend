@@ -29,6 +29,7 @@ function Logo() {
 function HeaderActions({ mobile = false, onAction }: { mobile?: boolean; onAction?: () => void }) {
   const [loginHref, setLoginHref] = useState("/customer/login");
   const [loginText, setLoginText] = useState("Login");
+  const [servicesHref, setServicesHref] = useState("/services");
 
   useEffect(() => {
     const syncLoginTarget = () => {
@@ -36,9 +37,11 @@ function HeaderActions({ mobile = false, onAction }: { mobile?: boolean; onActio
       if (session.accessToken && session.role) {
         setLoginHref(getPanelRedirect(session.role));
         setLoginText("Dashboard");
+        setServicesHref(session.role === "customer" ? "/customer/services" : "/services");
       } else {
         setLoginHref("/customer/login");
         setLoginText("Login");
+        setServicesHref("/services");
       }
     };
 
@@ -63,7 +66,7 @@ function HeaderActions({ mobile = false, onAction }: { mobile?: boolean; onActio
         wrapperClassName={mobile ? "w-full justify-stretch" : undefined}
       />
       <FlowButton
-        href="/services"
+        href={servicesHref}
         onClick={onAction}
         text="Explore Services"
         iconName="briefcase"

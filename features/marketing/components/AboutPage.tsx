@@ -174,10 +174,10 @@ export function AboutPage() {
                     <motion.div {...revealProps} variants={reveal} className="max-w-3xl">
                         <p className="mb-5 text-xs font-semibold uppercase tracking-[0.7px] text-primary-brand">About StartupKaro</p>
                         <h1 className="font-display text-4xl font-medium leading-none text-ink sm:text-5xl lg:text-6xl">
-                            StartupKaro was built for founders, freelancers, and small business owners
+                            Built for founders
                         </h1>
                         <p className="mt-6 max-w-2xl text-base leading-relaxed text-charcoal md:text-lg">
-                            who want to spend less time navigating paperwork and more time building . It is more than just a service platform , we are creating a complete ecosystem where startups can confidently <span className="font-semibold text-ink">BEGIN, BUILD, AND GROW</span>
+                            StartupKaro helps you spend less time on paperwork and more time building. We are more than a service platform, we are the ecosystem startups can rely on to confidently <span className="font-semibold text-ink">BEGIN, BUILD, AND GROW</span>.
                         </p>
                     </motion.div>
 
@@ -221,7 +221,6 @@ export function AboutPage() {
                             <p>You bring the vision. We bring the experts, the strategy, and the execution. From registering your company and managing compliances to taxation, legal, technology, branding, and fundraising support, we handle everything required to turn your idea into a thriving business.</p>
                             <p>No confusion. No running around. No missed compliances. Just one trusted ecosystem built to take your startup from idea to impact.</p>
                         </div>
-                        <p className="mt-8 text-base font-semibold uppercase text-ink">STARTUPKARO INDIA</p>
                     </motion.div>
 
                     <ExpertNetwork />

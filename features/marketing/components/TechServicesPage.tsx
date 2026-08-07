@@ -614,7 +614,7 @@ function TextField({ label, value, error, onChange, type = "text", autoComplete 
     return (
         <div>
             <Label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">{label}</Label>
-            <Input type={type} value={value} onChange={(event) => onChange(event.target.value)} placeholder={label} autoComplete={autoComplete} className={`h-10 w-full ${error ? "border-error-brand" : "border-hairline-strong"}`} />
+            <Input type={type} value={value} onChange={(event) => onChange(event.target.value)} placeholder={label} autoComplete={autoComplete} className={`h-10 w-full bg-canvas ${error ? "border-error-brand" : "border-hairline-strong"}`} />
             {error && <p className="mt-1.5 text-xs text-error-brand">{error}</p>}
         </div>
     );
@@ -643,7 +643,7 @@ function MessageField({ value, error, height, onChange, onResizeStart, onResize 
         <div>
             <Label className="mb-2 block text-xs font-medium uppercase tracking-[0.28px] text-graphite">Message</Label>
             <div className="relative">
-                <Textarea value={value} onChange={(event) => onChange(event.target.value)} placeholder="Example: I need a delivery app for a local food business, with customer ordering and admin order tracking." rows={4} style={{ height }} className={`resize-none pb-14 sm:pb-4 ${error ? "border-error-brand" : "border-hairline-strong"}`} />
+                <Textarea value={value} onChange={(event) => onChange(event.target.value)} placeholder="Example: I need a delivery app for a local food business, with customer ordering and admin order tracking." rows={4} style={{ height }} className={`resize-none pb-14 sm:pb-4 bg-canvas ${error ? "border-error-brand" : "border-hairline-strong"}`} />
                 <div className="absolute bottom-2 left-1/2 flex h-11 -translate-x-1/2 items-center rounded-md border border-hairline-strong bg-canvas text-graphite shadow-[0_2px_8px_rgba(26,26,26,0.08)] sm:hidden">
                     <button type="button" aria-label="Reduce message box height" onClick={() => onResize(-MESSAGE_RESIZE_STEP)} className="flex h-11 w-11 items-center justify-center rounded-l-md transition-colors hover:bg-surface hover:text-primary-brand focus:outline-none focus:ring-2 focus:ring-primary-brand/20"><Minus className="h-4 w-4" /></button>
                     <button type="button" aria-label="Increase message box height" onClick={() => onResize(MESSAGE_RESIZE_STEP)} className="flex h-11 w-11 items-center justify-center rounded-r-md border-l border-hairline-strong transition-colors hover:bg-surface hover:text-primary-brand focus:outline-none focus:ring-2 focus:ring-primary-brand/20"><Plus className="h-4 w-4" /></button>
