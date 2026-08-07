@@ -97,6 +97,7 @@ export function ServiceJourneySection() {
     const [activeStep, setActiveStep] = useState(0);
     const activeStepRef = useRef(0);
     const containerRef = useRef<HTMLDivElement>(null);
+    const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -114,6 +115,7 @@ export function ServiceJourneySection() {
     const handleSelectStep = (step: number) => {
         activeStepRef.current = step;
         setActiveStep(step);
+        stepRefs.current[step]?.scrollIntoView({ behavior: "smooth", block: "start" });
     };
 
     return (
@@ -170,6 +172,9 @@ export function ServiceJourneySection() {
                         {steps.map((step, i) => (
                             <div
                                 key={step.number}
+                                ref={(el) => {
+                                    stepRefs.current[i] = el;
+                                }}
                                 className="min-h-screen flex items-center py-12"
                             >
                                 <StepCard step={step} isActive={activeStep === i} />
