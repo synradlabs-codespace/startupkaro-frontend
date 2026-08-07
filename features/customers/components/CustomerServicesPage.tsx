@@ -5,8 +5,8 @@ import { Search, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { ServiceCard } from "@/components/custom/ServiceCard";
+import { ServiceSearchBar } from "@/components/custom/ServiceSearchBar";
 import { TablePagination } from "@/components/custom/TablePagination";
-import { Input } from "@/components/ui/input";
 import { SERVICE_CATEGORIES, categoryPillStyles, type ServiceCategory } from "@/lib/category-pills";
 import { getBundles, type EnrichedService } from "@/features/services/lib/merge";
 import { useAddCartItem } from "@/features/customers/hooks/useCustomerCart";
@@ -45,6 +45,7 @@ export function CustomerServicesPage({ services }: CustomerServicesPageProps) {
 
     const total = filtered.length;
     const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
+    const isFiltering = search.trim() !== "" || activeCategory !== "All";
 
     const handleSearch = (value: string) => {
         setSearch(value);
@@ -56,12 +57,39 @@ export function CustomerServicesPage({ services }: CustomerServicesPageProps) {
         setPage(1);
     };
 
+    const clearFilters = () => {
+        setSearch("");
+        setActiveCategory("All");
+        setPage(1);
+    };
+
     return (
-        <div className="flex min-h-screen flex-col">
+        <div className="flex flex-col">
             <PageHeader title="Services" description="Browse startup compliance and legal services" />
 
             <div className="flex-1 space-y-6 p-6">
-                {bundles.length > 0 && (
+                <div className="sticky top-16 z-20 -mx-6 space-y-3 border-b border-hairline bg-canvas/95 px-6 py-4 backdrop-blur-md">
+                    <ServiceSearchBar value={search} onChange={handleSearch} />
+                    <div className="flex flex-wrap gap-2">
+                        {SERVICE_CATEGORIES.map((cat) => {
+                            const styles = categoryPillStyles[cat];
+                            return (
+                                <button
+                                    key={cat}
+                                    type="button"
+                                    onClick={() => handleCategory(cat)}
+                                    className={`rounded-md border px-3 py-1.5 text-xs font-medium uppercase tracking-[0.28px] transition-all duration-150 ${
+                                        activeCategory === cat ? styles.active : styles.idle
+                                    }`}
+                                >
+                                    {cat}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {!isFiltering && bundles.length > 0 && (
                     <div className="space-y-4 rounded-lg border border-hairline bg-canvas p-5">
                         <div>
                             <p className="text-xs font-medium uppercase tracking-[0.28px] text-graphite">Bundles</p>
@@ -99,34 +127,21 @@ export function CustomerServicesPage({ services }: CustomerServicesPageProps) {
                     </div>
                 )}
 
-                <div className="flex flex-col gap-3 sm:flex-row">
-                    <div className="relative max-w-sm flex-1">
-                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone" />
-                        <Input
-                            placeholder="Search services..."
-                            value={search}
-                            onChange={(e) => handleSearch(e.target.value)}
-                            className="rounded-lg border-hairline pl-9 focus-visible:ring-primary-brand/20"
-                        />
+                {isFiltering && (
+                    <div className="flex items-center justify-between">
+                        <p className="text-sm text-charcoal">
+                            {total} {total === 1 ? "result" : "results"}
+                            {search.trim() && <> for &ldquo;<span className="font-medium text-ink">{search.trim()}</span>&rdquo;</>}
+                        </p>
+                        <button
+                            type="button"
+                            onClick={clearFilters}
+                            className="text-sm font-medium text-primary-brand hover:text-primary-deep"
+                        >
+                            Clear filters
+                        </button>
                     </div>
-                    <div className="flex flex-wrap gap-2">
-                        {SERVICE_CATEGORIES.map((cat) => {
-                            const styles = categoryPillStyles[cat];
-                            return (
-                                <button
-                                    key={cat}
-                                    type="button"
-                                    onClick={() => handleCategory(cat)}
-                                    className={`rounded-md border px-3 py-1.5 text-xs font-medium uppercase tracking-[0.28px] transition-all duration-150 ${
-                                        activeCategory === cat ? styles.active : styles.idle
-                                    }`}
-                                >
-                                    {cat}
-                                </button>
-                            );
-                        })}
-                    </div>
-                </div>
+                )}
 
                 {paged.length === 0 ? (
                     <div className="flex flex-col items-center justify-center gap-3 py-20 text-center">

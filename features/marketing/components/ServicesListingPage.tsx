@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Search, Sparkles } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { ServiceCard } from "@/components/custom/ServiceCard";
+import { ServiceSearchBar } from "@/components/custom/ServiceSearchBar";
 import { SERVICE_CATEGORIES, categoryPillStyles, type ServiceCategory } from "@/lib/category-pills";
 import { getBundles, getStandaloneServices, type EnrichedService } from "@/features/services/lib/merge";
 
@@ -51,6 +51,8 @@ export function ServicesListingPage({ services, initialCategory }: { services: E
         });
     }, [services, search, activeCategory]);
 
+    const isFiltering = search.trim() !== "" || activeCategory !== "All";
+
     return (
         <div className="mx-auto max-w-7xl space-y-8 px-4 py-10 sm:px-6 lg:px-8">
             <div>
@@ -58,7 +60,28 @@ export function ServicesListingPage({ services, initialCategory }: { services: E
                 <p className="text-base leading-relaxed text-charcoal">Startup compliance, legal, and tech services handled end-to-end by CAs, CSs, lawyers, and software engineers.</p>
             </div>
 
-            {bundles.length > 0 && (
+            <div className="sticky top-18 z-30 -mx-4 space-y-3 border-b border-hairline bg-canvas/95 px-4 py-4 backdrop-blur-md sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+                <ServiceSearchBar value={search} onChange={setSearch} />
+                <div className="flex flex-wrap gap-2">
+                    {SERVICE_CATEGORIES.map((cat) => {
+                        const styles = categoryPillStyles[cat];
+                        return (
+                            <button
+                                key={cat}
+                                type="button"
+                                onClick={() => setActiveCategory(cat)}
+                                className={`rounded-md border px-3 py-1.5 text-xs font-medium uppercase tracking-[0.28px] transition-all duration-150 ${
+                                    activeCategory === cat ? styles.active : styles.idle
+                                }`}
+                            >
+                                {cat}
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+
+            {!isFiltering && bundles.length > 0 && (
                 <section className="space-y-4 rounded-2xl border border-hairline bg-cloud p-5 md:p-6">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                         <div>
@@ -88,7 +111,7 @@ export function ServicesListingPage({ services, initialCategory }: { services: E
                 </section>
             )}
 
-            {popularServices.length > 0 && (
+            {!isFiltering && popularServices.length > 0 && (
                 <section className="space-y-4 rounded-2xl border border-primary-soft bg-canvas p-5 shadow-[0_18px_52px_rgba(41,110,249,0.08)] md:p-6">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                         <div>
@@ -118,34 +141,21 @@ export function ServicesListingPage({ services, initialCategory }: { services: E
                 </section>
             )}
 
-            <div className="flex flex-col gap-3 sm:flex-row">
-                <div className="relative max-w-sm flex-1">
-                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-graphite" />
-                    <Input
-                        placeholder="Search services..."
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className="rounded-lg border-hairline pl-9"
-                    />
+            {isFiltering && (
+                <div className="flex items-center justify-between">
+                    <p className="text-sm text-charcoal">
+                        {filtered.length} {filtered.length === 1 ? "result" : "results"}
+                        {search.trim() && <> for &ldquo;<span className="font-medium text-ink">{search.trim()}</span>&rdquo;</>}
+                    </p>
+                    <button
+                        type="button"
+                        onClick={() => { setSearch(""); setActiveCategory("All"); }}
+                        className="text-sm font-medium text-primary-brand hover:text-primary-deep"
+                    >
+                        Clear filters
+                    </button>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                    {SERVICE_CATEGORIES.map((cat) => {
-                        const styles = categoryPillStyles[cat];
-                        return (
-                            <button
-                                key={cat}
-                                type="button"
-                                onClick={() => setActiveCategory(cat)}
-                                className={`rounded-md border px-3 py-1.5 text-xs font-medium uppercase tracking-[0.28px] transition-all duration-150 ${
-                                    activeCategory === cat ? styles.active : styles.idle
-                                }`}
-                            >
-                                {cat}
-                            </button>
-                        );
-                    })}
-                </div>
-            </div>
+            )}
 
             {filtered.length === 0 ? (
                 <div className="flex flex-col items-center justify-center gap-3 py-20 text-center">
