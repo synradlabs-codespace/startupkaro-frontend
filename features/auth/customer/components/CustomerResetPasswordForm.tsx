@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PasswordField } from "@/components/custom/PasswordField";
 import { useCustomerResetPassword, useCustomerConfirmReset } from "../hooks/useCustomerAuth";
+import { formatEmailInput } from "@/lib/validation";
 
 // ─── Step 1: request reset email ────────────────────────────────────────────
 
@@ -61,7 +62,7 @@ function ForgotPasswordStep() {
               <Input
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(formatEmailInput(e.target.value))}
                 required
                 autoComplete="email"
                 placeholder="Email"

@@ -3,6 +3,7 @@
 export {
     PHONE_PREFIX,
     formatNameInput,
+    formatEmailInput,
     formatPhoneDigits,
     formatPostalCode,
     formatGstin,

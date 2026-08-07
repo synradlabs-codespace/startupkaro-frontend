@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { PasswordField } from "@/components/custom/PasswordField";
 import { useEmployeeLogin } from "../hooks/useEmployeeAuth";
 import { useRedirectIfAuthenticated } from "@/features/auth/shared/hooks/useAuthRedirect";
-import { validators } from "@/lib/validations/common.schema";
+import { formatEmailInput, validators } from "@/lib/validations/common.schema";
 
 export function EmployeeLoginForm() {
   useRedirectIfAuthenticated();
@@ -95,7 +95,7 @@ export function EmployeeLoginForm() {
                 <Input
                   type="email"
                   value={email}
-                  onChange={(e) => { setEmail(e.target.value); clearFieldError("email"); }}
+                  onChange={(e) => { setEmail(formatEmailInput(e.target.value)); clearFieldError("email"); }}
                   required
                   autoComplete="email"
                   placeholder="Email"

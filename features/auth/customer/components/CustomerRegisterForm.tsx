@@ -12,6 +12,7 @@ import { GoogleRegistrationStep } from "./GoogleRegistrationStep";
 import { useCustomerRegister } from "../hooks/useCustomerAuth";
 import { buildAuthRouteWithNext, useRedirectIfAuthenticated } from "@/features/auth/shared/hooks/useAuthRedirect";
 import {
+    formatEmailInput,
     formatNameInput,
     validateName,
     validateEmail,
@@ -46,7 +47,7 @@ export function CustomerRegisterForm() {
     };
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setForm((f) => ({ ...f, email: e.target.value }));
+        setForm((f) => ({ ...f, email: formatEmailInput(e.target.value) }));
         if (fieldErrors.email) clearFieldError("email");
     };
 

@@ -10,7 +10,7 @@ import { GoogleAuthButton } from "./GoogleAuthButton";
 import { GoogleRegistrationStep } from "./GoogleRegistrationStep";
 import { useCustomerLogin } from "../hooks/useCustomerAuth";
 import { buildAuthRouteWithNext, useRedirectIfAuthenticated } from "@/features/auth/shared/hooks/useAuthRedirect";
-import { validators } from "@/lib/validations/common.schema";
+import { formatEmailInput, validators } from "@/lib/validations/common.schema";
 
 export function CustomerLoginForm() {
     useRedirectIfAuthenticated();
@@ -89,7 +89,7 @@ export function CustomerLoginForm() {
                                     <Input
                                         type="email"
                                         value={email}
-                                        onChange={(e) => { setEmail(e.target.value); clearFieldError("email"); }}
+                                        onChange={(e) => { setEmail(formatEmailInput(e.target.value)); clearFieldError("email"); }}
                                         required
                                         autoComplete="email"
                                         placeholder="Email"

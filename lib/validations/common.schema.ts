@@ -10,6 +10,11 @@ export function formatNameInput(raw: string): string {
     return raw.replace(/[^a-zA-Z\s]/g, "");
 }
 
+/** Strip all whitespace and lowercase (spaces are never valid in an email address, and addresses are case-insensitive). */
+export function formatEmailInput(raw: string): string {
+    return raw.replace(/\s/g, "").toLowerCase();
+}
+
 /** Strip non-digits and cap at 10 for the bare number after +91. */
 export function formatPhoneDigits(raw: string): string {
     return raw.replace(/\D/g, "").slice(0, 10);
