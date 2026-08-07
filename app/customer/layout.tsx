@@ -10,6 +10,7 @@ import { QueryProvider } from "@/components/providers/QueryProvider";
 import { ToastProvider } from "@/components/providers/ToastProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CustomerProfileGate } from "@/features/customers/components/CustomerProfileGate";
+import { CustomerCartDock } from "@/features/customers/components/CustomerCartDock";
 
 const COMPLETE_PROFILE_ROUTE = "/customer/complete-profile";
 
@@ -33,6 +34,7 @@ export default function CustomerLayout({ children }: { children: React.ReactNode
                                             {children}
                                         </div>
                                     </SidebarInset>
+                                    <CustomerCartDock />
                                 </SidebarProvider>
                             )}
                         </CustomerProfileGate>
