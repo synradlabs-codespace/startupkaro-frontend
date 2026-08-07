@@ -9,7 +9,7 @@ import { formatINR } from "@/lib/currency";
 export function ServiceHero({ service }: { service: EnrichedService }) {
     const meta = categoryMeta[service.isBundle ? "Bundles" : service.stage] ?? fallbackMeta;
     const Icon = meta.icon;
-    const ctaHref = service.cta === "buy" ? `/customer/checkout?service=${service.slug}` : `/contact?service=${service.slug}`;
+    const ctaHref = service.cta === "buy" ? `/customer/services/${service.slug}` : `/contact?service=${service.slug}`;
 
     return (
         <section className="relative px-4 pt-6 sm:px-6 lg:px-8">
@@ -70,7 +70,7 @@ export function ServiceHero({ service }: { service: EnrichedService }) {
                             </div>
                             <FlowButton
                                 href={ctaHref}
-                                text={service.cta === "buy" ? "Get Started" : "Request Quote"}
+                                text={service.cta === "buy" ? "Add to Cart" : "Request Quote"}
                                 colorVariant="primary"
                                 wrapperClassName="w-full"
                                 className="h-12 w-full justify-center py-0"
@@ -82,7 +82,7 @@ export function ServiceHero({ service }: { service: EnrichedService }) {
                                 wrapperClassName="w-full"
                                 className="h-12 w-full justify-center bg-canvas py-0"
                             />
-                            <p className="text-center text-xs text-graphite">No hidden fees. Expert assistance included.</p>
+                            <p className="text-center text-xs text-graphite">No hidden service fees. Expert assistance included. Government charges, if applicable, are billed separately.</p>
                         </div>
                     </div>
                 </div>

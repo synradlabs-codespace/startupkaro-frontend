@@ -6,6 +6,7 @@ import { Minus, Plus, Trash2, CreditCard, ArrowLeft, X } from "lucide-react";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useCheckoutCustomerCart, useClearCustomerCart, useCustomerCart, useRemoveCartItem, useUpdateCartItem } from "@/features/customers/hooks/useCustomerCart";
 import { useResumePayment } from "@/features/customers/hooks/useResumePayment";
 import { normalizePaymentInitiation } from "@/features/customers/lib/payment";
@@ -115,17 +116,24 @@ export function CustomerCartPage() {
                                     </div>
                                     <div className="flex items-center justify-between gap-3 sm:justify-end">
                                         <span className="font-medium text-ink">{formatINR(itemTotal(item))}</span>
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="icon"
-                                            className="h-8 w-8 text-slate hover:text-error-brand"
-                                            onClick={() => removeItem.mutate(item.id)}
-                                            disabled={removeItem.isPending}
-                                            title="Remove item"
-                                        >
-                                            <X className="h-4 w-4" />
-                                        </Button>
+                                        <Tooltip>
+                                            <TooltipTrigger
+                                                render={
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        className="h-8 w-8 border border-hairline-strong text-slate hover:border-error-brand hover:bg-error-brand/10 hover:text-error-brand"
+                                                        onClick={() => removeItem.mutate(item.id)}
+                                                        disabled={removeItem.isPending}
+                                                        aria-label="Remove item"
+                                                    >
+                                                        <X className="h-4 w-4" />
+                                                    </Button>
+                                                }
+                                            />
+                                            <TooltipContent>Remove</TooltipContent>
+                                        </Tooltip>
                                     </div>
                                 </div>
                             ))
@@ -144,6 +152,11 @@ export function CustomerCartPage() {
                             <div className="flex justify-between"><span className="text-slate">GST</span><span className="font-medium">{formatINR(summary?.tax ?? 0)}</span></div>
                             <div className="flex justify-between border-t border-hairline pt-3 text-base"><span className="font-semibold text-ink">Total</span><span className="font-display font-medium text-ink">{formatINR(summary?.total ?? 0)}</span></div>
                         </div>
+                        {items.length > 0 && (
+                            <p className="rounded-md bg-surface px-3 py-2 text-xs leading-relaxed text-slate">
+                                Government fees or statutory charges, if applicable for any service, are not included above and are billed separately.
+                            </p>
+                        )}
                         <Button
                             className="w-full gap-2 bg-primary-brand text-white hover:bg-primary-brand/90 uppercase tracking-wide"
                             disabled={items.length === 0 || summary?.checkoutBlocked || isCheckingOut}

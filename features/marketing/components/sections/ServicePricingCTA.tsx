@@ -6,14 +6,14 @@ import { FlowButton } from "@/components/custom/FlowButton";
 import { formatINR } from "@/lib/currency";
 
 export function ServicePricingCTA({ service }: { service: EnrichedService }) {
-    const ctaHref = service.cta === "buy" ? `/customer/checkout?service=${service.slug}` : `/contact?service=${service.slug}`;
+    const ctaHref = service.cta === "buy" ? `/customer/services/${service.slug}` : `/contact?service=${service.slug}`;
 
     return (
         <section className="px-4 py-14 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-7xl">
                 <div className="flex flex-col gap-6 rounded-2xl border border-ink bg-ink p-6 sm:flex-row sm:items-center sm:justify-between md:p-8">
                     <div>
-                        <p className="mb-1 text-xs font-medium uppercase tracking-[0.28px] text-white/70">All-inclusive fee</p>
+                        <p className="mb-1 text-xs font-medium uppercase tracking-[0.28px] text-white/70">Service fee</p>
                         <p className="font-display text-4xl font-medium text-white">
                             {service.priceLabel ?? (service.pricePaise != null ? formatINR(service.pricePaise) : "On request")}
                         </p>
@@ -23,12 +23,13 @@ export function ServicePricingCTA({ service }: { service: EnrichedService }) {
                                 Delivered in {service.duration}
                             </p>
                         )}
+                        <p className="mt-2 text-xs text-white/60">Government charges, if applicable, are billed separately.</p>
                     </div>
 
                     <div className="flex flex-col gap-3 sm:items-end">
                         <FlowButton
                             href={ctaHref}
-                            text={service.cta === "buy" ? "Get Started Now" : "Request Quote"}
+                            text={service.cta === "buy" ? "Add to Cart" : "Request Quote"}
                             colorVariant="primary"
                         />
                         <p className="flex items-center gap-1.5 text-xs text-white/70">
