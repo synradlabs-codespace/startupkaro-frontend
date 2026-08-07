@@ -15,19 +15,42 @@ interface UniqueAccordionProps {
     defaultOpenId?: string | null;
 }
 
+const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
+const STAGGER_INTERVAL = 0.06;
+
 export function UniqueAccordion({ items, defaultOpenId = null }: UniqueAccordionProps) {
     const [activeId, setActiveId] = React.useState<string | null>(defaultOpenId);
     const [hoveredId, setHoveredId] = React.useState<string | null>(null);
 
+    // Tracks how many items were rendered before the latest change, so newly
+    // added items (e.g. from a "Show more" toggle) can stagger their fade-in
+    // starting from zero delay, while already-visible items stay unaffected.
+    // (Adjusting state during render, per React's documented pattern for
+    // deriving values from previous props/state without an effect.)
+    const [itemsMeta, setItemsMeta] = React.useState({ length: items.length, prevLength: items.length });
+    if (items.length !== itemsMeta.length) {
+        setItemsMeta({ length: items.length, prevLength: itemsMeta.length });
+    }
+    const prevItemsCount = itemsMeta.prevLength;
+
     return (
         <div className="w-full">
             <div className="space-y-0">
-                {items.map((item) => {
+                <AnimatePresence initial={false}>
+                {items.map((item, index) => {
                     const isActive = activeId === item.id;
                     const isHovered = hoveredId === item.id;
+                    const enterDelay = Math.max(0, index - prevItemsCount) * STAGGER_INTERVAL;
 
                     return (
-                        <div key={item.id}>
+                        <motion.div
+                            key={item.id}
+                            layout
+                            initial={{ opacity: 0, y: -8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -8 }}
+                            transition={{ duration: 0.3, ease: EASE, delay: enterDelay }}
+                        >
                             <motion.button
                                 onClick={() => setActiveId(isActive ? null : item.id)}
                                 onMouseEnter={() => setHoveredId(item.id)}
@@ -137,9 +160,10 @@ export function UniqueAccordion({ items, defaultOpenId = null }: UniqueAccordion
                                     </motion.div>
                                 )}
                             </AnimatePresence>
-                        </div>
+                        </motion.div>
                     );
                 })}
+                </AnimatePresence>
             </div>
         </div>
     );
