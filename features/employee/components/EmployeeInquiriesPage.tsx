@@ -15,7 +15,7 @@ import { formatDate } from "@/features/admin/lib/format";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { Search, Eye } from "lucide-react";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 50;
 
 export function EmployeeInquiriesPage() {
     const [search, setSearch] = useState("");

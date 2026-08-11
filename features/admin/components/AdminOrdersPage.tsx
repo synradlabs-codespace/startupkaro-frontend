@@ -16,7 +16,7 @@ import { formatINR } from "@/lib/currency";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { Plus, Search, Eye, Pencil } from "lucide-react";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 50;
 
 export function AdminOrdersPage() {
     const [search, setSearch] = useState("");

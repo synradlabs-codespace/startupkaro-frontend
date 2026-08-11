@@ -16,7 +16,7 @@ import { formatINR } from "@/lib/currency";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { AlertTriangle, CheckCircle2, Eye, ExternalLink, Plus, Search, Trash2 } from "lucide-react";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 50;
 
 export function AdminServicesPage() {
     const [search, setSearch] = useState("");

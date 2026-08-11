@@ -37,7 +37,7 @@ export function TablePagination({ total, page, pageSize, onPageChange, onPageSiz
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                                {[5, 10, 20, 50].map((s) => (
+                                {[25, 50, 100].map((s) => (
                                     <SelectItem key={s} value={String(s)}>{s}</SelectItem>
                                 ))}
                             </SelectContent>

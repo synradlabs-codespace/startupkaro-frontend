@@ -17,7 +17,7 @@ import { formatINR } from "@/lib/currency";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { Download, Search, Eye } from "lucide-react";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 50;
 
 function getPaymentOrderLabel(payment: { order?: { id: string; orderNumber?: string }; orderId?: string; orderNumber?: string }) {
     return payment.order?.orderNumber || payment.orderNumber || payment.order?.id?.slice(0, 8) || payment.orderId?.slice(0, 8) || "-";
