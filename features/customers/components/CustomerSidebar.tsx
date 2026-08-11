@@ -2,21 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
     LayoutDashboard,
     ShoppingBag,
     ShoppingCart,
     Store,
     User,
-    LogOut,
 } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useCustomerCart } from "@/features/customers/hooks/useCustomerCart";
-import { useCustomerProfile } from "@/features/customers/hooks/useCustomerProfile";
-import { getInitials } from "@/features/customers/lib/format";
-import { useAuth } from "@/features/auth/shared/hooks/useAuth";
+import { WHATSAPP_URL } from "@/components/custom/WhatsAppButton";
 
 const navItems = [
     { title: "Dashboard", href: "/customer", icon: LayoutDashboard, exact: true },
@@ -31,22 +27,12 @@ const ACCENT_TEXT_CLASS = "text-white";
 
 export function CustomerSidebar() {
     const pathname = usePathname();
-    const router = useRouter();
-    const { clearSession } = useAuth();
     const { state, isMobile, openMobile, setOpenMobile } = useSidebar();
     const collapsed = !isMobile && state === "collapsed";
-    const profileQuery = useCustomerProfile();
-    const profile = profileQuery.data;
     const cartQuery = useCustomerCart();
     const cartItemCount = cartQuery.data?.summary.itemCount ?? 0;
 
     const closeMobile = () => { if (isMobile) setOpenMobile(false); };
-
-    const handleLogout = () => {
-        clearSession();
-        closeMobile();
-        router.replace("/customer/login");
-    };
 
     const isActive = (href: string, exact?: boolean) =>
         exact ? pathname === href : pathname.startsWith(href);
@@ -68,16 +54,16 @@ export function CustomerSidebar() {
                 <div className={`h-16 flex items-center px-4 py-5 border-b border-hairline ${collapsed ? "justify-center" : "justify-between"}`}>
                     <div className={`flex items-center gap-3 overflow-hidden ${collapsed ? "w-auto" : "w-full"}`}>
                         {collapsed ? (
-                            <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full border border-hairline">
+                            <Link href="/" className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full border border-hairline">
                                 <Image
                                     src="/assets/startupkaro-small-logo.jpeg"
                                     alt="StartupKaro"
                                     fill
                                     className="object-cover"
                                 />
-                            </div>
+                            </Link>
                         ) : (
-                            <div className="flex flex-col whitespace-nowrap gap-0.5">
+                            <Link href="/" className="flex whitespace-nowrap">
                                 <Image
                                     src="/assets/startupkaro-logo-transparent.png"
                                     alt="StartupKaro"
@@ -86,8 +72,7 @@ export function CustomerSidebar() {
                                     className="h-7 w-auto object-contain"
                                     style={{ width: "auto" }}
                                 />
-                                <p className="text-[11px] text-steel leading-none pl-0.5">Customer Portal</p>
-                            </div>
+                            </Link>
                         )}
                     </div>
                 </div>
@@ -103,7 +88,7 @@ export function CustomerSidebar() {
                                     href={item.href}
                                     title={collapsed ? item.title : undefined}
                                     onClick={closeMobile}
-                                    className={`relative h-9 w-full rounded-md flex items-center gap-2.5 px-3 transition-all duration-150 outline-none ${active ? `${ACCENT_BG_CLASS} ${ACCENT_TEXT_CLASS}` : "text-steel hover:bg-surface hover:text-ink"} ${collapsed ? "justify-center" : ""}`}
+                                    className={`relative h-9 w-full rounded-md flex items-center gap-2.5 px-3 transition-all duration-150 outline-none ${active ? `${ACCENT_BG_CLASS} ${ACCENT_TEXT_CLASS}` : "text-black hover:bg-surface hover:text-black"} ${collapsed ? "justify-center" : ""}`}
                                 >
                                     <span className="relative shrink-0">
                                         <item.icon className="h-[18px] w-[18px]" />
@@ -123,32 +108,37 @@ export function CustomerSidebar() {
                     })}
                 </div>
 
-                {/* Footer */}
-                <div className="px-3 py-4 border-t border-hairline">
-                    <div className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
-                        <Avatar className="h-8 w-8 shrink-0">
-                            <AvatarFallback className={`text-white text-[11px] font-semibold ${ACCENT_BG_CLASS}`}>
-                                {profile ? getInitials(profile.name) : "CU"}
-                            </AvatarFallback>
-                        </Avatar>
-                        {!collapsed && (
-                            <>
-                                <div className="flex-1 min-w-0">
-                                    <p className="text-[13px] font-medium text-ink truncate leading-none">{profile?.name ?? "Customer"}</p>
-                                    <p className="text-[11px] text-steel truncate mt-0.5">{profile?.email ?? "customer account"}</p>
+                {!collapsed && (
+                    <div className="px-5 pb-4">
+                        <div className="rounded-xl bg-tint-sky/45 px-3.5 py-3.5">
+                            <div className="mb-3 flex items-center gap-2.5">
+                                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-canvas">
+                                    <Image
+                                        src="/assets/support-headset-icon.jpeg"
+                                        alt=""
+                                        fill
+                                        sizes="48px"
+                                        className="object-cover"
+                                    />
                                 </div>
-                                <button
-                                    type="button"
-                                    onClick={handleLogout}
-                                    className="p-1.5 rounded-md text-stone hover:text-error-brand hover:bg-red-50"
-                                    title="Sign out"
-                                >
-                                    <LogOut className="h-[15px] w-[15px]" />
-                                </button>
-                            </>
-                        )}
+                                <div className="min-w-0">
+                                    <p className="text-[17px] font-semibold leading-tight text-black">Need Help?</p>
+                                    <p className="mt-0.5 text-[13px] leading-snug text-black">Talk to our experts</p>
+                                </div>
+                            </div>
+                            <a
+                                href={WHATSAPP_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={closeMobile}
+                                className="flex h-10 w-full items-center justify-center rounded-md bg-primary-brand px-3 text-[13px] font-semibold text-white shadow-[0_8px_18px_rgba(41,110,249,0.22)] transition-colors hover:bg-primary-brand/90"
+                            >
+                                Contact Support
+                            </a>
+                        </div>
                     </div>
-                </div>
+                )}
+
             </aside>
         </>
     );

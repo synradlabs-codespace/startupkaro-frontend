@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 
-const WHATSAPP_URL = "https://wa.me/917700003572";
+export const WHATSAPP_URL = "https://wa.me/917700003572";
 
 export function WhatsAppButton() {
     const [visible, setVisible] = useState(false);

@@ -1,14 +1,22 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, LayoutDashboard, Menu, Package, ShoppingCart, User, X, type LucideIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { NAV_LINKS, type NavLink } from "./header/nav-data";
 import { FlowButton, FlowSecondaryButton } from "@/components/custom/FlowButton";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { categoryCardStyles, serviceCategoryIcons, type ServiceVisualCategory } from "@/lib/category-pills";
 import { cn } from "@/lib/utils";
 import { AUTH_SESSION_EVENT, getPanelRedirect, readAuthSession } from "@/lib/auth-session";
+import type { Role } from "@/lib/rbac/roles";
 
 function Logo() {
   return (
@@ -26,21 +34,146 @@ function Logo() {
   );
 }
 
+type AccountMenuLink = { label: string; href: string; icon: LucideIcon };
+
+function getAccountMenuLinks(role: Role): AccountMenuLink[] {
+  const dashboardLink: AccountMenuLink = { label: "Dashboard", href: getPanelRedirect(role), icon: LayoutDashboard };
+
+  if (role === "customer") {
+    return [
+      dashboardLink,
+      { label: "Cart", href: "/customer/cart", icon: ShoppingCart },
+      { label: "My Purchases", href: "/customer/purchases", icon: Package },
+      { label: "Profile", href: "/customer/profile", icon: User },
+    ];
+  }
+
+  if (role === "employee") {
+    return [dashboardLink, { label: "Profile", href: "/employee/profile", icon: User }];
+  }
+
+  return [dashboardLink];
+}
+
+function AccountMenu({
+  role,
+  name,
+  mobile = false,
+  onAction,
+}: {
+  role: Role;
+  name: string;
+  mobile?: boolean;
+  onAction?: () => void;
+}) {
+  const links = getAccountMenuLinks(role);
+  const initial = name.trim().charAt(0).toUpperCase() || "U";
+  const [open, setOpen] = useState(false);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearCloseTimer = useCallback(() => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  }, []);
+
+  const openMenu = useCallback(() => {
+    clearCloseTimer();
+    setOpen(true);
+  }, [clearCloseTimer, setOpen]);
+
+  const scheduleClose = useCallback(() => {
+    clearCloseTimer();
+    closeTimerRef.current = setTimeout(() => setOpen(false), 60);
+  }, [clearCloseTimer, setOpen]);
+
+  useEffect(() => () => clearCloseTimer(), [clearCloseTimer]);
+
+  if (mobile) {
+    return (
+      <div className="w-full rounded-lg border border-hairline bg-surface p-4">
+        <div className="mb-3 flex items-center gap-3 px-1">
+          <Avatar size="sm">
+            <AvatarFallback className="bg-primary-brand font-display font-medium text-white">
+              {initial}
+            </AvatarFallback>
+          </Avatar>
+          <span className="text-sm font-semibold text-ink">{name}</span>
+        </div>
+        <div className="flex flex-col gap-1.5">
+          {links.map(({ label, href, icon: Icon }) => (
+            <Link
+              key={label}
+              href={href}
+              onClick={onAction}
+              className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-charcoal transition-colors hover:bg-canvas hover:text-primary-brand"
+            >
+              <Icon className="size-4 text-graphite" strokeWidth={2} />
+              {label}
+            </Link>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div onMouseEnter={openMenu} onMouseLeave={scheduleClose}>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
+        <DropdownMenuTrigger
+          className={cn(
+            "inline-flex h-11 items-center gap-2 rounded-md border px-3 text-sm font-semibold transition-colors",
+            open
+              ? "border-primary-brand bg-surface text-primary-brand"
+              : "border-hairline bg-canvas text-ink hover:border-primary-brand hover:bg-surface hover:text-primary-brand"
+          )}
+        >
+          <Avatar size="sm">
+            <AvatarFallback className="bg-primary-brand font-display font-medium text-white">
+              {initial}
+            </AvatarFallback>
+          </Avatar>
+          <span className="max-w-32 truncate">{name}</span>
+          <ChevronDown className="size-3.5 text-graphite" strokeWidth={2} />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          align="end"
+          sideOffset={10}
+          className="min-w-56 space-y-1 p-2"
+          onMouseEnter={clearCloseTimer}
+          onMouseLeave={scheduleClose}
+        >
+          {links.map(({ label, href, icon: Icon }) => (
+            <DropdownMenuItem
+              key={label}
+              render={<Link href={href} />}
+              className="cursor-pointer gap-3 rounded-lg px-3 py-2.5 text-sm"
+            >
+              <Icon className="size-4 text-graphite" strokeWidth={2} />
+              {label}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
+}
+
 function HeaderActions({ mobile = false, onAction }: { mobile?: boolean; onAction?: () => void }) {
-  const [loginHref, setLoginHref] = useState("/customer/login");
-  const [loginText, setLoginText] = useState("Login");
+  const [role, setRole] = useState<Role | null>(null);
+  const [displayName, setDisplayName] = useState("Account");
   const [servicesHref, setServicesHref] = useState("/services");
 
   useEffect(() => {
     const syncLoginTarget = () => {
       const session = readAuthSession();
       if (session.accessToken && session.role) {
-        setLoginHref(getPanelRedirect(session.role));
-        setLoginText("Dashboard");
+        setRole(session.role);
+        setDisplayName(session.role === "admin" ? "Admin" : session.user?.name || "Account");
         setServicesHref(session.role === "customer" ? "/customer/services" : "/services");
       } else {
-        setLoginHref("/customer/login");
-        setLoginText("Login");
+        setRole(null);
         setServicesHref("/services");
       }
     };
@@ -54,23 +187,40 @@ function HeaderActions({ mobile = false, onAction }: { mobile?: boolean; onActio
     };
   }, []);
 
+  if (role) {
+    return (
+      <div className={cn("flex items-center gap-3", mobile && "w-full flex-col")}>
+        <FlowButton
+          href={servicesHref}
+          onClick={onAction}
+          text="Explore Services"
+          iconName="briefcase"
+          colorVariant="primary"
+          className={cn("h-11 px-6", mobile && "w-full")}
+          wrapperClassName={mobile ? "w-full justify-stretch" : undefined}
+        />
+        <AccountMenu role={role} name={displayName} mobile={mobile} onAction={onAction} />
+      </div>
+    );
+  }
+
   return (
     <div className={cn("flex items-center gap-3", mobile && "grid w-full grid-cols-1 sm:grid-cols-2")}>
-      <FlowSecondaryButton
-        href={loginHref}
-        onClick={onAction}
-        text={loginText}
-        iconName="log-in"
-        showIcon={false}
-        className={cn("h-11 px-6", mobile && "w-full")}
-        wrapperClassName={mobile ? "w-full justify-stretch" : undefined}
-      />
       <FlowButton
         href={servicesHref}
         onClick={onAction}
         text="Explore Services"
         iconName="briefcase"
         colorVariant="primary"
+        className={cn("h-11 px-6", mobile && "w-full")}
+        wrapperClassName={mobile ? "w-full justify-stretch" : undefined}
+      />
+      <FlowSecondaryButton
+        href="/customer/login"
+        onClick={onAction}
+        text="Login"
+        iconName="log-in"
+        showIcon={false}
         className={cn("h-11 px-6", mobile && "w-full")}
         wrapperClassName={mobile ? "w-full justify-stretch" : undefined}
       />

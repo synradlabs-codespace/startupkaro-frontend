@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
     LayoutDashboard,
     ShoppingCart,
@@ -13,13 +13,10 @@ import {
     UserCog,
     MessageSquare,
     BarChart3,
-    LogOut,
     ChevronRight,
 } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 import { useSidebar } from "@/components/ui/sidebar";
-import { useAuth } from "@/features/auth/shared/hooks/useAuth";
 
 const navItems = [
     { title: "Dashboard", href: "/admin", icon: LayoutDashboard, exact: true },
@@ -63,18 +60,10 @@ const ACCENT_TEXT_CLASS = "text-white";
 
 export function AdminSidebar() {
     const pathname = usePathname();
-    const router = useRouter();
-    const { clearSession } = useAuth();
     const { state, setOpen, isMobile, openMobile, setOpenMobile } = useSidebar();
     const collapsed = !isMobile && state === "collapsed";
 
     const closeMobile = () => { if (isMobile) setOpenMobile(false); };
-
-    const handleLogout = () => {
-        clearSession();
-        closeMobile();
-        router.replace("/admin/login");
-    };
 
     const [openMenus, setOpenMenus] = useState<Record<string, boolean>>(() => {
         const initialState: Record<string, boolean> = {};
@@ -111,16 +100,16 @@ export function AdminSidebar() {
                 <div className={`h-16 flex items-center px-4 py-5 transition-all duration-200 border-b border-hairline ${collapsed ? "justify-center" : "justify-between"}`}>
                     <div className={`flex items-center gap-3 overflow-hidden ${collapsed ? "w-auto" : "w-full"}`}>
                         {collapsed ? (
-                            <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full border border-hairline">
+                            <Link href="/" className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full border border-hairline">
                                 <Image
                                     src="/assets/startupkaro-small-logo.jpeg"
                                     alt="StartupKaro"
                                     fill
                                     className="object-cover"
                                 />
-                            </div>
+                            </Link>
                         ) : (
-                            <div className="flex flex-col whitespace-nowrap fade-in gap-0.5">
+                            <Link href="/" className="flex flex-col whitespace-nowrap fade-in gap-0.5">
                                 <Image
                                     src="/assets/startupkaro-logo-transparent.png"
                                     alt="StartupKaro"
@@ -130,7 +119,7 @@ export function AdminSidebar() {
                                     style={{ width: "auto" }}
                                 />
                                 <p className="text-[11px] text-steel leading-none pl-0.5">Admin Panel</p>
-                            </div>
+                            </Link>
                         )}
                     </div>
                 </div>
@@ -148,14 +137,14 @@ export function AdminSidebar() {
                                     <button
                                         onClick={() => toggleMenu(item.title)}
                                         title={collapsed ? item.title : undefined}
-                                        className={`h-9 w-full rounded-md flex items-center gap-2.5 px-3 transition-all duration-150 cursor-pointer outline-none ${active ? `${ACCENT_BG_CLASS} ${ACCENT_TEXT_CLASS}` : "text-steel hover:bg-surface hover:text-ink"} ${collapsed ? "justify-center" : "justify-between"}`}
+                                        className={`h-9 w-full rounded-md flex items-center gap-2.5 px-3 transition-all duration-150 cursor-pointer outline-none ${active ? `${ACCENT_BG_CLASS} ${ACCENT_TEXT_CLASS}` : "text-black hover:bg-surface hover:text-black"} ${collapsed ? "justify-center" : "justify-between"}`}
                                     >
                                         <div className="flex items-center gap-2.5">
                                             <item.icon className="h-[18px] w-[18px] shrink-0" />
                                             {!collapsed && <span className="text-[13px] font-medium whitespace-nowrap">{item.title}</span>}
                                         </div>
                                         {!collapsed && (
-                                            <ChevronRight className={`h-3.5 w-3.5 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-90" : ""} ${active ? "text-white" : "text-stone"}`} />
+                                            <ChevronRight className={`h-3.5 w-3.5 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-90" : ""} ${active ? "text-white" : "text-black"}`} />
                                         )}
                                     </button>
                                 ) : (
@@ -163,7 +152,7 @@ export function AdminSidebar() {
                                         href={item.href}
                                         title={collapsed ? item.title : undefined}
                                         onClick={closeMobile}
-                                        className={`h-9 w-full rounded-md flex items-center gap-2.5 px-3 transition-all duration-150 outline-none ${active ? `${ACCENT_BG_CLASS} ${ACCENT_TEXT_CLASS}` : "text-steel hover:bg-surface hover:text-ink"} ${collapsed ? "justify-center" : ""}`}
+                                        className={`h-9 w-full rounded-md flex items-center gap-2.5 px-3 transition-all duration-150 outline-none ${active ? `${ACCENT_BG_CLASS} ${ACCENT_TEXT_CLASS}` : "text-black hover:bg-surface hover:text-black"} ${collapsed ? "justify-center" : ""}`}
                                     >
                                         <item.icon className="h-[18px] w-[18px] shrink-0" />
                                         {!collapsed && <span className="text-[13px] font-medium whitespace-nowrap">{item.title}</span>}
@@ -179,7 +168,7 @@ export function AdminSidebar() {
                                                     key={child.href}
                                                     href={child.href}
                                                     onClick={closeMobile}
-                                                    className={`h-8 rounded-md flex items-center text-[12.5px] font-medium w-full px-2 transition-all duration-150 ${childActive ? `${ACCENT_BG_CLASS} ${ACCENT_TEXT_CLASS}` : "text-steel hover:bg-surface hover:text-ink"}`}
+                                                    className={`h-8 rounded-md flex items-center text-[12.5px] font-medium w-full px-2 transition-all duration-150 ${childActive ? `${ACCENT_BG_CLASS} ${ACCENT_TEXT_CLASS}` : "text-black hover:bg-surface hover:text-black"}`}
                                                 >
                                                     {child.title}
                                                 </Link>
@@ -192,38 +181,6 @@ export function AdminSidebar() {
                     })}
                 </div>
 
-                {/* Footer */}
-                <div className="px-3 py-4 border-t border-hairline">
-                    {collapsed ? (
-                        <div className="group relative flex justify-center cursor-pointer" title="Admin">
-                            <Avatar className="h-8 w-8">
-                                <AvatarFallback className={`text-white text-[11px] font-semibold ${ACCENT_BG_CLASS}`}>
-                                    AD
-                                </AvatarFallback>
-                            </Avatar>
-                        </div>
-                    ) : (
-                        <div className="flex items-center gap-3">
-                            <Avatar className="h-8 w-8 shrink-0">
-                                <AvatarFallback className={`text-white text-[11px] font-semibold ${ACCENT_BG_CLASS}`}>
-                                    AD
-                                </AvatarFallback>
-                            </Avatar>
-                            <div className="flex-1 min-w-0">
-                                <p className="text-[13px] font-medium text-ink truncate leading-none">Admin</p>
-                                <p className="text-[11px] text-steel truncate mt-0.5">admin@startupkaro.com</p>
-                            </div>
-                            <button
-                                type="button"
-                                onClick={handleLogout}
-                                className="p-1.5 rounded-md text-stone hover:text-error-brand hover:bg-error-brand/10 transition-all duration-150 block"
-                                title="Sign out"
-                            >
-                                <LogOut className="h-[15px] w-[15px]" />
-                            </button>
-                        </div>
-                    )}
-                </div>
             </aside>
         </>
     );
