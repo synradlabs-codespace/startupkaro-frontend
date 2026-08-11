@@ -83,7 +83,7 @@ function Combobox({
           placeholder={loading ? "Loading..." : placeholder}
           disabled={isDisabled}
           className={cn(
-            "h-full flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-graphite",
+            "h-full min-w-0 flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-graphite",
             isDisabled && "cursor-not-allowed text-graphite"
           )}
         />
