@@ -293,11 +293,11 @@ export function CustomerChangePasswordPage() {
 
                                 {/* Actions */}
                                 {apiError && <p className="text-sm text-error-brand">{apiError}</p>}
-                                <div className="flex gap-3 pt-2">
+                                <div className="flex flex-col gap-3 pt-2 sm:flex-row">
                                     <Button
                                         type="submit"
                                         disabled={changePassword.isPending}
-                                        className="gap-2 bg-primary-brand hover:bg-primary-brand/90 text-white rounded-lg px-6"
+                                        className="gap-2 bg-primary-brand hover:bg-primary-brand/90 text-white rounded-lg px-6 w-full sm:w-auto"
                                     >
                                         <ShieldCheck className="h-4 w-4" />
                                         {changePassword.isPending ? "Updating..." : "Update Password"}
@@ -306,7 +306,7 @@ export function CustomerChangePasswordPage() {
                                         type="button"
                                         variant="secondary"
                                         onClick={() => router.push("/customer/profile")}
-                                        className="rounded-lg"
+                                        className="rounded-lg w-full sm:w-auto"
                                     >
                                         Cancel
                                     </Button>

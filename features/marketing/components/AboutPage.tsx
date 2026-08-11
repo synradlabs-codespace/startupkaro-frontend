@@ -178,6 +178,12 @@ export function AboutPage() {
                         </h1>
                         <p className="mt-6 max-w-2xl text-base leading-relaxed text-charcoal md:text-lg">
                             StartupKaro helps you spend less time on paperwork and more time building. We are more than a service platform, we are the ecosystem startups can rely on to confidently <span className="font-semibold text-ink">BEGIN, BUILD, AND GROW</span>.
+                            <br /><br />
+                            Every founder&apos;s journey starts with the same overwhelming checklist: incorporation, licenses, tax registrations, compliance calendars, and paperwork that never seems to end. We built StartupKaro because that checklist shouldn&apos;t stand between an idea and a real business.
+                            <br /><br />
+                            Our team of CAs, CS professionals, and legal experts handles the regulatory heavy lifting, so you can stay focused on customers, product, and growth. From your first registration to your ongoing compliance and financial filings, we stay with you at every stage, offering fixed-cost services with transparent pricing and no surprises.
+                            <br /><br />
+                            Whether you are registering your first company or scaling a growing team, StartupKaro is the partner that keeps your business compliant, credible, and ready for what&apos;s next.
                         </p>
                     </motion.div>
 

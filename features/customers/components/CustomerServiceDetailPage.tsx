@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Clock, ShieldCheck, Tag } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, ShieldCheck, ShoppingCart, Tag } from "lucide-react";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { Button } from "@/components/ui/button";
 import { ServiceEditorial } from "@/features/services/components/ServiceEditorial";
@@ -30,7 +30,7 @@ export function CustomerServiceDetailPage({ service }: CustomerServiceDetailPage
     };
 
     return (
-        <div className="flex min-h-screen flex-col">
+        <div className={`flex min-h-screen flex-col ${service.cta === "buy" ? "pb-20 md:pb-0" : ""}`}>
             <PageHeader
                 title={service.name}
                 description={service.isBundle ? "Bundle" : service.stage}
@@ -151,6 +151,18 @@ export function CustomerServiceDetailPage({ service }: CustomerServiceDetailPage
                     </div>
                 </div>
             </div>
+
+            {service.cta === "buy" && (
+                <button
+                    type="button"
+                    onClick={() => void addToCart(false)}
+                    disabled={addCartItem.isPending}
+                    aria-label="Add to cart"
+                    className="fixed right-4 bottom-[calc(env(safe-area-inset-bottom)+1.45rem)] z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary-brand text-white shadow-[0_4px_16px_rgba(41,110,249,0.35)] transition-transform duration-200 hover:scale-110 active:scale-95 disabled:opacity-60 md:hidden"
+                >
+                    <ShoppingCart className="h-6 w-6" />
+                </button>
+            )}
 
             <RequestQuoteDialog
                 open={quoteOpen}

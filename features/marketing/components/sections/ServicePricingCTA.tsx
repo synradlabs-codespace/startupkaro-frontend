@@ -1,12 +1,18 @@
 // features/marketing/components/sections/ServicePricingCTA.tsx
 
+"use client";
+
 import { Clock, ShieldCheck } from "lucide-react";
 import type { EnrichedService } from "@/features/services/lib/merge";
 import { FlowButton } from "@/components/custom/FlowButton";
 import { formatINR } from "@/lib/currency";
+import { useAuth } from "@/features/auth/shared/hooks/useAuth";
+import { ROLES } from "@/lib/rbac/roles";
 
 export function ServicePricingCTA({ service }: { service: EnrichedService }) {
+    const { user } = useAuth();
     const ctaHref = service.cta === "buy" ? `/customer/services/${service.slug}` : `/contact?service=${service.slug}`;
+    const isLoggedInCustomer = user?.role === ROLES.CUSTOMER;
 
     return (
         <section className="px-4 py-14 sm:px-6 lg:px-8">
@@ -29,7 +35,7 @@ export function ServicePricingCTA({ service }: { service: EnrichedService }) {
                     <div className="flex flex-col gap-3 sm:items-end">
                         <FlowButton
                             href={ctaHref}
-                            text={service.cta === "buy" ? "Add to Cart" : "Request Quote"}
+                            text={service.cta === "buy" ? (isLoggedInCustomer ? "Get Started" : "Add to Cart") : "Request Quote"}
                             colorVariant="primary"
                         />
                         <p className="flex items-center gap-1.5 text-xs text-white/70">

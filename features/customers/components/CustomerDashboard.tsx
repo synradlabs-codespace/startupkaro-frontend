@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { PageHeader } from "@/components/custom/PageHeader";
 import { OrderStatusBadge } from "@/components/custom/StatusBadge";
 import { Button } from "@/components/ui/button";
@@ -11,8 +12,31 @@ import { useCustomerServiceList } from "@/features/customers/hooks/useCustomerSe
 import { useResumePayment } from "@/features/customers/hooks/useResumePayment";
 import { formatCustomerDate, getPurchaseId, getPurchaseServiceName } from "@/features/customers/lib/format";
 import { getPurchaseAmountDue, isPaymentResumable } from "@/features/customers/lib/payment";
+import { NAV_LINKS } from "@/components/directional-hover-header/header/nav-data";
+import { categoryCardStyles, fallbackCardStyles, serviceCategoryIcons, type ServiceVisualCategory } from "@/lib/category-pills";
 import { formatINR } from "@/lib/currency";
-import { ShoppingBag, ShoppingCart, Store, ArrowRight, Clock, AlertTriangle, RefreshCw } from "lucide-react";
+import { Check, Clock, AlertTriangle, RefreshCw, Rocket, ShoppingCart, Store, ArrowRight } from "lucide-react";
+
+const serviceMenuColumns = NAV_LINKS.find((link) => link.label === "Services")?.menu?.columns ?? [];
+
+function isServiceVisualCategory(heading: string): heading is ServiceVisualCategory {
+    return heading === "Bundles" || heading === "Start" || heading === "Manage" || heading === "Protect" || heading === "Tech";
+}
+
+function toCustomerServiceHref(href?: string) {
+    if (!href) return "/customer/services";
+
+    if (href.startsWith("/services/") || href.startsWith("/bundles/")) {
+        const slug = href.split("/").filter(Boolean).at(-1);
+        return slug ? `/customer/services/${slug}` : "/customer/services";
+    }
+
+    if (href.startsWith("/services") || href.startsWith("/bundles")) {
+        return "/customer/services";
+    }
+
+    return href;
+}
 
 export function CustomerDashboard() {
     const profileQuery = useCustomerProfile();
@@ -34,24 +58,137 @@ export function CustomerDashboard() {
 
     return (
         <div className="flex flex-col min-h-screen">
-            <PageHeader title="Dashboard" description={`Welcome back, ${firstName}`} />
+            <PageHeader title="Dashboard" description="Track purchases, browse services, and get expert support." />
 
             <div className="flex-1 p-6 space-y-6">
-                <div className="rounded-xl bg-primary-brand p-6">
-                    <div className="flex items-center justify-between gap-4">
-                        <div>
-                            <h2 className="text-lg font-semibold text-white">Hello, {firstName}</h2>
-                            <p className="text-sm text-white/80 mt-0.5">
-                                You have {purchasesTotal} active purchase{purchasesTotal !== 1 ? "s" : ""} | {servicesTotal} services available
-                            </p>
+                <div className="relative overflow-hidden rounded-xl border border-hairline bg-[#f4f8ff] px-6 py-3.5 shadow-[0_2px_8px_rgba(26,26,26,0.08)] md:min-h-[240px] md:px-9">
+                    <div className="relative z-10 max-w-xl md:max-w-[43%] xl:max-w-xl">
+                        <h2 className="flex flex-wrap items-center gap-2 font-display text-3xl font-medium leading-tight text-ink md:text-4xl">
+                            <span>Welcome, <span className="text-primary-brand">{firstName}</span></span>
+                            <span className="relative inline-flex h-8 w-8">
+                                <Image
+                                    src="/assets/welcome-wave-emoji.png"
+                                    alt=""
+                                    fill
+                                    sizes="32px"
+                                    className="object-contain"
+                                />
+                            </span>
+                        </h2>
+                        <p className="mt-4 text-xl font-semibold leading-snug text-ink">What would you like to get done today?</p>
+                        <p className="mt-4 text-base leading-relaxed text-charcoal">Everything your business needs, all in one place.</p>
+                        <div className="mt-6 flex flex-wrap gap-3">
+                            <Link
+                                href="/customer/services"
+                                className="inline-flex h-10 items-center gap-2 rounded-md bg-primary-brand px-4 text-sm font-semibold text-white transition-colors hover:bg-primary-deep"
+                            >
+                                <Store className="h-4 w-4" />
+                                Browse Services
+                            </Link>
+                            <span className="inline-flex h-10 items-center rounded-md border border-hairline bg-canvas px-4 text-sm font-medium text-charcoal">
+                                {purchasesTotal} active purchase{purchasesTotal !== 1 ? "s" : ""}
+                            </span>
                         </div>
-                        <Link
-                            href="/customer/services"
-                            className="inline-flex items-center gap-1.5 h-8 px-3 text-sm font-medium bg-white text-primary-deep hover:bg-white/90 rounded-lg transition-colors shrink-0"
-                        >
-                            <Store className="h-3.5 w-3.5" />
-                            Browse Services
-                        </Link>
+                    </div>
+
+                    {[
+                        "right-0 top-0 h-20 w-24 opacity-20",
+                        "right-32 top-5 h-14 w-14 opacity-16",
+                        "right-56 top-20 h-16 w-16 opacity-14",
+                        "right-4 bottom-12 h-[4.5rem] w-[4.5rem] opacity-15",
+                        "right-40 bottom-4 h-12 w-12 opacity-12",
+                        "right-72 bottom-20 h-10 w-10 opacity-10",
+                    ].map((position) => (
+                        <div
+                            key={position}
+                            aria-hidden="true"
+                            className={`pointer-events-none absolute z-0 hidden md:block ${position}`}
+                            style={{
+                                backgroundImage: "radial-gradient(circle, #296ef9 1.15px, transparent 1.15px)",
+                                backgroundSize: "13px 13px",
+                            }}
+                        />
+                    ))}
+
+                    <div className="relative z-0 mt-4 h-64 md:absolute md:inset-y-2 md:right-6 md:mt-0 md:h-auto md:w-[56%]">
+                        <Image
+                            src="/assets/customer-welcome-character.png"
+                            alt="StartupKaro expert at laptop"
+                            fill
+                            priority
+                            sizes="(min-width: 768px) 56vw, 90vw"
+                            className="object-contain object-bottom"
+                        />
+                    </div>
+                </div>
+
+                <div className="overflow-hidden rounded-xl border border-hairline bg-canvas shadow-[0_2px_8px_rgba(26,26,26,0.08)]">
+                    <div className="grid gap-0 md:grid-cols-2 xl:grid-cols-5">
+                        {serviceMenuColumns.map((column) => {
+                            const visualCategory = isServiceVisualCategory(column.heading) ? column.heading : null;
+                            const styles = visualCategory ? categoryCardStyles[visualCategory] : fallbackCardStyles;
+                            const Icon = visualCategory ? serviceCategoryIcons[visualCategory] : Rocket;
+
+                            return (
+                                <div key={column.heading} className="border-b border-hairline p-5 md:border-r xl:border-b-0">
+                                    <Link href={toCustomerServiceHref(column.href)} className="group mb-7 flex items-center gap-3">
+                                        <span className={`flex h-9 w-9 items-center justify-center rounded-lg transition-transform group-hover:-translate-y-0.5 ${styles.iconBg}`}>
+                                            <Icon className={`h-4.5 w-4.5 ${styles.iconText}`} strokeWidth={2} />
+                                        </span>
+                                        <span className={`rounded-md border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.18em] transition-colors group-hover:border-primary-brand ${styles.badge}`}>
+                                            {column.heading}
+                                        </span>
+                                    </Link>
+                                    <div className="space-y-2">
+                                        {column.items.map((service) => (
+                                            <Link
+                                                key={`${column.heading}-${service.label}`}
+                                                href={toCustomerServiceHref(service.href ?? column.href)}
+                                                className="block rounded-lg border border-transparent p-3 transition-colors hover:border-hairline hover:bg-cloud"
+                                            >
+                                                <span className="block text-sm font-semibold leading-snug text-ink">{service.label}</span>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                <div className="overflow-hidden rounded-xl border border-hairline bg-[#f4f8ff] shadow-[0_2px_8px_rgba(26,26,26,0.08)]">
+                    <div className="grid items-stretch gap-5 px-5 py-2.5 md:grid-cols-[280px_1fr_auto] lg:px-7">
+                        <div className="relative mx-auto min-h-48 w-full max-w-[280px] shrink-0 self-stretch md:mx-0">
+                            <Image
+                                src="/assets/startupkaro-consultation-expert.png"
+                                alt="StartupKaro consultation expert"
+                                fill
+                                sizes="280px"
+                                className="object-contain object-bottom"
+                            />
+                        </div>
+                        <div className="min-w-0 self-center text-center md:text-left">
+                            <p className="text-lg font-semibold leading-snug text-ink">Not sure what your business needs?</p>
+                            <p className="mt-1 text-sm leading-relaxed text-charcoal">Talk to a StartupKaro expert and get a clear roadmap.</p>
+                            <div className="mt-3 grid gap-2 text-sm text-charcoal sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
+                                {["1:1 Expert Consultation", "CA / CS / Legal / Tech Guidance", "Actionable Business Plan"].map((item) => (
+                                    <div key={item} className="flex items-center justify-center gap-2 md:justify-start">
+                                        <Check className="h-3.5 w-3.5 shrink-0 text-primary-brand" />
+                                        <span className="leading-snug">{item}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="flex flex-col items-center self-center border-hairline md:min-w-48 md:border-l md:pl-7">
+                            <p className="text-sm font-medium text-ink">1:1 Expert Consultation</p>
+                            <p className="mt-1 font-display text-3xl font-medium leading-none text-primary-brand">₹399</p>
+                            <Link
+                                href="/customer/services/professional-consulting-service"
+                                className="mt-4 inline-flex h-10 w-full max-w-44 items-center justify-center rounded-md bg-primary-brand px-4 text-sm font-semibold text-white transition-colors hover:bg-primary-deep"
+                            >
+                                Book Consultation
+                            </Link>
+                        </div>
                     </div>
                 </div>
 
@@ -115,20 +252,6 @@ export function CustomerDashboard() {
                         </div>
                     </div>
                 )}
-
-                <div className="rounded-lg border border-hairline bg-canvas p-5">
-                    <div className="flex items-start justify-between mb-3">
-                        <p className="text-xs text-steel font-medium">My Purchases</p>
-                        <div className="h-8 w-8 rounded-lg bg-primary-brand/10 flex items-center justify-center">
-                            <ShoppingBag className="h-4 w-4 text-primary-brand" />
-                        </div>
-                    </div>
-                    <p className="text-2xl font-display font-medium text-ink">{purchasesQuery.isLoading ? "-" : purchasesTotal}</p>
-                    <p className="text-xs text-stone mt-1">Total services ordered</p>
-                    <p className="mt-3 border-t border-hairline pt-3 text-xs leading-relaxed text-steel">
-                        After you purchase a service, StartupKaro will email you the required checklist from our official email. Your assigned expert will keep you updated by email and call.
-                    </p>
-                </div>
 
                 <div className="rounded-lg border border-hairline bg-canvas overflow-hidden">
                     <div className="flex items-center justify-between px-6 py-4 border-b border-hairline">

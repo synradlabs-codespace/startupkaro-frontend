@@ -1,15 +1,21 @@
 // features/marketing/components/sections/ServiceHero.tsx
 
+"use client";
+
 import { CheckCircle2, Clock, ShieldCheck } from "lucide-react";
 import { categoryMeta, fallbackMeta } from "@/features/marketing/data/category-meta";
 import type { EnrichedService } from "@/features/services/lib/merge";
 import { FlowButton, FlowSecondaryButton } from "@/components/custom/FlowButton";
 import { formatINR } from "@/lib/currency";
+import { useAuth } from "@/features/auth/shared/hooks/useAuth";
+import { ROLES } from "@/lib/rbac/roles";
 
 export function ServiceHero({ service }: { service: EnrichedService }) {
+    const { user } = useAuth();
     const meta = categoryMeta[service.isBundle ? "Bundles" : service.stage] ?? fallbackMeta;
     const Icon = meta.icon;
     const ctaHref = service.cta === "buy" ? `/customer/services/${service.slug}` : `/contact?service=${service.slug}`;
+    const isLoggedInCustomer = user?.role === ROLES.CUSTOMER;
 
     return (
         <section className="relative px-4 pt-6 sm:px-6 lg:px-8">
@@ -70,7 +76,7 @@ export function ServiceHero({ service }: { service: EnrichedService }) {
                             </div>
                             <FlowButton
                                 href={ctaHref}
-                                text={service.cta === "buy" ? "Add to Cart" : "Request Quote"}
+                                text={service.cta === "buy" ? (isLoggedInCustomer ? "Get Started" : "Add to Cart") : "Request Quote"}
                                 colorVariant="primary"
                                 wrapperClassName="w-full"
                                 className="h-12 w-full justify-center py-0"

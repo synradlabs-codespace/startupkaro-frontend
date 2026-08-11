@@ -8,10 +8,19 @@ import { ServiceCard } from "@/components/custom/ServiceCard";
 import { ServiceSearchBar } from "@/components/custom/ServiceSearchBar";
 import { TablePagination } from "@/components/custom/TablePagination";
 import { SERVICE_CATEGORIES, categoryPillStyles, type ServiceCategory } from "@/lib/category-pills";
-import { getBundles, type EnrichedService } from "@/features/services/lib/merge";
+import { type EnrichedService } from "@/features/services/lib/merge";
 import { useAddCartItem } from "@/features/customers/hooks/useCustomerCart";
 
-const PAGE_SIZE = 9;
+const PAGE_SIZE = 50;
+
+type CustomerServiceFilter = ServiceCategory | "Bundles";
+
+const CUSTOMER_SERVICE_FILTERS: CustomerServiceFilter[] = [...SERVICE_CATEGORIES, "Bundles"];
+
+const bundleFilterStyles = {
+    idle: "border-orange-200 bg-orange-100 text-orange-700 hover:border-orange-400",
+    active: "border-orange-600 bg-orange-600 text-white",
+};
 
 interface CustomerServicesPageProps {
     services: EnrichedService[];
@@ -20,15 +29,15 @@ interface CustomerServicesPageProps {
 export function CustomerServicesPage({ services }: CustomerServicesPageProps) {
     const addCartItem = useAddCartItem();
     const [search, setSearch] = useState("");
-    const [activeCategory, setActiveCategory] = useState<ServiceCategory>("All");
+    const [activeCategory, setActiveCategory] = useState<CustomerServiceFilter>("All");
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZE);
 
-    const bundles = useMemo(() => getBundles(services), [services]);
-
     const filtered = useMemo(() => {
         let result = services;
-        if (activeCategory !== "All") {
+        if (activeCategory === "Bundles") {
+            result = result.filter((s) => s.isBundle);
+        } else if (activeCategory !== "All") {
             result = result.filter((s) => s.stage === activeCategory);
         }
         if (search.trim()) {
@@ -52,7 +61,7 @@ export function CustomerServicesPage({ services }: CustomerServicesPageProps) {
         setPage(1);
     };
 
-    const handleCategory = (category: ServiceCategory) => {
+    const handleCategory = (category: CustomerServiceFilter) => {
         setActiveCategory(category);
         setPage(1);
     };
@@ -71,8 +80,8 @@ export function CustomerServicesPage({ services }: CustomerServicesPageProps) {
                 <div className="sticky top-16 z-20 -mx-6 space-y-3 border-b border-hairline bg-canvas/95 px-6 py-4 backdrop-blur-md">
                     <ServiceSearchBar value={search} onChange={handleSearch} />
                     <div className="flex flex-wrap gap-2">
-                        {SERVICE_CATEGORIES.map((cat) => {
-                            const styles = categoryPillStyles[cat];
+                        {CUSTOMER_SERVICE_FILTERS.map((cat) => {
+                            const styles = cat === "Bundles" ? bundleFilterStyles : categoryPillStyles[cat];
                             return (
                                 <button
                                     key={cat}
@@ -88,44 +97,6 @@ export function CustomerServicesPage({ services }: CustomerServicesPageProps) {
                         })}
                     </div>
                 </div>
-
-                {!isFiltering && bundles.length > 0 && (
-                    <div className="space-y-4 rounded-lg border border-hairline bg-canvas p-5">
-                        <div>
-                            <p className="text-xs font-medium uppercase tracking-[0.28px] text-graphite">Bundles</p>
-                            <h2 className="font-display text-2xl font-medium text-ink">Startup registration bundles</h2>
-                        </div>
-                        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
-                            {bundles.slice(0, 4).map((bundle) => (
-                                <ServiceCard
-                                    key={bundle.slug}
-                                    name={bundle.name}
-                                    description={bundle.cardContent?.shortDescription ?? bundle.description}
-                                    category={bundle.stage}
-                                    price={bundle.pricePaise ?? 0}
-                                    priceInPaise
-                                    priceLabel={bundle.priceLabel}
-                                    duration={bundle.duration ?? "Expert assisted"}
-                                    href={`/customer/services/${bundle.slug}`}
-                                    isBundle
-                                    actionLabel="View"
-                                    footerAction={
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            size="sm"
-                                            className="h-8 rounded-md px-3 text-xs uppercase tracking-wide"
-                                            onClick={() => addCartItem.mutate({ serviceId: bundle.id ?? bundle.slug, quantity: 1 })}
-                                            disabled={addCartItem.isPending}
-                                        >
-                                            Add
-                                        </Button>
-                                    }
-                                />
-                            ))}
-                        </div>
-                    </div>
-                )}
 
                 {isFiltering && (
                     <div className="flex items-center justify-between">
