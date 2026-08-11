@@ -3,6 +3,10 @@ import { customerCartService } from "@/services/customer.service";
 import { getApiErrorMessage, getApiSuccessMessage } from "@/lib/api-messages";
 import { useToast } from "@/components/providers/ToastProvider";
 
+function getErrorStatus(error: unknown) {
+    return (error as { response?: { status?: number } })?.response?.status;
+}
+
 export function useCustomerCart() {
     return useQuery({
         queryKey: ["customer", "cart"],
@@ -50,7 +54,27 @@ export function useClearCustomerCart() {
 }
 
 export function useCheckoutCustomerCart() {
+    const queryClient = useQueryClient();
+    const toast = useToast();
+    const invalidateCheckoutState = () => {
+        queryClient.invalidateQueries({ queryKey: ["customer", "cart"] });
+        queryClient.invalidateQueries({ queryKey: ["customer", "purchases"] });
+    };
+
     return useMutation({
         mutationFn: () => customerCartService.checkout(),
+        onSuccess: invalidateCheckoutState,
+        onError: (error) => {
+            const status = getErrorStatus(error);
+            if (status && status >= 500) {
+                toast.error({
+                    title: "Payment could not be opened",
+                    description: "If your cart was cleared, check My Purchases and retry the pending payment.",
+                });
+            } else {
+                toast.error(getApiErrorMessage(error, "Could not start checkout"));
+            }
+            invalidateCheckoutState();
+        },
     });
 }

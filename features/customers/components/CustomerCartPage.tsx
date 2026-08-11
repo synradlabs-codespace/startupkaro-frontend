@@ -142,7 +142,7 @@ export function CustomerCartPage() {
                 </Card>
 
                 <Card className="h-fit overflow-hidden">
-                    <div className="h-1.5 bg-primary-brand" />
+                    <div className="-mt-1 h-1.5 bg-primary-brand" />
                     <CardHeader>
                         <CardTitle className="text-base">Summary</CardTitle>
                     </CardHeader>
