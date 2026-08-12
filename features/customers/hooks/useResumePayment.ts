@@ -55,7 +55,7 @@ export function useResumePayment() {
                 if (error.reason === "dismissed") {
                     toast.error({
                         title: "Payment not completed",
-                        description: "You can retry it any time from My Purchases.",
+                        description: "Your cart is still saved. You can retry from Cart or My Purchases.",
                     });
                 } else {
                     toast.error({

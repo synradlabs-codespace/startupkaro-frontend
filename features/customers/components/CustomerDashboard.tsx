@@ -194,12 +194,12 @@ export function CustomerDashboard() {
 
                 {nextPendingPurchase && (
                     <div className="rounded-lg border border-hairline bg-tint-peach p-5">
-                        <div className="flex items-start justify-between gap-4">
-                            <div className="flex items-start gap-3">
+                        <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                            <div className="flex min-w-0 items-start gap-3">
                                 <div className="h-9 w-9 shrink-0 rounded-lg bg-error-brand/10 flex items-center justify-center">
                                     <AlertTriangle className="h-4 w-4 text-error-brand" />
                                 </div>
-                                <div>
+                                <div className="min-w-0">
                                     <p className="text-sm font-semibold text-ink">Payment pending on {getPurchaseServiceName(nextPendingPurchase)}</p>
                                     <p className="mt-0.5 text-xs text-steel">
                                         {formatINR(getPurchaseAmountDue(nextPendingPurchase))} due
@@ -207,11 +207,11 @@ export function CustomerDashboard() {
                                     </p>
                                 </div>
                             </div>
-                            <div className="flex shrink-0 items-center gap-2">
+                            <div className="flex w-full flex-col gap-2 sm:w-auto sm:shrink-0 sm:flex-row sm:items-center">
                                 <Button
                                     type="button"
                                     size="sm"
-                                    className="gap-1.5 bg-error-brand text-white hover:bg-error-brand/90 uppercase tracking-wide"
+                                    className="w-full gap-1.5 bg-error-brand text-white hover:bg-error-brand/90 uppercase tracking-wide sm:w-auto"
                                     onClick={() => void resumePayment(nextPendingPurchase)}
                                     disabled={isResuming}
                                 >
@@ -219,7 +219,7 @@ export function CustomerDashboard() {
                                     Retry your payment
                                 </Button>
                                 {pendingPurchases.length > 1 && (
-                                    <Link href="/customer/purchases" className="text-xs font-medium text-charcoal hover:underline whitespace-nowrap">
+                                    <Link href="/customer/purchases" className="inline-flex h-8 items-center justify-center text-xs font-medium text-charcoal hover:underline sm:whitespace-nowrap">
                                         View all
                                     </Link>
                                 )}
@@ -230,12 +230,12 @@ export function CustomerDashboard() {
 
                 {cartItemCount > 0 && (
                     <div className="rounded-lg border border-hairline bg-tint-sky p-5">
-                        <div className="flex items-center justify-between gap-4">
-                            <div className="flex items-center gap-3">
+                        <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                            <div className="flex min-w-0 items-center gap-3">
                                 <div className="h-9 w-9 shrink-0 rounded-lg bg-primary-brand/10 flex items-center justify-center">
                                     <ShoppingCart className="h-4 w-4 text-primary-brand" />
                                 </div>
-                                <div>
+                                <div className="min-w-0">
                                     <p className="text-sm font-semibold text-ink">
                                         {cartItemCount} item{cartItemCount === 1 ? "" : "s"} in your cart
                                     </p>
@@ -244,7 +244,7 @@ export function CustomerDashboard() {
                             </div>
                             <Link
                                 href="/customer/cart"
-                                className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md bg-primary-brand px-3 text-sm font-medium text-white hover:bg-primary-brand/90 uppercase tracking-wide"
+                                className="inline-flex h-8 w-full shrink-0 items-center justify-center gap-1.5 rounded-md bg-primary-brand px-3 text-sm font-medium text-white hover:bg-primary-brand/90 uppercase tracking-wide sm:w-auto"
                             >
                                 <ShoppingCart className="h-3.5 w-3.5" />
                                 Checkout your cart

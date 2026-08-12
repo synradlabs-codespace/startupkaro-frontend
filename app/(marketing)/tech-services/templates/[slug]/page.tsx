@@ -1,11 +1,26 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { ArrowLeft, CheckCircle2, Send } from "lucide-react";
 import { getTechTemplateBySlug, techTemplates } from "@/features/marketing/data/tech-templates";
+import { buildMetadata } from "@/lib/seo/metadata";
+import { NOINDEX } from "@/lib/seo/site";
 
 export function generateStaticParams() {
     return techTemplates.map((template) => ({ slug: template.slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const template = getTechTemplateBySlug(slug);
+    if (!template) return NOINDEX;
+    return buildMetadata({
+        title: template.name,
+        description: template.description,
+        path: `/tech-services/templates/${slug}`,
+        ogLabel: "Templates",
+    });
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {

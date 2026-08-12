@@ -5,12 +5,33 @@ import { ArticleListPage } from "@/features/articles/components/ArticleListPage"
 import { getArticles } from "@/features/articles/api/articles.service";
 import { getAllCategories } from "@/features/articles/api/categories.service";
 import { SanityLive } from "@/sanity/live";
+import { buildMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
-    title: "Articles | StartupKaro",
-    description:
-        "Expert insights on GST, income tax, company compliance, startup law, and business finance, written by CAs, lawyers, and experienced founders.",
-};
+const ARTICLES_DESCRIPTION =
+    "Expert insights on GST, income tax, company compliance, startup law, and business finance, written by CAs, lawyers, and experienced founders.";
+
+export async function generateMetadata({
+    searchParams,
+}: {
+    searchParams: Promise<{ page?: string; category?: string }>;
+}): Promise<Metadata> {
+    const { page, category } = await searchParams;
+
+    // Each page/category combination is a genuinely different set of articles,
+    // so it gets its own self-referential canonical (not collapsed to /article) —
+    // that keeps every combination indexable instead of hiding pages 2+ from Google.
+    const params = new URLSearchParams();
+    if (category && category !== "All") params.set("category", category);
+    if (page && page !== "1") params.set("page", page);
+    const query = params.toString();
+    const path = query ? `/article?${query}` : "/article";
+
+    return buildMetadata({
+        title: "Articles",
+        description: ARTICLES_DESCRIPTION,
+        path,
+    });
+}
 
 export default async function ArticlesPage({
     searchParams,

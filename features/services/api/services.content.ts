@@ -21,7 +21,7 @@ export async function getServiceContentBySlug(slug: string): Promise<ServiceCont
 }
 
 // Uses plain client, safe for generateStaticParams (no draftMode() call)
-export async function getAllServiceSlugs(): Promise<{ slug: string }[]> {
+export async function getAllServiceSlugs(): Promise<{ slug: string; isBundle?: boolean; _updatedAt: string }[]> {
     const data = await client.fetch(ALL_SERVICE_SLUGS_QUERY);
-    return (data ?? []) as { slug: string }[];
+    return (data ?? []) as { slug: string; isBundle?: boolean; _updatedAt: string }[];
 }

@@ -46,5 +46,8 @@ export interface Article extends Omit<ArticleCard, "author"> {
         description?: string;
         keywords?: string[];
         ogImage?: string;
+        ogImageAlt?: string;
+        canonicalUrl?: string;
+        noIndex?: boolean;
     };
 }

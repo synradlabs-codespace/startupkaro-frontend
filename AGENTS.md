@@ -10,10 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 |---|---|---|---|
 | Admin | `admin@startupkaro.com` | `admin123@321` | `/admin/login` |
 | Employee | `daksh.e@startupkaro.com` | `startupkaro123` | `/employee/login` |
-| Customer 0 | `daksh.c@startupkaro.com` | `startupkaro123` | `/customer/login` |
-| Customer 1 | `daksh.c1@startupkaro.com` | `startupkaro123` | `/customer/login` |
-| Customer 2 (real email — use for email flow testing e.g. forgot password) | `mr.codefrost@gmail.com` | `startupkaro123` | `/customer/login` |
-| Customer 3 | `daksh.c2@startupkaro.com` | `startupkaro123` | `/customer/login` |
+| Customer 1 | `daksh.c1@startupkaro.in` | `startupkaro123` | `/customer/login` |
 API base URL: `https://server.startupkaro.in/api/v1`
 
 ## Investigating API issues
@@ -161,6 +158,31 @@ Article, Author, and Category documents live in Sanity Content Lake. Studio is e
 
 ### Adding new content types to Sanity
 Add a schema file to `sanity/schemaTypes/`, register it in `sanity/schemaTypes/index.ts`, and add corresponding GROQ queries in `sanity/queries.ts`.
+
+## PostHog Analytics (website visitors)
+
+Marketing pages capture pageviews via `posthog-js`, gated behind a cookie-consent banner. `/admin/analytics` reads aggregated visitor stats back through a server-side route handler — the query keys never reach the browser.
+
+### Where it lives
+| Path | Purpose |
+|---|---|
+| `components/providers/PostHogProvider.tsx` | Client-side init + pageview capture on route change. Mounted only in `app/(marketing)/layout.tsx` — never in `admin`/`employee`/`customer` layouts, so staff usage doesn't inflate visitor counts. |
+| `components/custom/CookieConsentBanner.tsx` | Gates capture behind explicit consent (`localStorage`-persisted). Capture starts opted-out (`opt_out_capturing_by_default: true`) until the visitor accepts. |
+| `app/api/admin/analytics/traffic/route.ts` | Server route handler. Holds the PostHog personal API key, runs HogQL queries, returns the standard `ApiResponse<T>` shape. |
+| `features/admin/hooks/useTrafficAnalytics.ts` | React Query hook consuming the route handler, following the same pattern as `useAdminAnalytics.ts`. |
+
+### Env vars
+| Variable | Scope | Purpose |
+|---|---|---|
+| `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` | public | Project API key — browser sends pageview events |
+| `NEXT_PUBLIC_POSTHOG_HOST` | public | Ingest host, e.g. `https://us.i.posthog.com` |
+| `POSTHOG_PERSONAL_API_KEY` | **server-only** | Query-scoped personal API key. Never prefix with `NEXT_PUBLIC_`. |
+| `POSTHOG_PROJECT_ID` | **server-only** | Numeric PostHog project ID to query against |
+
+### Rules
+- Do not mount `PostHogProvider` or `CookieConsentBanner` outside `app/(marketing)/layout.tsx`.
+- `app/api/admin/analytics/traffic/route.ts` must reject requests without a valid staff token before running any PostHog query — it forwards the caller's token to the existing `/admin/analytics/orders` backend endpoint as an auth probe, matching the trust boundary the rest of `/admin/analytics` already relies on.
+- UI copy on `/admin/analytics` must stay plain-language ("Visitors", "Most Viewed Pages") — never surface "PostHog", "HogQL", "events", or "routes" to admins.
 
 ### Prompt for gemini image creation
 Square 1:1 composition, 1600x1600, main subject centered with safe margins, clean white background, no text, suitable for rounded-corner web card crop.

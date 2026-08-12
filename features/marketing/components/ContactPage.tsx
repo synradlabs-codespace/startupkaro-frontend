@@ -2,11 +2,12 @@
 
 "use client";
 
-import { useRef, useState, FormEvent } from "react";
+import { useEffect, useRef, useState, FormEvent } from "react";
 import { validators, formatNameInput, validatePhoneDigits, buildPhone } from "@/lib/validations/common.schema";
-import { publicInquiryService } from "@/services/customer.service";
+import { customerProfileService, publicInquiryService } from "@/services/customer.service";
 import { getApiErrorMessage, isRateLimited } from "@/features/customers/lib/format";
 import { getApiSuccessMessage } from "@/lib/api-messages";
+import { readAuthSession } from "@/lib/auth-session";
 import { useToast } from "@/components/providers/ToastProvider";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,6 +51,10 @@ function humanizeSlug(slug?: string) {
         .join(" ");
 }
 
+function toPhoneDigits(value?: string) {
+    return (value ?? "").replace(/\D/g, "").slice(-10);
+}
+
 export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: string } = {}) {
     const toast = useToast();
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -66,6 +71,38 @@ export function ContactPage({ initialServiceSlug }: { initialServiceSlug?: strin
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
     const [messageHeight, setMessageHeight] = useState(MESSAGE_MIN_HEIGHT);
+
+    useEffect(() => {
+        let cancelled = false;
+
+        const session = readAuthSession();
+        if (!session.accessToken || session.role !== "customer") return;
+
+        const applyProfile = (profile?: { name?: string; email?: string; phone?: string; mobile?: string }) => {
+            if (!profile || cancelled) return;
+            setForm((current) => ({
+                ...current,
+                name: current.name || profile.name || "",
+                email: current.email || profile.email || "",
+            }));
+            setPhoneDigits((current) => current || toPhoneDigits(profile.phone ?? profile.mobile));
+        };
+
+        applyProfile({
+            name: session.user?.name,
+            email: session.user?.email,
+            phone: (session.user as { phone?: string; mobile?: string } | null)?.phone,
+            mobile: (session.user as { phone?: string; mobile?: string } | null)?.mobile,
+        });
+
+        customerProfileService.get()
+            .then((response) => applyProfile(response.data.data))
+            .catch(() => undefined);
+
+        return () => {
+            cancelled = true;
+        };
+    }, []);
 
     function validate(): FormErrors {
         return {

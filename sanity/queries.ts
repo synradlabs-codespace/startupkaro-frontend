@@ -69,7 +69,10 @@ export const ARTICLE_BY_SLUG_QUERY = defineQuery(`
       title,
       description,
       keywords,
-      "ogImage": ogImage.asset->url
+      "ogImage": ogImage.asset->url,
+      "ogImageAlt": ogImage.alt,
+      canonicalUrl,
+      noIndex
     },
     "relatedManual": relatedArticles[]-> ${ARTICLE_CARD_PROJECTION}
   }
@@ -85,7 +88,7 @@ export const RELATED_FALLBACK_QUERY = defineQuery(`
 `);
 
 export const ALL_SLUGS_QUERY = defineQuery(`
-  *[_type == "article" && defined(slug.current)]{ "slug": slug.current }
+  *[_type == "article" && defined(slug.current) && defined(publishedAt)]{ "slug": slug.current, _updatedAt }
 `);
 
 export const LATEST_ARTICLES_QUERY = defineQuery(`
@@ -157,7 +160,7 @@ export const JOB_BY_SLUG_QUERY = defineQuery(`
 `);
 
 export const ALL_JOB_SLUGS_QUERY = defineQuery(`
-  *[_type == "job" && defined(slug.current) && isActive == true]{ "slug": slug.current }
+  *[_type == "job" && defined(slug.current) && isActive == true]{ "slug": slug.current, _updatedAt }
 `);
 
 // ─── Services ─────────────────────────────────────────────────────────────────
@@ -221,5 +224,5 @@ export const SERVICE_BY_SLUG_QUERY = defineQuery(`
 `);
 
 export const ALL_SERVICE_SLUGS_QUERY = defineQuery(`
-  *[_type == "service" && defined(slug.current) && isActive == true]{ "slug": slug.current }
+  *[_type == "service" && defined(slug.current) && isActive == true]{ "slug": slug.current, isBundle, _updatedAt }
 `);

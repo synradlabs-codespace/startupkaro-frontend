@@ -1,7 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 import { techTemplates } from "@/features/marketing/data/tech-templates";
+import { buildMetadata } from "@/lib/seo/metadata";
+
+export const metadata: Metadata = buildMetadata({
+    title: "Landing Page Templates",
+    description: "Start with a focused page structure, then adapt the content to your offer. Responsive landing page templates from Rs. 15,000.",
+    path: "/tech-services/templates",
+});
 
 export default function Page() {
     return (

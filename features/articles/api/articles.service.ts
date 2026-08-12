@@ -64,9 +64,9 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
 }
 
 // Uses the plain client, safe to call from generateStaticParams (no draftMode() call)
-export async function getAllArticleSlugs(): Promise<{ slug: string }[]> {
+export async function getAllArticleSlugs(): Promise<{ slug: string; _updatedAt: string }[]> {
     const data = await client.fetch(ALL_SLUGS_QUERY);
-    return (data ?? []) as { slug: string }[];
+    return (data ?? []) as { slug: string; _updatedAt: string }[];
 }
 
 export async function getLatestArticles(limit = 3): Promise<ArticleCard[]> {

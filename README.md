@@ -20,7 +20,7 @@ StartupKaro is a digital platform that helps **startups and SMEs** start, manage
 | Components | shadcn/ui + custom components |
 | HTTP Client | Axios (`services/api-client.ts`) |
 | Server State | TanStack React Query v5 |
-| Animations | Framer Motion, Lenis (smooth scroll) |
+| Animations | Framer Motion, Lenis (ScrollStack smoothing) |
 | CMS | Sanity v5 (articles, services, careers) |
 | Icons | Lucide React, React Icons |
 | Auth | JWT in `localStorage` + cookies (client-side) |
@@ -201,3 +201,7 @@ npm run lint     # ESLint check
 | `SANITY_API_TOKEN` | server-only | Read token for draft mode + Live API |
 | `SANITY_PREVIEW_SECRET` | server-only | Secret for Studio preview link |
 | `SANITY_REVALIDATE_SECRET` | server-only | Webhook signature secret for `/api/revalidate` |
+| `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` | public | PostHog project API key — browser sends pageview events |
+| `NEXT_PUBLIC_POSTHOG_HOST` | public | PostHog ingest host, e.g. `https://us.i.posthog.com` |
+| `POSTHOG_PERSONAL_API_KEY` | server-only | Personal API key with query scope — reads visitor stats back for `/admin/analytics` |
+| `POSTHOG_PROJECT_ID` | server-only | Numeric PostHog project ID to query against |

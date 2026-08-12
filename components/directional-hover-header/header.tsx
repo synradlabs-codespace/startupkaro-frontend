@@ -92,28 +92,42 @@ function AccountMenu({
 
   if (mobile) {
     return (
-      <div className="w-full rounded-lg border border-hairline bg-surface p-4">
-        <div className="mb-3 flex items-center gap-3 px-1">
-          <Avatar size="sm">
-            <AvatarFallback className="bg-primary-brand font-display font-medium text-white">
-              {initial}
-            </AvatarFallback>
-          </Avatar>
-          <span className="text-sm font-semibold text-ink">{name}</span>
-        </div>
-        <div className="flex flex-col gap-1.5">
-          {links.map(({ label, href, icon: Icon }) => (
-            <Link
-              key={label}
-              href={href}
-              onClick={onAction}
-              className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-charcoal transition-colors hover:bg-canvas hover:text-primary-brand"
-            >
-              <Icon className="size-4 text-graphite" strokeWidth={2} />
-              {label}
-            </Link>
-          ))}
-        </div>
+      <div className="w-full">
+        <button
+          type="button"
+          onClick={() => setOpen((current) => !current)}
+          className={cn(
+            "inline-flex h-11 w-full items-center justify-between gap-2 rounded-md border px-3 text-sm font-semibold transition-colors",
+            open
+              ? "border-primary-brand bg-surface text-primary-brand"
+              : "border-hairline bg-canvas text-ink hover:border-primary-brand hover:bg-surface hover:text-primary-brand"
+          )}
+        >
+          <span className="flex min-w-0 items-center gap-2">
+            <Avatar size="sm">
+              <AvatarFallback className="bg-primary-brand font-display font-medium text-white">
+                {initial}
+              </AvatarFallback>
+            </Avatar>
+            <span className="min-w-0 truncate">{name}</span>
+          </span>
+          <ChevronDown className={cn("size-3.5 shrink-0 text-graphite transition-transform", open && "rotate-180")} strokeWidth={2} />
+        </button>
+        {open && (
+          <div className="mt-2 space-y-1 rounded-lg border border-hairline bg-canvas p-2 shadow-[0_10px_30px_rgba(26,26,26,0.12)]">
+            {links.map(({ label, href, icon: Icon }) => (
+              <Link
+                key={label}
+                href={href}
+                onClick={onAction}
+                className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-charcoal transition-colors hover:bg-surface hover:text-primary-brand"
+              >
+                <Icon className="size-4 text-graphite" strokeWidth={2} />
+                {label}
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     );
   }
