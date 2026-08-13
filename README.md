@@ -24,7 +24,7 @@ StartupKaro is a digital platform that helps **startups and SMEs** start, manage
 | CMS | Sanity v5 (articles, services, careers) |
 | Icons | Lucide React, React Icons |
 | Auth | JWT in `localStorage` + cookies (client-side) |
-| Backend | Node.js API on AWS (separate team) — `https://server.startupkaro.in/api/v1` |
+| Backend | Node.js API (separate team) — `https://startupkarobackend.up.railway.app/api/v1` |
 
 ---
 

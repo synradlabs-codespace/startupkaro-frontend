@@ -16,6 +16,12 @@ import { loadRazorpayScript, openRazorpayCheckout, RazorpayCheckoutError } from 
 
 type StartPaymentOptions = {
     serviceName?: string;
+    /** Only true for a checkout that just created a fresh draft (cart / service
+     * checkout). If the customer dismisses the modal, the draft is discarded
+     * server-side so it never lingers as a phantom pending order. Never set
+     * this for a resumed payment - that order is already promoted, and
+     * abandoning it would just get rejected (409). */
+    abandonOnDismiss?: boolean;
 };
 
 export function useResumePayment() {
@@ -29,38 +35,49 @@ export function useResumePayment() {
     };
 
     const startPayment = useMutation({
-        mutationFn: async ({ initiation }: { initiation: RawPaymentInitiation; options?: StartPaymentOptions }) => {
+        mutationFn: async ({ initiation, options }: { initiation: RawPaymentInitiation; options?: StartPaymentOptions }) => {
             const normalized = normalizePaymentInitiation(initiation);
             await loadRazorpayScript();
-            const response = await openRazorpayCheckout({
-                key: normalized.razorpayKeyId,
-                amount: normalized.amount,
-                currency: normalized.currency,
-                name: "StartupKaro",
-                description: normalized.description ?? normalized.serviceName,
-                order_id: normalized.razorpayOrderId,
-                prefill: {
-                    name: profileQuery.data?.name,
-                    email: profileQuery.data?.email,
-                    contact: profileQuery.data?.phone ?? profileQuery.data?.mobile,
-                },
-                theme: { color: "#296ef9" },
-            });
-            const verification = await customerPurchaseService.verify(response);
-            return { normalized, response, orderId: verification.data.data.orderId };
+            try {
+                const response = await openRazorpayCheckout({
+                    key: normalized.razorpayKeyId,
+                    amount: normalized.amount,
+                    currency: normalized.currency,
+                    name: "StartupKaro",
+                    description: normalized.description ?? normalized.serviceName,
+                    order_id: normalized.razorpayOrderId,
+                    prefill: {
+                        name: profileQuery.data?.name,
+                        email: profileQuery.data?.email,
+                        contact: profileQuery.data?.phone ?? profileQuery.data?.mobile,
+                    },
+                    theme: { color: "#296ef9" },
+                });
+                const verification = await customerPurchaseService.verify(response);
+                return { normalized, response, orderId: verification.data.data.orderId };
+            } catch (error) {
+                if (error instanceof RazorpayCheckoutError && error.reason === "dismissed" && options?.abandonOnDismiss && normalized.orderId) {
+                    // Best-effort: discards the draft this checkout just created so it
+                    // never lingers as a phantom pending order. Every outcome (200
+                    // discarded, 409 already promoted, 503 gateway unreachable) is
+                    // safe to ignore here - the sweeper is the real guarantee.
+                    void customerPurchaseService.abandon(normalized.orderId).catch(() => {});
+                }
+                throw error;
+            }
         },
         onSuccess: () => invalidate(),
         onError: (error) => {
             if (error instanceof RazorpayCheckoutError) {
                 if (error.reason === "dismissed") {
                     toast.error({
-                        title: "Payment not completed",
-                        description: "Your cart is still saved. You can retry from Cart or My Purchases.",
+                        title: "Checkout cancelled",
+                        description: "Nothing was ordered. Your cart is saved if you want to come back.",
                     });
                 } else {
                     toast.error({
                         title: "Payment failed",
-                        description: error.description || "The payment gateway declined this transaction.",
+                        description: error.description || "Your bank declined this transaction. You can try again.",
                     });
                 }
                 invalidate();

@@ -44,7 +44,7 @@ export function CustomerCartPage() {
         try {
             const initiation = (await checkoutCart.mutateAsync()).data.data;
             normalized = normalizePaymentInitiation(initiation);
-            const { response, orderId } = await startPayment(initiation);
+            const { response, orderId } = await startPayment(initiation, { abandonOnDismiss: true });
             router.push(`/customer/checkout/success?payment_id=${response.razorpay_payment_id}&order_id=${orderId}`);
         } catch (error) {
             // A dismissed checkout is handled (toast + stay put) inside

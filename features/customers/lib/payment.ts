@@ -66,5 +66,10 @@ export function getResumablePaymentId(purchase: CustomerPurchase): string | unde
 }
 
 export function isPaymentResumable(purchase: CustomerPurchase): boolean {
-    return getPurchaseAmountDue(purchase) > 0 && purchase.status !== "cancelled";
+    // Drafts shouldn't reach the client (the backend excludes them from
+    // `GET /customer/purchases`), but this is the last line of defense in
+    // case one ever leaks through - a draft has never been attempted, so it
+    // has nothing to resume.
+    if (purchase.status === "cancelled" || purchase.status === "draft") return false;
+    return getPurchaseAmountDue(purchase) > 0;
 }

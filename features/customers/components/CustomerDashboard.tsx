@@ -212,7 +212,9 @@ export function CustomerDashboard() {
                                     type="button"
                                     size="sm"
                                     className="w-full gap-1.5 bg-error-brand text-white hover:bg-error-brand/90 uppercase tracking-wide sm:w-auto"
-                                    onClick={() => void resumePayment(nextPendingPurchase)}
+                                    onClick={() => {
+                                        void resumePayment(nextPendingPurchase).catch(() => {});
+                                    }}
                                     disabled={isResuming}
                                 >
                                     <RefreshCw className="h-3.5 w-3.5" />

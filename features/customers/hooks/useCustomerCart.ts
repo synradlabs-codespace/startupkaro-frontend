@@ -68,8 +68,8 @@ export function useCheckoutCustomerCart() {
             const status = getErrorStatus(error);
             if (status && status >= 500) {
                 toast.error({
-                    title: "Payment could not be opened",
-                    description: "If your cart was cleared, check My Purchases and retry the pending payment.",
+                    title: "Checkout unavailable",
+                    description: "Something went wrong on our end. Your cart is safe — please try again.",
                 });
             } else {
                 toast.error(getApiErrorMessage(error, "Could not start checkout"));

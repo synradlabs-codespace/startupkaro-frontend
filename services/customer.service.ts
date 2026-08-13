@@ -3,7 +3,7 @@ import type { ApiResponse, PaginatedResponse } from "@/types/api.types";
 import type { RazorpayHandlerResponse } from "@/lib/razorpay";
 import { flattenBackendServices, type BackendService, type BackendServiceCategory } from "@/features/services/api/services.backend";
 
-export type CustomerOrderStatus = "pending" | "confirmed" | "in_progress" | "completed" | "cancelled";
+export type CustomerOrderStatus = "draft" | "pending" | "confirmed" | "in_progress" | "completed" | "cancelled";
 export type CustomerPaymentStatus = "created" | "authorized" | "captured" | "failed" | "refunded" | "voided";
 export type CustomerPaymentState = "unpaid" | "partially_paid" | "paid";
 
@@ -270,6 +270,12 @@ export const customerPurchaseService = {
         apiClient.post<ApiResponse<RazorpayInitiation>>(`/customer/purchases/${orderId}/pay`, payload),
     retryPayment: (paymentId: string) =>
         apiClient.post<ApiResponse<RazorpayInitiation>>(`/customer/purchases/payments/${paymentId}/retry`),
+    /** Called from Razorpay's `modal.ondismiss` to discard a checkout the
+     * customer backed out of before reaching the gateway. Best-effort: 200
+     * (discarded or already gone), 409 (already promoted - a real order now),
+     * and 503 (gateway unreachable, fails closed) are all safe to ignore. */
+    abandon: (orderId: string) =>
+        apiClient.post<ApiResponse<null>>(`/customer/purchases/${orderId}/abandon`),
     listPaymentAttempts: (paymentId: string) =>
         apiClient.get<ApiResponse<CustomerPaymentAttempt[]> | PaginatedResponse<CustomerPaymentAttempt>>(`/customer/purchases/payments/${paymentId}/attempts`),
     downloadReceipt: (paymentId: string) =>

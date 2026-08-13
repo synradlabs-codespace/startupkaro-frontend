@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import type { ApiResponse } from "@/types/api.types";
 
-const BACKEND_API_URL = process.env.NEXT_PUBLIC_API_URL || "https://server.startupkaro.in/api/v1";
+const BACKEND_API_URL = process.env.NEXT_PUBLIC_API_URL || "https://startupkarobackend.up.railway.app/api/v1";
 const POSTHOG_HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com";
 const POSTHOG_PROJECT_ID = process.env.POSTHOG_PROJECT_ID;
 const POSTHOG_PERSONAL_API_KEY = process.env.POSTHOG_PERSONAL_API_KEY;

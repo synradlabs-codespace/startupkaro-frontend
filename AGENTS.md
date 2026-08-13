@@ -11,12 +11,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | Admin | `admin@startupkaro.com` | `admin123@321` | `/admin/login` |
 | Employee | `daksh.e@startupkaro.com` | `startupkaro123` | `/employee/login` |
 | Customer 1 | `daksh.c1@startupkaro.in` | `startupkaro123` | `/customer/login` |
-API base URL: `https://server.startupkaro.in/api/v1`
+API base URL: `https://startupkarobackend.up.railway.app/api/v1`
 
 ## Investigating API issues
 
 When debugging API contract questions or suspected mismatches:
-- **Always verify with `curl` first** against the live staging API (`https://server.startupkaro.in/api/v1`). Use the admin credentials above to get a token.
+- **Always verify with `curl` first** against the live staging API (`https://startupkarobackend.up.railway.app/api/v1`). Use the admin credentials above to get a token.
 - Use the Postman collection (`StartupKaro_API.postman_collection.json`) only as a **route reference** — it documents available endpoints and request structure.
 - **Do not trust Postman response examples** — they are often outdated and do not reflect the current backend response shape.
 - Only open `API_MISMATCHES.md` issues after confirming via curl that the backend does not behave as expected.

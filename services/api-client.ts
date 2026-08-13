@@ -3,7 +3,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { clearAuthSession } from "@/lib/auth-session";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://server.startupkaro.in/api/v1";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://startupkarobackend.up.railway.app/api/v1";
 
 export const apiClient = axios.create({
     baseURL: API_BASE_URL,

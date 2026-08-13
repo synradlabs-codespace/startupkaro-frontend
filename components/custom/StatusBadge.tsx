@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 
-type OrderStatus = "pending" | "confirmed" | "in_progress" | "completed" | "cancelled";
+type OrderStatus = "draft" | "pending" | "confirmed" | "in_progress" | "completed" | "cancelled";
 type PaymentStatus = "created" | "authorized" | "captured" | "failed" | "refunded" | "voided" | "unpaid" | "partially_paid" | "paid";
 type InquiryStatus = "unresolved" | "resolved";
 type Role = "admin" | "employee" | "customer";
@@ -13,6 +13,7 @@ const neutral  = "bg-status-neutral-bg text-status-neutral-fg border-status-neut
 const danger   = "bg-status-danger-bg text-status-danger-fg border-status-danger-border hover:bg-status-danger-bg";
 
 const orderStatusConfig: Record<OrderStatus, { label: string; className: string }> = {
+  draft:       { label: "Draft",       className: neutral },
   pending:     { label: "Pending",     className: warning },
   confirmed:   { label: "Confirmed",   className: info },
   in_progress: { label: "In Progress", className: neutral },
