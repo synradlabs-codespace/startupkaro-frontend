@@ -75,6 +75,13 @@ export function loadRazorpayScript(): Promise<void> {
 export function openRazorpayCheckout(options: RazorpayOptions): Promise<RazorpayHandlerResponse> {
     return new Promise((resolve, reject) => {
         let settled = false;
+        // On a decline, Razorpay does NOT close its modal - it shows its own
+        // retry/change-method screen inside the still-open checkout iframe.
+        // Rejecting immediately here would navigate the app away while that
+        // iframe is still on top of the page. So a failure is only recorded,
+        // and the promise settles when the modal actually closes
+        // (`ondismiss`), whether the user retries-and-gives-up or hits close.
+        let lastFailure: RazorpayFailureError | undefined;
         const rzp = new window.Razorpay({
             ...options,
             handler: (response) => {
@@ -83,19 +90,14 @@ export function openRazorpayCheckout(options: RazorpayOptions): Promise<Razorpay
             },
             modal: {
                 ondismiss: () => {
-                    // A declined payment also closes the modal, which fires
-                    // ondismiss after payment.failed already rejected below -
-                    // don't overwrite that more specific rejection.
                     if (settled) return;
                     settled = true;
-                    reject(new RazorpayCheckoutError("dismissed"));
+                    reject(lastFailure ? new RazorpayCheckoutError("failed", lastFailure) : new RazorpayCheckoutError("dismissed"));
                 },
             },
         });
         rzp.on("payment.failed", (response) => {
-            if (settled) return;
-            settled = true;
-            reject(new RazorpayCheckoutError("failed", response.error));
+            lastFailure = response.error;
         });
         rzp.open();
     });

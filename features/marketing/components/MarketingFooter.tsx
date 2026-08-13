@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, MapPin, Phone } from "lucide-react";
-import { FaInstagram } from "react-icons/fa";
+import { FaInstagram, FaLinkedin } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { NAV_LINKS } from "@/components/directional-hover-header/header/nav-data";
 import { UnderlineAnimation } from "@/components/fancy/text";
@@ -69,6 +69,15 @@ export function MarketingFooter() {
                                 className="flex h-9 w-9 items-center justify-center rounded-md border border-hairline text-graphite transition-colors hover:border-primary-brand hover:text-primary-brand"
                             >
                                 <FaXTwitter className="h-3.5 w-3.5" />
+                            </a>
+                            <a
+                                href="https://www.linkedin.com/company/startupkaroindia/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="LinkedIn"
+                                className="flex h-9 w-9 items-center justify-center rounded-md border border-hairline text-graphite transition-colors hover:border-primary-brand hover:text-primary-brand"
+                            >
+                                <FaLinkedin className="h-3.5 w-3.5" />
                             </a>
                         </div>
                     </div>

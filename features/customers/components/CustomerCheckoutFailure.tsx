@@ -9,21 +9,27 @@ import { XCircle, RefreshCw, LayoutDashboard, Phone, Loader2 } from "lucide-reac
 import { useCustomerPurchase } from "@/features/customers/hooks/useCustomerPurchases";
 import { useResumePayment } from "@/features/customers/hooks/useResumePayment";
 import { RazorpayCheckoutError } from "@/lib/razorpay";
+import { WHATSAPP_URL } from "@/components/custom/WhatsAppButton";
 
 function FailureContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const serviceId = searchParams.get("service");
     const orderId = searchParams.get("order");
-    const message = searchParams.get("message");
     const [retrying, setRetrying] = useState(false);
 
-    // Only fetched when we have an order id to retry against.
-    const purchaseQuery = useCustomerPurchase(orderId ?? "");
+    // Only fetched when we have an order id to retry against. A declined
+    // card's order is promoted from draft to a real, fetchable order by an
+    // async Razorpay webhook, so this page can beat that webhook here -
+    // pollForPromotion rides out the race instead of failing once.
+    const purchaseQuery = useCustomerPurchase(orderId ?? "", { pollForPromotion: true });
     const { resumePayment } = useResumePayment();
 
-    const canRetryOrder = Boolean(orderId);
     const retryHref = serviceId ? `/customer/checkout?service=${serviceId}` : "/customer/services";
+    // Falls back to starting a brand new checkout if there's no order to
+    // retry against, or the order never showed up (webhook never landed).
+    const canRetryOrder = Boolean(orderId) && !purchaseQuery.isError;
+    const preparingRetry = canRetryOrder && purchaseQuery.isLoading;
 
     const handleTryAgain = async () => {
         if (!purchaseQuery.data) return;
@@ -59,14 +65,8 @@ function FailureContent() {
                         <div className="space-y-2">
                             <h1 className="text-2xl font-display font-medium text-ink">Payment Failed</h1>
                             <p className="text-sm text-steel leading-relaxed">
-                                Your payment could not be processed. No amount has been charged. Please try again or contact support if the issue persists.
+                                Your bank or payment gateway declined this transaction, so it could not be completed. No amount has been deducted from your account.
                             </p>
-                        </div>
-
-                        {/* Error note */}
-                        <div className="inline-flex items-center gap-2 bg-error-brand/10 border border-error-brand/20 text-error-brand text-xs font-medium px-4 py-2 rounded-full">
-                            <XCircle className="h-3.5 w-3.5" />
-                            {message || "Transaction declined by payment gateway"}
                         </div>
 
                         <div className="h-px bg-surface" />
@@ -77,11 +77,11 @@ function FailureContent() {
                                 <button
                                     type="button"
                                     onClick={handleTryAgain}
-                                    disabled={retrying || purchaseQuery.isLoading}
+                                    disabled={retrying || preparingRetry}
                                     className="flex-1 inline-flex items-center justify-center gap-2 h-9 px-4 text-sm font-medium bg-primary-brand text-white hover:bg-primary-brand/90 rounded-md transition-colors disabled:opacity-60"
                                 >
-                                    {retrying ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-                                    {retrying ? "Retrying..." : "Try Again"}
+                                    {retrying || preparingRetry ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+                                    {retrying ? "Retrying..." : preparingRetry ? "Preparing..." : "Try Again"}
                                 </button>
                             ) : (
                                 <Link
@@ -105,9 +105,14 @@ function FailureContent() {
                         <p className="text-xs text-stone flex items-center justify-center gap-1.5">
                             <Phone className="h-3 w-3" />
                             Need help?{" "}
-                            <Link href="/customer/services" className="text-charcoal underline underline-offset-2 hover:text-charcoal/80">
+                            <a
+                                href={WHATSAPP_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-charcoal underline underline-offset-2 hover:text-charcoal/80"
+                            >
                                 Contact support
-                            </Link>
+                            </a>
                         </p>
                     </div>
                 </div>

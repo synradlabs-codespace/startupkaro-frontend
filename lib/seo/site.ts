@@ -20,7 +20,11 @@ export const ORG = {
     email: "contact@startupkaro.in",
     phones: ["+91 789 00000 88", "+91 737 00000 88"],
     address: { locality: "Mohali", region: "Punjab", country: "IN" },
-    socials: ["https://www.instagram.com/Startupkaro.india", "https://x.com/startupkaro24"],
+    socials: [
+        "https://www.instagram.com/Startupkaro.india",
+        "https://x.com/startupkaro24",
+        "https://www.linkedin.com/company/startupkaroindia/",
+    ],
     twitterHandle: "@startupkaro24",
     logo: STARTUPKARO_LOGO_SRC,
 } as const;
