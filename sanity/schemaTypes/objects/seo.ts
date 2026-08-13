@@ -10,12 +10,12 @@ export const seoType = defineType({
             title: "SEO Title",
             type: "string",
             description:
-                "The headline Google shows in search results, and the text shown when this article is shared on WhatsApp or LinkedIn. Leave blank to reuse the article Title. Recommended: 50–60 characters — anything past 60 usually gets cut off in Google.",
+                "The headline Google shows in search results, and the text shown when this article is shared on WhatsApp or LinkedIn. Leave blank to reuse the article Title. Recommended: 50 to 60 characters. Anything past 60 usually gets cut off in Google.",
             validation: (Rule) => [
                 Rule.max(70).error("SEO Title must be 70 characters or fewer."),
                 Rule.custom((value?: string) =>
                     value && value.length > 60
-                        ? "Longer than 60 characters — Google will likely truncate this in search results."
+                        ? "Longer than 60 characters. Google will likely truncate this in search results."
                         : true
                 ).warning(),
             ],
@@ -26,12 +26,12 @@ export const seoType = defineType({
             type: "text",
             rows: 3,
             description:
-                "The grey summary text shown under the headline in Google results. Write it as a reason to click, not a summary of the article. Leave blank to reuse the article Summary. Recommended: 140–160 characters.",
+                "The grey summary text shown under the headline in Google results. Write it as a reason to click, not a summary of the article. Leave blank to reuse the article Summary. Recommended: 140 to 160 characters.",
             validation: (Rule) => [
                 Rule.max(180).error("SEO Description must be 180 characters or fewer."),
                 Rule.custom((value?: string) =>
                     value && value.length > 160
-                        ? "Longer than 160 characters — Google will likely truncate this in search results."
+                        ? "Longer than 160 characters. Google will likely truncate this in search results."
                         : true
                 ).warning(),
             ],
@@ -43,10 +43,10 @@ export const seoType = defineType({
             of: [{ type: "string" }],
             options: { layout: "tags" },
             description:
-                "Topic tags for this article, e.g. \"GST return filing\", \"private limited company\". These do not affect Google rankings — they are used internally only. 3–6 is plenty.",
+                "Topic tags for this article, e.g. \"GST return filing\", \"private limited company\". These do not affect Google rankings. They are used internally only. 3 to 6 is plenty.",
             validation: (Rule) =>
                 Rule.custom((value?: string[]) =>
-                    value && value.length > 10 ? "More than 10 keywords is rarely useful — keep it focused." : true
+                    value && value.length > 10 ? "More than 10 keywords is rarely useful. Keep it focused." : true
                 ).warning(),
         }),
         defineField({
@@ -70,7 +70,7 @@ export const seoType = defineType({
             title: "Canonical URL",
             type: "url",
             description:
-                "Only set this if this article was first published somewhere else. Paste the original URL so Google credits that page instead of this one. Leave blank otherwise — most articles never need this.",
+                "Only set this if this article was first published somewhere else. Paste the original URL so Google credits that page instead of this one. Leave blank otherwise, most articles never need this.",
             validation: (Rule) => Rule.uri({ scheme: ["http", "https"] }),
         }),
         defineField({

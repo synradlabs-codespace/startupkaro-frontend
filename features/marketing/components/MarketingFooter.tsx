@@ -7,6 +7,7 @@ import { FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { NAV_LINKS } from "@/components/directional-hover-header/header/nav-data";
 import { UnderlineAnimation } from "@/components/fancy/text";
+import { STARTUPKARO_LOGO_SRC } from "@/lib/brand";
 
 const servicesMenu = NAV_LINKS.find((link) => link.label === "Services")?.menu;
 
@@ -35,11 +36,11 @@ export function MarketingFooter() {
                         <Link href="/" className="inline-flex flex-col items-center">
                             <span className="inline-flex">
                                 <Image
-                                    src="/assets/startupkaro-logo-transparent.png"
+                                    src={STARTUPKARO_LOGO_SRC}
                                     alt="StartupKaro"
-                                    width={174}
-                                    height={32}
-                                    className="h-8 w-auto"
+                                    width={216}
+                                    height={40}
+                                    className="h-10 w-auto"
                                     style={{ width: "auto" }}
                                 />
                             </span>

@@ -17,16 +17,17 @@ import { categoryCardStyles, serviceCategoryIcons, type ServiceVisualCategory } 
 import { cn } from "@/lib/utils";
 import { AUTH_SESSION_EVENT, getPanelRedirect, readAuthSession } from "@/lib/auth-session";
 import type { Role } from "@/lib/rbac/roles";
+import { STARTUPKARO_LOGO_SRC } from "@/lib/brand";
 
 function Logo() {
   return (
     <Link href="/" className="flex shrink-0 items-center select-none" aria-label="StartupKaro home">
       <Image
-        src="/assets/startupkaro-logo-transparent.png"
+        src={STARTUPKARO_LOGO_SRC}
         alt="StartupKaro"
-        width={164}
-        height={30}
-        className="h-[27px] w-auto sm:h-[30px]"
+        width={204}
+        height={37}
+        className="h-[34px] w-auto sm:h-[37px]"
         style={{ width: "auto" }}
         priority
       />

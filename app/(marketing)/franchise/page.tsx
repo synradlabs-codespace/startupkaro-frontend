@@ -5,7 +5,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 export const metadata: Metadata = buildMetadata({
     title: "Franchise Consulting",
     description:
-        "End-to-end franchise consulting — business model, legal framework, operational systems, brand protection, and expansion strategy for Indian and international markets.",
+        "End-to-end franchise consulting for business models, legal frameworks, operational systems, brand protection, and expansion strategy in India and international markets.",
     path: "/franchise",
 });
 

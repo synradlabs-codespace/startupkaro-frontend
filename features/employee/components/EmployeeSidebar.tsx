@@ -13,6 +13,7 @@ import {
   User,
 } from "lucide-react";
 import { useSidebar } from "@/components/ui/sidebar";
+import { STARTUPKARO_LOGO_SRC } from "@/lib/brand";
 
 type NavItem = {
   title: string;
@@ -78,11 +79,11 @@ export function EmployeeSidebar() {
             ) : (
               <Link href="/" className="flex flex-col whitespace-nowrap gap-0.5">
                 <Image
-                  src="/assets/startupkaro-logo-transparent.png"
+                  src={STARTUPKARO_LOGO_SRC}
                   alt="StartupKaro"
-                  width={152}
-                  height={28}
-                  className="h-7 w-auto object-contain"
+                  width={188}
+                  height={35}
+                  className="h-[35px] w-auto object-contain"
                   style={{ width: "auto" }}
                 />
                 <p className="text-[11px] text-steel leading-tight pl-0.5">Employee Panel</p>

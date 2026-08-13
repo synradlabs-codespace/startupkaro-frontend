@@ -7,7 +7,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { landingFaqItems } from "@/features/marketing/data/landing-faq.data";
 
 // Root layout already provides the site-wide default title/description/OG/Twitter
-// tags for "/" — this only adds the canonical, which the layout does not set.
+// tags for "/". This only adds the canonical, which the layout does not set.
 export const metadata: Metadata = {
     alternates: { canonical: "/" },
 };

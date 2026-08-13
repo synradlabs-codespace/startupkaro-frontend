@@ -6,6 +6,8 @@
 // app/api/og/route.tsx changes. WhatsApp/Facebook/LinkedIn cache the OG image
 // per-URL aggressively (often for days); the version query param is the only
 // way to force a fresh scrape without waiting it out. See docs/SEO_CAVEATS.md.
+import { sanitizeSeoText } from "./text";
+
 const OG_TEMPLATE_VERSION = 1;
 
 const MAX_TITLE_LENGTH = 120;
@@ -17,8 +19,8 @@ const MAX_LABEL_LENGTH = 24;
  */
 export function ogImageUrl(title: string, label?: string): string {
     const params = new URLSearchParams();
-    params.set("title", title.slice(0, MAX_TITLE_LENGTH));
-    if (label) params.set("label", label.slice(0, MAX_LABEL_LENGTH));
+    params.set("title", sanitizeSeoText(title).slice(0, MAX_TITLE_LENGTH));
+    if (label) params.set("label", sanitizeSeoText(label).slice(0, MAX_LABEL_LENGTH));
     params.set("v", String(OG_TEMPLATE_VERSION));
     return `/api/og?${params.toString()}`;
 }

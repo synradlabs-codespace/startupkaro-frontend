@@ -18,7 +18,7 @@ export async function generateMetadata({
     const { page, category } = await searchParams;
 
     // Each page/category combination is a genuinely different set of articles,
-    // so it gets its own self-referential canonical (not collapsed to /article) —
+    // so it gets its own self-referential canonical (not collapsed to /article).
     // that keeps every combination indexable instead of hiding pages 2+ from Google.
     const params = new URLSearchParams();
     if (category && category !== "All") params.set("category", category);

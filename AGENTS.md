@@ -184,6 +184,32 @@ Marketing pages capture pageviews via `posthog-js`, gated behind a cookie-consen
 - `app/api/admin/analytics/traffic/route.ts` must reject requests without a valid staff token before running any PostHog query — it forwards the caller's token to the existing `/admin/analytics/orders` backend endpoint as an auth probe, matching the trust boundary the rest of `/admin/analytics` already relies on.
 - UI copy on `/admin/analytics` must stay plain-language ("Visitors", "Most Viewed Pages") — never surface "PostHog", "HogQL", "events", or "routes" to admins.
 
+## Resend (careers job applications)
+
+Job listings (`/careers`, `/careers/[slug]`) are Sanity-driven — that part is unrelated. Submitting an application, however, does **not** go to the backend: the backend has no `/careers/*` routes at all (see `docs/API_MISMATCHES.md`). Instead a Next.js route handler emails the full application, resume attached, straight to `contact@startupkaro.in` (read via Titan Mail).
+
+### Where it lives
+| Path | Purpose |
+|---|---|
+| `app/api/careers/apply/route.ts` | Server route handler. Holds `RESEND_API_KEY`, re-validates every field server-side (never trusts the client), rate-limits by IP, checks a honeypot field, and calls `resend.emails.send()` with the resume as a real attachment. |
+| `lib/emails/job-application.ts` | Renders the notification email (HTML + text) from the submitted fields. All applicant-supplied values are HTML-escaped before interpolation — this is public, unauthenticated input. |
+| `features/careers/api/applications.service.ts` | Client-side call. Builds a `FormData` and `fetch`es `/api/careers/apply` directly — deliberately **not** through `apiClient` (wrong baseURL, forces JSON which silently drops `File` values, and its 401 interceptor would wrongly clear an applicant's session). |
+| `features/careers/components/ui/JobApplicationForm.tsx` | The form. Enforces the 4MB resume cap client-side (route handler enforces it again server-side) and includes a hidden honeypot input. |
+
+### Env vars
+| Variable | Scope | Purpose |
+|---|---|---|
+| `RESEND_API_KEY` | **server-only** | Resend API key. Never prefix with `NEXT_PUBLIC_` — only `app/api/careers/apply/route.ts` may read it. |
+| `CAREERS_TO_EMAIL` | server-only | Recipient inbox, default `contact@startupkaro.in` |
+| `CAREERS_FROM_EMAIL` | server-only | Sender address on the Resend-verified `startupkaro.in` domain, default `careers@startupkaro.in` |
+
+On Netlify, these three must also be added under Site configuration → Environment variables, scoped to **Functions**, for every deploy context in use (Production/Deploy Preview/Branch). Editing them requires a redeploy to take effect.
+
+### Rules
+- Never send `from` as the candidate's own email address — Resend only sends from verified domains, and doing so anyway is domain spoofing that fails SPF/DKIM/DMARC. Use `replyTo` for that behavior instead (already wired).
+- The resume cap is 4MB, not larger — Netlify Functions cap request bodies around ~6MB, and 4MB leaves headroom for our own error message to fire before the platform's opaque 413 does.
+- Any change to the accepted resume MIME types / extensions must be made in both `JobApplicationForm.tsx` and `app/api/careers/apply/route.ts` — the client check is UX only, the server check is the real gate.
+
 ### Prompt for gemini image creation
 Square 1:1 composition, 1600x1600, main subject centered with safe margins, clean white background, no text, suitable for rounded-corner web card crop.
 

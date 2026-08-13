@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 
 import { useSidebar } from "@/components/ui/sidebar";
+import { STARTUPKARO_LOGO_SRC } from "@/lib/brand";
 
 const navItems = [
     { title: "Dashboard", href: "/admin", icon: LayoutDashboard, exact: true },
@@ -111,11 +112,11 @@ export function AdminSidebar() {
                         ) : (
                             <Link href="/" className="flex flex-col whitespace-nowrap fade-in gap-0.5">
                                 <Image
-                                    src="/assets/startupkaro-logo-transparent.png"
+                                    src={STARTUPKARO_LOGO_SRC}
                                     alt="StartupKaro"
-                                    width={152}
-                                    height={28}
-                                    className="h-7 w-auto object-contain"
+                                    width={188}
+                                    height={35}
+                                    className="h-[35px] w-auto object-contain"
                                     style={{ width: "auto" }}
                                 />
                                 <p className="text-[11px] text-steel leading-none pl-0.5">Admin Panel</p>

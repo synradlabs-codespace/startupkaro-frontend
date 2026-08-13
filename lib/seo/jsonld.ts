@@ -3,10 +3,11 @@
 // Structured data (schema.org) builders. Each function returns a plain object
 // ready to hand to <JsonLd data={...} /> (components/seo/JsonLd.tsx).
 //
-// Known gaps in this markup are tracked in docs/SEO_CAVEATS.md — read that
+// Known gaps in this markup are tracked in docs/SEO_CAVEATS.md. Read that
 // file before "fixing" a validator warning here; some are accepted tradeoffs.
 
 import { absoluteUrl, ORG, SITE_LEGAL_NAME, SITE_NAME, SITE_URL } from "./site";
+import { sanitizeSeoText } from "./text";
 
 export function organizationJsonLd() {
     return {
@@ -57,8 +58,8 @@ export function faqPageJsonLd(items: FaqItem[]) {
         "@type": "FAQPage",
         mainEntity: items.map((item) => ({
             "@type": "Question",
-            name: item.question,
-            acceptedAnswer: { "@type": "Answer", text: item.answer },
+            name: sanitizeSeoText(item.question),
+            acceptedAnswer: { "@type": "Answer", text: sanitizeSeoText(item.answer) },
         })),
     };
 }
@@ -78,15 +79,15 @@ export function articleJsonLd(input: ArticleJsonLdInput) {
     return {
         "@context": "https://schema.org",
         "@type": "Article",
-        headline: input.title,
-        description: input.description,
+        headline: sanitizeSeoText(input.title),
+        description: sanitizeSeoText(input.description),
         image: [input.imageUrl],
         datePublished: input.publishedAt,
         dateModified: input.updatedAt ?? input.publishedAt,
         author: {
             "@type": "Person",
-            name: input.authorName,
-            ...(input.authorTitle ? { jobTitle: input.authorTitle } : {}),
+            name: sanitizeSeoText(input.authorName),
+            ...(input.authorTitle ? { jobTitle: sanitizeSeoText(input.authorTitle) } : {}),
         },
         publisher: {
             "@type": "Organization",
@@ -108,7 +109,7 @@ export interface JobPostingJsonLdInput {
 }
 
 /**
- * Missing `validThrough` and `baseSalary` — the Sanity `job` schema has
+ * Missing `validThrough` and `baseSalary`. The Sanity `job` schema has
  * neither field today. Markup stays valid and Google-Jobs-eligible, just
  * weaker. See docs/SEO_CAVEATS.md.
  */
@@ -116,8 +117,8 @@ export function jobPostingJsonLd(input: JobPostingJsonLdInput) {
     return {
         "@context": "https://schema.org",
         "@type": "JobPosting",
-        title: input.title,
-        description: input.description,
+        title: sanitizeSeoText(input.title),
+        description: sanitizeSeoText(input.description),
         identifier: {
             "@type": "PropertyValue",
             name: SITE_NAME,
@@ -138,7 +139,7 @@ export function jobPostingJsonLd(input: JobPostingJsonLdInput) {
                       "@type": "Place",
                       address: {
                           "@type": "PostalAddress",
-                          addressLocality: input.location,
+                          addressLocality: sanitizeSeoText(input.location),
                           addressCountry: "IN",
                       },
                   },
@@ -158,7 +159,7 @@ export function breadcrumbListJsonLd(items: BreadcrumbItem[]) {
         itemListElement: items.map((item, index) => ({
             "@type": "ListItem",
             position: index + 1,
-            name: item.name,
+            name: sanitizeSeoText(item.name),
             item: absoluteUrl(item.path),
         })),
     };

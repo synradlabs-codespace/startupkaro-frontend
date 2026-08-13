@@ -5,14 +5,16 @@
 // so this file never invents facts about the business.
 
 import type { Metadata } from "next";
+import { STARTUPKARO_LOGO_SRC } from "@/lib/brand";
+import { sanitizeSeoText } from "./text";
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://startupkaro.in";
 export const SITE_NAME = "StartupKaro";
 export const SITE_LEGAL_NAME = "STARTUPKARO PRIVATE LIMITED";
 export const SITE_LOCALE = "en_IN";
-export const DEFAULT_TITLE = "StartupKaro — Company Registration, Compliance & Tax Services in India";
+export const DEFAULT_TITLE = sanitizeSeoText("StartupKaro | Registration, Compliance, Tax and Tech Services in India");
 export const DEFAULT_DESCRIPTION =
-    "StartupKaro brings together Chartered Accountants, Company Secretaries, lawyers, compliance experts, and software engineers to help Indian startups and SMEs incorporate, stay compliant, protect their brand, and grow — with fixed-cost services and transparent pricing.";
+    sanitizeSeoText("StartupKaro helps Indian startups and SMEs with company registration, compliance, tax, accounting, legal support, websites, apps, dashboards, and growth services through CAs, CSs, lawyers, and software engineers.");
 
 export const ORG = {
     email: "contact@startupkaro.in",
@@ -20,7 +22,7 @@ export const ORG = {
     address: { locality: "Mohali", region: "Punjab", country: "IN" },
     socials: ["https://www.instagram.com/Startupkaro.india", "https://x.com/startupkaro24"],
     twitterHandle: "@startupkaro24",
-    logo: "/assets/startupkaro-logo-transparent.png",
+    logo: STARTUPKARO_LOGO_SRC,
 } as const;
 
 /** Applied to pages that should never appear in search results (internal panels, auth screens). */

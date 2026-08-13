@@ -159,7 +159,7 @@ function PanelAccountDropdown() {
 
   if (!session.role) return null;
 
-  const name = session.user?.name || (session.role === "admin" ? "Admin" : "Account");
+  const name = session.role === "admin" ? "Admin" : session.user?.name || "Account";
   const initial = name.trim().charAt(0).toUpperCase() || "U";
   const links = getAccountLinks(session.role);
 

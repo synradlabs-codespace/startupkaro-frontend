@@ -13,6 +13,7 @@ import {
 import { useSidebar } from "@/components/ui/sidebar";
 import { useCustomerCart } from "@/features/customers/hooks/useCustomerCart";
 import { WHATSAPP_URL } from "@/components/custom/WhatsAppButton";
+import { STARTUPKARO_LOGO_SRC } from "@/lib/brand";
 
 const navItems = [
     { title: "Dashboard", href: "/customer", icon: LayoutDashboard, exact: true },
@@ -65,11 +66,11 @@ export function CustomerSidebar() {
                         ) : (
                             <Link href="/" className="flex whitespace-nowrap">
                                 <Image
-                                    src="/assets/startupkaro-logo-transparent.png"
+                                    src={STARTUPKARO_LOGO_SRC}
                                     alt="StartupKaro"
-                                    width={152}
-                                    height={28}
-                                    className="h-7 w-auto object-contain"
+                                    width={188}
+                                    height={35}
+                                    className="h-[35px] w-auto object-contain"
                                     style={{ width: "auto" }}
                                 />
                             </Link>

@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/select";
 import { validators, formatNameInput, validatePhoneDigits, buildPhone } from "@/lib/validations/common.schema";
 import { submitJobApplication } from "@/features/careers/api/applications.service";
-import { getApiErrorMessage, getApiSuccessMessage } from "@/lib/api-messages";
+import { getApiErrorMessage, getApiSuccessMessage, mapServerFieldErrors } from "@/lib/api-messages";
 import { useToast } from "@/components/providers/ToastProvider";
 import type {
     ApplicationFormState,
@@ -69,6 +69,10 @@ function validateLinkedin(v: string): string | null {
 
 const ACCEPTED_TYPES = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
 const ACCEPTED_EXT = [".pdf", ".docx"];
+// Kept in sync with app/api/careers/apply/route.ts — Netlify Functions cap
+// request bodies around ~6MB, so 4MB leaves headroom for our own friendly
+// error to fire before the platform rejects the upload outright.
+const MAX_RESUME_BYTES = 4 * 1024 * 1024;
 
 function isValidResume(file: File) {
     return ACCEPTED_TYPES.includes(file.type) || ACCEPTED_EXT.some((ext) => file.name.toLowerCase().endsWith(ext));
@@ -104,10 +108,19 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
     const [loading, setLoading] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const resumeInputRef = useRef<HTMLInputElement>(null);
+    const honeypotRef = useRef<HTMLInputElement>(null);
 
     const handleResumeFile = (file: File) => {
         if (!isValidResume(file)) {
-            setErrors((prev) => ({ ...prev, resume: "Only PDF or DOCX files are accepted" }));
+            const message = "Only PDF or DOCX files are accepted";
+            setErrors((prev) => ({ ...prev, resume: message }));
+            toast.error(message);
+            return;
+        }
+        if (file.size > MAX_RESUME_BYTES) {
+            const message = `Resume must be under 4 MB (yours is ${(file.size / (1024 * 1024)).toFixed(1)} MB)`;
+            setErrors((prev) => ({ ...prev, resume: message }));
+            toast.error(message);
             return;
         }
         set("resume", file);
@@ -123,7 +136,10 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
 
     const set = <K extends keyof ApplicationFormState>(field: K, value: ApplicationFormState[K]) => {
         setForm((prev) => ({ ...prev, [field]: value }));
-        if (field in errors) setErrors((prev) => ({ ...prev, [field]: undefined }));
+        // Unconditional: previously `if (field in errors)` only cleared when the
+        // key already existed on the errors object, so an error set after this
+        // field was last touched could survive a fix until the next submit.
+        setErrors((prev) => ({ ...prev, [field]: undefined }));
     };
 
     function validate(): ApplicationFormErrors {
@@ -150,11 +166,12 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
         const errs = validate();
         if (Object.values(errs).some(Boolean)) {
             setErrors(errs);
+            toast.error("Please fix the highlighted fields before submitting");
             return;
         }
 
         setLoading(true);
-        const payload: ApplicationPayload = {
+        const payload: ApplicationPayload & { honeypot?: string } = {
             jobId: job.jobId,
             jobTitle: job.title,
             submittedAt: new Date().toISOString(),
@@ -172,6 +189,7 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
             summary: form.summary.trim() || undefined,
             resume: form.resume!,
             hasCriminalCase: form.hasCriminalCase === "Yes",
+            honeypot: honeypotRef.current?.value,
         };
 
         try {
@@ -181,8 +199,10 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
         } catch (error: unknown) {
             const message = getApiErrorMessage(error, "Something went wrong. Please try again or contact us directly.");
             toast.error(message);
+            const fieldErrors = mapServerFieldErrors(error);
             setErrors((prev) => ({
                 ...prev,
+                ...fieldErrors,
                 submit: message,
             }));
         } finally {
@@ -213,6 +233,20 @@ export function JobApplicationForm({ job }: JobApplicationFormProps) {
                 <p className="text-sm text-graphite mb-8">All fields are required unless marked optional.</p>
 
                 <form onSubmit={handleSubmit} noValidate className="space-y-7">
+
+                    {/* Honeypot — hidden from real users, only bots fill this in.
+                        Clipped to 1px rather than display:none since some bots
+                        skip inputs that aren't rendered; no large offset, so it
+                        can't push the page into horizontal overflow. */}
+                    <input
+                        ref={honeypotRef}
+                        type="text"
+                        name="company"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        aria-hidden="true"
+                        className="absolute h-px w-px overflow-hidden opacity-0"
+                    />
 
                     {/* Auto-filled fields */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
