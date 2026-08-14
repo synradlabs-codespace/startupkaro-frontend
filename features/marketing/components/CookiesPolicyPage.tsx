@@ -11,44 +11,20 @@ function Section({ title, children }: { title: string; children: React.ReactNode
     );
 }
 
-const cookieTable = [
-    {
-        name: "ph_*",
-        provider: "PostHog",
-        purpose: "Product analytics, tracks page views, events, and user sessions to help us understand usage",
-        type: "Analytics",
-        duration: "1 year",
-    },
-    {
-        name: "sidebar:state",
-        provider: "Startupkaro private limited",
-        purpose: "Remembers whether your sidebar is expanded or collapsed in the app panels",
-        type: "Functional",
-        duration: "7 days",
-    },
-    {
-        name: "auth_token",
-        provider: "Startupkaro private limited",
-        purpose: "Stores your authentication session token to keep you logged in",
-        type: "Strictly necessary",
-        duration: "Session / configurable",
-    },
-];
-
 export function CookiesPolicyPage() {
     return (
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-4">
+        <div className="mx-auto max-w-7xl px-0 sm:px-6 lg:px-8 pb-6 space-y-4">
             {/* Header */}
-            <div className="bg-canvas rounded-2xl px-8 py-12">
+            <div className="bg-canvas rounded-2xl px-4 pb-12 pt-7 sm:px-6 md:pt-11 lg:px-8">
                 <div className="max-w-3xl">
                     <p className="text-xs font-medium uppercase tracking-[0.28px] text-steel mb-3">Legal</p>
                     <h1 className="font-display text-4xl font-semibold tracking-tight text-ink mb-3">Cookies &amp; Data Collection</h1>
-                    <p className="text-sm text-stone">Last updated: April 9, 2026</p>
+                    <p className="text-sm text-stone">Last updated: August 14, 2026</p>
                 </div>
             </div>
 
             {/* Body */}
-            <div className="bg-canvas rounded-2xl px-8 py-12">
+            <div className="bg-canvas rounded-2xl px-4 py-12 sm:px-6 lg:px-8">
             <div className="max-w-3xl">
 
                 <Section title="What Are Cookies?">
@@ -76,10 +52,10 @@ export function CookiesPolicyPage() {
                     </ul>
                 </Section>
 
-                <Section title="PostHog Analytics">
+                <Section title="Analytics & Product Insights">
                     <p>
-                        We use <strong className="text-ink">PostHog</strong>, an open-source, privacy-focused product analytics platform, to
-                        understand how our website and app are used. PostHog collects:
+                        We use third-party analytics tools to understand how our website and app are used. Depending on the
+                        page, these tools may collect:
                     </p>
                     <ul className="list-disc pl-5 space-y-1.5">
                         <li>Pages visited and time spent on each page</li>
@@ -89,41 +65,35 @@ export function CookiesPolicyPage() {
                         <li>Session recordings (if enabled), these capture UI interactions, not keystrokes or passwords</li>
                     </ul>
                     <p>
-                        PostHog does not use your data for advertising and does not share it with third-party ad networks.
-                        You can learn more at{" "}
-                        <span className="text-charcoal font-medium">posthog.com</span>.
+                        This data is not used for advertising and is not shared with third-party ad networks. We are not
+                        obligated to, and do not, disclose the identity of the specific analytics or technology partners we use.
                     </p>
                     <p>
-                        IP addresses collected by PostHog may be used to derive location data and are subsequently anonymized
-                        or truncated in accordance with PostHog&apos;s data processing practices.
+                        Authorized Startupkaro private limited staff can view aggregated, anonymized visitor statistics (such as visitor counts and
+                        popular pages) through our internal admin tools. This internal view does not identify individual visitors.
                     </p>
                 </Section>
 
                 <Section title="Cookies We Set">
-                    <div className="overflow-x-auto rounded-xl border border-hairline">
-                        <table className="w-full text-sm">
-                            <thead>
-                                <tr className="bg-surface border-b border-hairline">
-                                    <th className="text-left px-4 py-3 font-medium text-slate text-xs uppercase tracking-wider">Cookie</th>
-                                    <th className="text-left px-4 py-3 font-medium text-slate text-xs uppercase tracking-wider">Provider</th>
-                                    <th className="text-left px-4 py-3 font-medium text-slate text-xs uppercase tracking-wider">Purpose</th>
-                                    <th className="text-left px-4 py-3 font-medium text-slate text-xs uppercase tracking-wider">Type</th>
-                                    <th className="text-left px-4 py-3 font-medium text-slate text-xs uppercase tracking-wider">Duration</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-hairline">
-                                {cookieTable.map((row) => (
-                                    <tr key={row.name} className="bg-canvas">
-                                        <td className="px-4 py-3 font-mono text-xs text-charcoal whitespace-nowrap">{row.name}</td>
-                                        <td className="px-4 py-3 text-slate whitespace-nowrap">{row.provider}</td>
-                                        <td className="px-4 py-3 text-slate">{row.purpose}</td>
-                                        <td className="px-4 py-3 text-slate whitespace-nowrap">{row.type}</td>
-                                        <td className="px-4 py-3 text-slate whitespace-nowrap">{row.duration}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <p>
+                        We do not publish a list of individual cookie names, as this changes as our tools evolve and we are not
+                        obligated to disclose it. In general, the cookies we and our service providers set fall into the
+                        categories described above:
+                    </p>
+                    <ul className="list-disc pl-5 space-y-1.5">
+                        <li>
+                            <strong className="text-ink">Strictly necessary cookies</strong> typically last for your browser session or a short
+                            configurable period, and keep you signed in.
+                        </li>
+                        <li>
+                            <strong className="text-ink">Functional cookies</strong> typically last a few days to a few weeks, and remember
+                            interface preferences such as panel or sidebar state.
+                        </li>
+                        <li>
+                            <strong className="text-ink">Analytics cookies</strong> typically last up to a year, and help us recognise repeat
+                            visits for usage statistics.
+                        </li>
+                    </ul>
                 </Section>
 
                 <Section title="Your Choices">
@@ -133,9 +103,9 @@ export function CookiesPolicyPage() {
                         core site functionality from working (e.g., you will not be able to log in).
                     </p>
                     <p>
-                        <strong className="text-ink">Opt-out of analytics:</strong> If you do not wish to be tracked by PostHog, you can
-                        use a browser extension that blocks analytics scripts (such as uBlock Origin), or enable
-                        &quot;Do Not Track&quot; in your browser settings, PostHog respects this signal where configured.
+                        <strong className="text-ink">Opt-out of analytics:</strong> If you do not wish to be tracked by our analytics tools,
+                        you can decline analytics cookies through the cookie consent banner, use a browser extension that blocks
+                        analytics scripts, or enable &quot;Do Not Track&quot; in your browser settings.
                     </p>
                 </Section>
 

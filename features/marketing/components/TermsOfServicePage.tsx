@@ -13,18 +13,18 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export function TermsOfServicePage() {
     return (
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-4">
+        <div className="mx-auto max-w-7xl px-0 sm:px-6 lg:px-8 pb-6 space-y-4">
             {/* Header */}
-            <div className="bg-canvas rounded-2xl px-8 py-12">
+            <div className="bg-canvas rounded-2xl px-4 pb-12 pt-7 sm:px-6 md:pt-11 lg:px-8">
                 <div className="max-w-3xl">
                     <p className="text-xs font-medium uppercase tracking-[0.28px] text-steel mb-3">Legal</p>
                     <h1 className="font-display text-4xl font-semibold tracking-tight text-ink mb-3">Terms of Service</h1>
-                    <p className="text-sm text-stone">Last updated: April 9, 2026</p>
+                    <p className="text-sm text-stone">Last updated: August 14, 2026</p>
                 </div>
             </div>
 
             {/* Body */}
-            <div className="bg-canvas rounded-2xl px-8 py-12">
+            <div className="bg-canvas rounded-2xl px-4 py-12 sm:px-6 lg:px-8">
             <div className="max-w-3xl">
 
                 <Section title="Acceptance of Terms">
@@ -41,16 +41,19 @@ export function TermsOfServicePage() {
 
                 <Section title="Services">
                     <p>
-                        Startupkaro private limited provides business compliance, registration, legal, and technology services including, but not limited to: GST registration,
-                        company incorporation, trademark filing, income tax return filing, FSSAI licensing, import-export code registration, websites, apps, automation, and dashboards.
+                        Startupkaro private limited provides business compliance, registration, legal, technology, and franchise consulting services including, but not
+                        limited to: GST registration, company incorporation, trademark filing, income tax return filing, FSSAI licensing, import-export code registration,
+                        accounting, tax, and payroll compliance, websites, apps, automation, and dashboards, and franchise modelling, franchise agreements, partner
+                        acquisition, and national or international expansion advisory.
                     </p>
                     <p>
-                        All services are delivered through qualified professionals, Chartered Accountants (CAs), Company Secretaries (CSs),
-                        legal professionals, and software engineers, assigned on a case-by-case basis.
+                        All services are delivered through qualified professionals, Chartered Accountants (CAs), Company Secretaries (CSs), legal professionals,
+                        software engineers, and business consultants, assigned on a case-by-case basis.
                     </p>
                     <p>
                         We act as a facilitator and professional service provider. We do not guarantee outcomes that are subject to
-                        discretionary decisions of government authorities (e.g., trademark approval, MCA name availability).
+                        discretionary decisions of government authorities (e.g., trademark approval, MCA name availability) or third parties
+                        such as prospective franchise partners or investors.
                     </p>
                 </Section>
 
@@ -99,8 +102,10 @@ export function TermsOfServicePage() {
                         special, or consequential damages arising from the use or inability to use our services.
                     </p>
                     <p>
-                        Our total liability for any claim arising from our services shall not exceed the amount paid by you for
-                        the specific service that gave rise to the claim.
+                        Regardless of the nature of the claim, including any claim framed as mental harassment, emotional distress,
+                        or psychological damages, our total liability to you shall in no event exceed the amount actually paid by
+                        you for the specific service that gave rise to the claim. You will not be entitled to recover any amount
+                        beyond what you originally paid for that service.
                     </p>
                     <p>
                         We are not liable for delays or service failures caused by government portals, third-party systems,

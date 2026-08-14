@@ -13,24 +13,24 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export function PrivacyPolicyPage() {
     return (
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-4">
+        <div className="mx-auto max-w-7xl px-0 sm:px-6 lg:px-8 pb-6 space-y-4">
             {/* Header */}
-            <div className="bg-canvas rounded-2xl px-8 py-12">
+            <div className="bg-canvas rounded-2xl px-4 pb-12 pt-7 sm:px-6 md:pt-11 lg:px-8">
                 <div className="max-w-3xl">
                     <p className="text-xs font-medium uppercase tracking-[0.28px] text-steel mb-3">Legal</p>
                     <h1 className="font-display text-4xl font-semibold tracking-tight text-ink mb-3">Privacy Policy</h1>
-                    <p className="text-sm text-stone">Last updated: April 9, 2026</p>
+                    <p className="text-sm text-stone">Last updated: August 14, 2026</p>
                 </div>
             </div>
 
             {/* Body */}
-            <div className="bg-canvas rounded-2xl px-8 py-12">
+            <div className="bg-canvas rounded-2xl px-4 py-12 sm:px-6 lg:px-8">
             <div className="max-w-3xl">
 
                 <Section title="Overview">
                     <p>
                         Startupkaro private limited (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) operates the website startupkaro.in and provides business
-                        compliance, registration, legal, and technology services. This Privacy Policy explains how we collect, use, store, and share
+                        compliance, registration, legal, technology, and franchise consulting services. This Privacy Policy explains how we collect, use, store, and share
                         information when you visit our website or use our services.
                     </p>
                     <p>
@@ -54,9 +54,10 @@ export function PrivacyPolicyPage() {
                         <li>Interaction events such as button clicks and form interactions</li>
                     </ul>
                     <p className="mt-2">
-                        We use <strong className="text-ink">PostHog</strong>, an open-source product analytics platform, to collect
-                        behavioral and usage data to understand how visitors interact with our website. PostHog may set cookies on
-                        your device. See our <Link href="/cookies-policy" className="text-link-blue hover:underline">Cookies Policy</Link> for details.
+                        We use analytics tools to collect behavioral and usage data so we can understand how visitors interact with
+                        our website. These tools may set cookies on your device. See our{" "}
+                        <Link href="/cookies-policy" className="text-link-blue hover:underline">Cookies Policy</Link> for details.
+                        We are not obligated to, and do not, disclose the identity of our specific technology or analytics partners.
                     </p>
                 </Section>
 
@@ -66,7 +67,8 @@ export function PrivacyPolicyPage() {
                         <li>To communicate with you about your order status, documents, and compliance deadlines</li>
                         <li>To respond to your inquiries and support requests</li>
                         <li>To send you service updates or relevant legal/compliance reminders (you can opt out at any time)</li>
-                        <li>To analyse website usage and improve our product experience via PostHog analytics</li>
+                        <li>To analyse website usage and improve our product experience through analytics tools</li>
+                        <li>To generate aggregated, anonymized visitor statistics that authorized Startupkaro private limited staff can view internally to understand site performance</li>
                         <li>To comply with legal obligations, including record-keeping requirements under Indian law</li>
                     </ul>
                 </Section>
@@ -85,8 +87,13 @@ export function PrivacyPolicyPage() {
                             <strong className="text-ink">Payment processors:</strong> Your payment is processed by third-party gateways. We do not store card or UPI credentials.
                         </li>
                         <li>
-                            <strong className="text-ink">Analytics providers:</strong> PostHog receives anonymized usage data. See our{" "}
+                            <strong className="text-ink">Analytics providers:</strong> Our analytics tools receive anonymized usage data.
+                            We do not disclose the identity of our specific analytics or technology partners. See our{" "}
                             <Link href="/cookies-policy" className="text-link-blue hover:underline">Cookies Policy</Link>.
+                        </li>
+                        <li>
+                            <strong className="text-ink">Internal teams:</strong> Aggregated, anonymized visitor analytics may be viewed by
+                            authorized Startupkaro private limited staff through our internal admin tools. This data is not used to identify individual visitors.
                         </li>
                         <li>
                             <strong className="text-ink">Legal requirements:</strong> We may disclose information if required by law, court order, or government authority.
@@ -137,6 +144,13 @@ export function PrivacyPolicyPage() {
                     <p>
                         Our services are intended for individuals 18 years of age or older. We do not knowingly collect personal
                         information from minors.
+                    </p>
+                </Section>
+
+                <Section title="Governing Law & Jurisdiction">
+                    <p>
+                        This Privacy Policy is governed by the laws of India. Any dispute arising out of or relating to this
+                        Privacy Policy shall be subject to the exclusive jurisdiction of the courts in Mohali, Punjab, India.
                     </p>
                 </Section>
 

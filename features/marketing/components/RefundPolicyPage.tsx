@@ -13,18 +13,18 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export function RefundPolicyPage() {
     return (
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-4">
+        <div className="mx-auto max-w-7xl px-0 sm:px-6 lg:px-8 pb-6 space-y-4">
             {/* Header */}
-            <div className="bg-canvas rounded-2xl px-8 py-12">
+            <div className="bg-canvas rounded-2xl px-4 pb-12 pt-7 sm:px-6 md:pt-11 lg:px-8">
                 <div className="max-w-3xl">
                     <p className="text-xs font-medium uppercase tracking-[0.28px] text-steel mb-3">Legal</p>
                     <h1 className="font-display text-4xl font-semibold tracking-tight text-ink mb-3">Refund Policy</h1>
-                    <p className="text-sm text-stone">Last updated: April 9, 2026</p>
+                    <p className="text-sm text-stone">Last updated: August 14, 2026</p>
                 </div>
             </div>
 
             {/* Body */}
-            <div className="bg-canvas rounded-2xl px-8 py-12">
+            <div className="bg-canvas rounded-2xl px-4 py-12 sm:px-6 lg:px-8">
             <div className="max-w-3xl">
 
                 <div className="mb-10 p-5 bg-amber-50 border border-amber-100 rounded-2xl">
@@ -118,6 +118,22 @@ export function RefundPolicyPage() {
                         Initiating a chargeback with your bank without first contacting us to resolve the issue is a violation
                         of our Terms of Service. We reserve the right to dispute any chargeback with appropriate evidence and
                         may suspend your account pending resolution.
+                    </p>
+                </Section>
+
+                <Section title="Maximum Refund Amount">
+                    <p>
+                        In no event will any refund, compensation, or other payout under this policy exceed the amount you
+                        actually paid Startupkaro private limited for the specific service in question. This limit applies regardless of how
+                        the claim is framed, including claims for mental harassment, emotional distress, or psychological damages.
+                        You do not have the right to seek compensation beyond your original payment.
+                    </p>
+                </Section>
+
+                <Section title="Governing Law & Jurisdiction">
+                    <p>
+                        This Refund Policy is governed by the laws of India. Any dispute arising out of or relating to a refund
+                        request shall be subject to the exclusive jurisdiction of the courts in Mohali, Punjab, India.
                     </p>
                 </Section>
 
