@@ -169,7 +169,7 @@ export function AboutPage() {
 
     return (
         <div className="overflow-hidden bg-canvas">
-            <section className="relative border-b border-hairline bg-canvas px-4 py-16 sm:px-6 md:py-24 lg:px-8">
+            <section className="relative border-b border-hairline bg-canvas px-4 pb-16 pt-7 sm:px-6 md:pb-24 md:pt-11 lg:px-8">
                 <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
                     <motion.div {...revealProps} variants={reveal} className="max-w-3xl">
                         <p className="mb-5 text-xs font-semibold uppercase tracking-[0.7px] text-primary-brand">About StartupKaro</p>

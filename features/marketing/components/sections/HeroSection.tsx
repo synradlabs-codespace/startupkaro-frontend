@@ -51,11 +51,11 @@ export function HeroSection() {
           };
 
     return (
-        <section className="relative overflow-x-clip px-3 sm:px-4 lg:px-5 xl:px-8">
+        <section className="relative overflow-x-clip px-0 sm:px-4 lg:px-5 xl:px-8">
             <div className="mx-auto max-w-7xl">
                 <div className="flex flex-col items-stretch gap-8 lg:flex-row lg:gap-12">
                     {/* Left text content */}
-                    <motion.div {...leftProps} className="relative flex-1 min-w-0 overflow-hidden rounded-2xl bg-canvas px-7 pb-12 pt-4 md:px-10 md:pb-16 md:pt-8">
+                    <motion.div {...leftProps} className="relative flex-1 min-w-0 overflow-hidden rounded-2xl bg-canvas px-4 pb-12 pt-4 md:px-10 md:pb-16 md:pt-8">
                         <div className="relative">
                             {/* Eyebrow */}
                             <p className="text-xs uppercase tracking-[0.28px] text-graphite font-medium mb-4">

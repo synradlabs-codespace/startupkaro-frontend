@@ -54,7 +54,7 @@ export function ServicesListingPage({ services, initialCategory }: { services: E
     const isFiltering = search.trim() !== "" || activeCategory !== "All";
 
     return (
-        <div className="mx-auto max-w-7xl space-y-8 px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl space-y-8 px-4 pb-10 pt-7 sm:px-6 md:pt-11 lg:px-8">
             <div>
                 <h1 className="mb-2 font-display text-4xl font-medium text-ink md:text-6xl">Our Services</h1>
                 <p className="text-base leading-relaxed text-charcoal">Startup compliance, legal, and tech services handled end-to-end by CAs, CSs, lawyers, and software engineers.</p>

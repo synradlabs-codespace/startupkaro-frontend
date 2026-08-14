@@ -273,7 +273,7 @@ function HeroSection() {
     const { reduceMotion, revealProps } = useRevealProps();
 
     return (
-        <section className="relative bg-canvas px-4 pb-10 pt-14 sm:px-6 md:pb-12 md:pt-18 lg:px-8">
+        <section className="relative bg-canvas px-4 pb-10 pt-7 sm:px-6 md:pb-12 md:pt-11 lg:px-8">
             <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[0.82fr_1.18fr]">
                 <motion.div {...revealProps} variants={reveal} className="max-w-3xl">
                     <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-graphite">

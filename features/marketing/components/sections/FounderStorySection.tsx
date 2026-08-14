@@ -32,7 +32,7 @@ const team = [
     },
     {
         name: "Daksh Nauni",
-        role: "CTO",
+        role: "Chief Technology Officer",
         description: "Drives technology and innovation across the Startupkaro platform while supervising web and app development projects that help startups and businesses embrace digital transformation.",
         image: "/assets/team-daksh-nauni.jpeg",
     },

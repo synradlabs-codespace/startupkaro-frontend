@@ -230,7 +230,7 @@ export function TechServicesPage({ articles }: TechServicesPageProps) {
 
     return (
         <main className="overflow-x-clip bg-canvas">
-            <section className="relative overflow-hidden border-b border-hairline bg-canvas pt-10">
+            <section className="relative overflow-hidden border-b border-hairline bg-canvas pt-7 md:pt-11">
                 <div className="mx-auto grid max-w-7xl gap-10 px-4 pb-14 sm:px-6 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:px-8 lg:pb-18">
                     <motion.div
                         initial={prefersReducedMotion ? undefined : { opacity: 0, x: -34 }}
