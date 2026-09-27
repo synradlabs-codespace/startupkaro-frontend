@@ -5,6 +5,7 @@ const BRANDS = [
     { name: "Chai Churi", src: "/brands/chai-churi.webp" },
     { name: "Kleenjal Sipster", src: "/brands/kleenjal-sipster.webp" },
     { name: "Nadar Properties", src: "/brands/nadar-properties.webp" },
+    { name: "Octane Fitness", src: "/brands/octane-fitness.png" },
     { name: "Paggnation", src: "/brands/paggnation.webp" },
     { name: "Sardar Ji", src: "/brands/sardar-ji.webp" },
     { name: "Social", src: "/brands/social.webp" },
