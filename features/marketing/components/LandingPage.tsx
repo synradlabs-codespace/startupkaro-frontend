@@ -11,7 +11,7 @@ import { LandingCTASection } from "./sections/LandingCTASection";
 import { SectionReveal } from "./ui/SectionReveal";
 import { getLatestArticles } from "@/features/articles/api/articles.service";
 
-const PromotionsSection = dynamic(() => import("./sections/PromotionsSection").then((mod) => mod.PromotionsSection));
+const ServicePromoCarousel = dynamic(() => import("./sections/ServicePromoCarousel").then((mod) => mod.ServicePromoCarousel));
 const ConsultantCTASection = dynamic(() => import("./sections/ConsultantCTASection").then((mod) => mod.ConsultantCTASection));
 const ProductDevelopmentSection = dynamic(() => import("./sections/ProductDevelopmentSection").then((mod) => mod.ProductDevelopmentSection));
 const ServiceJourneySection = dynamic(() => import("./sections/ServiceJourneySection").then((mod) => mod.ServiceJourneySection));
@@ -30,7 +30,7 @@ export async function LandingPage() {
                 <BrandsMarqueeSection />
             </SectionReveal>
             <SectionReveal delay={0.04}>
-                <PromotionsSection />
+                <ServicePromoCarousel />
             </SectionReveal>
             <SectionReveal delay={0.04}>
                 <ServicesOverviewSection />
