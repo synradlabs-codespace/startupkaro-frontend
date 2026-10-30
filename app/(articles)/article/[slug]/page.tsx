@@ -37,12 +37,12 @@ export async function generateMetadata({
     let image: { url: string; alt?: string } | undefined;
     if (article.seo?.ogImage) {
         image = {
-            url: urlFor(article.seo.ogImage).width(1200).height(630).fit("crop").url(),
+            url: urlFor(article.seo.ogImage).width(1200).height(630).fit("crop").format("jpg").quality(80).url(),
             alt: article.seo.ogImageAlt ?? title,
         };
     } else if (article.coverImage?.url) {
         image = {
-            url: urlFor(article.coverImage.url).width(1200).height(630).fit("crop").url(),
+            url: urlFor(article.coverImage.url).width(1200).height(630).fit("crop").format("jpg").quality(80).url(),
             alt: article.coverImage.alt ?? title,
         };
     } else {
@@ -73,9 +73,9 @@ export default async function ArticlePage({
     const related = await getRelatedArticles(slug, categorySlugs, 3);
 
     const imageUrl = article.seo?.ogImage
-        ? urlFor(article.seo.ogImage).width(1200).height(630).fit("crop").url()
+        ? urlFor(article.seo.ogImage).width(1200).height(630).fit("crop").format("jpg").quality(80).url()
         : article.coverImage?.url
-          ? urlFor(article.coverImage.url).width(1200).height(630).fit("crop").url()
+          ? urlFor(article.coverImage.url).width(1200).height(630).fit("crop").format("jpg").quality(80).url()
           : ogImageUrl(article.title, "Article");
 
     return (
