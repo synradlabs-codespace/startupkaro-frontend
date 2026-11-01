@@ -17,8 +17,18 @@ const controlClass =
 
 type SlideProps = { active: boolean; index: number };
 
+type SlideShellProps = SlideProps & {
+    /** Text colour and desktop grid columns. */
+    className: string;
+    /** Background of the card. It lives on its own layer so the woman can rise above the card's top edge. */
+    bgClassName: string;
+    /** Decorative shapes, clipped to the card. */
+    decor: ReactNode;
+    children: ReactNode;
+};
+
 /** Every slide sits in one grid cell, so the carousel keeps the height of its tallest slide. */
-function SlideShell({ active, index, className, children }: SlideProps & { className: string; children: ReactNode }) {
+function SlideShell({ active, index, className, bgClassName, decor, children }: SlideShellProps) {
     return (
         <div
             role="group"
@@ -30,20 +40,31 @@ function SlideShell({ active, index, className, children }: SlideProps & { class
                 active ? "opacity-100" : "pointer-events-none opacity-0"
             )}
         >
-            <div className={cn("relative grid h-full rounded-2xl md:min-h-70", className)}>{children}</div>
+            <div className={cn("relative grid h-full grid-rows-[auto_1fr] md:min-h-70 md:grid-rows-none", className)}>
+                {/* On mobile the card starts lower down, so the top of the image stands out above it. */}
+                <div
+                    aria-hidden="true"
+                    className={cn("pointer-events-none absolute inset-x-0 bottom-0 top-24 overflow-hidden rounded-2xl md:inset-0", bgClassName)}
+                >
+                    {decor}
+                </div>
+                {children}
+            </div>
         </div>
     );
 }
 
 /**
- * The cutout is clipped only along its bottom edge, so it stays flush with the card but can
- * rise above the card's top edge on desktop. On mobile it sits below the text without overflowing.
+ * The woman is the eye-catcher, so she is large on every screen size and rises above the card.
+ * Desktop: clipped only along the bottom edge, flush with the card, free to overflow the top.
+ * Mobile: sits above the text, and her lower body fades into the card colour instead of being cut off.
  */
 function PopImage({ src, alt, active, className }: { src: string; alt: string; active: boolean; className?: string }) {
     return (
-        <div className={cn("relative h-52 md:h-auto", className)}>
+        // z-5 keeps her above the card layer even when `order-first` changes the paint order.
+        <div className={cn("relative z-5 h-80 md:h-auto", className)}>
             <div
-                className="relative h-full w-full md:absolute md:inset-x-0 md:bottom-0 md:h-[calc(100%+5rem)]"
+                className="relative h-full w-full [-webkit-mask-image:linear-gradient(to_bottom,black_58%,transparent_100%)] [mask-image:linear-gradient(to_bottom,black_58%,transparent_100%)] md:absolute md:inset-x-0 md:bottom-0 md:h-[calc(100%+5rem)] md:[-webkit-mask-image:none] md:[mask-image:none]"
                 style={{ clipPath: "inset(-6rem -6rem 0 -6rem)" }}
             >
                 <Image
@@ -76,13 +97,19 @@ function LightButton({ href, text }: { href: string; text: string }) {
 /* Slide 1: solid brand blue, pill chips, image on the right. */
 function TechSlide({ active, index }: SlideProps) {
     return (
-        <SlideShell active={active} index={index} className="bg-primary-brand text-white md:grid-cols-[1fr_380px]">
-            <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl" aria-hidden="true">
-                <div className="absolute -right-16 -top-24 h-72 w-72 rounded-full bg-white/10" />
-                <div className="absolute bottom-0 right-24 h-48 w-48 rounded-full bg-white/10 blur-2xl" />
-            </div>
-
-            <div className="relative z-10 flex flex-col justify-center p-5 md:p-8 lg:px-10">
+        <SlideShell
+            active={active}
+            index={index}
+            className="text-white md:grid-cols-[1fr_380px]"
+            bgClassName="bg-primary-brand"
+            decor={
+                <>
+                    <div className="absolute -right-16 -top-24 h-72 w-72 rounded-full bg-white/10" />
+                    <div className="absolute bottom-0 right-24 h-48 w-48 rounded-full bg-white/10 blur-2xl" />
+                </>
+            }
+        >
+            <div className="relative z-10 -mt-4 flex flex-col justify-start md:justify-center p-5 md:mt-0 md:p-8 lg:px-10">
                 <p className="mb-3 text-xs font-semibold uppercase tracking-[0.7px] text-white/80">Tech services</p>
                 <h2 className="max-w-xl font-display text-3xl font-medium leading-tight md:text-4xl">
                     Launch your website, app or dashboard without a tech team
@@ -104,6 +131,7 @@ function TechSlide({ active, index }: SlideProps) {
                 src="/assets/promo-tech-services.webp"
                 alt="Smiling woman in a navy StartupKaro polo holding a laptop that shows a website dashboard"
                 active={active}
+                className="order-first md:order-none"
             />
         </SlideShell>
     );
@@ -118,31 +146,36 @@ const gstPoints: { icon: LucideIcon; text: string }[] = [
 /* Slide 2: soft sky tint, image on the left, three icon cards. */
 function GstSlide({ active, index }: SlideProps) {
     return (
-        <SlideShell active={active} index={index} className="bg-tint-sky text-ink md:grid-cols-[380px_1fr]">
-            <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl" aria-hidden="true">
-                <div className="absolute -left-10 bottom-0 h-64 w-64 rounded-full bg-white/60 blur-2xl" />
-                <div className="absolute -bottom-20 right-10 h-56 w-56 rounded-full bg-primary-brand/10" />
-            </div>
-
+        <SlideShell
+            active={active}
+            index={index}
+            className="text-ink md:grid-cols-[380px_1fr]"
+            bgClassName="bg-tint-sky"
+            decor={
+                <>
+                    <div className="absolute -left-10 bottom-0 h-64 w-64 rounded-full bg-white/60 blur-2xl" />
+                    <div className="absolute -bottom-20 right-10 h-56 w-56 rounded-full bg-primary-brand/10" />
+                </>
+            }
+        >
             <PopImage
                 src="/assets/promo-gst-registration.webp"
                 alt="Smiling woman in a navy StartupKaro polo holding a tablet showing an approved document"
                 active={active}
-                className="order-2 md:order-1"
             />
 
-            <div className="relative z-10 order-1 flex flex-col justify-center p-6 md:order-2 md:p-8 lg:pl-4 lg:pr-10">
+            <div className="relative z-10 -mt-4 flex flex-col justify-start md:justify-center p-5 md:mt-0 md:p-8 lg:pl-4 lg:pr-10">
                 <p className="mb-3 text-xs font-semibold uppercase tracking-[0.7px] text-primary-brand">GST registration</p>
                 <h2 className="max-w-xl font-display text-3xl font-medium leading-tight md:text-4xl">
                     Get your GST registration handled by an expert CA
                 </h2>
-                <div className="mt-4 grid gap-2.5 sm:grid-cols-3">
+                <div className="mt-4 grid gap-2 sm:grid-cols-3 md:gap-2.5">
                     {gstPoints.map(({ icon: Icon, text }) => (
-                        <div key={text} className="flex items-start gap-2.5 rounded-xl bg-white p-3 shadow-sm">
-                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-tint-sky text-primary-brand">
+                        <div key={text} className="flex items-center gap-2.5 rounded-xl bg-white p-2 shadow-sm md:items-start md:p-3">
+                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-tint-sky text-primary-brand md:h-8 md:w-8">
                                 <Icon className="h-4 w-4" aria-hidden="true" />
                             </div>
-                            <p className="text-sm font-semibold leading-snug">{text}</p>
+                            <p className="text-[13px] font-semibold leading-snug md:text-sm">{text}</p>
                         </div>
                     ))}
                 </div>
@@ -169,14 +202,20 @@ const franchiseSteps = [
 /* Slide 3: deep teal, numbered steps, ring behind the image. */
 function FranchiseSlide({ active, index }: SlideProps) {
     return (
-        <SlideShell active={active} index={index} className="bg-storm-deep text-white md:grid-cols-[1fr_380px]">
-            <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl" aria-hidden="true">
-                <div className="absolute -right-24 top-1/2 h-[420px] w-[420px] -translate-y-1/2 rounded-full border border-white/15" />
-                <div className="absolute -right-8 top-1/2 h-[300px] w-[300px] -translate-y-1/2 rounded-full border border-white/20" />
-                <div className="absolute bottom-0 right-16 h-52 w-52 rounded-full bg-bloom-coral/25 blur-3xl" />
-            </div>
-
-            <div className="relative z-10 flex flex-col justify-center p-5 md:p-8 lg:px-10">
+        <SlideShell
+            active={active}
+            index={index}
+            className="text-white md:grid-cols-[1fr_380px]"
+            bgClassName="bg-storm-deep"
+            decor={
+                <>
+                    <div className="absolute -right-24 top-1/2 h-[420px] w-[420px] -translate-y-1/2 rounded-full border border-white/15" />
+                    <div className="absolute -right-8 top-1/2 h-[300px] w-[300px] -translate-y-1/2 rounded-full border border-white/20" />
+                    <div className="absolute bottom-0 right-16 h-52 w-52 rounded-full bg-bloom-coral/25 blur-3xl" />
+                </>
+            }
+        >
+            <div className="relative z-10 -mt-4 flex flex-col justify-start md:justify-center p-5 md:mt-0 md:p-8 lg:px-10">
                 <p className="mb-3 text-xs font-semibold uppercase tracking-[0.7px] text-white/80">Franchise services</p>
                 <h2 className="max-w-xl font-display text-3xl font-medium leading-tight md:text-4xl">
                     Ready to grow your brand through franchising?
@@ -200,6 +239,7 @@ function FranchiseSlide({ active, index }: SlideProps) {
                 src="/assets/promo-franchise-services.webp"
                 alt="Smiling woman in a navy StartupKaro polo holding a miniature shop model"
                 active={active}
+                className="order-first md:order-none"
             />
         </SlideShell>
     );
@@ -226,7 +266,7 @@ export function ServicePromoCarousel() {
         <section
             aria-roledescription="carousel"
             aria-label="Featured services"
-            className="overflow-x-clip bg-surface pb-14 pt-14 md:pb-16 md:pt-32"
+            className="overflow-x-clip bg-surface pb-14 pt-28 md:pb-16 md:pt-32"
             onMouseEnter={() => setHoverPaused(true)}
             onMouseLeave={() => setHoverPaused(false)}
             onFocus={() => setHoverPaused(true)}
