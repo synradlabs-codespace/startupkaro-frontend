@@ -164,3 +164,51 @@ export function breadcrumbListJsonLd(items: BreadcrumbItem[]) {
         })),
     };
 }
+
+export interface WebApplicationJsonLdInput {
+    name: string;
+    description: string;
+    path: string;
+    /** schema.org applicationCategory, e.g. "FinanceApplication" */
+    category?: string;
+    dateModified?: string;
+}
+
+/** Free browser-based tools (calculators). Price 0 makes them eligible as free apps. */
+export function webApplicationJsonLd(input: WebApplicationJsonLdInput) {
+    return {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        name: sanitizeSeoText(input.name),
+        description: sanitizeSeoText(input.description),
+        url: absoluteUrl(input.path),
+        applicationCategory: input.category ?? "FinanceApplication",
+        operatingSystem: "Any",
+        browserRequirements: "Requires JavaScript",
+        inLanguage: "en-IN",
+        isAccessibleForFree: true,
+        ...(input.dateModified ? { dateModified: input.dateModified } : {}),
+        offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
+        publisher: {
+            "@type": "Organization",
+            name: SITE_LEGAL_NAME,
+            url: SITE_URL,
+            logo: absoluteUrl(ORG.logo),
+        },
+    };
+}
+
+export function itemListJsonLd(name: string, items: { name: string; path: string }[]) {
+    return {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: sanitizeSeoText(name),
+        numberOfItems: items.length,
+        itemListElement: items.map((item, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            name: sanitizeSeoText(item.name),
+            url: absoluteUrl(item.path),
+        })),
+    };
+}

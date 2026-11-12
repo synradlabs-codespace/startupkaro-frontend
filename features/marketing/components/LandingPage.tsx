@@ -7,6 +7,7 @@ import { ServicesOverviewSection } from "./sections/ServicesOverviewSection";
 import { WhyChooseUsSection } from "./sections/WhyChooseUsSection";
 import { TestimonialsSection } from "./sections/TestimonialsSection";
 import { LatestArticlesSection } from "./sections/LatestArticlesSection";
+import { FreeToolsSection } from "./sections/FreeToolsSection";
 import { LandingCTASection } from "./sections/LandingCTASection";
 import { SectionReveal } from "./ui/SectionReveal";
 import { getLatestArticles } from "@/features/articles/api/articles.service";
@@ -49,6 +50,9 @@ export async function LandingPage() {
             </SectionReveal>
             <SectionReveal delay={0.04}>
                 <HowItWorksSection />
+            </SectionReveal>
+            <SectionReveal delay={0.04}>
+                <FreeToolsSection />
             </SectionReveal>
             <SectionReveal delay={0.04}>
                 <LatestArticlesSection articles={articles} />

@@ -8,6 +8,10 @@ import { FaXTwitter } from "react-icons/fa6";
 import { NAV_LINKS } from "@/components/directional-hover-header/header/nav-data";
 import { UnderlineAnimation } from "@/components/fancy/text";
 import { STARTUPKARO_LOGO_SRC } from "@/lib/brand";
+import { TOOLS } from "@/features/tools/data/tools.registry";
+
+const FOOTER_TOOL_SLUGS = ["income-tax-calculator", "salary-calculator", "sip-calculator", "emi-calculator", "gst-calculator", "tds-calculator"];
+const footerTools = FOOTER_TOOL_SLUGS.map((slug) => TOOLS.find((t) => t.slug === slug)).filter((t) => t !== undefined);
 
 const servicesMenu = NAV_LINKS.find((link) => link.label === "Services")?.menu;
 
@@ -96,7 +100,7 @@ export function MarketingFooter() {
                                 href="/services"
                                 className="group text-sm font-medium text-primary-brand transition-colors hover:text-primary-deep"
                             >
-                                <UnderlineAnimation lineClassName="bg-primary-brand">View all services</UnderlineAnimation>
+                                <UnderlineAnimation lineClassName="bg-primary-brand">View All Services</UnderlineAnimation>
                             </Link>
                         </div>
 
@@ -143,7 +147,7 @@ export function MarketingFooter() {
                     </div>
                 </div>
 
-                <div className="grid gap-10 border-b border-hairline py-10 md:grid-cols-3">
+                <div className="grid gap-10 border-b border-hairline py-10 md:grid-cols-2 lg:grid-cols-4">
                     <div>
                         <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.7px] text-ink">Company</h3>
                         <ul className="space-y-2.5">
@@ -154,6 +158,26 @@ export function MarketingFooter() {
                                     </Link>
                                 </li>
                             ))}
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.7px] text-ink">
+                            <Link href="/tools" className="hover:text-primary-brand">Free Tools</Link>
+                        </h3>
+                        <ul className="space-y-2.5">
+                            {footerTools.map((tool) => (
+                                <li key={tool.slug}>
+                                    <Link href={`/tools/${tool.slug}`} className="group text-sm text-charcoal transition-colors hover:text-ink">
+                                        <UnderlineAnimation lineClassName="bg-primary-brand">{tool.name}</UnderlineAnimation>
+                                    </Link>
+                                </li>
+                            ))}
+                            <li>
+                                <Link href="/tools" className="group text-sm font-semibold text-primary-brand">
+                                    <UnderlineAnimation lineClassName="bg-primary-brand">All Free Tools</UnderlineAnimation>
+                                </Link>
+                            </li>
                         </ul>
                     </div>
 

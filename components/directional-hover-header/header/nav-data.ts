@@ -2,6 +2,8 @@ export type NavItem = {
   label: string;
   description?: string;
   href?: string;
+  /** "cta" renders the item as an outline button (DESIGN.md button-outline) at the end of its column. */
+  variant?: "cta";
 };
 
 export type NavColumn = {
@@ -102,6 +104,17 @@ export const NAV_LINKS: NavLink[] = [
             { label: "Careers", description: "Join our growing team", href: "/careers" },
             { label: "Articles", description: "Insights and guides for founders", href: "/article" },
             { label: "Contact", description: "Talk to our team", href: "/contact" },
+          ],
+        },
+        {
+          heading: "Free Tools",
+          href: "/tools",
+          items: [
+            { label: "Income Tax Calculator", description: "Old vs new regime for FY 2026-27", href: "/tools/income-tax-calculator" },
+            { label: "SIP Calculator", description: "See what your monthly SIP grows to", href: "/tools/sip-calculator" },
+            { label: "EMI Calculator", description: "Monthly EMI and total interest", href: "/tools/emi-calculator" },
+            { label: "GST Calculator", description: "Add or remove GST in one click", href: "/tools/gst-calculator" },
+            { label: "View All Free Tools", href: "/tools", variant: "cta" },
           ],
         },
         {

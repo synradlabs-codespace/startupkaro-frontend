@@ -6,6 +6,7 @@ import { getAllServiceSlugs } from "@/features/services/api/services.content";
 import { getAllJobSlugs } from "@/features/careers/api/jobs.service";
 import { getAllArticleSlugs } from "@/features/articles/api/articles.service";
 import { techTemplates } from "@/features/marketing/data/tech-templates";
+import { TOOLS } from "@/features/tools/data/tools.registry";
 
 type SitemapEntry = MetadataRoute.Sitemap[number];
 
@@ -20,6 +21,7 @@ const STATIC_ROUTES: { path: string; changeFrequency: SitemapEntry["changeFreque
     { path: "/tech-services", changeFrequency: "monthly", priority: 0.7 },
     { path: "/tech-services/templates", changeFrequency: "monthly", priority: 0.5 },
     { path: "/article", changeFrequency: "daily", priority: 0.8 },
+    { path: "/tools", changeFrequency: "monthly", priority: 0.8 },
     { path: "/privacy-policy", changeFrequency: "yearly", priority: 0.2 },
     { path: "/terms-of-service", changeFrequency: "yearly", priority: 0.2 },
     { path: "/refund-policy", changeFrequency: "yearly", priority: 0.2 },
@@ -77,5 +79,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.4,
     }));
 
-    return [...staticEntries, ...serviceEntries, ...bundleEntries, ...jobEntries, ...articleEntries, ...templateEntries];
+    const toolEntries: MetadataRoute.Sitemap = TOOLS.map((t) => ({
+        url: absoluteUrl(`/tools/${t.slug}`),
+        lastModified: t.lastReviewed,
+        changeFrequency: "monthly",
+        priority: 0.8,
+    }));
+
+    return [...staticEntries, ...serviceEntries, ...bundleEntries, ...jobEntries, ...articleEntries, ...templateEntries, ...toolEntries];
 }

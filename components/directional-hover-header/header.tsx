@@ -311,7 +311,11 @@ function DesktopMenuPanel({ link, onClose }: { link: NavLink; onClose?: () => vo
           >
             <DesktopColumnHeading heading={column.heading} href={column.href} serviceMenu={serviceMenu} onClose={onClose} />
             <div className={cn(serviceMenu ? "space-y-1.5" : "space-y-2")}>
-              {column.items.map((item) => (
+              {column.items.map((item) => item.variant === "cta" ? (
+                <div key={item.label} className="mt-3 border-t border-hairline px-3 pt-5">
+                  <FlowSecondaryButton href={item.href ?? "#"} onClick={onClose} text={item.label} showIcon={false} />
+                </div>
+              ) : (
                 <Link
                   key={item.label}
                   href={item.href ?? "#"}
@@ -436,7 +440,11 @@ function MobileNavItem({
                 </p>
               )}
               <div className="space-y-1">
-                {column.items.map((item) => (
+                {column.items.map((item) => item.variant === "cta" ? (
+                  <div key={item.label} className="pt-2">
+                    <FlowSecondaryButton href={item.href ?? "#"} onClick={onNavigate} text={item.label} showIcon={false} />
+                  </div>
+                ) : (
                   <Link
                     key={item.label}
                     href={item.href ?? "#"}
