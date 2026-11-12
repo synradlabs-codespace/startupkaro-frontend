@@ -266,7 +266,7 @@ export function ServicePromoCarousel() {
         <section
             aria-roledescription="carousel"
             aria-label="Featured services"
-            className="overflow-x-clip bg-surface pb-14 pt-28 md:pb-16 md:pt-32"
+            className="overflow-x-clip bg-surface pb-14 pt-10 md:pb-16 md:pt-32"
             onMouseEnter={() => setHoverPaused(true)}
             onMouseLeave={() => setHoverPaused(false)}
             onFocus={() => setHoverPaused(true)}
