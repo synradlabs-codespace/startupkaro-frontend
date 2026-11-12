@@ -11,6 +11,9 @@ import { ArticleCard } from "./ui/ArticleCard";
 import { ArticleShareButton } from "./ui/ArticleShareButton";
 import { ReadingProgressBar } from "./ui/ReadingProgressBar";
 import type { Article, ArticleCard as ArticleCardType } from "@/features/articles/types";
+import { FlowSecondaryButton } from "@/components/custom/FlowButton";
+import { ToolCard } from "@/features/tools/components/ToolCard";
+import { getRelatedTools } from "@/features/tools/lib/related";
 
 interface ArticleDetailPageProps {
     article: Article;
@@ -19,6 +22,7 @@ interface ArticleDetailPageProps {
 
 export function ArticleDetailPage({ article, related }: ArticleDetailPageProps) {
     const headings = getArticleHeadings(article.body);
+    const tools = getRelatedTools({ title: article.title, summary: article.summary, categories: article.categories.map((c) => c.title) });
     const formattedDate = new Date(article.publishedAt).toLocaleDateString("en-IN", {
         day: "numeric",
         month: "long",
@@ -140,8 +144,10 @@ export function ArticleDetailPage({ article, related }: ArticleDetailPageProps) 
                     </article>
                 </div>
 
-                <aside className="absolute right-8 top-10 hidden w-[240px] min-w-0 lg:block xl:right-10 xl:w-[260px]">
-                    <div className="sticky top-24 space-y-5">
+                {/* Stretch the aside over the full body height (top-10 to bottom-10) so its
+                    sticky child has room to stick; without a height it scrolled away. */}
+                <aside className="absolute bottom-10 right-8 top-10 hidden w-[240px] min-w-0 lg:block xl:right-10 xl:w-[260px]">
+                    <div className="sticky top-28 space-y-5">
                         <ArticleShareButton title={article.title} summary={article.summary} className="w-full" />
                         <ArticleIndex headings={headings} />
                     </div>
@@ -184,6 +190,26 @@ export function ArticleDetailPage({ article, related }: ArticleDetailPageProps) 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                             {related.map((a, i) => (
                                 <ArticleCard key={a.slug} article={a} index={i} />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Free tools related to this article */}
+            {tools.length > 0 && (
+                <div className="border-t border-hairline bg-surface">
+                    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+                        <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
+                            <div>
+                                <p className="mb-2 text-xs font-medium uppercase tracking-[0.28px] text-graphite">Free Tools</p>
+                                <h2 className="font-display text-2xl font-semibold tracking-tight text-ink">Put this into numbers</h2>
+                            </div>
+                            <FlowSecondaryButton href="/tools" text="View All Free Tools" iconName="arrow-right" wrapperClassName="shrink-0" />
+                        </div>
+                        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+                            {tools.map((tool) => (
+                                <ToolCard key={tool.slug} tool={tool} />
                             ))}
                         </div>
                     </div>
