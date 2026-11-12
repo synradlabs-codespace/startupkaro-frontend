@@ -12,6 +12,7 @@ const KNOWN_PAGES: Record<string, string> = {
     "/services": "Services",
     "/tech-services": "Tech Services",
     "/franchise": "Franchise",
+    "/tools": "Free Tools",
     "/privacy-policy": "Privacy Policy",
     "/terms-of-service": "Terms of Service",
     "/refund-policy": "Refund Policy",
@@ -23,9 +24,10 @@ const KNOWN_SECTIONS: Record<string, string> = {
     bundles: "Bundles",
     article: "Articles",
     careers: "Careers",
+    tools: "Free Tools",
 };
 
-const ACRONYMS = new Set(["gst", "roc", "dpiit", "fssai", "msme", "pan", "tan", "cfo", "llp", "cs", "ca"]);
+const ACRONYMS = new Set(["gst", "roc", "dpiit", "fssai", "msme", "pan", "tan", "cfo", "llp", "cs", "ca", "sip", "emi", "itr", "tds", "hra", "ppf", "fd"]);
 
 function prettifySegment(segment: string) {
     return decodeURIComponent(segment)

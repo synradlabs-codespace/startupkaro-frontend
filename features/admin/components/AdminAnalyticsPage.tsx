@@ -13,10 +13,12 @@ import {
     type AnalyticsRange,
 } from "@/features/admin/hooks/useAdminAnalytics";
 import { useTrafficAnalytics } from "@/features/admin/hooks/useTrafficAnalytics";
+import { useToolsAnalytics } from "@/features/admin/hooks/useToolsAnalytics";
+import type { AdminToolsAnalytics } from "@/services/traffic-analytics.service";
 import { pathnameToLabel } from "@/features/admin/lib/pathname-labels";
 import { formatINR } from "@/lib/currency";
 import type { AdminRevenueAnalytics, AdminRevenuePoint, AdminServiceAnalytics } from "@/services/admin.service";
-import { AlertTriangle, BarChart3, CheckCircle2, ChevronLeft, ChevronRight, CreditCard, Globe, IndianRupee, PieChart as PieChartIcon, Share2, ShoppingCart, TrendingUp, Users } from "lucide-react";
+import { AlertTriangle, BarChart3, Calculator, CheckCircle2, Link2, ChevronLeft, ChevronRight, CreditCard, Globe, IndianRupee, PieChart as PieChartIcon, Share2, ShoppingCart, TrendingUp, Users } from "lucide-react";
 import {
     Area,
     AreaChart,
@@ -407,6 +409,8 @@ export function AdminAnalyticsPage() {
                         </div>
                     </div>
                 </div>
+
+                <ToolsAnalyticsSection />
             </div>
         </div>
     );
@@ -545,6 +549,151 @@ function ErrorText({ message }: { message: string }) {
 
 function EmptyText({ label }: { label: string }) {
     return <p className="rounded-lg border border-hairline bg-surface p-4 text-sm text-slate">{label}</p>;
+}
+
+// ── Free Tools ──────────────────────────────────────────────────────────
+// Usage and sharing of the public calculators at /tools. Copy stays
+// plain-language: "times used", "results shared", never "events".
+function ToolsAnalyticsSection() {
+    const [month, setMonth] = useState<string>(() => currentMonthKey());
+    const query = useToolsAnalytics(month);
+    const data = query.data;
+    const label = formatMonthLabel(month);
+    const kpi = (value: number | string) => (query.isLoading ? "..." : query.isError ? "—" : String(value));
+    const hasActivity = (data?.totals.uses ?? 0) + (data?.totals.shares ?? 0) + (data?.totals.sharedLinkOpens ?? 0) > 0;
+
+    const body = (content: React.ReactNode, loadingLabel: string) =>
+        query.isLoading ? (
+            <LoadingText label={loadingLabel} />
+        ) : query.isError ? (
+            <ErrorText message="Free tools data is temporarily unavailable" />
+        ) : !hasActivity ? (
+            <EmptyText label="No tool activity yet this month." />
+        ) : (
+            content
+        );
+
+    return (
+        <div className="border-t border-hairline pt-6">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                    <h2 className="text-base font-semibold text-ink">Free Tools</h2>
+                    <p className="text-sm text-stone">How visitors use the free calculators, and how often they share their results</p>
+                </div>
+                <MonthYearPicker month={month} onChange={setMonth} />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                <KpiCard label="Times Used" value={kpi(data?.totals.uses ?? 0)} sub={`Calculators used in ${label}`} icon={Calculator} accent="bg-primary-brand/10 text-primary-brand" loading={query.isLoading} />
+                <KpiCard label="Results Shared" value={kpi(data?.totals.shares ?? 0)} sub="Links copied, images saved or sent" icon={Share2} accent="bg-tint-sky text-primary-brand" loading={query.isLoading} />
+                <KpiCard label="Shared Links Opened" value={kpi(data?.totals.sharedLinkOpens ?? 0)} sub="People who opened a shared result" icon={Link2} accent="bg-tint-peach text-charcoal" loading={query.isLoading} />
+                <KpiCard label="Share Rate" value={kpi(`${data?.totals.shareRate ?? 0}%`)} sub="Results shared per 100 uses" icon={TrendingUp} accent="bg-surface text-charcoal" loading={query.isLoading} />
+            </div>
+
+            <div className="mt-6 space-y-6">
+                <Panel title="Daily Activity" subtitle={`Times used vs results shared in ${label}`} icon={TrendingUp}>
+                    {body(<ToolsTrendChart points={data?.trend ?? []} />, "Loading daily activity...")}
+                </Panel>
+
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+                    <Panel title="By Tool" subtitle={`Which calculators people use and share in ${label}`} icon={BarChart3}>
+                        {body(<ToolsByToolChart rows={data?.byTool ?? []} />, "Loading tools...")}
+                    </Panel>
+                    <Panel title="How People Share" subtitle={`Share options used in ${label}`} icon={Share2}>
+                        {body(<ShareMethodList rows={data?.byMethod ?? []} />, "Loading share options...")}
+                    </Panel>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+const TOOLS_CHART_CONFIG = {
+    uses: { label: "Times used", color: "#296ef9" },
+    shares: { label: "Results shared", color: "#9cc3fb" },
+};
+
+function ToolsTrendChart({ points }: { points: AdminToolsAnalytics["trend"] }) {
+    if (points.length === 0) return <EmptyText label="No tool activity yet this month." />;
+    return (
+        <ChartContainer config={TOOLS_CHART_CONFIG} className="h-64 w-full">
+            <BarChart data={points} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+                <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                <XAxis dataKey="label" tickLine={false} axisLine={false} tickMargin={8} interval="preserveStartEnd" />
+                <YAxis tickLine={false} axisLine={false} width={36} allowDecimals={false} />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <ChartLegend content={<ChartLegendContent />} />
+                <Bar dataKey="uses" fill="var(--color-uses)" radius={[3, 3, 0, 0]} />
+                <Bar dataKey="shares" fill="var(--color-shares)" radius={[3, 3, 0, 0]} />
+            </BarChart>
+        </ChartContainer>
+    );
+}
+
+function ToolsByToolChart({ rows }: { rows: AdminToolsAnalytics["byTool"] }) {
+    if (rows.length === 0) return <EmptyText label="No tool activity yet this month." />;
+    const height = Math.max(rows.length * 44, 140);
+    const axisWidth = estimateAxisWidth(rows.map((row) => row.name));
+    return (
+        <div className="space-y-5">
+            <ChartContainer config={TOOLS_CHART_CONFIG} className="w-full" style={{ height }}>
+                <BarChart data={rows} layout="vertical" margin={{ top: 0, right: 12, left: 0, bottom: 0 }}>
+                    <CartesianGrid horizontal={false} strokeDasharray="3 3" />
+                    <XAxis type="number" tickLine={false} axisLine={false} allowDecimals={false} />
+                    <YAxis type="category" dataKey="name" tickLine={false} axisLine={false} width={axisWidth} />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <ChartLegend content={<ChartLegendContent />} />
+                    <Bar dataKey="uses" fill="var(--color-uses)" radius={[0, 3, 3, 0]} />
+                    <Bar dataKey="shares" fill="var(--color-shares)" radius={[0, 3, 3, 0]} />
+                </BarChart>
+            </ChartContainer>
+            <div className="overflow-x-auto">
+                <table className="w-full text-xs">
+                    <thead>
+                        <tr className="border-b border-hairline text-left text-stone">
+                            <th className="py-2 pr-3 font-medium">Tool</th>
+                            <th className="py-2 pr-3 text-right font-medium">Used</th>
+                            <th className="py-2 pr-3 text-right font-medium">Shared</th>
+                            <th className="py-2 text-right font-medium">Shared links opened</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {rows.map((row) => (
+                            <tr key={row.slug} className="border-b border-hairline/60 text-charcoal last:border-0">
+                                <td className="py-2 pr-3 font-medium">{row.name}</td>
+                                <td className="py-2 pr-3 text-right tabular-nums">{row.uses}</td>
+                                <td className="py-2 pr-3 text-right tabular-nums">{row.shares}</td>
+                                <td className="py-2 text-right tabular-nums">{row.opens}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+}
+
+function ShareMethodList({ rows }: { rows: AdminToolsAnalytics["byMethod"] }) {
+    if (rows.length === 0) return <EmptyText label="No results shared yet this month." />;
+    const total = rows.reduce((sum, row) => sum + row.shares, 0);
+    return (
+        <div className="space-y-3">
+            {rows.map((row) => {
+                const pct = total > 0 ? Math.round((row.shares / total) * 100) : 0;
+                return (
+                    <div key={row.method}>
+                        <div className="mb-1 flex items-center justify-between text-xs">
+                            <span className="font-medium text-charcoal">{row.label}</span>
+                            <span className="text-stone">{row.shares} · {pct}%</span>
+                        </div>
+                        <div className="h-1.5 w-full rounded-full bg-surface">
+                            <div className="h-1.5 rounded-full bg-primary-brand" style={{ width: `${pct}%` }} />
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+    );
 }
 
 // Horizontal bar charts (service names, channel names, page names) were

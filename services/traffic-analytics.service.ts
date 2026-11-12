@@ -26,3 +26,13 @@ export const trafficAnalyticsService = {
 };
 
 export type { AdminTrafficAnalytics };
+
+import type { AdminToolsAnalytics } from "@/app/api/admin/analytics/tools/route";
+
+export const toolsAnalyticsService = {
+    /** @param month "YYYY-MM"; omit for the current calendar month. */
+    get: (month: string) =>
+        internalClient.get<ApiResponse<AdminToolsAnalytics>>("/api/admin/analytics/tools", { params: { month } }),
+};
+
+export type { AdminToolsAnalytics };
